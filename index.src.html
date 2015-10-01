@@ -1,7 +1,7 @@
 <h1>Credential Management Level 1</h1>
 <pre class="metadata">
 Status: ED
-ED: https://w3c.github.io/webappsec/specs/credentialmanagement/
+ED: https://w3c.github.io/webappsec-credential-management/
 TR: http://www.w3.org/TR/credential-management/
 Shortname: credential-management
 Level: 1
@@ -11,10 +11,11 @@ Abstract:
   This specification describes an imperative API enabling a website to request a
   user's credentials from a user agent, and to help the user agent correctly
   store user credentials for future use.
-Version History: https://github.com/w3c/webappsec/commits/master/specs/credentialmanagement/index.src.html
 !Use Cases: <a href="https://w3c.github.io/webappsec/usecases/credentialmanagement/">https://w3c.github.io/webappsec/usecases/credentialmanagement/</a>
-!Bug Reports: <a href="https://github.com/w3c/webappsec/issues/new?title=CREDENTIAL:%20">via the w3c/webappsec repository on GitHub</a>
 Indent: 2
+Version History: https://github.com/w3c/webappsec-credential-management/commits/master/index.src.html
+Boilerplate: omit conformance, omit feedback-header
+!Participate: <a href="https://github.com/w3c/webappsec-credential-management/issues/new">File an issue</a> (<a href="https://github.com/w3c/webappsec-credential-management/issues">open issues</a>)
 </pre>
 
 <pre class="anchors">
@@ -136,7 +137,28 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
     text: host; for: URL; url: concept-url-host
     text: port; for: URL; url: concept-url-port
 </pre>
-
+<pre class="biblio">
+{
+  "MANIFEST": {
+    "authors": [ "Marcos Caceres", "Anssi Kostiainen", "Kenneth Rohde Christiansen" ],
+    "etAl": true,
+    "href": "http://w3c.github.io/manifest/",
+    "title": "Manifest for web application",
+    "status": "WD",
+    "publisher": "W3C"
+  },
+  "PSL": {
+    "authors": [ "Mozilla Foundation" ],
+    "href": "https://publicsuffix.org/",
+    "title": "Public Suffix List"
+  },
+  "WEB-LOGIN": {
+    "authors": [ "Jason Denizac", "Robin Berjon", "Anne van Kesteren" ],
+    "href": "https://github.com/jden/web-login",
+    "title": "web-login"
+  }
+}
+</pre>
 <!--
 ████ ██    ██ ████████ ████████   ███████
  ██  ███   ██    ██    ██     ██ ██     ██
