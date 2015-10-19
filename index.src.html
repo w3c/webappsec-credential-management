@@ -851,11 +851,12 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
     <dt><dfn dict-member>suppressUI</dfn></dt>
     <dd>
       If <code>true</code>, the user agent will only attempt to provide
-      a {{Credential}} without user interaction: if the user has explicitly
-      opted-into always giving a particular site access to a particular set of
-      credentials, they will be provided. If not, the promise will resolve with
-      <code>undefined</code>. For processing details, see the algorithm defined
-      in [[#request-credential]].
+      a {{Credential}} without user interaction. It MUST NOT present the user
+      with any visible prompt to grant access to a {{Credential}}: if the user
+      has opted-into always giving a particular site access to a particular set
+      of credentials, they will be provided. If not, the promise will resolve
+      with <code>undefined</code>. For processing details, see the algorithm
+      defined in [[#request-credential]].
     </dd>
   </dl>
 

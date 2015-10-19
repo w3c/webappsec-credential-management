@@ -434,7 +434,6 @@
 
 	img {
 		border-style: none;
-		color: white;
 	}
 
 	figure, div.figure, div.sidefigure {
@@ -994,7 +993,7 @@
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="http://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/Icons/w3c_home" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2015-10-01">1 October 2015</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2015-10-19">19 October 2015</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1004,7 +1003,7 @@
      <dt>Version History:
      <dd><a href="https://github.com/w3c/webappsec-credential-management/commits/master/index.src.html">https://github.com/w3c/webappsec-credential-management/commits/master/index.src.html</a>
      <dt>Feedback:
-     <dd><span><a href="mailto:public-webappsec@w3.org?subject=%5Bcredential-management%5D%20YOUR%20TOPIC%20HERE">public-webappsec@w3.org</a> with subject line “<kbd>[credential-management] <var>… message topic …</var></kbd>” (<a href="http://lists.w3.org/Archives/Public/public-webappsec/" rel="discussion">archives</a>)</span>
+     <dd><span><a href="mailto:public-webappsec@w3.org?subject=%5Bcredential-management%5D%20YOUR%20TOPIC%20HERE">public-webappsec@w3.org</a> with subject line “<kbd>[credential-management] <i>… message topic …</i></kbd>” (<a href="http://lists.w3.org/Archives/Public/public-webappsec/" rel="discussion">archives</a>)</span>
      <dt class="editor">Editor:
      <dd class="editor p-author h-card vcard" data-editor-id="56384"><a class="p-name fn u-email email" href="mailto:mkwst@google.com">Mike West</a> (<span class="p-org org">Google Inc.</span>)
      <dt>Use Cases:
@@ -1719,10 +1718,12 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
       outlined in <a href="#request-credential">§4.1.1 Request a Credential</a>. 
      <dt><dfn class="idl-code" data-dfn-for="CredentialRequestOptions" data-dfn-type="dict-member" data-export="" id="dom-credentialrequestoptions-suppressui">suppressUI<a class="self-link" href="#dom-credentialrequestoptions-suppressui"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://heycam.github.io/webidl/#idl-boolean">boolean</a>, defaulting to <code>false</code></span>
      <dd> If <code>true</code>, the user agent will only attempt to provide
-      a <code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code> without user interaction: if the user has explicitly
-      opted-into always giving a particular site access to a particular set of
-      credentials, they will be provided. If not, the promise will resolve with <code>undefined</code>. For processing details, see the algorithm defined
-      in <a href="#request-credential">§4.1.1 Request a Credential</a>. 
+      a <code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code> without user interaction. It MUST NOT present the user
+      with any visible prompt to grant access to a <code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code>: if the user
+      has opted-into always giving a particular site access to a particular set
+      of credentials, they will be provided. If not, the promise will resolve
+      with <code>undefined</code>. For processing details, see the algorithm
+      defined in <a href="#request-credential">§4.1.1 Request a Credential</a>. 
     </dl>
     <h5 class="heading settled" data-level="3.2.1.2" id="interfaces-federatedcredentialrequestoptions"><span class="secno">3.2.1.2. </span><span class="content"> <code>FederatedCredentialRequestOptions</code> dictionary </span><a class="self-link" href="#interfaces-federatedcredentialrequestoptions"></a></h5>
 <pre class="idl">dictionary <dfn class="idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-federatedcredentialrequestoptions">FederatedCredentialRequestOptions<a class="self-link" href="#dictdef-federatedcredentialrequestoptions"></a></dfn> {
@@ -2772,7 +2773,7 @@ partial dictionary CredentialRequestOptions {
    <dt id="biblio-manifest"><a class="self-link" href="#biblio-manifest"></a>[MANIFEST]
    <dd>Marcos Caceres; Anssi Kostiainen; Kenneth Rohde Christiansen; et al. <a href="http://w3c.github.io/manifest/">Manifest for web application</a>. WD. URL: <a href="http://w3c.github.io/manifest/">http://w3c.github.io/manifest/</a>
    <dt id="biblio-sri"><a class="self-link" href="#biblio-sri"></a>[SRI]
-   <dd>Frederik Braun. <a href="http://www.w3.org/TR/SRI/">Subresource Integrity</a>. 16 September 2015. WD. URL: <a href="http://www.w3.org/TR/SRI/">http://www.w3.org/TR/SRI/</a>
+   <dd>Frederik Braun. <a href="http://www.w3.org/TR/SRI/">Subresource Integrity</a>. 7 July 2015. WD. URL: <a href="http://www.w3.org/TR/SRI/">http://www.w3.org/TR/SRI/</a>
    <dt id="biblio-web-login"><a class="self-link" href="#biblio-web-login"></a>[WEB-LOGIN]
    <dd>Jason Denizac; Robin Berjon; Anne van Kesteren. <a href="https://github.com/jden/web-login">web-login</a>. URL: <a href="https://github.com/jden/web-login">https://github.com/jden/web-login</a>
    <dt id="biblio-xmlhttprequest"><a class="self-link" href="#biblio-xmlhttprequest"></a>[XMLHttpRequest]
