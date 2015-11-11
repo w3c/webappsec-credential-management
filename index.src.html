@@ -16,7 +16,16 @@ Indent: 2
 Version History: https://github.com/w3c/webappsec-credential-management/commits/master/index.src.html
 Boilerplate: omit conformance, omit feedback-header
 !Participate: <a href="https://github.com/w3c/webappsec-credential-management/issues/new">File an issue</a> (<a href="https://github.com/w3c/webappsec-credential-management/issues">open issues</a>)
+Markup Shorthands: css off, markdown on
 </pre>
+<style>
+  ul.toc ul ul ul {
+    margin: 0 0 0 2em;
+  }
+  ul.toc ul ul ul span.secno {
+    margin-left: -9em;
+  }
+</style>
 
 <pre class="anchors">
 spec: HTML5; urlPrefix: http://www.w3.org/TR/html5/
@@ -72,6 +81,7 @@ spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
     text: network error; url: concept-network-error
     text: extracting a MIME type; url: concept-header-extract-mime-type
     text: consume body; url: concept-Body-consume-body
+    text: body; for: request; url: concept-request-body
   type: interface
     text: RequestInit
     text: RequestInfo
@@ -88,6 +98,10 @@ spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
   type: constructor
     text: Request(); url: dom-request
     text: Response(); url: dom-response
+  type: attribute; for: Request
+    text: client; url: concept-request-client
+    text: url; url: concept-request-url
+    text: redirect mode; url: concept-request-redirect-mode
 spec: CSP2; urlPrefix: https://w3c.github.io/webappsec/specs/content-security-policy/
   type: dfn
     text: form-action; url: directive-form-action
@@ -129,8 +143,13 @@ spec: WEBMESSAGING; urlPrefix: http://www.w3.org/TR/webmessaging/
 spec: URL; urlPrefix: http://www.w3.org/TR/url/
   type: dfn
     text: URL parser; url: concept-url-parser
+    text: list; for: URLSearchParams; url: concept-urlsearchparams-list
   type: interface
     text: URL; url: dom-url
+    text: URLSearchParams; url: dom-urlsearchparams
+  type: method; for: URLSearchParams
+    text: get(); url: dom-urlsearchparams-get
+    text: getAll(); url: dom-urlsearchparams-getall 
   type: attribute
     text: origin; for: URL; url: concept-url-origin
     text: scheme; for: URL; url: concept-url-scheme
@@ -602,18 +621,19 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
       DOMString password;
     };
 
-    dictionary FormDataOptions {
+    dictionary PasswordCredentialConversionOptions {
       DOMString idName = "username";
       DOMString passwordName = "password";
     };
 
     [Constructor(PasswordCredentialData data), Exposed=Window]
     interface PasswordCredential : OriginBoundCredential {
-      FormData toFormData(optional FormDataOptions formDataOptions);
+      FormData toFormData(optional PasswordCredentialConversionOptions options);
+      URLSearchParams toURLSearchParams(optional PasswordCredentialConversionOptions options);
     };
   </pre>
   <dl dfn-for="PasswordCredential">
-    <dt><dfn method lt="toFormData(formDataOptions)">toFormData(formDataOptions)</dfn></dt>
+    <dt><dfn method lt="toFormData(options)">toFormData(options)</dfn></dt>
     <dd>
       This method will generate an <a>opaque <code>FormData</code> object</a>
       containing the {{Credential/id}} and {{PasswordCredential/[[password]]}}
@@ -623,8 +643,22 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
       The user agent MUST execute the algorithm described in
       [[#generate-formdata]] when this method is executed.
 
-      <pre class="argumentdef" for="PasswordCredential/toFormData(formDataOptions)">
-        formDataOptions: A set of options governing the {{FormData}} object's construction.
+      <pre class="argumentdef" for="PasswordCredential/toFormData(options)">
+        options: A set of options governing the {{FormData}} object's construction.
+      </pre>
+    </dd>
+    <dt><dfn method lt="toURLSearchParams(options)">toURLSearchParams(options)</dfn></dt>
+    <dd>
+      This method will generate an <a>opaque `URLSearchParams` object</a>
+      containing the {{Credential/id}} and {{PasswordCredential/[[password]]}}
+      associated with this credential, which can then be used to asynchronously
+      sign a user into an origin via Fetch.
+
+      The user agent MUST execute the algorithm described in
+      [[#generate-urlsearchparams]] when this method is executed.
+
+      <pre class="argumentdef" for="PasswordCredential/toURLSearchParams(options)">
+        options: A set of options governing the {{URLSearchParams}} object's construction.
       </pre>
     </dd>
     <dt>{{[[type]]}}</dt>
@@ -766,9 +800,9 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
     <dd>
       Request a credential from the credential manager.
 
-      The {{options!!argument}} argument contains an object filled with
-      type-specific sets of parameters which will be used to select a
-      particular {{Credential}} to return. This process is described in each
+      The {{CredentialContainer/get()/options}} argument contains an object
+      filled with type-specific sets of parameters which will be used to select
+      a particular {{Credential}} to return. This process is described in each
       {{Credential}} type's <a>options matching algorithm</a>.
       
       When {{CredentialContainer/get()}} is called, the user agent MUST execute the
@@ -938,83 +972,64 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   silently: <code>https://accounts.google.com/</code> is clearly intended to
   be the same as <code>https://accounts.google.com</code>.
 
-  <h3 id="opaque-formdata">Opaque <code>FormData</code> objects</h3>
+  <h3 id="opaque-data">Opaque data objects</h3>
 
-  {{FormData}} objects have a <dfn>opaque flag</dfn>, unset by default,
-  and set only if the object is constructed from a {{PasswordCredential}}.
-  Opaque {{FormData}} objects return <code>null</code> and the empty sequence
-  when their {{FormData/get()}} and {{FormData/getAll()}} methods are executed,
-  respectively. Further, data from opaque {{FormData}} objects can only be
-  <a>extracted</a> in the context of executing {{XMLHttpRequest}}'s
-  {{XMLHttpRequest/send()}} method.
-  
-  <dfn local-lt="opaque">Opaque <code>FormData</code> objects</dfn> have the
-  following properties:
+  In order to actually authenticate a user, {{PasswordCredential}}s need to be
+  somehow submitted to a server for evaluation. We could allow JavaScript direct
+  access to the username and password, but that would open up the risk that this
+  API would make it easier to extract sensitive data via a cross-site scripting
+  attack (see [[#security-cross-origin-leakage]]). We mitigate this risk by
+  hiding the credential information from JavaScript through the construction of
+  <dfn>opaque</dfn> variants of {{FormData}} and {{URLSearchParams}} objects
+  that enable developers to submit the credentials to their server via
+  {{fetch()}}, but prevent direct JavaScript access.
 
-  <ol>
-    <li>
-      Whenever the user agent would execute an opaque {{FormData}} object's
-      {{FormData/get()}} method, it MUST return <code>null</code>.
-    </li>
-    <li>
-      Whenever the user agent would execute an opaque {{FormData}} object's
+  <h4 id="opaque-formdata-objects" dfn>Opaque `FormData` objects</h4>
+
+  {{FormData}} objects have a <dfn for="FormData" attribute>opaque flag</dfn>
+  which is unset unless otherwise specified. The {{FormData}} object is
+  <a>opaque</a> if this flag is set, which has the following implications:
+
+  1.  Whenever the user agent would execute an opaque {{FormData}} object's
+      {{FormData/get()}} method, it MUST return `null`.
+
+  2.  Whenever the user agent would execute an opaque {{FormData}} object's
       {{FormData/getAll()}} method, it MUST return the empty sequence.
-    </li>
-    <li>
-      The opaqueness of a {{FormData}} object taints {{Request}} objects
-      created from them. The {{Body}} accessor methods will reject with a
-      <code>TypeError</code>.
-    </li>
-  </ol>
 
-  <h4 id="opaque-formdata-algorithms">
-    Algorithm Modifications
-  </h4>
+  3.  The opaqueness of a {{FormData}} object taints {{Request}} objects created
+      from them. The {{Body}} accessor methods will reject with a `TypeError`.
 
-  ISSUE: Monkey-patching! Hooray! Talk with Anne, et al.
+  4.  Data from opaque {{FormData}} objects can only be <a>extracted</a> in the
+      context of executing {{fetch()}} or {{XMLHttpRequest}}'s
+      {{XMLHttpRequest/send()}} method.
 
-  <h5 id="monkey-patching-xhr-1">XHR: <code>FormData</code> Iteration</code></h5>
+  These are described in normative detail in [[#monkey-patching-fetch]] and
+  [[#monkey-patching-xhr]] (and will ideally move entirely to those documents).
 
-  Replace the following text from {{FormData}}:
+  <h4 id="opaque-urlsearchparams-objects" dfn>Opaque `URLSearchParams` objects</h4>
 
-  <blockquote>
-    The <a>value pairs to iterate over</a> are the <a>entries</a> with the key
-    being the {{entry/name}} and the value the {{entry/value}}.
-  </blockquote>
+  {{URLSearchParams}} objects have a <dfn for="URLSearchParams" attribute>opaque
+  flag</dfn> which is unset unless otherwise specified. The {{URLSearchParams}}
+  object is <a>opaque</a> if this flag is set, which has the following
+  implications:
 
-  With:
+  1.  Whenever the user agent would execute an opaque {{FormData}} object's
+      {{FormData/get()}} method, it MUST return `null`.
 
-  <blockquote>
-    The <a>value pairs to iterate over</a> is an empty list if the <a>opaque
-    flag</a> is set, otherwise the <a>entries</a> with the key being the
-    {{entry/name}} and the value the {{entry/value}}.
-  </blockquote>
+  2.  Whenever the user agent would execute an opaque {{FormData}} object's
+      {{FormData/getAll()}} method, it MUST return the empty sequence.
 
-  <h5 id="monkey-patching-xhr-2">XHR: <code>FormData</code>'s <code>get()</code></h5>
+  3.  The opaqueness of a {{FormData}} object taints {{Request}} objects created
+      from them. The {{Body}} accessor methods will reject with a `TypeError`.
 
-  Redefine {{FormData}}'s {{FormData/get()}} method as follows:
+  4.  Data from opaque {{FormData}} objects can only be <a>extracted</a> in the
+      context of executing {{fetch()}} or {{XMLHttpRequest}}'s
+      {{XMLHttpRequest/send()}} method.
 
-  <ol>
-    <li>If the <a>opaque flag</a> is set, return <code>null</code>.</li>
-    <li>
-      Otherwise, return the {{entry/value}} of the first <a>entry</a> whose
-      {{entry/name}} is  is <var>name</var>, and <code>null</code> if no such
-      <a>entry</a> exists.
-    </li>
-  </ol>
+  These are described in normative detail in [[#monkey-patching-fetch]] and
+  [[#monkey-patching-xhr]] (and will ideally move entirely to those documents).
 
-  <h5 id="monkey-patching-xhr-3">XHR: <code>FormData</code>'s <code>getAll()</code></h5>
-
-  Redefine {{FormData}}'s {{FormData/getAll()}} method as follows:
-
-  <ol>
-    <li>If the <a>opaque flag</a> is set, return the empty sequence.</li>
-    <li>
-      Otherwise, return the {{entry/value}}s of all <a>entries</a> whose
-      {{entry/name}} is <var>name</var>, in list order, and the empty sequence
-      if no such <a>entry</a> exists.
-    </li>
-  </ol>
+  <h4 id="monkey-patching-fetch">Monkey-patching Fetch</h4>
 
   <h5 id="monkey-patching-fetch-1">Fetch: <code>Body</code> objects</h5>
 
@@ -1070,12 +1085,103 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
 
   <ol start="34">
     <li>
-      If <var>init</var>'s body member is a {{FormData}} object whose <a>opaque
-      flag</a> is set, or <var>input</var>'s <a attribute for="Body">opaque
-      flag</a> is set, set <var>r</var>'s <a attribute for="Body">opaque
-      flag</a>.
+      If <var>init</var>'s body member is an <a>opaque</a> {{FormData}} or
+      {{URLSearchParams}} object, or |input|'s <a for="request">body</a>'s
+      <a attribute for="Body">opaque flag</a> is set:
+     
+      1.  Set |r|'s <a for="request">body</a>'s <a attribute for="Body">opaque
+          flag</a>.
+
+      2.  If |r|'s {{Request/url}}'s {{URL/origin}} is not the same as |r|'s
+          {{Request/client}}'s <a>origin</a>, throw a `TypeError`.
+
+      3.  Set |r|'s <a for="Request" attribute>redirect mode</a> to "`error`".
     </li>
   </ol>
+
+  <h5 id="monkey-patching-fetch-3">
+
+  <h4 id="monkey-patching-url">Monkey-patching URL</h4>
+
+  <h5 id="monkey-patching-url-1">`URLSearchParams` Iteration</code></h5>
+
+  Replace the following text from {{URLSearchParams}}:
+
+  <blockquote>
+    The <a>value pairs to iterate over</a> are are the
+    <a for="URLSearchParams">list</a> name-value pairs with the key being the
+    name and the value being the value.
+  </blockquote>
+
+  With:
+
+  <blockquote>
+    The <a>value pairs to iterate over</a> is an empty list if the
+    <a for="URLSearchParams" attribute>opaque flag</a> is set, otherwise the
+    <a for="URLSearchParams">list</a> name-value pairs with the key being the
+    name and the value being the value.
+  </blockquote>
+
+  <h5 id="monkey-patching-url-2">`URLSearchParams`'s `get()`</h5>
+
+  Redefine {{URLSearchParams}}'s {{URLSearchParams/get()}} method as follows.
+  Given a {{USVString}} (|name|):
+
+  1.  If the <a for="FormData" attribute>opaque flag</a> is set, return `null`.
+
+  2.  Otherwise, return the value of the first name-value pair whose name is
+      |name| in <a for="URLSearchParams">list</a> if there is such a pair, and
+      `null` otherwise.
+
+  <h5 id="monkey-patching-url-3">`URLSearchParams`'s `getAll()`</h5>
+
+  Redefine {{URLSearchParams}}'s {{URLSearchParams/getAll()}} method as follows.
+  Given a {{USVString}} (|name|):
+
+  1.  If the object is <a>opaque</a>, return the empty sequence.
+  
+  2.  Otherwise, return the values of all name-value pairs in
+      <a for="URLSearchParams">list</a> whose name is |name|, in list order, if
+      any such pairs exist. Return the empty sequence otherwise.
+
+  <h4 id="monkey-patching-xhr">Monkey-patching XMLHttpRequest</h4>
+
+  <h5 id="monkey-patching-xhr-1">`FormData` Iteration</code></h5>
+
+  Replace the following text from {{FormData}}:
+
+  <blockquote>
+    The <a>value pairs to iterate over</a> are the <a>entries</a> with the key
+    being the {{entry/name}} and the value the {{entry/value}}.
+  </blockquote>
+
+  With:
+
+  <blockquote>
+    The <a>value pairs to iterate over</a> is an empty list if the
+    <a for="FormData" attribute>opaque flag</a> is set, otherwise the
+    <a>entries</a> with the key being the {{entry/name}} and the value the
+    {{entry/value}}.
+  </blockquote>
+
+  <h5 id="monkey-patching-xhr-2">`FormData`'s `get()`</h5>
+
+  Redefine {{FormData}}'s {{FormData/get()}} method as follows:
+
+  1.  If the <a for="FormData" attribute>opaque flag</a> is set, return `null`.
+
+  2.  Otherwise, return the {{entry/value}} of the first <a>entry</a> whose
+      {{entry/name}} is  is |name|, and `null` if no such <a>entry</a> exists.
+
+  <h5 id="monkey-patching-xhr-3">`FormData`'s `getAll()`</h5>
+
+  Redefine {{FormData}}'s {{FormData/getAll()}} method as follows:
+
+  1.  If the object is <a>opaque</a>, return the empty sequence.
+  
+  2.  Otherwise, return the {{entry/value}}s of all <a>entries</a> whose
+      {{entry/name}} is |name|, in list order, and the empty sequence if no such
+      <a>entry</a> exists.
 </section>
 
 <!--
@@ -1572,53 +1678,73 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   </h3>
 
   <h4 id="generate-formdata">
-    Generate a <code>FormData</code> object from <var>password credential</var>
+    Generate a `FormData` object from |credential|
   </h4>
 
-  Given a {{FormDataOptions}} (<var>options</var>) and a {{PasswordCredential}}
-  (<var>credential</var>), this method will create an <a>opaque</a> {{FormData}}
-  object which can be used to submit the credential information to a sign-in
-  endpoint.
+  Given a {{PasswordCredentialConversionOptions}} (<var>options</var>) and a
+  {{PasswordCredential}} (|credential|), this method will create an
+  <a>opaque</a> {{FormData}} object which can be used to submit the credential
+  information to a sign-in endpoint:
 
-  <ol>
-    <li>
-      Let <var>environment</var> be the <a>incumbent settings object</a>.
-    </li>
-    <li>
-      Return a new {{FormData}} object <strong>and</strong> terminate this
+  1.  Let |environment| be the <a>incumbent settings object</a>.
+
+  2.  Return a new {{FormData}} object <strong>and</strong> terminate this
       algorithm if any of the following conditions are true:
 
-      <ol>
-        <li>
-          [[#is-match]] returns <code>No Match</code> when executed upon
-          <var>credential</var> and <var>environment</var>'s <a>origin</a>.
-        </li>
-        <li>
-          <var>environment</var> is not a <a>secure context</a>
-        </li>
-      </ol>
-    </li>
-    <li>
-      Let <var>fd</var> be a new {{FormData}} object.
-    </li>
-    <li>
-      Set <var>fd</var>'s <a>opaque flag</a>.
-    </li>
-    <li>
-      Append a new <a>entry</a> to <var>fd</var>'s list of <a>entries</a> whose
-      {{entry/name}} is <var>option</var>'s {{FormDataOptions/idName}}, and
-      whose value is <var>credential</var>'s {{Credential/id}}.
-    </li>
-    <li>
-      Append a new <a>entry</a> to <var>fd</var>'s list of <a>entries</a> whose
-      {{entry/name}} is <var>option</var>'s {{FormDataOptions/passwordName}},
-      and whose value is <var>credential</var>'s
-      {{PasswordCredential/[[password]]}}.
-    </li>
-    <li>
-      Resolve <var>fd</var>.
-    </li>
-  </ol>
+      1.  [[#is-match]] returns `No Match` when executed upon |credential| and
+          |environment|'s <a>origin</a>.
+
+      2.  |environment| is not a <a>secure context</a>
+
+  3.  Let |fd| be a new {{FormData}} object.
+
+  4.  Set |fd|'s <a for="FormData" attribute>opaque flag</a>.
+
+  5.  Append a new <a>entry</a> to |fd|'s list of <a>entries</a> whose
+      {{entry/name}} is |option|'s
+      {{PasswordCredentialConversionOptions/idName}}, and whose value is
+      |credential|'s {{Credential/id}}.
+
+  6.  Append a new <a>entry</a> to |fd|'s list of <a>entries</a> whose
+      {{entry/name}} is |option|'s
+      {{PasswordCredentialConversionOptions/passwordName}}, and whose value is
+      |credential|'s {{PasswordCredential/[[password]]}}.
+
+  7.  Resolve |fd|.
+
+  <h4 id="generate-urlsearchparams">
+    Generate a `URLSearchParams` object from |credential| 
+  </h4>
+
+  Given a {{PasswordCredentialConversionOptions}} (|options|) and a
+  {{PasswordCredential}} (|credential|), this method will create an
+  <a>opaque</a> {{URLSearchParams}} object which can be used to submit the
+  credential information to a sign-in endpoint:
+
+  1.  Let |environment| be the <a>incumbent settings object</a>.
+
+  2.  Return a new {{URLSearchParams}} object <strong>and</strong> terminate
+      this algorithm if any of the following conditions are true:
+
+      1.  [[#is-match]] returns <code>No Match</code> when executed upon
+          |credential| and |environment|'s <a>origin</a>.
+
+      2.  |environment| is not a <a>secure context</a>
+
+  3.  Let |usp| be a new {{URLSearchParams}} object.
+
+  4.  Set |usp|'s <a for="URLSearchParams" attribute>opaque flag</a>.
+
+  5.  Append a new name-value pair whose name is |option|'s
+      {{PasswordCredentialConversionOptions/idName}}, and whose value is
+      |credential|'s {{Credential/id}} to <a for="URLSearchParams">list</a>.
+
+  6.  Append a new name-value pair whose name is |option|'s
+      {{PasswordCredentialConversionOptions/passwordName}}, and whose value is
+      |credential|'s {{PasswordCredential/password}} to
+      <a for="URLSearchParams">list</a>.
+
+  7.  Return |usp|.
 
   <h3 id="processing-federated">
     Processing <code>FederatedCredential</code>s
@@ -1837,7 +1963,8 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
     </li>
     <li>
       For each <var>member</var> in the <a>dictionary members</a> of
-      {{CredentialContainer/get()}}'s {{options!!argument}} argument:
+      {{CredentialContainer/get()}}'s {{CredentialContainer/get()/options}}
+      argument:
 
       <ol>
         <li>
@@ -1848,7 +1975,8 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
 
           Note: That is, instances of {{FederatedCredential}} have a
           {{Credential/type}} property with a value of
-          "{{FederatedCredential/federated!!const}}". An {{options!!argument}}
+          "{{FederatedCredential/federated!!const}}". An
+          {{CredentialContainer/get()/options}}
           argument's {{CredentialRequestOptions/federated}} member would map
           to {{FederatedCredential}} in this step.
         </li>
