@@ -80,8 +80,14 @@ spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
     text: request; url: concept-request
     text: network error; url: concept-network-error
     text: extracting a MIME type; url: concept-header-extract-mime-type
+    text: extract; url: concept-bodyinit-extract
     text: consume body; url: concept-Body-consume-body
-    text: body; for: request; url: concept-request-body
+    for: request
+      text: body; url: concept-request-body
+      text: client; url: concept-request-client
+      text: url; url: concept-request-url
+      text: redirect mode; url: concept-request-redirect-mode
+      text: skip-service-worker flag; url: skip-service-worker-flag
   type: interface
     text: RequestInit
     text: RequestInfo
@@ -98,11 +104,6 @@ spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
   type: constructor
     text: Request(); url: dom-request
     text: Response(); url: dom-response
-  type: attribute; for: Request
-    text: client; url: concept-request-client
-    text: url; url: concept-request-url
-    text: redirect mode; url: concept-request-redirect-mode
-    text: skip-service-worker flag; url: skip-service-worker-flag
 spec: CSP2; urlPrefix: https://w3c.github.io/webappsec/specs/content-security-policy/
   type: dfn
     text: form-action; url: directive-form-action
@@ -111,22 +112,10 @@ spec: CSP2; urlPrefix: https://w3c.github.io/webappsec/specs/content-security-po
     text: script-src; url: directive-script-src
     text: object-src; url: directive-object-src
 spec: XHR; urlPrefix: https://xhr.spec.whatwg.org/
-  type: dfn
-    text: extract; url: concept-fetchbodyinit-extract
-    text: entry; for: FormData; url: concept-formdata-entry
   type: interface
     text: XMLHttpRequest; url: interface-xmlhttprequest
     text: FormData; url: interface-formdata
-  type: method
-    text: append(); for: FormData; url: dom-formdata-append
-    text: get(); for: FormData; url: dom-formdata-get
-    text: getAll(); for: FormData; url: dom-formdata-getAll
-    text: send(); for: XMLHttpRequest; url: dom-xmlhttprequest-send
-  type: attribute
-    text: value; for: entry; url: concept-formdata-entry-value
-    text: name; for: entry; url: concept-formdata-entry-name
   type: constructor
-    text: XMLHttpRequest(); for: XMLHttpRequest; url: dom-xmlhttprequest
     text: FormData(); for: FormData; url: dom-formdata
 spec: WebIDL; urlPrefix: https://heycam.github.io/webidl/
   type: dfn
@@ -314,7 +303,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
                 return;
               }
               if (credential.type == "<a const>password</a>") {
-                fetch("https://example.com/loginEndpoint", { body: credential.<a>toFormData()</a>, method: "POST" })
+                fetch("https://example.com/loginEndpoint", { body: credential, method: "POST" })
                   .then(function (response) {
                     // Notify the user that signin succeeded! Do amazing, signed-in things!
                   });
@@ -365,7 +354,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
                 // ...
                 }
               } else {
-                fetch("https://example.com/loginEndpoint", { body: credential.<a>toFormData()</a>, method: "POST" })
+                fetch("https://example.com/loginEndpoint", { body: credential, method: "POST" })
                   .then(function (response) { ... })
                   .catch(function (response) { ... });
               }
@@ -384,18 +373,17 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
     website to tell the credential manager that sign-in succeeded.
 
     <div class="example">
-      If a user is signed in by calling {{PasswordCredential/toFormData()}} on
-      a {{PasswordCredential}} object, and submitting that data to a sign-in
-      endpoint via {{fetch()}} then we can check the response to determine
-      whether the user was signed in successfully, and notify the user agent
-      accordingly:
+      If a user is signed in by calling {{fetch()}} on a {{PasswordCredential}}
+      object, submitting that data to a sign-in endpoint, then we can check the
+      response to determine whether the user was signed in successfully, and
+      notify the user agent accordingly:
 
       <pre>
         var credential = new <a idl>PasswordCredential</a>({
           "<a idl for="CredentialData">id</a>": "JaneDoe98",
           "<a idl for="PasswordCredentialData">password</a>": "MfPeRQq5P3yVry68Q4KZMMhB"
         });
-        fetch("https://example.com/sign-in/", { body: credential.<a>toFormData()</a>, method: "POST" })
+        fetch("https://example.com/sign-in/", { body: credential, method: "POST" })
           .then(function (response) {
             if (response.status == 200)
               navigator.<a attribute>credentials</a>.<a idl lt="store()">store</a>(credential);
@@ -622,75 +610,70 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
       DOMString password;
     };
 
-    dictionary PasswordCredentialConversionOptions {
-      DOMString idName = "username";
-      DOMString passwordName = "password";
-    };
+    typedef (FormData or URLSearchParams) CredentialBodyType;
 
     [Constructor(PasswordCredentialData data), Exposed=Window]
     interface PasswordCredential : OriginBoundCredential {
-      FormData toFormData(optional PasswordCredentialConversionOptions options);
-      URLSearchParams toURLSearchParams(optional PasswordCredentialConversionOptions options);
+      attribute DOMString idName;
+      attribute DOMString passwordName;
+
+      attribute CredentialBodyType additionalData;
     };
+    PasswordCredential implements Body;
   </pre>
-  <dl dfn-for="PasswordCredential">
-    <dt><dfn method lt="toFormData(options)">toFormData(options)</dfn></dt>
-    <dd>
-      This method will generate an <a>opaque <code>FormData</code> object</a>
-      containing the {{Credential/id}} and {{PasswordCredential/[[password]]}}
-      associated with this credential, which can then be used to asynchronously
-      sign a user into an origin via Fetch.
+  
+  :   <dfn attribute for="PasswordCredential">idName</dfn>
+  ::  This attribute represents the name which will be used for the ID field
+      when submitting the {{PasswordCredential}} to a remote endpoint via
+      {{fetch()}}. It defaults to "`username`", but can be overridden by a
+      developer to match whatever the backend service expects.
 
-      The user agent MUST execute the algorithm described in
-      [[#generate-formdata]] when this method is executed.
+  :   <dfn attribute for="PasswordCredential">passwordName</dfn>
+  ::  This attribute represents the name which will be used for the ID field
+      when submitting the {{PasswordCredential}} to a remote endpoint via
+      {{fetch()}}. It defaults to "`password`", but can be overridden by a
+      developer to match whatever the backend service expects.
 
-      <pre class="argumentdef" for="PasswordCredential/toFormData(options)">
-        options: A set of options governing the {{FormData}} object's construction.
-      </pre>
-    </dd>
-    <dt><dfn method lt="toURLSearchParams(options)">toURLSearchParams(options)</dfn></dt>
-    <dd>
-      This method will generate an <a>opaque `URLSearchParams` object</a>
-      containing the {{Credential/id}} and {{PasswordCredential/[[password]]}}
-      associated with this credential, which can then be used to asynchronously
-      sign a user into an origin via Fetch.
+  :   <dfn attribute for="PasswordCredential">additionalData</dfn>
+  ::  If the developer wishes to specify additional data to insert into the
+      request body when submitting the credential information to a remote
+      endpoint, they can do so by assigning a {{FormData}} or
+      {{URLSearchParams}} object to this attribute. The credential information
+      will be mixed into the object to produce the body.
 
-      The user agent MUST execute the algorithm described in
-      [[#generate-urlsearchparams]] when this method is executed.
-
-      <pre class="argumentdef" for="PasswordCredential/toURLSearchParams(options)">
-        options: A set of options governing the {{URLSearchParams}} object's construction.
-      </pre>
-    </dd>
-    <dt>{{[[type]]}}</dt>
-    <dd>
-      All {{PasswordCredential}} objects have their {{[[type]]}} slot's
-      value set to the string "<dfn const><code>password</code></dfn>".
-    </dd>
-  </dl>
+  : {{[[type]]}}
+  ::  All {{PasswordCredential}} objects have their {{[[type]]}} slot's
+      value set to the string 
+      "<dfn const for="PasswordCredential">`password`</dfn>".
 
   All {{PasswordCredential}} objects have an internal slot named
   <dfn attribute for="PasswordCredential">\[[password]]</dfn> which stores the
   credential's password. This property is not directly exposed to the web, but
-  used to construct the {{FormData}} object generated during
-  {{PasswordCredential/toFormData()}}.
+  used to construct the request body during {{fetch()}}.
 
-  <h5 id="why-oh-why">
-    Why on Earth do we have both `toFormData()` and `toURLSearchParams()`?
-  </h5>
+  <h5 id="passwordcredential-body">Body mixin definitions</h5>
 
-  <em>This section is non-normative.</em>
+  {{PasswordCredential}} implements the {{Body}} interface as follows:
 
-  Devlopers may well scratch their heads in wonderment at the API defined here.
-  "Why do we have both {{toFormData()}} and {{toURLSearchParams()}}?", they'll
-  ask, and "When should I use one, and when the other?"
+  {{PasswordCredential}}'s <a>consume body</a> algorithm returns a new `Promise`
+  rejected with a `TypeError`.
 
-  In short: developers should use {{toFormData()}}, unless they really need to
-  submit data with a MIME type of `application/x-www-form-urlencoded`, in
-  which case they should use {{toURLSearchParams()}}. There are other subtle
-  differences between the objects (e.g. {{FormData}} can accept blobs, while
-  {{URLSearchParams}} cannot), but the MIME type is the only relevant
-  distinction for most use cases.
+  To <a>extract</a> a byte stream and a `Content-Type` from a
+  {{PasswordCredential}} (|credential|), execute the following steps:
+
+  1.  Let |data| be |credential|'s {{PasswordCredential/additionalData}}
+      attribute if it is not `undefined`, and a new {{FormData}} object otherwise.
+
+  2.  Execute `set()` on |data| with a |name| of |credential|'s
+      {{PasswordCredential/idName}} and a |value| of |credential|'s
+      {{Credential/id}}.
+
+  3.  Execute `set()` on |data| with a |name| of |credential|'s
+      {{PasswordCredential/passwordName}} and a |value| of |credential|'s
+      {{[[password]]}}.
+
+  4.  Return the result of <a lt="extract">extracting</a> a byte stream and a
+      `Content-Type` from |data|.
 
   <h5 id="passwordcredential-matching">
     Matching Algorithm
@@ -989,220 +972,48 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   U+002F SOLIDUS ("<code>/</code>"), but user agents SHOULD accept them
   silently: <code>https://accounts.google.com/</code> is clearly intended to
   be the same as <code>https://accounts.google.com</code>.
+</section>
 
-  <h3 id="opaque-data">Opaque data objects</h3>
+<!-- Big Text: Fetch -->
+<section>
+  <h3 id="monkey-patching-fetch">Monkey-patching Fetch</h3>
+  
+  In order to actually authenticate a user, {{PasswordCredential}} objects may
+  be submitted to a server for evaluation. To prevent the risk that sensitive
+  credential information will be exposed directly to a page's JavaScript (see
+  [[#security-cross-origin-leakage]]), we hide the credential information in
+  non-web-exposed slots on the {{PasswordCredential}} object, and extract them
+  during {{fetch()}} in ways that will remain opaque to anything other than the
+  remote (same-origin) server.
 
-  In order to actually authenticate a user, {{PasswordCredential}}s need to be
-  somehow submitted to a server for evaluation. We could allow JavaScript direct
-  access to the username and password, but that would open up the risk that this
-  API would make it easier to extract sensitive data via a cross-site scripting
-  attack (see [[#security-cross-origin-leakage]]). We mitigate this risk by
-  hiding the credential information from JavaScript through the construction of
-  <dfn>opaque</dfn> variants of {{FormData}} and {{URLSearchParams}} objects
-  that enable developers to submit the credentials to their server via
-  {{fetch()}}, but prevent direct JavaScript access.
+  <h4 id="monkey-patching-fetch-1">Body extraction</h4>
 
-  Note: Opaque data objects do not prevent Service Workers from reading the
-  data from a request before it hits the wire. If this ends up being a 
+  {{PasswordCredential}} implements the {{Body}} interface, and defines an
+  <a>extract</a> algorithm and a <a>consume body</a> algorithm. The latter is
+  automatically wired into Fetch through the magic of interfaces. The former
+  needs to be hardwired by adding the following to the switch in step 3 of the
+  current <a>extract</a> algorithm for {{Body}}:
 
-  <h4 id="opaque-formdata-objects" dfn>Opaque `FormData` objects</h4>
+  :   {{PasswordCredential}}
+  ::  Set |stream| and |content type| to the result of executing the extraction
+      algorithm defined in [[#passwordcredential-body]].
 
-  {{FormData}} objects have a <dfn for="FormData" attribute>opaque flag</dfn>
-  which is unset unless otherwise specified. The {{FormData}} object is
-  <a>opaque</a> if this flag is set, which has the following implications:
-
-  1.  Whenever the user agent would execute an opaque {{FormData}} object's
-      {{FormData/get()}} method, it MUST return `null`.
-
-  2.  Whenever the user agent would execute an opaque {{FormData}} object's
-      {{FormData/getAll()}} method, it MUST return the empty sequence.
-
-  3.  The opaqueness of a {{FormData}} object taints {{Request}} objects created
-      from them. The {{Body}} accessor methods will reject with a `TypeError`.
-
-  4.  Data from opaque {{FormData}} objects can only be <a>extracted</a> in the
-      context of executing {{fetch()}} or {{XMLHttpRequest}}'s
-      {{XMLHttpRequest/send()}} method.
-
-  These are described in normative detail in [[#monkey-patching-fetch]] and
-  [[#monkey-patching-xhr]] (and will ideally move entirely to those documents).
-
-  <h4 id="opaque-urlsearchparams-objects" dfn>Opaque `URLSearchParams` objects</h4>
-
-  {{URLSearchParams}} objects have a <dfn for="URLSearchParams" attribute>opaque
-  flag</dfn> which is unset unless otherwise specified. The {{URLSearchParams}}
-  object is <a>opaque</a> if this flag is set, which has the following
-  implications:
-
-  1.  Whenever the user agent would execute an opaque {{FormData}} object's
-      {{FormData/get()}} method, it MUST return `null`.
-
-  2.  Whenever the user agent would execute an opaque {{FormData}} object's
-      {{FormData/getAll()}} method, it MUST return the empty sequence.
-
-  3.  The opaqueness of a {{FormData}} object taints {{Request}} objects created
-      from them. The {{Body}} accessor methods will reject with a `TypeError`.
-
-  4.  Data from opaque {{FormData}} objects can only be <a>extracted</a> in the
-      context of executing {{fetch()}} or {{XMLHttpRequest}}'s
-      {{XMLHttpRequest/send()}} method.
-
-  These are described in normative detail in [[#monkey-patching-fetch]] and
-  [[#monkey-patching-xhr]] (and will ideally move entirely to those documents).
-
-  <h4 id="monkey-patching-fetch">Monkey-patching Fetch</h4>
-
-  <h5 id="monkey-patching-fetch-1">Fetch: <code>Body</code> objects</h5>
-
-  Add a new <dfn attribute for="Body">opaque flag</dfn> to Fetch's {{Body}}
-  interface. This flag is unset unless otherwise specified.
-
-  Replace the {{Body/arrayBuffer()}} method's definition with:
-
-  1.  If the <a attribute for="Body">opaque flag</a> is set, return a
-      <code>Promise</code> rejected with a <code>TypeError</code>.
-
-  2.  Return the result of running <a>consume body</a> with
-      <var>ArrayBuffer</var>.
-
-  Replace the {{Body/blob()}} method's definition with:
-
-  1.  If the <a attribute for="Body">opaque flag</a> is set, return a
-      <code>Promise</code> rejected with a <code>TypeError</code>.
-
-  2.  Return the result of running <a>consume body</a> with
-      <var>Blob</var>.
-
-  Replace the {{Body/formData()}} method's definition with:
-
-  1.  If the <a attribute for="Body">opaque flag</a> is set, return a
-      <code>Promise</code> rejected with a <code>TypeError</code>.
-
-  2.  Return the result of running <a>consume body</a> with
-      <var>FormData</var>.
-
-  Replace the {{Body/json()}} method's definition with:
-
-  1.  If the <a attribute for="Body">opaque flag</a> is set, return a
-      <code>Promise</code> rejected with a <code>TypeError</code>.
-
-  2.  Return the result of running <a>consume body</a> with
-      <var>JSON</var>.
-
-  Replace the {{Body/text()}} method's definition with:
-
-  1.  If the <a attribute for="Body">opaque flag</a> is set, return a
-      <code>Promise</code> rejected with a <code>TypeError</code>.
-
-  2.  Return the result of running <a>consume body</a> with
-      <var>text</var>.
-
-  Note: We reject each of the accessor methods' <code>Promise</code>s, which
-  which means that the body remains unconsumed.
-
-  <h5 id="monkey-patching-fetch-2">Fetch: <code>Request</code>'s constructor</h5>
+  <h4 id="monkey-patching-fetch-2">
 
   Perform the following after step 33 of the current {{Request()}} constructor:
 
-  <ol start="34">
+  <ol step="34">
     <li>
-      If <var>init</var>'s body member is an <a>opaque</a> {{FormData}} or
-      {{URLSearchParams}} object, or |input|'s <a for="request">body</a>'s
-      <a attribute for="Body">opaque flag</a> is set:
-     
-      1.  Set |r|'s <a for="request">body</a>'s <a attribute for="Body">opaque
-          flag</a>.
+      If |init|'s `body` member is a {{Credential}} object:
 
-      2.  If |r|'s {{Request/url}}'s {{URL/origin}} is not the same as |r|'s
-          {{Request/client}}'s <a>origin</a>, throw a `TypeError`.
+      1.  If |r|'s <a for="request">url</a> is not the same as |r|'s
+          <a for="request">client</a>'s {{URL/origin}}, throw a `TypeError`.
 
-      3.  Set |r|'s <a for="Request" attribute>redirect mode</a> to "`error`".
+      2.  Set |r|'s <a for="request">redirect mode</a> to "`error`".
 
-      4.  Set |r|'s <a for="Request" attribute>skip-service-worker flag</a>.
+      3.  Set |r|'s <a for="request">skip-service-worker flag</a>.
     </li>
   </ol>
-
-  <h4 id="monkey-patching-url">Monkey-patching URL</h4>
-
-  <h5 id="monkey-patching-url-1">`URLSearchParams` Iteration</code></h5>
-
-  Replace the following text from {{URLSearchParams}}:
-
-  <blockquote>
-    The <a>value pairs to iterate over</a> are are the
-    <a for="URLSearchParams">list</a> name-value pairs with the key being the
-    name and the value being the value.
-  </blockquote>
-
-  With:
-
-  <blockquote>
-    The <a>value pairs to iterate over</a> is an empty list if the
-    <a for="URLSearchParams" attribute>opaque flag</a> is set, otherwise the
-    <a for="URLSearchParams">list</a> name-value pairs with the key being the
-    name and the value being the value.
-  </blockquote>
-
-  <h5 id="monkey-patching-url-2">`URLSearchParams`'s `get()`</h5>
-
-  Redefine {{URLSearchParams}}'s {{URLSearchParams/get()}} method as follows.
-  Given a {{USVString}} (|name|):
-
-  1.  If the <a for="FormData" attribute>opaque flag</a> is set, return `null`.
-
-  2.  Otherwise, return the value of the first name-value pair whose name is
-      |name| in <a for="URLSearchParams">list</a> if there is such a pair, and
-      `null` otherwise.
-
-  <h5 id="monkey-patching-url-3">`URLSearchParams`'s `getAll()`</h5>
-
-  Redefine {{URLSearchParams}}'s {{URLSearchParams/getAll()}} method as follows.
-  Given a {{USVString}} (|name|):
-
-  1.  If the object is <a>opaque</a>, return the empty sequence.
-  
-  2.  Otherwise, return the values of all name-value pairs in
-      <a for="URLSearchParams">list</a> whose name is |name|, in list order, if
-      any such pairs exist. Return the empty sequence otherwise.
-
-  <h4 id="monkey-patching-xhr">Monkey-patching XMLHttpRequest</h4>
-
-  <h5 id="monkey-patching-xhr-1">`FormData` Iteration</code></h5>
-
-  Replace the following text from {{FormData}}:
-
-  <blockquote>
-    The <a>value pairs to iterate over</a> are the <a>entries</a> with the key
-    being the {{entry/name}} and the value the {{entry/value}}.
-  </blockquote>
-
-  With:
-
-  <blockquote>
-    The <a>value pairs to iterate over</a> is an empty list if the
-    <a for="FormData" attribute>opaque flag</a> is set, otherwise the
-    <a>entries</a> with the key being the {{entry/name}} and the value the
-    {{entry/value}}.
-  </blockquote>
-
-  <h5 id="monkey-patching-xhr-2">`FormData`'s `get()`</h5>
-
-  Redefine {{FormData}}'s {{FormData/get()}} method as follows:
-
-  1.  If the <a for="FormData" attribute>opaque flag</a> is set, return `null`.
-
-  2.  Otherwise, return the {{entry/value}} of the first <a>entry</a> whose
-      {{entry/name}} is  is |name|, and `null` if no such <a>entry</a> exists.
-
-  <h5 id="monkey-patching-xhr-3">`FormData`'s `getAll()`</h5>
-
-  Redefine {{FormData}}'s {{FormData/getAll()}} method as follows:
-
-  1.  If the object is <a>opaque</a>, return the empty sequence.
-  
-  2.  Otherwise, return the {{entry/value}}s of all <a>entries</a> whose
-      {{entry/name}} is |name|, in list order, and the empty sequence if no such
-      <a>entry</a> exists.
 </section>
 
 <!--
@@ -1694,79 +1505,6 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
     </li>
   </ol>
 
-  <h3 id="processing-password">
-    Processing <code>PasswordCredential</code>s
-  </h3>
-
-  <h4 id="generate-formdata">
-    Generate a `FormData` object from |credential|
-  </h4>
-
-  Given a {{PasswordCredentialConversionOptions}} (<var>options</var>) and a
-  {{PasswordCredential}} (|credential|), this method will create an
-  <a>opaque</a> {{FormData}} object which can be used to submit the credential
-  information to a sign-in endpoint:
-
-  1.  Let |environment| be the <a>incumbent settings object</a>.
-
-  2.  Return a new {{FormData}} object <strong>and</strong> terminate this
-      algorithm if any of the following conditions are true:
-
-      1.  [[#is-match]] returns `No Match` when executed upon |credential| and
-          |environment|'s <a>origin</a>.
-
-      2.  |environment| is not a <a>secure context</a>
-
-  3.  Let |fd| be a new {{FormData}} object.
-
-  4.  Set |fd|'s <a for="FormData" attribute>opaque flag</a>.
-
-  5.  Append a new <a>entry</a> to |fd|'s list of <a>entries</a> whose
-      {{entry/name}} is |option|'s
-      {{PasswordCredentialConversionOptions/idName}}, and whose value is
-      |credential|'s {{Credential/id}}.
-
-  6.  Append a new <a>entry</a> to |fd|'s list of <a>entries</a> whose
-      {{entry/name}} is |option|'s
-      {{PasswordCredentialConversionOptions/passwordName}}, and whose value is
-      |credential|'s {{PasswordCredential/[[password]]}}.
-
-  7.  Resolve |fd|.
-
-  <h4 id="generate-urlsearchparams">
-    Generate a `URLSearchParams` object from |credential| 
-  </h4>
-
-  Given a {{PasswordCredentialConversionOptions}} (|options|) and a
-  {{PasswordCredential}} (|credential|), this method will create an
-  <a>opaque</a> {{URLSearchParams}} object which can be used to submit the
-  credential information to a sign-in endpoint:
-
-  1.  Let |environment| be the <a>incumbent settings object</a>.
-
-  2.  Return a new {{URLSearchParams}} object <strong>and</strong> terminate
-      this algorithm if any of the following conditions are true:
-
-      1.  [[#is-match]] returns <code>No Match</code> when executed upon
-          |credential| and |environment|'s <a>origin</a>.
-
-      2.  |environment| is not a <a>secure context</a>
-
-  3.  Let |usp| be a new {{URLSearchParams}} object.
-
-  4.  Set |usp|'s <a for="URLSearchParams" attribute>opaque flag</a>.
-
-  5.  Append a new name-value pair whose name is |option|'s
-      {{PasswordCredentialConversionOptions/idName}}, and whose value is
-      |credential|'s {{Credential/id}} to <a for="URLSearchParams">list</a>.
-
-  6.  Append a new name-value pair whose name is |option|'s
-      {{PasswordCredentialConversionOptions/passwordName}}, and whose value is
-      |credential|'s {{PasswordCredential/password}} to
-      <a for="URLSearchParams">list</a>.
-
-  7.  Return |usp|.
-
   <h3 id="processing-federated">
     Processing <code>FederatedCredential</code>s
   </h3>
@@ -2179,9 +1917,8 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   </ol>
 
   {{PasswordCredential}}s further mitigate the risk of data leakage by never
-  exposing the {{[[password]]}} slot directly to a page's JavaScript, but
-  instead constructing an <a>opaque</a> {{FormData}} object via
-  {{PasswordCredential/toFormData()}}.
+  exposing the {{[[password]]}} slot directly to a page's JavaScript, but only
+  allowing its submission to a same-origin server-side endpoint via {{fetch()}}.
 
   Additionally, authors SHOULD mitigate the risk of leakage by setting a
   reasonable Content Security Policy [[!CSP2]] which restricts the origins to
@@ -2205,7 +1942,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   <h3 id="security-same-origin-leakage">Same-origin Leakage</h3>
 
   Cross-site scripting attacks could make it possible to exploit
-  {{PasswordCredential/toFormData()}} and {{fetch()}} in order to leak
+  {{PasswordCredential}}'s integration with {{fetch()}} in order to leak
   credential information via a vulnerable same-origin endpoint. To mitigate
   this kind of risk, authors SHOULD set a reasonable Content Security Policy
   which restricts the kinds of content which can execute in their sites'
