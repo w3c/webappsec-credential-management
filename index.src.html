@@ -102,6 +102,7 @@ spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
     text: client; url: concept-request-client
     text: url; url: concept-request-url
     text: redirect mode; url: concept-request-redirect-mode
+    text: skip-service-worker flag; url: skip-service-worker-flag
 spec: CSP2; urlPrefix: https://w3c.github.io/webappsec/specs/content-security-policy/
   type: dfn
     text: form-action; url: directive-form-action
@@ -1001,6 +1002,9 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   that enable developers to submit the credentials to their server via
   {{fetch()}}, but prevent direct JavaScript access.
 
+  Note: Opaque data objects do not prevent Service Workers from reading the
+  data from a request before it hits the wire. If this ends up being a 
+
   <h4 id="opaque-formdata-objects" dfn>Opaque `FormData` objects</h4>
 
   {{FormData}} objects have a <dfn for="FormData" attribute>opaque flag</dfn>
@@ -1113,6 +1117,8 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
           {{Request/client}}'s <a>origin</a>, throw a `TypeError`.
 
       3.  Set |r|'s <a for="Request" attribute>redirect mode</a> to "`error`".
+
+      4.  Set |r|'s <a for="Request" attribute>skip-service-worker flag</a>.
     </li>
   </ol>
 

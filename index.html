@@ -1848,6 +1848,8 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
   attack (see <a href="#security-cross-origin-leakage">§6.1 Cross-origin Credential Leakage</a>). We mitigate this risk by
   hiding the credential information from JavaScript through the construction of <dfn data-dfn-type="dfn" data-noexport="" id="opaque">opaque<a class="self-link" href="#opaque"></a></dfn> variants of <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> and <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#dom-urlsearchparams">URLSearchParams</a></code> objects
   that enable developers to submit the credentials to their server via <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a></code>, but prevent direct JavaScript access.</p>
+    <p class="note" role="note">Note: Opaque data objects do not prevent Service Workers from reading the
+  data from a request before it hits the wire. If this ends up being a</p>
     <h4 class="heading settled" data-dfn-type="dfn" data-level="3.3.1" data-lt="Opaque FormData objects" data-noexport="" id="opaque-formdata-objects"><span class="secno">3.3.1. </span><span class="content">Opaque <code>FormData</code> objects</span><a class="self-link" href="#opaque-formdata-objects"></a></h4>
     <p><code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> objects have a <dfn class="idl-code" data-dfn-for="FormData" data-dfn-type="attribute" data-export="" id="dom-formdata-opaque-flag">opaque flag<a class="self-link" href="#dom-formdata-opaque-flag"></a></dfn> which is unset unless otherwise specified. The <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> object is <a data-link-type="dfn" href="#opaque">opaque</a> if this flag is set, which has the following implications:</p>
     <ol>
@@ -1933,6 +1935,8 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
         <p>If <var>r</var>’s <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#concept-request-url">url</a></code>'s <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#concept-url-origin">origin</a></code> is not the same as <var>r</var>’s <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a></code>'s <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a>, throw a <code>TypeError</code>.</p>
        <li data-md="">
         <p>Set <var>r</var>’s <a class="idl-code" data-link-type="attribute" href="https://fetch.spec.whatwg.org/#concept-request-redirect-mode">redirect mode</a> to "<code>error</code>".</p>
+       <li data-md="">
+        <p>Set <var>r</var>’s <a class="idl-code" data-link-type="attribute" href="https://fetch.spec.whatwg.org/#skip-service-worker-flag">skip-service-worker flag</a>.</p>
       </ol>
     </ol>
     <h4 class="heading settled" data-level="3.3.4" id="monkey-patching-url"><span class="secno">3.3.4. </span><span class="content">Monkey-patching URL</span><a class="self-link" href="#monkey-patching-url"></a></h4>
@@ -2828,6 +2832,7 @@ partial dictionary CredentialRequestOptions {
      <li><a href="https://fetch.spec.whatwg.org/#dom-Body-formData">formData()</a>
      <li><a href="https://fetch.spec.whatwg.org/#dom-Body-json">json()</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-request-redirect-mode">redirect mode</a>
+     <li><a href="https://fetch.spec.whatwg.org/#skip-service-worker-flag">skip-service-worker flag</a>
      <li><a href="https://fetch.spec.whatwg.org/#dom-Body-text">text()</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-request-url">url</a>
     </ul>
