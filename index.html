@@ -1114,7 +1114,7 @@ store user credentials for future use.</p>
        <a href="#monkey-patching-fetch"><span class="secno">3.3</span> <span class="content">Monkey-patching Fetch</span></a>
        <ul class="toc">
         <li><a href="#monkey-patching-fetch-1"><span class="secno">3.3.1</span> <span class="content">Body extraction</span></a>
-        <li><a href="#monkey-patching-fetch-2"><span class="secno">3.3.2</span> <span class="content"> <p>Perform the following after step 33 of the current <code class="idl"><span>Request()</span></code> constructor:</p> <ol step="34"> <li> If <var>init</var>’s <code>body</code> member is a <code class="idl"><span>Credential</span></code> object: <ol><li data-md=""><p>If <var>r</var>’s <span>url</span> is not the same as <var>r</var>’s <span>client</span>’s <code class="idl"><span>origin</span></code>, throw a <code>TypeError</code>.</p> </li><li data-md=""><p>Set <var>r</var>’s <span>redirect mode</span> to "<code>error</code>".</p> </li><li data-md=""><p>Set <var>r</var>’s <span>skip-service-worker flag</span>.</p> </li></ol> </li> </ol> </span></a>
+        <li><a href="#monkey-patching-fetch-2"><span class="secno">3.3.2</span> <span class="content"><code>Request()</code> constructor</span></a>
        </ul>
      </ul>
     <li>
@@ -1815,7 +1815,20 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
       <p>Set <var>stream</var> and <var>content type</var> to the result of executing the extraction
   algorithm defined in <a href="#passwordcredential-body">§3.1.3.1 Body mixin definitions</a>.</p>
     </dl>
-    <h4 class="heading settled" data-level="3.3.2" id="monkey-patching-fetch-2"><span class="secno">3.3.2. </span><span class="content"> <p>Perform the following after step 33 of the current <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-request">Request()</a></code> constructor:</p> <ol step="34"> <li> If <var>init</var>’s <code>body</code> member is a <code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code> object: <ol><li data-md=""><p>If <var>r</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url">url</a> is not the same as <var>r</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>’s <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#concept-url-origin">origin</a></code>, throw a <code>TypeError</code>.</p> </li><li data-md=""><p>Set <var>r</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-redirect-mode">redirect mode</a> to "<code>error</code>".</p> </li><li data-md=""><p>Set <var>r</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#skip-service-worker-flag">skip-service-worker flag</a>.</p> </li></ol> </li> </ol> </span><a class="self-link" href="#monkey-patching-fetch-2"></a></h4>
+    <h4 class="heading settled" data-level="3.3.2" id="monkey-patching-fetch-2"><span class="secno">3.3.2. </span><span class="content"><code>Request()</code> constructor</span><a class="self-link" href="#monkey-patching-fetch-2"></a></h4>
+    <p>Perform the following after step 33 of the current <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-request">Request()</a></code> constructor:</p>
+    <ol step="34">
+     <li>
+       If <var>init</var>’s <code>body</code> member is a <code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code> object: 
+      <ol>
+       <li data-md="">
+        <p>If <var>r</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url">url</a> is not the same as <var>r</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>’s <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#concept-url-origin">origin</a></code>, throw a <code>TypeError</code>.</p>
+       <li data-md="">
+        <p>Set <var>r</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-redirect-mode">redirect mode</a> to "<code>error</code>".</p>
+       <li data-md="">
+        <p>Set <var>r</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#skip-service-worker-flag">skip-service-worker flag</a>.</p>
+      </ol>
+    </ol>
    </section>
    <section>
     <h2 class="heading settled" data-level="4" id="algorithms"><span class="secno">4. </span><span class="content">Algorithms</span><a class="self-link" href="#algorithms"></a></h2>
