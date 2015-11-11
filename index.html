@@ -1090,7 +1090,8 @@ store user credentials for future use.</p>
         <li>
          <a href="#interfaces-credential-types-passwordcredential"><span class="secno">3.1.3</span> <span class="content"><code>PasswordCredential</code></span></a>
          <ul class="toc">
-          <li><a href="#passwordcredential-matching"><span class="secno">3.1.3.1</span> <span class="content"> Matching Algorithm </span></a>
+          <li><a href="#why-oh-why"><span class="secno">3.1.3.1</span> <span class="content"> Why on Earth do we have both <code>toFormData()</code> and <code>toURLSearchParams()</code>? </span></a>
+          <li><a href="#passwordcredential-matching"><span class="secno">3.1.3.2</span> <span class="content"> Matching Algorithm </span></a>
          </ul>
         <li>
          <a href="#interfaces-credential-types-federatedcredential"><span class="secno">3.1.4</span> <span class="content"><code>FederatedCredential</code></span></a>
@@ -1612,7 +1613,17 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="pas
     <p>All <code class="idl"><a data-link-type="idl" href="#passwordcredential">PasswordCredential</a></code> objects have an internal slot named <dfn class="idl-code" data-dfn-for="PasswordCredential" data-dfn-type="attribute" data-export="" id="dom-passwordcredential-password-slot">[[password]]<a class="self-link" href="#dom-passwordcredential-password-slot"></a></dfn> which stores the
   credential’s password. This property is not directly exposed to the web, but
   used to construct the <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> object generated during <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-toformdata">toFormData()</a></code>.</p>
-    <h5 class="heading settled" data-level="3.1.3.1" id="passwordcredential-matching"><span class="secno">3.1.3.1. </span><span class="content"> Matching Algorithm </span><a class="self-link" href="#passwordcredential-matching"></a></h5>
+    <h5 class="heading settled" data-level="3.1.3.1" id="why-oh-why"><span class="secno">3.1.3.1. </span><span class="content"> Why on Earth do we have both <code>toFormData()</code> and <code>toURLSearchParams()</code>? </span><a class="self-link" href="#why-oh-why"></a></h5>
+    <p><em>This section is non-normative.</em></p>
+    <p>Devlopers may well scratch their heads in wonderment at the API defined here.
+  "Why do we have both <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-toformdata">toFormData()</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-tourlsearchparams">toURLSearchParams()</a></code>?", they’ll
+  ask, and "When should I use one, and when the other?"</p>
+    <p>In short: developers should use <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-toformdata">toFormData()</a></code>, unless they really need to
+  submit data with a MIME type of <code>application/x-www-form-urlencoded</code>, in
+  which case they should use <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-tourlsearchparams">toURLSearchParams()</a></code>. There are other subtle
+  differences between the objects (e.g. <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> can accept blobs, while <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#dom-urlsearchparams">URLSearchParams</a></code> cannot), but the MIME type is the only relevant
+  distinction for most use cases.</p>
+    <h5 class="heading settled" data-level="3.1.3.2" id="passwordcredential-matching"><span class="secno">3.1.3.2. </span><span class="content"> Matching Algorithm </span><a class="self-link" href="#passwordcredential-matching"></a></h5>
     <p><code class="idl"><a data-link-type="idl" href="#passwordcredential">PasswordCredential</a></code> objects' <a data-link-type="dfn" href="#options-matching-algorithm">options matching algorithm</a> always
   returns <a data-link-type="dfn" href="#match"><code>Match</code></a>.</p>
     <h4 class="heading settled" data-level="3.1.4" id="interfaces-credential-types-federatedcredential"><span class="secno">3.1.4. </span><span class="content"><code>FederatedCredential</code></span><a class="self-link" href="#interfaces-credential-types-federatedcredential"></a></h4>
@@ -1653,7 +1664,7 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
       present in <var>federated</var>: 
       <ol>
        <li>
-         For each <var>provider</var> in <var>federated</var>' <code>providers</code> list: 
+         For each <var>provider</var> in <var>federated</var>’ <code>providers</code> list: 
         <ol>
          <li> Return <a data-link-type="dfn" href="#match"><code>Matches</code></a> if <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-provider">provider</a></code> is a case-sensitive match for <var>provider</var>. 
         </ol>
@@ -1663,7 +1674,7 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
       present in <var>federated</var>: 
       <ol>
        <li>
-         For each <var>protocol</var> in <var>federated</var>' <code class="idl"><a data-link-type="idl" href="#dom-federatedcredentialrequestoptions-protocols">protocols</a></code> list: 
+         For each <var>protocol</var> in <var>federated</var>’ <code class="idl"><a data-link-type="idl" href="#dom-federatedcredentialrequestoptions-protocols">protocols</a></code> list: 
         <ol>
          <li> Return <a data-link-type="dfn" href="#match"><code>Matches</code></a> if <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-protocol">protocol</a></code> is a case-insensitive match for <var>protocol</var>. 
         </ol>
@@ -1913,15 +1924,15 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
     <p>Perform the following after step 33 of the current <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-request">Request()</a></code> constructor:</p>
     <ol start="34">
      <li>
-       If <var>init</var>’s body member is an <a data-link-type="dfn" href="#opaque">opaque</a> <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> or <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#dom-urlsearchparams">URLSearchParams</a></code> object, or <var>input</var>'s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-body">body</a>’s <a class="idl-code" data-link-type="attribute" href="#dom-body-opaque-flag">opaque flag</a> is set: 
+       If <var>init</var>’s body member is an <a data-link-type="dfn" href="#opaque">opaque</a> <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> or <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#dom-urlsearchparams">URLSearchParams</a></code> object, or <var>input</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-body">body</a>’s <a class="idl-code" data-link-type="attribute" href="#dom-body-opaque-flag">opaque flag</a> is set: 
       <ol>
        <li data-md="">
-        <p>Set <var>r</var>'s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-body">body</a>’s <a class="idl-code" data-link-type="attribute" href="#dom-body-opaque-flag">opaque
+        <p>Set <var>r</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-body">body</a>’s <a class="idl-code" data-link-type="attribute" href="#dom-body-opaque-flag">opaque
   flag</a>.</p>
        <li data-md="">
-        <p>If <var>r</var>'s <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#concept-request-url">url</a></code>'s <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#concept-url-origin">origin</a></code> is not the same as <var>r</var>'s <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a></code>'s <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a>, throw a <code>TypeError</code>.</p>
+        <p>If <var>r</var>’s <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#concept-request-url">url</a></code>'s <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#concept-url-origin">origin</a></code> is not the same as <var>r</var>’s <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a></code>'s <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a>, throw a <code>TypeError</code>.</p>
        <li data-md="">
-        <p>Set <var>r</var>'s <a class="idl-code" data-link-type="attribute" href="https://fetch.spec.whatwg.org/#concept-request-redirect-mode">redirect mode</a> to "<code>error</code>".</p>
+        <p>Set <var>r</var>’s <a class="idl-code" data-link-type="attribute" href="https://fetch.spec.whatwg.org/#concept-request-redirect-mode">redirect mode</a> to "<code>error</code>".</p>
       </ol>
     </ol>
     <h4 class="heading settled" data-level="3.3.4" id="monkey-patching-url"><span class="secno">3.3.4. </span><span class="content">Monkey-patching URL</span><a class="self-link" href="#monkey-patching-url"></a></h4>
@@ -1986,12 +1997,12 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
   from somewhere other than a <a data-link-type="dfn" href="http://www.w3.org/TR/html5/browsers.html#top-level-browsing-context">top-level browsing context</a>, the <code>Promise</code> will be rejected with a <code>NotSupportedError</code>.</p>
     <ol>
      <li> Let <var>settings</var> be the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/webappapis.html#incumbent-settings-object">incumbent settings object</a>. 
-     <li> Let <var>origin</var> be <var>settings</var>' <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a>. 
+     <li> Let <var>origin</var> be <var>settings</var>’ <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a>. 
      <li>
        Return a <code>Promise</code> rejected with <code>NotSupportedError</code> if any of the following statements are true: 
       <ol>
        <li> <var>settings</var> does not have a <a data-link-type="dfn" href="http://www.w3.org/TR/html5/webappapis.html#responsible-document">responsible document</a> 
-       <li> <var>settings</var>' <a data-link-type="dfn" href="http://www.w3.org/TR/html5/webappapis.html#responsible-document">responsible document</a> is not the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/browsers.html#active-document">active document</a> in the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/browsers.html#top-level-browsing-context">top-level browsing context</a> 
+       <li> <var>settings</var>’ <a data-link-type="dfn" href="http://www.w3.org/TR/html5/webappapis.html#responsible-document">responsible document</a> is not the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/browsers.html#active-document">active document</a> in the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/browsers.html#top-level-browsing-context">top-level browsing context</a> 
        <li> <var>settings</var> is not a <a data-link-type="dfn" href="https://w3c.github.io/webappsec/specs/powerfulfeatures/#secure-context">secure context</a> 
       </ol>
      <li> Let <var>types</var> be an empty set. 
@@ -2047,12 +2058,12 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
   from somewhere other than a <a data-link-type="dfn" href="http://www.w3.org/TR/html5/browsers.html#top-level-browsing-context">top-level browsing context</a>, the <code>Promise</code> will be rejected with a <code>NotSupportedError</code>.</p>
     <ol>
      <li> Let <var>settings</var> be the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/webappapis.html#incumbent-settings-object">incumbent settings object</a>. 
-     <li> Let <var>origin</var> be <var>settings</var>' <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a>. 
+     <li> Let <var>origin</var> be <var>settings</var>’ <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a>. 
      <li>
        Return a <code>Promise</code> rejected with <code>NotSupportedError</code> if any of the following statements are true: 
       <ol>
        <li> <var>settings</var> does not have a <a data-link-type="dfn" href="http://www.w3.org/TR/html5/webappapis.html#responsible-document">responsible document</a> 
-       <li> <var>settings</var>' <a data-link-type="dfn" href="http://www.w3.org/TR/html5/webappapis.html#responsible-document">responsible document</a> is not the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/browsers.html#active-document">active document</a> in the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/browsers.html#top-level-browsing-context">top-level browsing context</a> 
+       <li> <var>settings</var>’ <a data-link-type="dfn" href="http://www.w3.org/TR/html5/webappapis.html#responsible-document">responsible document</a> is not the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/browsers.html#active-document">active document</a> in the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/browsers.html#top-level-browsing-context">top-level browsing context</a> 
        <li> <var>settings</var> is not a <a data-link-type="dfn" href="https://w3c.github.io/webappsec/specs/powerfulfeatures/#secure-context">secure context</a> 
       </ol>
      <li> Let <var>promise</var> be a newly created <code>Promise</code> object. 
@@ -2214,18 +2225,18 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
   algorithm if any of the following conditions are true:</p>
       <ol>
        <li data-md="">
-        <p><a href="#is-match">§4.5.2 Does credential match origin B?</a> returns <code>No Match</code> when executed upon <var>credential</var> and <var>environment</var>'s <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a>.</p>
+        <p><a href="#is-match">§4.5.2 Does credential match origin B?</a> returns <code>No Match</code> when executed upon <var>credential</var> and <var>environment</var>’s <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a>.</p>
        <li data-md="">
         <p><var>environment</var> is not a <a data-link-type="dfn" href="https://w3c.github.io/webappsec/specs/powerfulfeatures/#secure-context">secure context</a></p>
       </ol>
      <li data-md="">
       <p>Let <var>fd</var> be a new <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> object.</p>
      <li data-md="">
-      <p>Set <var>fd</var>'s <a class="idl-code" data-link-type="attribute" href="#dom-formdata-opaque-flag">opaque flag</a>.</p>
+      <p>Set <var>fd</var>’s <a class="idl-code" data-link-type="attribute" href="#dom-formdata-opaque-flag">opaque flag</a>.</p>
      <li data-md="">
-      <p>Append a new <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entry</a> to <var>fd</var>'s list of <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entries</a> whose <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-name">name</a></code> is <var>option</var>'s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredentialconversionoptions-idname">idName</a></code>, and whose value is <var>credential</var>'s <code class="idl"><a data-link-type="idl" href="#dom-credential-id">id</a></code>.</p>
+      <p>Append a new <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entry</a> to <var>fd</var>’s list of <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entries</a> whose <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-name">name</a></code> is <var>option</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredentialconversionoptions-idname">idName</a></code>, and whose value is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-id">id</a></code>.</p>
      <li data-md="">
-      <p>Append a new <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entry</a> to <var>fd</var>'s list of <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entries</a> whose <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-name">name</a></code> is <var>option</var>'s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredentialconversionoptions-passwordname">passwordName</a></code>, and whose value is <var>credential</var>'s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot">[[password]]</a></code>.</p>
+      <p>Append a new <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entry</a> to <var>fd</var>’s list of <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entries</a> whose <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-name">name</a></code> is <var>option</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredentialconversionoptions-passwordname">passwordName</a></code>, and whose value is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot">[[password]]</a></code>.</p>
      <li data-md="">
       <p>Resolve <var>fd</var>.</p>
     </ol>
@@ -2240,18 +2251,18 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
   this algorithm if any of the following conditions are true:</p>
       <ol>
        <li data-md="">
-        <p><a href="#is-match">§4.5.2 Does credential match origin B?</a> returns <code>No Match</code> when executed upon <var>credential</var> and <var>environment</var>'s <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a>.</p>
+        <p><a href="#is-match">§4.5.2 Does credential match origin B?</a> returns <code>No Match</code> when executed upon <var>credential</var> and <var>environment</var>’s <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a>.</p>
        <li data-md="">
         <p><var>environment</var> is not a <a data-link-type="dfn" href="https://w3c.github.io/webappsec/specs/powerfulfeatures/#secure-context">secure context</a></p>
       </ol>
      <li data-md="">
       <p>Let <var>usp</var> be a new <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#dom-urlsearchparams">URLSearchParams</a></code> object.</p>
      <li data-md="">
-      <p>Set <var>usp</var>'s <a class="idl-code" data-link-type="attribute" href="#dom-urlsearchparams-opaque-flag">opaque flag</a>.</p>
+      <p>Set <var>usp</var>’s <a class="idl-code" data-link-type="attribute" href="#dom-urlsearchparams-opaque-flag">opaque flag</a>.</p>
      <li data-md="">
-      <p>Append a new name-value pair whose name is <var>option</var>'s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredentialconversionoptions-idname">idName</a></code>, and whose value is <var>credential</var>'s <code class="idl"><a data-link-type="idl" href="#dom-credential-id">id</a></code> to <a data-link-type="dfn" href="http://www.w3.org/TR/url/#concept-urlsearchparams-list">list</a>.</p>
+      <p>Append a new name-value pair whose name is <var>option</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredentialconversionoptions-idname">idName</a></code>, and whose value is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-id">id</a></code> to <a data-link-type="dfn" href="http://www.w3.org/TR/url/#concept-urlsearchparams-list">list</a>.</p>
      <li data-md="">
-      <p>Append a new name-value pair whose name is <var>option</var>'s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredentialconversionoptions-passwordname">passwordName</a></code>, and whose value is <var>credential</var>'s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password">password</a></code> to <a data-link-type="dfn" href="http://www.w3.org/TR/url/#concept-urlsearchparams-list">list</a>.</p>
+      <p>Append a new name-value pair whose name is <var>option</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredentialconversionoptions-passwordname">passwordName</a></code>, and whose value is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password">password</a></code> to <a data-link-type="dfn" href="http://www.w3.org/TR/url/#concept-urlsearchparams-list">list</a>.</p>
      <li data-md="">
       <p>Return <var>usp</var>.</p>
     </ol>
@@ -2392,7 +2403,7 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
              For each <code class="idl"><a data-link-type="idl" href="#passwordcredential">PasswordCredential</a></code> <var>credential</var> in the <a data-link-type="dfn" href="#credential-store">credential store</a>: 
             <ol>
              <li>
-               For each <var>provider</var> in <var>options</var>' <code class="idl"><a data-link-type="idl" href="#dom-federatedcredentialrequestoptions-providers">providers</a></code> property: 
+               For each <var>provider</var> in <var>options</var>’ <code class="idl"><a data-link-type="idl" href="#dom-federatedcredentialrequestoptions-providers">providers</a></code> property: 
               <ol>
                <li>
                  If <a href="#is-match">§4.5.2 Does credential match origin B?</a> returns <code>Exact Match</code> or <code>Fuzzy Match</code> when executed upon <var>credential</var> and <var>provider</var>: 
@@ -2409,7 +2420,7 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
                   store</a> has stored a <a data-link-type="dfn" href="#protocol-set">protocol set</a>: 
             <ol>
              <li>
-               For each <var>protocol</var> in <var>options</var>' <code class="idl"><a data-link-type="idl" href="#dom-federatedcredentialrequestoptions-protocols">protocols</a></code> property: 
+               For each <var>protocol</var> in <var>options</var>’ <code class="idl"><a data-link-type="idl" href="#dom-federatedcredentialrequestoptions-protocols">protocols</a></code> property: 
               <ol>
                <li>
                  If <var>origin</var>’s <a data-link-type="dfn" href="#protocol-set">protocol set</a> contains <var>protocol</var>: 

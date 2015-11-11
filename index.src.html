@@ -674,6 +674,23 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   used to construct the {{FormData}} object generated during
   {{PasswordCredential/toFormData()}}.
 
+  <h5 id="why-oh-why">
+    Why on Earth do we have both `toFormData()` and `toURLSearchParams()`?
+  </h5>
+
+  <em>This section is non-normative.</em>
+
+  Devlopers may well scratch their heads in wonderment at the API defined here.
+  "Why do we have both {{toFormData()}} and {{toURLSearchParams()}}?", they'll
+  ask, and "When should I use one, and when the other?"
+
+  In short: developers should use {{toFormData()}}, unless they really need to
+  submit data with a MIME type of `application/x-www-form-urlencoded`, in
+  which case they should use {{toURLSearchParams()}}. There are other subtle
+  differences between the objects (e.g. {{FormData}} can accept blobs, while
+  {{URLSearchParams}} cannot), but the MIME type is the only relevant
+  distinction for most use cases.
+
   <h5 id="passwordcredential-matching">
     Matching Algorithm
   </h5>
