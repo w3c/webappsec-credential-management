@@ -1112,11 +1112,7 @@ store user credentials for future use.</p>
       <li>
        <a href="#monkey-patching-fetch"><span class="secno">3.3</span> <span class="content">Monkey-patching Fetch</span></a>
        <ul class="toc">
-        <li>
-         <a href="#monkey-patching-fetch-1"><span class="secno">3.3.1</span> <span class="content">Body extraction</span></a>
-         <ul class="toc">
-          <li><a href="#passwordcredential-body"><span class="secno">3.3.1.1</span> <span class="content">Body mixin definitions</span></a>
-         </ul>
+        <li><a href="#monkey-patching-fetch-1"><span class="secno">3.3.1</span> <span class="content">Body extraction</span></a>
         <li><a href="#monkey-patching-fetch-2"><span class="secno">3.3.2</span> <span class="content"><code>Request()</code> constructor</span></a>
         <li><a href="#monkey-patching-fetch-3"><span class="secno">3.3.3</span> <span class="content"><code>RequestInit</code> dictionary</span></a>
        </ul>
@@ -1794,8 +1790,6 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
   remote (same-origin) server.</p>
     <h4 class="heading settled" data-level="3.3.1" id="monkey-patching-fetch-1"><span class="secno">3.3.1. </span><span class="content">Body extraction</span><a class="self-link" href="#monkey-patching-fetch-1"></a></h4>
     <p>Add the following to the switch in step 3 of the current <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-bodyinit-extract">extract</a> algorithm for <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#body">Body</a></code>:</p>
-    <h5 class="heading settled" data-level="3.3.1.1" id="passwordcredential-body"><span class="secno">3.3.1.1. </span><span class="content">Body mixin definitions</span><a class="self-link" href="#passwordcredential-body"></a></h5>
-    <p>To <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-bodyinit-extract">extract</a> a byte stream and a <code>Content-Type</code> from a <code class="idl"><a data-link-type="idl" href="#passwordcredential">PasswordCredential</a></code> (<var>credential</var>), execute the following steps:</p>
     <dl>
      <dt data-md="">
       <p><code class="idl"><a data-link-type="idl" href="#passwordcredential">PasswordCredential</a></code></p>
