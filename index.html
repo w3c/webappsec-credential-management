@@ -1799,14 +1799,48 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
      <dd data-md="">
       <ol>
        <li data-md="">
-        <p>Let <var>data</var> be <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-additionaldata">additionalData</a></code> attribute if it is not <code>undefined</code>, and a new <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> object
-  otherwise.</p>
+        <p>Let <var>data</var> be a copy of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-additionaldata">additionalData</a></code> attribute if it is not <code>undefined</code>, and a new <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> object otherwise.</p>
        <li data-md="">
-        <p>Execute <code>set()</code> on <var>data</var> with a <var>name</var> of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname">idName</a></code> and a <var>value</var> of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-id">id</a></code>.</p>
+        <p>Let <var>list</var> be an empty list.</p>
        <li data-md="">
-        <p>Execute <code>set()</code> on <var>data</var> with a <var>name</var> of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname">passwordName</a></code> and a <var>value</var> of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot">[[password]]</a></code>.</p>
-       <li data-md="">
-        <p>Set <var>stream</var> and <var>content type</var> to the result of <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-bodyinit-extract">extracting</a> a byte stream and a <code>Content-Type</code> from <var>data</var>.</p>
+        <p>If <var>data</var> is a <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> object, then:</p>
+        <ol>
+         <li data-md="">
+          <p>Set <var>list</var> to a copy of <var>data</var>’s <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entries</a>.</p>
+         <li data-md="">
+          <p>Remove all <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entry</a> objects from <var>list</var> whose <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-name">name</a> is either <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname">idName</a></code> or <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname">passwordName</a></code>.</p>
+         <li data-md="">
+          <p>Let <var>entry</var> be a new <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entry</a> whose <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-name">name</a> is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname">idName</a></code> and whose <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-value">value</a> is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-id">id</a></code>.</p>
+         <li data-md="">
+          <p>Append <var>entry</var> to <var>list</var>.</p>
+         <li data-md="">
+          <p>Let <var>entry</var> be a new <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entry</a> whose <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-name">name</a> is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname">passwordName</a></code> and whose <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-value">value</a> is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot">[[password]]</a></code>.</p>
+         <li data-md="">
+          <p>Append <var>entry</var> to <var>list</var>.</p>
+         <li data-md="">
+          <p>Push the result of running the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/forms.html#multipart/form-data-encoding-algorithm"><code>multipart/form-data</code> encoding
+  algorithm</a>, with <var>list</var> as <var>form data set</var> and with "<code>utf-8</code>" as
+  the explicit character encoding, to <var>stream</var>.</p>
+         <li data-md="">
+          <p>Set <var>Content-Type</var> to <code>multipart/form-data;boundary=</code>, followed by the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/forms.html#multipart/form-data-boundary-string"><code>multipart/form-data</code> boundary string</a> generated by the
+  multipart/form-data encoding algorithm.</p>
+        </ol>
+        <p>Otherwise <var>data</var> is a <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#dom-urlsearchparams">URLSearchParams</a></code> object, so:</p>
+        <ol>
+         <li data-md="">
+          <p>Set <var>list</var> to a copy of <var>data</var>’s <a data-link-type="dfn" href="http://www.w3.org/TR/url/#concept-urlsearchparams-list">list</a>.</p>
+         <li data-md="">
+          <p>Remove all name-value pairs from <var>list</var> whose name is either <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname">idName</a></code> or <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname">passwordName</a></code>.</p>
+         <li data-md="">
+          <p>Append a new name-value pair to <var>list</var> whose name is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname">idName</a></code> and whose value is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-id">id</a></code>.</p>
+         <li data-md="">
+          <p>Append a new name-value pair to <var>list</var> whose name is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname">passwordName</a></code> and whose value
+  is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot">[[password]]</a></code>.</p>
+         <li data-md="">
+          <p>Push the result of running the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/forms.html#application/x-www-form-urlencoded serializer"><code>application/x-www-form-urlencoded</code> serializer</a>, with <var>list</var>, to <var>stream</var>.</p>
+         <li data-md="">
+          <p>Set <var>Content-Type</var> to <code>application/x-www-form-urlencoded;charset=UTF-8</code>.</p>
+        </ol>
       </ol>
     </dl>
     <h4 class="heading settled" data-level="3.3.2" id="monkey-patching-fetch-2"><span class="secno">3.3.2. </span><span class="content">Body consumption</span><a class="self-link" href="#monkey-patching-fetch-2"></a></h4>
@@ -1815,6 +1849,7 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
      <li> If this <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#request">Request</a></code> object’s <a data-link-type="dfn" href="#opaque-flag">opaque flag</a> is set, throw a <code>TypeError</code>. 
     </ol>
     <h4 class="heading settled" data-level="3.3.3" id="monkey-patching-fetch-3"><span class="secno">3.3.3. </span><span class="content"><code>Request()</code> constructor</span><a class="self-link" href="#monkey-patching-fetch-3"></a></h4>
+    <p>Adjust step 8 of the current <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-request">Request()</a></code> algorithm to set the new <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request">request</a>’s <a data-link-type="dfn" href="#opaque-flag">opaque flag</a> to <var>request</var>’s <a data-link-type="dfn" href="#opaque-flag">opaque flag</a>.</p>
     <p>Perform the following after step 33 of the current <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-request">Request()</a></code> constructor:</p>
     <ol step="34">
      <li>
@@ -2617,9 +2652,12 @@ partial dictionary CredentialRequestOptions {
      <li><a href="http://www.w3.org/TR/html5/infrastructure.html#transferable">Transferable</a>
      <li><a href="http://www.w3.org/TR/html5/browsers.html#active-document">active document</a>
      <li><a href="http://www.w3.org/TR/html5/browsers.html#allowed-to-show-a-popup">allowed to show a popup</a>
+     <li><a href="http://www.w3.org/TR/html5/forms.html#application/x-www-form-urlencoded serializer">application/x-www-form-urlencoded serializer</a>
      <li><a href="http://www.w3.org/TR/html5/forms.html#autofilling-form-controls:-the-autocomplete-attribute">autocomplete</a>
      <li><a href="http://www.w3.org/TR/html5/webappapis.html#incumbent-settings-object">incumbent settings object</a>
      <li><a href="http://www.w3.org/TR/html5/infrastructure.html#internal-structured-cloning-algorithm">internal structured cloning algorithm</a>
+     <li><a href="http://www.w3.org/TR/html5/forms.html#multipart/form-data-boundary-string">multipart/form-data boundary string</a>
+     <li><a href="http://www.w3.org/TR/html5/forms.html#multipart/form-data-encoding-algorithm">multipart/form-data encoding algorithm</a>
      <li><a href="http://www.w3.org/TR/html5/browsers.html#nested-browsing-context">nested browsing context</a>
      <li><a href="http://www.w3.org/TR/html5/webappapis.html#responsible-document">responsible document</a>
      <li><a href="http://www.w3.org/TR/html5/infrastructure.html#structured-clone">structured clone</a>
@@ -2653,6 +2691,7 @@ partial dictionary CredentialRequestOptions {
     <ul>
      <li><a href="http://www.w3.org/TR/url/#dom-urlsearchparams">URLSearchParams</a>
      <li><a href="http://www.w3.org/TR/url/#concept-url-host">host</a>
+     <li><a href="http://www.w3.org/TR/url/#concept-urlsearchparams-list">list</a>
      <li><a href="http://www.w3.org/TR/url/#concept-url-origin">origin</a>
      <li><a href="http://www.w3.org/TR/url/#concept-url-scheme">scheme</a>
     </ul>
@@ -2674,6 +2713,10 @@ partial dictionary CredentialRequestOptions {
     <ul>
      <li><a href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a>
      <li><a href="https://xhr.spec.whatwg.org/#interface-xmlhttprequest">XMLHttpRequest</a>
+     <li><a href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entries</a>
+     <li><a href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entry</a>
+     <li><a href="https://xhr.spec.whatwg.org/#concept-formdata-entry-name">name</a>
+     <li><a href="https://xhr.spec.whatwg.org/#concept-formdata-entry-value">value</a>
     </ul>
    <li>
     <a data-link-type="biblio" href="#biblio-webidl">[WebIDL]</a> defines the following terms:
