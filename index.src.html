@@ -81,7 +81,7 @@ spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
     text: network error; url: concept-network-error
     text: extracting a MIME type; url: concept-header-extract-mime-type
     text: extract; url: concept-bodyinit-extract
-    text: consume body; url: concept-Body-consume-body
+    text: consume body; url: concept-request-consume-body
     for: request
       text: body; url: concept-request-body
       text: client; url: concept-request-client
@@ -962,6 +962,9 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   during {{fetch()}} in ways that will remain opaque to anything other than the
   remote (same-origin) server.
 
+  To this end, <a>request</a> objects have an <dfn for="request">opaque
+  flag</dfn>, which is unset unless otherwise specified.
+
   <h4 id="monkey-patching-fetch-1">Body extraction</h4>
 
   Add the following to the switch in step 3 of the current <a>extract</a>
@@ -985,7 +988,19 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
           <a lt="extract">extracting</a> a byte stream and a `Content-Type`
           from |data|.
 
-  <h4 id="monkey-patching-fetch-2">`Request()` constructor</h4>
+  <h4 id="monkey-patching-fetch-2">Body consumption</h4>
+
+  Add the following as step 2 of the current <a>consume body</a> algorithm for
+  {{Request}}:
+
+  <ol start="2">
+    <li>
+      If this {{Request}} object's <a>opaque flag</a> is set, throw a
+      `TypeError`.
+    </li>
+  </ol>
+
+  <h4 id="monkey-patching-fetch-3">`Request()` constructor</h4>
 
   Perform the following after step 33 of the current {{Request()}} constructor:
 
@@ -999,14 +1014,20 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
       2.  Set |r|'s <a for="request">redirect mode</a> to "`error`".
 
       3.  Set |r|'s <a for="request">skip-service-worker flag</a>.
+
+      4.  Set |r|'s <a for="request">opaque flag</a>.
     </li>
   </ol>
 
-  <h4 id="monkey-patching-fetch-3">`RequestInit` dictionary</h4>
+  <h4 id="monkey-patching-fetch-4">`RequestInit` dictionary</h4>
 
-  The {{RequestInit}} dictionary accepts a {{BodyInit}} object for its `body`
-  property. We can either adjust {{BodyInit}} to include {{PasswordCredential}}
-  or adjust {{RequestInit}} to accept a {{BodyInit}} or a {{PasswordCredential}}.
+  Change the {{RequestInit}} dictionary's `body` member to be of the union type
+  `(BodyInit or Credential)`.
+
+  Note: The {{RequestInit}} parameter to {{Request}} is the only piece of the
+  Fetch infrastructure that accepts a {{Credential}}. In particular, neither
+  {{Response}} nor {{XMLHttpRequest}}'s `send()` method accept {{Credential}}
+  objects.
 </section>
 
 <!--
