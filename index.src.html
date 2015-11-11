@@ -94,6 +94,7 @@ spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
     text: Response
     text: Request
     text: Body
+    text: BodyInit
   type: method
     text: fetch(); url: dom-global-fetch
     text: arrayBuffer(); for: Body; url: dom-Body-arrayBuffer
@@ -619,7 +620,6 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
 
       attribute CredentialBodyType additionalData;
     };
-    PasswordCredential implements Body;
   </pre>
   
   :   <dfn attribute for="PasswordCredential">idName</dfn>
@@ -650,30 +650,6 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   <dfn attribute for="PasswordCredential">\[[password]]</dfn> which stores the
   credential's password. This property is not directly exposed to the web, but
   used to construct the request body during {{fetch()}}.
-
-  <h5 id="passwordcredential-body">Body mixin definitions</h5>
-
-  {{PasswordCredential}} implements the {{Body}} interface as follows:
-
-  {{PasswordCredential}}'s <a>consume body</a> algorithm returns a new `Promise`
-  rejected with a `TypeError`.
-
-  To <a>extract</a> a byte stream and a `Content-Type` from a
-  {{PasswordCredential}} (|credential|), execute the following steps:
-
-  1.  Let |data| be |credential|'s {{PasswordCredential/additionalData}}
-      attribute if it is not `undefined`, and a new {{FormData}} object otherwise.
-
-  2.  Execute `set()` on |data| with a |name| of |credential|'s
-      {{PasswordCredential/idName}} and a |value| of |credential|'s
-      {{Credential/id}}.
-
-  3.  Execute `set()` on |data| with a |name| of |credential|'s
-      {{PasswordCredential/passwordName}} and a |value| of |credential|'s
-      {{[[password]]}}.
-
-  4.  Return the result of <a lt="extract">extracting</a> a byte stream and a
-      `Content-Type` from |data|.
 
   <h5 id="passwordcredential-matching">
     Matching Algorithm
@@ -988,15 +964,31 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
 
   <h4 id="monkey-patching-fetch-1">Body extraction</h4>
 
-  {{PasswordCredential}} implements the {{Body}} interface, and defines an
-  <a>extract</a> algorithm and a <a>consume body</a> algorithm. The latter is
-  automatically wired into Fetch through the magic of interfaces. The former
-  needs to be hardwired by adding the following to the switch in step 3 of the
-  current <a>extract</a> algorithm for {{Body}}:
+  Add the following to the switch in step 3 of the current <a>extract</a>
+  algorithm for {{Body}}:
+
+  <h5 id="passwordcredential-body">Body mixin definitions</h5>
+
+  To <a>extract</a> a byte stream and a `Content-Type` from a
+  {{PasswordCredential}} (|credential|), execute the following steps:
 
   :   {{PasswordCredential}}
-  ::  Set |stream| and |content type| to the result of executing the extraction
-      algorithm defined in [[#passwordcredential-body]].
+  ::  
+      1.  Let |data| be |credential|'s {{PasswordCredential/additionalData}}
+          attribute if it is not `undefined`, and a new {{FormData}} object
+          otherwise.
+
+      2.  Execute `set()` on |data| with a |name| of |credential|'s
+          {{PasswordCredential/idName}} and a |value| of |credential|'s
+          {{Credential/id}}.
+
+      3.  Execute `set()` on |data| with a |name| of |credential|'s
+          {{PasswordCredential/passwordName}} and a |value| of |credential|'s
+          {{[[password]]}}.
+
+      4.  Set |stream| and |content type| to the result of
+          <a lt="extract">extracting</a> a byte stream and a `Content-Type`
+          from |data|.
 
   <h4 id="monkey-patching-fetch-2">`Request()` constructor</h4>
 
@@ -1014,6 +1006,12 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
       3.  Set |r|'s <a for="request">skip-service-worker flag</a>.
     </li>
   </ol>
+
+  <h4 id="monkey-patching-fetch-3">`RequestInit` dictionary</h4>
+
+  The {{RequestInit}} dictionary accepts a {{BodyInit}} object for its `body`
+  property. We can either adjust {{BodyInit}} to include {{PasswordCredential}}
+  or adjust {{RequestInit}} to accept a {{BodyInit}} or a {{PasswordCredential}}.
 </section>
 
 <!--
