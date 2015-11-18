@@ -1008,7 +1008,7 @@
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="http://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/Icons/w3c_home" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2015-11-11">11 November 2015</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2015-11-18">18 November 2015</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1530,7 +1530,7 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="pas
   attribute DOMString <a class="idl-code" data-link-type="attribute" data-type="DOMString " href="#dom-passwordcredential-idname">idName</a>;
   attribute DOMString <a class="idl-code" data-link-type="attribute" data-type="DOMString " href="#dom-passwordcredential-passwordname">passwordName</a>;
 
-  attribute <a data-link-type="idl-name" href="#typedefdef-credentialbodytype">CredentialBodyType</a> <a class="idl-code" data-link-type="attribute" data-type="CredentialBodyType " href="#dom-passwordcredential-additionaldata">additionalData</a>;
+  attribute <a data-link-type="idl-name" href="#typedefdef-credentialbodytype">CredentialBodyType</a>? <a class="idl-code" data-link-type="attribute" data-type="CredentialBodyType? " href="#dom-passwordcredential-additionaldata">additionalData</a>;
 };
 </pre>
     <dl>
@@ -1547,12 +1547,12 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="pas
   when submitting the <code class="idl"><a data-link-type="idl" href="#passwordcredential">PasswordCredential</a></code> to a remote endpoint via <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a></code>. It defaults to "<code>password</code>", but can be overridden by a
   developer to match whatever the backend service expects.</p>
      <dt data-md="">
-      <p><dfn class="idl-code" data-dfn-for="PasswordCredential" data-dfn-type="attribute" data-export="" id="dom-passwordcredential-additionaldata">additionalData<a class="self-link" href="#dom-passwordcredential-additionaldata"></a></dfn>, <span> of type <a data-link-type="idl-name" href="#typedefdef-credentialbodytype">CredentialBodyType</a></span></p>
+      <p><dfn class="idl-code" data-dfn-for="PasswordCredential" data-dfn-type="attribute" data-export="" id="dom-passwordcredential-additionaldata">additionalData<a class="self-link" href="#dom-passwordcredential-additionaldata"></a></dfn>, <span> of type <a data-link-type="idl-name" href="#typedefdef-credentialbodytype">CredentialBodyType</a>, nullable</span></p>
      <dd data-md="">
       <p>If the developer wishes to specify additional data to insert into the
   request body when submitting the credential information to a remote
   endpoint, they can do so by assigning a <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> or <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#dom-urlsearchparams">URLSearchParams</a></code> object to this attribute. The credential information
-  will be mixed into the object to produce the body.</p>
+  will be mixed into the object to produce the body. The value is <code>null</code> unless otherwise specified.</p>
      <dt data-md="">
       <p><code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot">[[type]]</a></code></p>
      <dd data-md="">
@@ -2799,7 +2799,7 @@ interface <a href="#passwordcredential">PasswordCredential</a> : <a data-link-ty
   attribute DOMString <a class="idl-code" data-link-type="attribute" data-type="DOMString " href="#dom-passwordcredential-idname">idName</a>;
   attribute DOMString <a class="idl-code" data-link-type="attribute" data-type="DOMString " href="#dom-passwordcredential-passwordname">passwordName</a>;
 
-  attribute <a data-link-type="idl-name" href="#typedefdef-credentialbodytype">CredentialBodyType</a> <a class="idl-code" data-link-type="attribute" data-type="CredentialBodyType " href="#dom-passwordcredential-additionaldata">additionalData</a>;
+  attribute <a data-link-type="idl-name" href="#typedefdef-credentialbodytype">CredentialBodyType</a>? <a class="idl-code" data-link-type="attribute" data-type="CredentialBodyType? " href="#dom-passwordcredential-additionaldata">additionalData</a>;
 };
 
 dictionary <a href="#dictdef-federatedcredentialdata">FederatedCredentialData</a> : <a data-link-type="idl-name" href="#dictdef-originboundcredentialdata">OriginBoundCredentialData</a> {
