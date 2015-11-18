@@ -628,7 +628,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
       attribute DOMString idName;
       attribute DOMString passwordName;
 
-      attribute CredentialBodyType additionalData;
+      attribute CredentialBodyType? additionalData;
     };
   </pre>
   
@@ -649,7 +649,8 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
       request body when submitting the credential information to a remote
       endpoint, they can do so by assigning a {{FormData}} or
       {{URLSearchParams}} object to this attribute. The credential information
-      will be mixed into the object to produce the body.
+      will be mixed into the object to produce the body. The value is `null`
+      unless otherwise specified.
 
   : {{[[type]]}}
   ::  All {{PasswordCredential}} objects have their {{[[type]]}} slot's
