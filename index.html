@@ -1008,7 +1008,7 @@
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="http://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/Icons/w3c_home" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2015-11-18">18 November 2015</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2015-11-19">19 November 2015</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1074,8 +1074,9 @@ store user credentials for future use.</p>
         <li><a href="#examples-password-signin"><span class="secno">1.2.1</span> <span class="content">Password-based Sign-in</span></a>
         <li><a href="#examples-federated-signin"><span class="secno">1.2.2</span> <span class="content">Federated Sign-in</span></a>
         <li><a href="#examples-post-signin"><span class="secno">1.2.3</span> <span class="content">Post-sign-in Confirmation</span></a>
-        <li><a href="#examples-sign-up"><span class="secno">1.2.4</span> <span class="content">Sign-Up</span></a>
-        <li><a href="#examples-change-password"><span class="secno">1.2.5</span> <span class="content">Change Password</span></a>
+        <li><a href="#examples-legacy"><span class="secno">1.2.4</span> <span class="content">Layering on top of a legacy system</span></a>
+        <li><a href="#examples-sign-up"><span class="secno">1.2.5</span> <span class="content">Sign-Up</span></a>
+        <li><a href="#examples-change-password"><span class="secno">1.2.6</span> <span class="content">Change Password</span></a>
        </ul>
      </ul>
     <li><a href="#terms"><span class="secno">2</span> <span class="content">Key Concepts and Terminology</span></a>
@@ -1398,12 +1399,49 @@ fetch("https://example.com/sign-in/", { body: credential, method: "POST" })
 }
 </pre>
      </div>
-     <h4 class="heading settled" data-level="1.2.4" id="examples-sign-up"><span class="secno">1.2.4. </span><span class="content">Sign-Up</span><a class="self-link" href="#examples-sign-up"></a></h4>
+     <h4 class="heading settled" data-level="1.2.4" id="examples-legacy"><span class="secno">1.2.4. </span><span class="content">Layering on top of a legacy system</span><a class="self-link" href="#examples-legacy"></a></h4>
+     <p>The API is designed in such a way as to cleanly sit on top of an existing
+    password-based sign-in system’s backend. For instance, the username and
+    password parameters can be renamed by adjusting the <code class="idl"><a data-link-type="idl" href="#passwordcredential">PasswordCredential</a></code>'s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname">idName</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname">passwordName</a></code> attributes, and additional data can be added to a request by setting the <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-additionaldata">additionalData</a></code> attribute.</p>
+     <div class="example" id="example-af2ea818">
+      <a class="self-link" href="#example-af2ea818"></a> Megacorp Inc. has an existing sign-in system that expects the username
+      to be submitted as a parameter named "<code>u</code>" and a the password as a
+      parameter named "<code>p</code>". The following code accomplishes this: 
+<pre>// Given a PasswordCredential |credential|:
+credential.idName = "u";
+credential.passwordName = "p";
+fetch("https://example.com/loginEndpoint", { body: credential, method: "POST" });
+</pre>
+     </div>
+     <div class="example" id="example-72a93777">
+      <a class="self-link" href="#example-72a93777"></a> Further, Megacorp Inc. protects itself against attack by appending a CSRF
+      token to the request. The following code accomplishes this: 
+<pre>// Given a PasswordCredential |credential|:
+credential.additionalData = new FormData();
+credential.additionalData.append("csrf", "[random token value goes here]");
+        
+fetch("https://example.com/loginEndpoint", { body: credential, method: "POST" });
+</pre>
+     </div>
+     <div class="example" id="example-fcc6a510">
+      <a class="self-link" href="#example-fcc6a510"></a> Megacorp Inc.'s backend servers cannot accept POST requests submitted as <code>multipart/form-data</code>. They need to submit the credential information as <code>application/x-www-form-urlencoded</code> instead. They can accomplish this by
+      setting the <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-additionaldata">additionalData</a></code> attribute to a <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#dom-urlsearchparams">URLSearchParams</a></code> object (which serializes as a urlencoded submission): 
+<pre>// Given a PasswordCredential |credential|:
+credential.additionalData = new URLSearchParams();
+        
+// Note that Megacorp doesn’t need to append any data to the object.
+// Just setting <code>additionalData</code> to an empty <code>URLSearchParams</code> object
+// is enough to change the content type of the submission.
+        
+fetch("https://example.com/loginEndpoint", { body: credential, method: "POST" });
+</pre>
+     </div>
+     <h4 class="heading settled" data-level="1.2.5" id="examples-sign-up"><span class="secno">1.2.5. </span><span class="content">Sign-Up</span><a class="self-link" href="#examples-sign-up"></a></h4>
      <p>The "federated sign-in" mechanism can be reused for "sign-up" with no
     modifications: if the user has a credential from a supported federated
     identity provider, it could be offered to the user via the same request
     mechanism.</p>
-     <h4 class="heading settled" data-level="1.2.5" id="examples-change-password"><span class="secno">1.2.5. </span><span class="content">Change Password</span><a class="self-link" href="#examples-change-password"></a></h4>
+     <h4 class="heading settled" data-level="1.2.6" id="examples-change-password"><span class="secno">1.2.6. </span><span class="content">Change Password</span><a class="self-link" href="#examples-change-password"></a></h4>
      <p>The "Password Sign-In" mechanism can be reused for "password change" with no
     modifications: if the user changes her credentials, the website can notify
     the user agent that she’s successfully signed in with new credentials. The
