@@ -1008,7 +1008,7 @@
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="http://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/Icons/w3c_home" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2015-11-19">19 November 2015</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-01-13">13 January 2016</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1028,7 +1028,7 @@
     </dl>
    </div>
    <div data-fill-with="warning"></div>
-   <p class="copyright" data-fill-with="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2015 <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup> (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>, <a href="http://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>, <a href="http://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>). W3C <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>, <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and <a href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a> rules apply. </p>
+   <p class="copyright" data-fill-with="copyright"><a href="http://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2016 <a href="http://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup> (<a href="http://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>, <a href="http://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>, <a href="http://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>). W3C <a href="http://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>, <a href="http://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and <a href="http://www.w3.org/Consortium/Legal/copyright-documents">document use</a> rules apply. </p>
    <hr title="Separator for header">
   </div>
   <h2 class="no-num no-toc no-ref heading settled" id="abstract"><span class="content">Abstract</span></h2>
@@ -1173,8 +1173,9 @@ store user credentials for future use.</p>
      <a href="#privacy-considerations"><span class="secno">7</span> <span class="content">Privacy Considerations</span></a>
      <ul class="toc">
       <li><a href="#privacy-timing-attacks"><span class="secno">7.1</span> <span class="content">Timing Attacks</span></a>
-      <li><a href="#privacy-chooser-leakage"><span class="secno">7.2</span> <span class="content">Chooser Leakage</span></a>
-      <li><a href="#locally-stored-data"><span class="secno">7.3</span> <span class="content">Locally Stored Data</span></a>
+      <li><a href="#privacy-signout"><span class="secno">7.2</span> <span class="content">Signing-Out</span></a>
+      <li><a href="#privacy-chooser-leakage"><span class="secno">7.3</span> <span class="content">Chooser Leakage</span></a>
+      <li><a href="#locally-stored-data"><span class="secno">7.4</span> <span class="content">Locally Stored Data</span></a>
      </ul>
     <li>
      <a href="#implementation-considerations"><span class="secno">8</span> <span class="content">Implementation Considerations</span></a>
@@ -2408,7 +2409,22 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
   user gesture, and the user would, sooner or later, be prompted to provide
   credentials to the site which would certainly raise her suspicions as to its
   behavior.</p>
-    <h3 class="heading settled" data-level="7.2" id="privacy-chooser-leakage"><span class="secno">7.2. </span><span class="content">Chooser Leakage</span><a class="self-link" href="#privacy-chooser-leakage"></a></h3>
+    <h3 class="heading settled" data-level="7.2" id="privacy-signout"><span class="secno">7.2. </span><span class="content">Signing-Out</span><a class="self-link" href="#privacy-signout"></a></h3>
+    <p>If a user has chosent to automatically sign-in to websites, as discussed
+  in <a href="#user-mediation-requirements">§5.2 Requiring User Mediation</a>, then the user agent will provide
+  credentials to an origin whenever it asks for them. The website can instruct
+  the user agent to suppress this behavior by calling <code class="idl"><a data-link-type="idl" href="#credentialcontainer">CredentialContainer</a></code>'s <code class="idl"><a data-link-type="idl" href="#dom-credentialcontainer-requireusermediation">requireUserMediation()</a></code> method, which will turn off
+  automatic sign-in for a given origin.</p>
+    <p>The user agent relies on the website to do the right thing; an inattentive (or
+  malicious) website could simply neglect to call this method, causing the user
+  agent to continue providing credentials against the user’s apparent intention.</p>
+    <p>The user MUST have some control over this behavior. As noted in <a href="#user-mediation-requirements">§5.2 Requiring User Mediation</a>, clearing cookies for an origin will also
+  reset that origin’s <a data-link-type="dfn" href="#requires-user-mediation">requires user mediation</a> flag in the <a data-link-type="dfn" href="#credential-store">credential
+  store</a> to <code>true</code>. Additionally, we recommend that the user agent provide
+  some UI affordance for disabling automatic sign-in for a particular origin.
+  This could be tied to the notification that credentials have been provided to
+  an origin, for example.</p>
+    <h3 class="heading settled" data-level="7.3" id="privacy-chooser-leakage"><span class="secno">7.3. </span><span class="content">Chooser Leakage</span><a class="self-link" href="#privacy-chooser-leakage"></a></h3>
     <p>If a user agent displays images supplied by a website or federation (for
   example, if a <code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code>'s <code class="idl"><a data-link-type="idl" href="#dom-originboundcredential-iconurl">iconURL</a></code> is displayed),
   requests for these images MUST NOT be directly tied to instantiating the
@@ -2422,7 +2438,7 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
   associated with the credential, the alterations to the data SHOULD NOT be
   exposed to the website (consider a user who names two credentials for an
   origin "My fake account" and "My real account", for instance).</p>
-    <h3 class="heading settled" data-level="7.3" id="locally-stored-data"><span class="secno">7.3. </span><span class="content">Locally Stored Data</span><a class="self-link" href="#locally-stored-data"></a></h3>
+    <h3 class="heading settled" data-level="7.4" id="locally-stored-data"><span class="secno">7.4. </span><span class="content">Locally Stored Data</span><a class="self-link" href="#locally-stored-data"></a></h3>
     <p>This API offers an <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a> the ability to store data persistently along
   with a user’s profile. Since most user agents treat credential data
   differently than "browsing data" (cookies, etc.) this might have the side
@@ -2797,7 +2813,7 @@ partial dictionary CredentialRequestOptions {
    <dt id="biblio-manifest"><a class="self-link" href="#biblio-manifest"></a>[MANIFEST]
    <dd>Marcos Caceres; Anssi Kostiainen; Kenneth Rohde Christiansen; et al. <a href="http://w3c.github.io/manifest/">Manifest for web application</a>. WD. URL: <a href="http://w3c.github.io/manifest/">http://w3c.github.io/manifest/</a>
    <dt id="biblio-sri"><a class="self-link" href="#biblio-sri"></a>[SRI]
-   <dd>Frederik Braun. <a href="http://www.w3.org/TR/SRI/">Subresource Integrity</a>. 6 October 2015. WD. URL: <a href="http://www.w3.org/TR/SRI/">http://www.w3.org/TR/SRI/</a>
+   <dd>Devdatta Akhawe; et al. <a href="http://www.w3.org/TR/SRI/">Subresource Integrity</a>. 12 November 2015. CR. URL: <a href="http://www.w3.org/TR/SRI/">http://www.w3.org/TR/SRI/</a>
    <dt id="biblio-web-login"><a class="self-link" href="#biblio-web-login"></a>[WEB-LOGIN]
    <dd>Jason Denizac; Robin Berjon; Anne van Kesteren. <a href="https://github.com/jden/web-login">web-login</a>. URL: <a href="https://github.com/jden/web-login">https://github.com/jden/web-login</a>
    <dt id="biblio-xmlhttprequest"><a class="self-link" href="#biblio-xmlhttprequest"></a>[XMLHttpRequest]

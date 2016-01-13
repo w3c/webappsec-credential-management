@@ -2136,6 +2136,27 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   credentials to the site which would certainly raise her suspicions as to its
   behavior.
 
+  <h3 id="privacy-signout">Signing-Out</h3>
+
+  If a user has chosent to automatically sign-in to websites, as discussed
+  in [[#user-mediation-requirements]], then the user agent will provide
+  credentials to an origin whenever it asks for them. The website can instruct
+  the user agent to suppress this behavior by calling {{CredentialContainer}}'s
+  {{CredentialContainer/requireUserMediation()}} method, which will turn off
+  automatic sign-in for a given origin.
+
+  The user agent relies on the website to do the right thing; an inattentive (or
+  malicious) website could simply neglect to call this method, causing the user
+  agent to continue providing credentials against the user's apparent intention.
+
+  The user MUST have some control over this behavior. As noted in
+  [[#user-mediation-requirements]], clearing cookies for an origin will also
+  reset that origin's <a>requires user mediation</a> flag in the <a>credential
+  store</a> to `true`. Additionally, we recommend that the user agent provide
+  some UI affordance for disabling automatic sign-in for a particular origin.
+  This could be tied to the notification that credentials have been provided to
+  an origin, for example.
+
   <h3 id="privacy-chooser-leakage">Chooser Leakage</h3>
 
   If a user agent displays images supplied by a website or federation (for
