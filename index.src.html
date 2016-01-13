@@ -44,7 +44,6 @@ spec: HTML5; urlPrefix: http://www.w3.org/TR/html5/
       text: multipart/form-data boundary string; url: multipart/form-data-boundary-string
       text: application/x-www-form-urlencoded serializer; url: application/x-www-form-urlencoded serializer
     urlPrefix: browsers.html
-      text: allowed to show a popup
       text: browsing context
       text: top-level browsing context; url: top-level-browsing-context
       text: nested browsing context
@@ -1283,14 +1282,6 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
               <var>undefined</var>, and terminate this algorithm.
             </li>
             <li>
-              If this algorithm would not be <a>allowed to show a popup</a>,
-              then reject <var>promise</var> with a <code>SecurityError</code>
-              and terminate this algorithm.
-
-              Note: This boils down to requiring a user gesture for
-              {{CredentialContainer/get()}} before showing the user any UI.
-            </li>
-            <li>
               Resolve <var>promise</var> with the result of executing
               [[#request-originboundcredential-with-mediation]],
               passing in <var>origin</var>, <var>types</var>, and
@@ -1864,7 +1855,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   them, the user agent is free to use any of a number of heuristics to help a
   user get signed-into/-up for a website.
 
-  Credentials SHOULD be synthesized to populate a <a>chooser</a> based on the
+  Credentials MAY be synthesized to populate a <a>chooser</a> based on the
   following heuristics:
 
   <ol>
@@ -2156,10 +2147,13 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   saved for particular federated identity providers by repeatedly calling
   {{CredentialContainer/get()}} with a single item in the
   {{FederatedCredentialRequestOptions/providers}} array. The risk is mitigated
-  by the fact that a user-mediated {{CredentialContainer/get()}} is tied to a
-  user gesture, and the user would, sooner or later, be prompted to provide
+  by the fact that the user would, sooner or later, be prompted to provide
   credentials to the site which would certainly raise her suspicions as to its
   behavior.
+
+  User agents SHOULD also rate-limit credential requests. It's almost certainly
+  abusive for a page to request credentials more than a few times in a short
+  period.
 
   <h3 id="privacy-signout">Signing-Out</h3>
 
