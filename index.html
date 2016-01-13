@@ -1074,9 +1074,9 @@ store user credentials for future use.</p>
         <li><a href="#examples-password-signin"><span class="secno">1.2.1</span> <span class="content">Password-based Sign-in</span></a>
         <li><a href="#examples-federated-signin"><span class="secno">1.2.2</span> <span class="content">Federated Sign-in</span></a>
         <li><a href="#examples-post-signin"><span class="secno">1.2.3</span> <span class="content">Post-sign-in Confirmation</span></a>
-        <li><a href="#examples-legacy"><span class="secno">1.2.4</span> <span class="content">Layering on top of a legacy system</span></a>
-        <li><a href="#examples-sign-up"><span class="secno">1.2.5</span> <span class="content">Sign-Up</span></a>
-        <li><a href="#examples-change-password"><span class="secno">1.2.6</span> <span class="content">Change Password</span></a>
+        <li><a href="#examples-change-password"><span class="secno">1.2.4</span> <span class="content">Change Password</span></a>
+        <li><a href="#examples-legacy"><span class="secno">1.2.5</span> <span class="content">Layering on top of a legacy system</span></a>
+        <li><a href="#examples-sign-up"><span class="secno">1.2.6</span> <span class="content">Sign-Up</span></a>
        </ul>
      </ul>
     <li><a href="#terms"><span class="secno">2</span> <span class="content">Key Concepts and Terminology</span></a>
@@ -1400,53 +1400,73 @@ fetch("https://example.com/sign-in/", { body: credential, method: "POST" })
 }
 </pre>
      </div>
-     <h4 class="heading settled" data-level="1.2.4" id="examples-legacy"><span class="secno">1.2.4. </span><span class="content">Layering on top of a legacy system</span><a class="self-link" href="#examples-legacy"></a></h4>
+     <h4 class="heading settled" data-level="1.2.4" id="examples-change-password"><span class="secno">1.2.4. </span><span class="content">Change Password</span><a class="self-link" href="#examples-change-password"></a></h4>
+     <p>This same storage mechanism can be reused for "password change" with no
+    modifications: if the user changes her credentials, the website can notify
+    the user agent that she’s successfully signed in with new credentials. The
+    user agent can then update the credentials it stores:</p>
+     <div class="example" id="example-286d8112">
+      <a class="self-link" href="#example-286d8112"></a> MegaCorp Inc. allows users to change their passwords by POSTing data to
+      a backend server asynchronously. After doing so successfully, they can
+      update the user’s credentials by calling <code class="idl"><a data-link-type="idl" href="#dom-credentialcontainer-store">store()</a></code> with the new information: 
+<pre>// Given |username| and |newPassword|, POST the data to the backend, and
+// update the credential store upon success:
+var data = new FormData();
+data.append("user", username);
+data.append("pass", newPassword);
+fetch("https://example.com/changePassword", { body: data, method: "POST" })
+  .then(function(response) {
+    if (response.status == 200) {
+      navigator.credentials.store(new PasswordCredential({
+        "id": username,
+        "password": newPassword
+      });
+    }
+  });
+</pre>
+     </div>
+     <h4 class="heading settled" data-level="1.2.5" id="examples-legacy"><span class="secno">1.2.5. </span><span class="content">Layering on top of a legacy system</span><a class="self-link" href="#examples-legacy"></a></h4>
      <p>The API is designed in such a way as to cleanly sit on top of an existing
     password-based sign-in system’s backend. For instance, the username and
     password parameters can be renamed by adjusting the <code class="idl"><a data-link-type="idl" href="#passwordcredential">PasswordCredential</a></code>'s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname">idName</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname">passwordName</a></code> attributes, and additional data can be added to a request by setting the <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-additionaldata">additionalData</a></code> attribute.</p>
-     <div class="example" id="example-af2ea818">
-      <a class="self-link" href="#example-af2ea818"></a> Megacorp Inc. has an existing sign-in system that expects the username
+     <div class="example" id="example-63870e08">
+      <a class="self-link" href="#example-63870e08"></a> MegaCorp Inc. has an existing sign-in system that expects the username
       to be submitted as a parameter named "<code>u</code>" and a the password as a
       parameter named "<code>p</code>". The following code accomplishes this: 
-<pre>// Given a PasswordCredential |credential|:
+<pre>// Given a <a data-link-type="idl" href="#passwordcredential">PasswordCredential</a> |credential|:
 credential.idName = "u";
 credential.passwordName = "p";
 fetch("https://example.com/loginEndpoint", { body: credential, method: "POST" });
 </pre>
      </div>
-     <div class="example" id="example-72a93777">
-      <a class="self-link" href="#example-72a93777"></a> Further, Megacorp Inc. protects itself against attack by appending a CSRF
+     <div class="example" id="example-b439b6d9">
+      <a class="self-link" href="#example-b439b6d9"></a> Further, MegaCorp Inc. protects itself against attack by appending a CSRF
       token to the request. The following code accomplishes this: 
-<pre>// Given a PasswordCredential |credential|:
-credential.additionalData = new FormData();
-credential.additionalData.append("csrf", "[random token value goes here]");
+<pre>// Given a <a data-link-type="idl" href="#passwordcredential">PasswordCredential</a> |credential|:
+credential.<a data-link-type="idl" href="#dom-passwordcredential-additionaldata">additionalData</a> = new FormData();
+credential.<a data-link-type="idl" href="#dom-passwordcredential-additionaldata">additionalData</a>.append("csrf", "[random token value goes here]");
         
 fetch("https://example.com/loginEndpoint", { body: credential, method: "POST" });
 </pre>
      </div>
-     <div class="example" id="example-fcc6a510">
-      <a class="self-link" href="#example-fcc6a510"></a> Megacorp Inc.'s backend servers cannot accept POST requests submitted as <code>multipart/form-data</code>. They need to submit the credential information as <code>application/x-www-form-urlencoded</code> instead. They can accomplish this by
+     <div class="example" id="example-59f99400">
+      <a class="self-link" href="#example-59f99400"></a> MegaCorp Inc.'s backend servers cannot accept POST requests submitted as <code>multipart/form-data</code>. They need to submit the credential information as <code>application/x-www-form-urlencoded</code> instead. They can accomplish this by
       setting the <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-additionaldata">additionalData</a></code> attribute to a <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#dom-urlsearchparams">URLSearchParams</a></code> object (which serializes as a urlencoded submission): 
-<pre>// Given a PasswordCredential |credential|:
-credential.additionalData = new URLSearchParams();
+<pre>// Given a <a data-link-type="idl" href="#passwordcredential">PasswordCredential</a> |credential|:
+credential.<a data-link-type="idl" href="#dom-passwordcredential-additionaldata">additionalData</a> = new URLSearchParams();
         
-// Note that Megacorp doesn’t need to append any data to the object.
-// Just setting <code>additionalData</code> to an empty <code>URLSearchParams</code> object
+// Note that MegaCorp Inc. doesn’t need to append any data to the
+// object. Setting <code>additionalData</code> to an empty <code>URLSearchParams</code> object
 // is enough to change the content type of the submission.
         
 fetch("https://example.com/loginEndpoint", { body: credential, method: "POST" });
 </pre>
      </div>
-     <h4 class="heading settled" data-level="1.2.5" id="examples-sign-up"><span class="secno">1.2.5. </span><span class="content">Sign-Up</span><a class="self-link" href="#examples-sign-up"></a></h4>
+     <h4 class="heading settled" data-level="1.2.6" id="examples-sign-up"><span class="secno">1.2.6. </span><span class="content">Sign-Up</span><a class="self-link" href="#examples-sign-up"></a></h4>
      <p>The "federated sign-in" mechanism can be reused for "sign-up" with no
     modifications: if the user has a credential from a supported federated
     identity provider, it could be offered to the user via the same request
     mechanism.</p>
-     <h4 class="heading settled" data-level="1.2.6" id="examples-change-password"><span class="secno">1.2.6. </span><span class="content">Change Password</span><a class="self-link" href="#examples-change-password"></a></h4>
-     <p>The "Password Sign-In" mechanism can be reused for "password change" with no
-    modifications: if the user changes her credentials, the website can notify
-    the user agent that she’s successfully signed in with new credentials. The
-    user agent can then update the credentials it stores.</p>
     </section>
    </section>
    <section>
@@ -1828,8 +1848,8 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
   non-web-exposed slots on the <code class="idl"><a data-link-type="idl" href="#passwordcredential">PasswordCredential</a></code> object, and extract them
   during <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a></code> in ways that will remain opaque to anything other than the
   remote (same-origin) server.</p>
-    <p>To this end, <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request">request</a> objects have an <dfn data-dfn-for="request" data-dfn-type="dfn" data-noexport="" id="opaque-flag">opaque
-  flag<a class="self-link" href="#opaque-flag"></a></dfn>, which is unset unless otherwise specified.</p>
+    <p>To this end, <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request">request</a> objects have an <dfn data-dfn-for="request" data-dfn-type="dfn" data-noexport="" id="request-opaque-flag">opaque
+  flag<a class="self-link" href="#request-opaque-flag"></a></dfn>, which is unset unless otherwise specified.</p>
     <h4 class="heading settled" data-level="3.3.1" id="monkey-patching-fetch-1"><span class="secno">3.3.1. </span><span class="content">Body extraction</span><a class="self-link" href="#monkey-patching-fetch-1"></a></h4>
     <p>Add the following to the switch in step 3 of the current <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-bodyinit-extract">extract</a> algorithm for <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#body">Body</a></code>:</p>
     <dl>
@@ -1885,10 +1905,10 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
     <h4 class="heading settled" data-level="3.3.2" id="monkey-patching-fetch-2"><span class="secno">3.3.2. </span><span class="content">Body consumption</span><a class="self-link" href="#monkey-patching-fetch-2"></a></h4>
     <p>Add the following as step 2 of the current <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-consume-body">consume body</a> algorithm for <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#request">Request</a></code>:</p>
     <ol start="2">
-     <li> If this <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#request">Request</a></code> object’s <a data-link-type="dfn" href="#opaque-flag">opaque flag</a> is set, throw a <code>TypeError</code>. 
+     <li> If this <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#request">Request</a></code> object’s <a data-link-type="dfn" href="#request-opaque-flag">opaque flag</a> is set, throw a <code>TypeError</code>. 
     </ol>
     <h4 class="heading settled" data-level="3.3.3" id="monkey-patching-fetch-3"><span class="secno">3.3.3. </span><span class="content"><code>Request()</code> constructor</span><a class="self-link" href="#monkey-patching-fetch-3"></a></h4>
-    <p>Adjust step 8 of the current <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-request">Request()</a></code> algorithm to set the new <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request">request</a>’s <a data-link-type="dfn" href="#opaque-flag">opaque flag</a> to <var>request</var>’s <a data-link-type="dfn" href="#opaque-flag">opaque flag</a>.</p>
+    <p>Adjust step 8 of the current <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-request">Request()</a></code> algorithm to set the new <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request">request</a>’s <a data-link-type="dfn" href="#request-opaque-flag">opaque flag</a> to <var>request</var>’s <a data-link-type="dfn" href="#request-opaque-flag">opaque flag</a>.</p>
     <p>Perform the following after step 33 of the current <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-request">Request()</a></code> constructor:</p>
     <ol step="34">
      <li>
@@ -1901,7 +1921,7 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
        <li data-md="">
         <p>Set <var>r</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#skip-service-worker-flag">skip-service-worker flag</a>.</p>
        <li data-md="">
-        <p>Set <var>r</var>’s <a data-link-type="dfn" href="#opaque-flag">opaque flag</a>.</p>
+        <p>Set <var>r</var>’s <a data-link-type="dfn" href="#request-opaque-flag">opaque flag</a>.</p>
       </ol>
     </ol>
     <h4 class="heading settled" data-level="3.3.4" id="monkey-patching-fetch-4"><span class="secno">3.3.4. </span><span class="content"><code>RequestInit</code> dictionary</span><a class="self-link" href="#monkey-patching-fetch-4"></a></h4>
@@ -2575,7 +2595,6 @@ partial dictionary CredentialRequestOptions {
    <li><a href="#dom-passwordcredential-additionaldata">additionalData</a><span>, in §3.1.3</span>
    <li><a href="#credential-chooser">chooser</a><span>, in §5.3</span>
    <li><a href="#credential">Credential</a><span>, in §3.1.1</span>
-   <li><a href="#dom-credentialcontainer-store-credential-credential">credential</a><span>, in §3.2</span>
    <li><a href="#typedefdef-credentialbodytype">CredentialBodyType</a><span>, in §3.1.3</span>
    <li><a href="#credential-chooser">credential chooser</a><span>, in §5.3</span>
    <li><a href="#credentialcontainer">CredentialContainer</a><span>, in §3.2</span>
@@ -2584,12 +2603,6 @@ partial dictionary CredentialRequestOptions {
    <li><a href="#credentials">Credentials</a><span>, in §2</span>
    <li><a href="#dom-navigator-credentials">credentials</a><span>, in §3.2</span>
    <li><a href="#credential-store">Credential Store</a><span>, in §2</span>
-   <li>
-    data
-    <ul>
-     <li><a href="#dom-passwordcredential-passwordcredential-data-data">argument for PasswordCredential/PasswordCredential(data)</a><span>, in §3.1.3</span>
-     <li><a href="#dom-federatedcredential-federatedcredential-data-data">argument for FederatedCredential/FederatedCredential(data)</a><span>, in §3.1.4</span>
-    </ul>
    <li><a href="#does-not-match">Does Not
   Match</a><span>, in §3.1.2</span>
    <li>
@@ -2627,9 +2640,8 @@ partial dictionary CredentialRequestOptions {
      <li><a href="#dom-originboundcredentialdata-name">dict-member for OriginBoundCredentialData</a><span>, in §3.1.1</span>
      <li><a href="#dom-originboundcredential-name">attribute for OriginBoundCredential</a><span>, in §3.1.2</span>
     </ul>
-   <li><a href="#opaque-flag">opaque
+   <li><a href="#request-opaque-flag">opaque
   flag</a><span>, in §3.3</span>
-   <li><a href="#dom-credentialcontainer-get-options-options">options</a><span>, in §3.2</span>
    <li><a href="#options-matching-algorithm">options matching
   algorithm</a><span>, in §3.1.2</span>
    <li><a href="#dom-originboundcredential-origin-slot">[[origin]]</a><span>, in §3.1.2</span>
@@ -2652,7 +2664,6 @@ partial dictionary CredentialRequestOptions {
     protocol
     <ul>
      <li><a href="#dom-federatedcredentialdata-protocol">dict-member for FederatedCredentialData</a><span>, in §3.1.4</span>
-     <li><a href="#dom-federatedcredential-registerasprovider-protocol-protocol">argument for FederatedCredential/registerAsProvider(protocol)</a><span>, in §3.1.4</span>
      <li><a href="#dom-federatedcredential-protocol">attribute for FederatedCredential</a><span>, in §3.1.4</span>
     </ul>
    <li><a href="#dom-federatedcredentialrequestoptions-protocols">protocols</a><span>, in §3.2.1.2</span>

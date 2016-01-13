@@ -423,6 +423,37 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
       </pre>
     </div>
 
+    <h4 id="examples-change-password">Change Password</h4>
+
+    This same storage mechanism can be reused for "password change" with no
+    modifications: if the user changes her credentials, the website can notify
+    the user agent that she's successfully signed in with new credentials. The
+    user agent can then update the credentials it stores:
+
+    <div class="example">
+      MegaCorp Inc. allows users to change their passwords by POSTing data to
+      a backend server asynchronously. After doing so successfully, they can
+      update the user's credentials by calling {{CredentialContainer/store()}}
+      with the new information:
+
+      <pre>
+        // Given |username| and |newPassword|, POST the data to the backend, and
+        // update the credential store upon success:
+        var data = new FormData();
+        data.append("user", username);
+        data.append("pass", newPassword);
+        fetch("https://example.com/changePassword", { body: data, method: "POST" })
+          .then(function(response) {
+            if (response.status == 200) {
+              navigator.credentials.store(new PasswordCredential({
+                "id": username,
+                "password": newPassword
+              });
+            }
+          });
+      </pre>
+    </div>
+
     <h4 id="examples-legacy">Layering on top of a legacy system</h4>
 
     The API is designed in such a way as to cleanly sit on top of an existing
@@ -433,12 +464,12 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
     {{PasswordCredential/additionalData}} attribute.
 
     <div class="example">
-      Megacorp Inc. has an existing sign-in system that expects the username
+      MegaCorp Inc. has an existing sign-in system that expects the username
       to be submitted as a parameter named "`u`" and a the password as a
       parameter named "`p`". The following code accomplishes this:
 
       <pre>
-        // Given a PasswordCredential |credential|:
+        // Given a <a idl>PasswordCredential</a> |credential|:
         credential.idName = "u";
         credential.passwordName = "p";
         fetch("https://example.com/loginEndpoint", { body: credential, method: "POST" });
@@ -446,49 +477,43 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
     </div>
 
     <div class="example">
-      Further, Megacorp Inc. protects itself against attack by appending a CSRF
+      Further, MegaCorp Inc. protects itself against attack by appending a CSRF
       token to the request. The following code accomplishes this:
 
       <pre>
-        // Given a PasswordCredential |credential|:
-        credential.additionalData = new FormData();
-        credential.additionalData.append("csrf", "[random token value goes here]");
+        // Given a <a idl>PasswordCredential</a> |credential|:
+        credential.<a idl>additionalData</a> = new FormData();
+        credential.<a idl>additionalData</a>.append("csrf", "[random token value goes here]");
         
         fetch("https://example.com/loginEndpoint", { body: credential, method: "POST" });
       </pre>
     </div>
 
     <div class="example">
-      Megacorp Inc.'s backend servers cannot accept POST requests submitted as
+      MegaCorp Inc.'s backend servers cannot accept POST requests submitted as
       `multipart/form-data`. They need to submit the credential information as
       `application/x-www-form-urlencoded` instead. They can accomplish this by
       setting the {{PasswordCredential/additionalData}} attribute to a
       {{URLSearchParams}} object (which serializes as a urlencoded submission):
 
       <pre>
-        // Given a PasswordCredential |credential|:
-        credential.additionalData = new URLSearchParams();
+        // Given a <a idl>PasswordCredential</a> |credential|:
+        credential.<a idl>additionalData</a> = new URLSearchParams();
         
-        // Note that Megacorp doesn't need to append any data to the object.
-        // Just setting `additionalData` to an empty `URLSearchParams` object
+        // Note that MegaCorp Inc. doesn't need to append any data to the
+        // object. Setting `additionalData` to an empty `URLSearchParams` object
         // is enough to change the content type of the submission.
         
         fetch("https://example.com/loginEndpoint", { body: credential, method: "POST" });
       </pre>
     </div>
+
     <h4 id="examples-sign-up">Sign-Up</h4>
 
     The "federated sign-in" mechanism can be reused for "sign-up" with no
     modifications: if the user has a credential from a supported federated
     identity provider, it could be offered to the user via the same request
     mechanism.
-
-    <h4 id="examples-change-password">Change Password</h4>
-
-    The "Password Sign-In" mechanism can be reused for "password change" with no
-    modifications: if the user changes her credentials, the website can notify
-    the user agent that she's successfully signed in with new credentials. The
-    user agent can then update the credentials it stores.
   </section>
 </section>
 
