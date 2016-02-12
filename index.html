@@ -1301,7 +1301,7 @@
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="http://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/Icons/w3c_home" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-01-15">15 January 2016</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-02-12">12 February 2016</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -2026,14 +2026,14 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
   request. See <a href="#implementation-extension">§8.2 Extension Points</a>.</p>
     <h5 class="heading settled" data-level="3.2.1.1" id="interfaces-credentialrequestoptions"><span class="secno">3.2.1.1. </span><span class="content"> <code>CredentialRequestOptions</code> dictionary </span><a class="self-link" href="#interfaces-credentialrequestoptions"></a></h5>
 <pre class="idl">dictionary <dfn class="idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-credentialrequestoptions">CredentialRequestOptions<a class="self-link" href="#dictdef-credentialrequestoptions"></a></dfn> {
-  boolean <a class="idl-code" data-link-type="dict-member" data-type="boolean " href="#dom-credentialrequestoptions-password">password</a>;
+  boolean <a class="idl-code" data-default="false" data-link-type="dict-member" data-type="boolean " href="#dom-credentialrequestoptions-password">password</a> = false;
   <a data-link-type="idl-name" href="#dictdef-federatedcredentialrequestoptions">FederatedCredentialRequestOptions</a> <a class="idl-code" data-link-type="dict-member" data-type="FederatedCredentialRequestOptions " href="#dom-credentialrequestoptions-federated">federated</a>;
 
   boolean <a class="idl-code" data-default="false" data-link-type="dict-member" data-type="boolean " href="#dom-credentialrequestoptions-suppressui">suppressUI</a> = false;
 };
 </pre>
     <dl>
-     <dt><dfn class="idl-code" data-dfn-for="CredentialRequestOptions" data-dfn-type="dict-member" data-export="" id="dom-credentialrequestoptions-password">password<a class="self-link" href="#dom-credentialrequestoptions-password"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://heycam.github.io/webidl/#idl-boolean">boolean</a></span>
+     <dt><dfn class="idl-code" data-dfn-for="CredentialRequestOptions" data-dfn-type="dict-member" data-export="" id="dom-credentialrequestoptions-password">password<a class="self-link" href="#dom-credentialrequestoptions-password"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://heycam.github.io/webidl/#idl-boolean">boolean</a>, defaulting to <code>false</code></span>
      <dd> If set, the user agent will request <code class="idl"><a data-link-type="idl" href="#passwordcredential">PasswordCredential</a></code> objects, as
       outlined in <a href="#request-credential">§4.1.1 Request a Credential</a>. 
      <dt><dfn class="idl-code" data-dfn-for="CredentialRequestOptions" data-dfn-type="dict-member" data-export="" id="dom-credentialrequestoptions-federated">federated<a class="self-link" href="#dom-credentialrequestoptions-federated"></a></dfn>, <span> of type <a data-link-type="idl-name" href="#dictdef-federatedcredentialrequestoptions">FederatedCredentialRequestOptions</a></span>
@@ -3045,7 +3045,7 @@ interface <a href="#credentialcontainer">CredentialContainer</a> {
 };
 
 dictionary <a href="#dictdef-credentialrequestoptions">CredentialRequestOptions</a> {
-  boolean <a class="idl-code" data-link-type="dict-member" data-type="boolean " href="#dom-credentialrequestoptions-password">password</a>;
+  boolean <a class="idl-code" data-default="false" data-link-type="dict-member" data-type="boolean " href="#dom-credentialrequestoptions-password">password</a> = false;
   <a data-link-type="idl-name" href="#dictdef-federatedcredentialrequestoptions">FederatedCredentialRequestOptions</a> <a class="idl-code" data-link-type="dict-member" data-type="FederatedCredentialRequestOptions " href="#dom-credentialrequestoptions-federated">federated</a>;
 
   boolean <a class="idl-code" data-default="false" data-link-type="dict-member" data-type="boolean " href="#dom-credentialrequestoptions-suppressui">suppressUI</a> = false;
