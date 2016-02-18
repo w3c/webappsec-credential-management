@@ -1114,14 +1114,20 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
     <li>
       If |init|'s `body` member is a {{Credential}} object:
 
-      1.  If |r|'s <a for="request">url</a> is not the same as |r|'s
-          <a for="request">client</a>'s {{URL/origin}}, throw a `TypeError`.
+      1.  If |r|'s <a for="request">url</a>'s scheme is not the same as |r|'s
+          <a for="request">client</a>'s {{URL/origin}}'s scheme, throw a
+          `TypeError`.
 
-      2.  Set |r|'s <a for="request">redirect mode</a> to "`error`".
+      2.  If |r|'s <a for="request">url</a>'s host's <a>registerable domain</a>
+          is not the same as |r|'s <a for="request">client</a>'s
+          {{URL/origin}}'s host's <a>registerable domain</a>, throw a
+          `TypeError`.
 
-      3.  Set |r|'s <a for="request">skip-service-worker flag</a>.
+      3.  Set |r|'s <a for="request">redirect mode</a> to "`error`".
 
-      4.  Set |r|'s <a for="request">opaque flag</a>.
+      4.  Set |r|'s <a for="request">skip-service-worker flag</a>.
+
+      5.  Set |r|'s <a for="request">opaque flag</a>.
     </li>
   </ol>
 
