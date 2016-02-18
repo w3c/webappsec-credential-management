@@ -1974,7 +1974,7 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
   boolean <a class="idl-code" data-default="false" data-link-type="dict-member" data-type="boolean " href="#dom-credentialrequestoptions-password">password</a> = false;
   <a data-link-type="idl-name" href="#dictdef-federatedcredentialrequestoptions">FederatedCredentialRequestOptions</a> <a class="idl-code" data-link-type="dict-member" data-type="FederatedCredentialRequestOptions " href="#dom-credentialrequestoptions-federated">federated</a>;
 
-  boolean <a class="idl-code" data-default="false" data-link-type="dict-member" data-type="boolean " href="#dom-credentialrequestoptions-suppressui">suppressUI</a> = false;
+  boolean <a class="idl-code" data-default="false" data-link-type="dict-member" data-type="boolean " href="#dom-credentialrequestoptions-unmediatedonly">unmediatedOnly</a> = false;
 };
 </pre>
     <dl>
@@ -1984,7 +1984,7 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
      <dt><dfn class="idl-code" data-dfn-for="CredentialRequestOptions" data-dfn-type="dict-member" data-export="" id="dom-credentialrequestoptions-federated">federated<a class="self-link" href="#dom-credentialrequestoptions-federated"></a></dfn>, <span> of type <a data-link-type="idl-name" href="#dictdef-federatedcredentialrequestoptions">FederatedCredentialRequestOptions</a></span>
      <dd> If set, the user agent will request <code class="idl"><a data-link-type="idl" href="#federatedcredential">FederatedCredential</a></code> objects, as
       outlined in <a href="#request-credential">§4.1.1 Request a Credential</a>. 
-     <dt><dfn class="idl-code" data-dfn-for="CredentialRequestOptions" data-dfn-type="dict-member" data-export="" id="dom-credentialrequestoptions-suppressui">suppressUI<a class="self-link" href="#dom-credentialrequestoptions-suppressui"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://heycam.github.io/webidl/#idl-boolean">boolean</a>, defaulting to <code>false</code></span>
+     <dt><dfn class="idl-code" data-dfn-for="CredentialRequestOptions" data-dfn-type="dict-member" data-export="" id="dom-credentialrequestoptions-unmediatedonly">unmediatedOnly<a class="self-link" href="#dom-credentialrequestoptions-unmediatedonly"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://heycam.github.io/webidl/#idl-boolean">boolean</a>, defaulting to <code>false</code></span>
      <dd> If <code>true</code>, the user agent will only attempt to provide
       a <code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code> without user interaction. It MUST NOT present the user
       with any visible prompt to grant access to a <code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code>: if the user
@@ -2006,8 +2006,8 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
      <dt><dfn class="idl-code" data-dfn-for="FederatedCredentialRequestOptions" data-dfn-type="dict-member" data-export="" id="dom-federatedcredentialrequestoptions-protocols">protocols<a class="self-link" href="#dom-federatedcredentialrequestoptions-protocols"></a></dfn>, <span> of type sequence&lt;<a data-link-type="idl-name" href="http://heycam.github.io/webidl/#idl-DOMString">DOMString</a>></span>
      <dd> A sequence of protocol identifiers. 
     </dl>
-    <div class="example" id="example-85b140bc">
-     <a class="self-link" href="#example-85b140bc"></a> Suppose <code>https://example.com/</code> only supports federated sign-in
+    <div class="example" id="example-88e82799">
+     <a class="self-link" href="#example-88e82799"></a> Suppose <code>https://example.com/</code> only supports federated sign-in
     via <code>https://identity.example.com/</code>. It could request credentials
     via the following call: 
 <pre>navigator.<a data-link-type="idl" href="#dom-navigator-credentials">credentials</a>.<a data-link-type="idl" href="#dom-credentialcontainer-get">get</a>({
@@ -2019,14 +2019,14 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
 });
 </pre>
      <p>If it wanted to ensure that the user agent didn’t bother the user with
-    questions, it could ask to suppress UI for the request (and, therefore,
+    questions, it could ask only for unmediated credentials (and, therefore,
     to receive <code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code>s if and only if the user had chosen to
     automatically sign into the origin):</p>
 <pre>navigator.<a data-link-type="idl" href="#dom-navigator-credentials">credentials</a>.<a data-link-type="idl" href="#dom-credentialcontainer-get">get</a>(
   "<a class="idl-code" data-link-type="dict-member" href="#dom-credentialrequestoptions-federated">federated</a>": {
     "<a data-link-type="idl" href="#dom-federatedcredentialrequestoptions-providers">providers</a>": [ "https://identity.example.com/" ]
   },
-  "<a data-link-type="idl" href="#dom-credentialrequestoptions-suppressui">suppressUI</a>: true
+  "<a data-link-type="idl" href="#dom-credentialrequestoptions-unmediatedonly">unmediatedOnly</a>: true
 ).then(function (credential) {
   // ...
 });
@@ -2183,7 +2183,7 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
               passing in <var>origin</var>, <var>types</var> and <var>options</var>. 
          <li> If <var>result</var> is not <code>null</code>, resolve <var>promise</var> with <var>result</var>, and terminate this
               algorithm. 
-         <li> If <var>options</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-suppressui">suppressUI</a></code> is <code>true</code>, resolve <var>promise</var> with <var>undefined</var>, and terminate this algorithm. 
+         <li> If <var>options</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-unmediatedonly">unmediatedOnly</a></code> is <code>true</code>, resolve <var>promise</var> with <var>undefined</var>, and terminate this algorithm. 
          <li> Resolve <var>promise</var> with the result of executing <a href="#request-originboundcredential-with-mediation">§4.2.3 Request a OriginBoundCredential with user mediation</a>,
               passing in <var>origin</var>, <var>types</var>, and <var>options</var>. 
         </ol>
@@ -2580,8 +2580,8 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
     <h2 class="heading settled" data-level="8" id="implementation-considerations"><span class="secno">8. </span><span class="content">Implementation Considerations</span><a class="self-link" href="#implementation-considerations"></a></h2>
     <p><em>This section is non-normative.</em></p>
     <h3 class="heading settled" data-level="8.1" id="implementation-for-authors"><span class="secno">8.1. </span><span class="content">Website Authors</span><a class="self-link" href="#implementation-for-authors"></a></h3>
-    <p class="issue" id="issue-e1d9f1af"><a class="self-link" href="#issue-e1d9f1af"></a> Add some thoughts here about when and how the API
-  should be used, especially with regard to <code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-suppressui">suppressUI</a></code>. <a href="https://github.com/w3c/webappsec/issues/290">&lt;https://github.com/w3c/webappsec/issues/290></a></p>
+    <p class="issue" id="issue-a8dd64f2"><a class="self-link" href="#issue-a8dd64f2"></a> Add some thoughts here about when and how the API
+  should be used, especially with regard to <code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-unmediatedonly">unmediatedOnly</a></code>. <a href="https://github.com/w3c/webappsec/issues/290">&lt;https://github.com/w3c/webappsec/issues/290></a></p>
     <h3 class="heading settled" data-level="8.2" id="implementation-extension"><span class="secno">8.2. </span><span class="content">Extension Points</span><a class="self-link" href="#implementation-extension"></a></h3>
     <p>As noted in <a href="#future-work">§9 Future Work</a>, there is known interest in extending the API
   defined here to serve use cases beyond those this document addresses. To
@@ -2784,9 +2784,9 @@ partial dictionary CredentialRequestOptions {
    <li><a href="#requires-user-mediation">requires user mediation</a><span>, in §2</span>
    <li><a href="#dom-credentialcontainer-requireusermediation">requireUserMediation()</a><span>, in §3.2</span>
    <li><a href="#dom-credentialcontainer-store">store(credential)</a><span>, in §3.2</span>
-   <li><a href="#dom-credentialrequestoptions-suppressui">suppressUI</a><span>, in §3.2.1.1</span>
    <li><a href="#dom-credential-type">type</a><span>, in §3.1.1</span>
    <li><a href="#dom-credential-type-slot">[[type]]</a><span>, in §3.1.1</span>
+   <li><a href="#dom-credentialrequestoptions-unmediatedonly">unmediatedOnly</a><span>, in §3.2.1.1</span>
   </ul>
   <h3 class="no-num heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
   <ul class="index">
@@ -2995,7 +2995,7 @@ dictionary <a href="#dictdef-credentialrequestoptions">CredentialRequestOptions<
   boolean <a class="idl-code" data-default="false" data-link-type="dict-member" data-type="boolean " href="#dom-credentialrequestoptions-password">password</a> = false;
   <a data-link-type="idl-name" href="#dictdef-federatedcredentialrequestoptions">FederatedCredentialRequestOptions</a> <a class="idl-code" data-link-type="dict-member" data-type="FederatedCredentialRequestOptions " href="#dom-credentialrequestoptions-federated">federated</a>;
 
-  boolean <a class="idl-code" data-default="false" data-link-type="dict-member" data-type="boolean " href="#dom-credentialrequestoptions-suppressui">suppressUI</a> = false;
+  boolean <a class="idl-code" data-default="false" data-link-type="dict-member" data-type="boolean " href="#dom-credentialrequestoptions-unmediatedonly">unmediatedOnly</a> = false;
 };
 
 dictionary <a href="#dictdef-federatedcredentialrequestoptions">FederatedCredentialRequestOptions</a> {
@@ -3010,5 +3010,5 @@ dictionary <a href="#dictdef-federatedcredentialrequestoptions">FederatedCredent
       as an <code>ImageBitmap</code> or <code>blob:</code>. We also need to
       figure out responsiveness. Perhaps <a data-link-type="biblio" href="#biblio-manifest">[MANIFEST]</a>'s format? <a href="https://github.com/w3c/webappsec/issues/247">&lt;https://github.com/w3c/webappsec/issues/247></a><a href="#issue-c874d302"> ↵ </a></div>
    <div class="issue"> Add some thoughts here about when and how the API
-  should be used, especially with regard to <code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-suppressui">suppressUI</a></code>. <a href="https://github.com/w3c/webappsec/issues/290">&lt;https://github.com/w3c/webappsec/issues/290></a><a href="#issue-e1d9f1af"> ↵ </a></div>
+  should be used, especially with regard to <code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-unmediatedonly">unmediatedOnly</a></code>. <a href="https://github.com/w3c/webappsec/issues/290">&lt;https://github.com/w3c/webappsec/issues/290></a><a href="#issue-a8dd64f2"> ↵ </a></div>
   </div>

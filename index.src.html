@@ -903,7 +903,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
       boolean password = false;
       FederatedCredentialRequestOptions federated;
 
-      boolean suppressUI = false;
+      boolean unmediatedOnly = false;
     };
   </pre>
   <dl dfn-for="CredentialRequestOptions">
@@ -917,7 +917,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
       If set, the user agent will request {{FederatedCredential}} objects, as
       outlined in [[#request-credential]].
     </dd>
-    <dt><dfn dict-member>suppressUI</dfn></dt>
+    <dt><dfn dict-member>unmediatedOnly</dfn></dt>
     <dd>
       If <code>true</code>, the user agent will only attempt to provide
       a {{Credential}} without user interaction. It MUST NOT present the user
@@ -967,7 +967,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
     </pre>
 
     If it wanted to ensure that the user agent didn't bother the user with
-    questions, it could ask to suppress UI for the request (and, therefore,
+    questions, it could ask only for unmediated credentials (and, therefore,
     to receive {{Credential}}s if and only if the user had chosen to
     automatically sign into the origin):
 
@@ -976,7 +976,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
         "<a dict-member>federated</a>": {
           "<a idl>providers</a>": [ "https://identity.example.com/" ]
         },
-        "<a idl>suppressUI</a>: true
+        "<a idl>unmediatedOnly</a>: true
       ).then(function (credential) {
         // ...
       });
@@ -1253,7 +1253,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
               algorithm.
             </li>
             <li>
-              If <var>options</var>'s {{CredentialRequestOptions/suppressUI}}
+              If <var>options</var>'s {{CredentialRequestOptions/unmediatedOnly}}
               is <code>true</code>, resolve <var>promise</var> with
               <var>undefined</var>, and terminate this algorithm.
             </li>
@@ -2017,7 +2017,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   <h3 id="implementation-for-authors">Website Authors</h3>
 
   ISSUE(w3c/webappsec#290): Add some thoughts here about when and how the API
-  should be used, especially with regard to {{suppressUI}}.
+  should be used, especially with regard to {{unmediatedOnly}}.
 
   <h3 id="implementation-extension">Extension Points</h3>
 
