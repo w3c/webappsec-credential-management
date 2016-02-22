@@ -574,11 +574,11 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
 
   This document defines a generic and extensible {{Credential}} interface from
   which all <a>credentials</a> will inherit, and a slightly less generic
-  {{OriginBoundCredential}}, which defines the specific attributes shared
+  {{SiteBoundCredential}}, which defines the specific attributes shared
   by any <a>Credential</a> persisted in user agent's <a>credential store</a>.
 
   {{PasswordCredential}} and {{FederatedCredential}} both inherit from
-  {{OriginBoundCredential}}, and, as you might expect, are the concrete types
+  {{SiteBoundCredential}}, and, as you might expect, are the concrete types
   mapped to <a>password credentials</a> and <a>federated credentials</a>,
   respectively.
 
@@ -626,22 +626,22 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   [[#clone-credential]].
 
   <pre class="idl">
-    dictionary OriginBoundCredentialData : CredentialData {
+    dictionary SiteBoundCredentialData : CredentialData {
       USVString name;
       USVString iconURL;
     };
 
-    interface OriginBoundCredential : Credential {
+    interface SiteBoundCredential : Credential {
       readonly attribute USVString name;
       readonly attribute USVString iconURL;
     };
   </pre>
 
-  <h4 id="interfaces-credential-types-originboundcredential">
-    <code>OriginBoundCredential</code>
+  <h4 id="interfaces-credential-types-siteboundcredential">
+    <code>SiteBoundCredential</code>
   </h4>
 
-  <dl dfn-for="OriginBoundCredential">
+  <dl dfn-for="SiteBoundCredential">
     <dt><dfn attribute>name</dfn></dt>
     <dd>
       A name associated with the credential, intended as a human-understandable
@@ -659,27 +659,27 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
     </dd>
     <dt><dfn attribute>\[[origin]]</dfn></dt>
     <dd>
-      All {{OriginBoundCredential}} objects have an internal slot named
+      All {{SiteBoundCredential}} objects have an internal slot named
       {{[[origin]]}}, which stores the <a>origin</a> to which the credential is
       bound. This property is not directly exposed to the web.
     </dd>
   </dl>
 
-  All {{OriginBoundCredential}} objects MUST define an <dfn>options matching
+  All {{SiteBoundCredential}} objects MUST define an <dfn>options matching
   algorithm</dfn> which returns <dfn><code>Match</code></dfn> if the object
   matches a {{CredentialRequestOptions}} object, and <dfn><code>Does Not
   Match</code></dfn> otherwise.
 
   <h4 id="interfaces-credential-types-passwordcredential"><code>PasswordCredential</code></h4>
   <pre class="idl">
-    dictionary PasswordCredentialData : OriginBoundCredentialData {
+    dictionary PasswordCredentialData : SiteBoundCredentialData {
       USVString password;
     };
 
     typedef (FormData or URLSearchParams) CredentialBodyType;
 
     [Constructor(PasswordCredentialData data), Exposed=Window]
-    interface PasswordCredential : OriginBoundCredential {
+    interface PasswordCredential : SiteBoundCredential {
       attribute USVString idName;
       attribute USVString passwordName;
 
@@ -726,13 +726,13 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
 
   <h4 id="interfaces-credential-types-federatedcredential"><code>FederatedCredential</code></h4>
   <pre class="idl">
-    dictionary FederatedCredentialData : OriginBoundCredentialData {
+    dictionary FederatedCredentialData : SiteBoundCredentialData {
       USVString provider;
       DOMString protocol;
     };
 
     [Constructor(FederatedCredentialData data), Exposed=Window]
-    interface FederatedCredential : OriginBoundCredential {
+    interface FederatedCredential : SiteBoundCredential {
       readonly attribute USVString provider;
       readonly attribute DOMString? protocol;
     };
@@ -1220,7 +1220,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
 
       Note: That is, given a set containing {{PasswordCredential}} and
       {{FederatedCredential}}, <var>type</var> will be
-      {{OriginBoundCredential}}.
+      {{SiteBoundCredential}}.
     </li>
     <li>
       Return a <code>Promise</code> rejected with <code>TypeMismatchError</code>
@@ -1237,13 +1237,13 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
 
       <dl>
         <dt>{{FederatedCredential}}</dt>
-        <dt>{{OriginBoundCredential}}</dt>
+        <dt>{{SiteBoundCredential}}</dt>
         <dt>{{PasswordCredential}}</dt>
         <dd>
           <ol>
             <li>
               Let <var>result</var> be the result of executing
-              [[#request-originboundcredential-without-mediation]],
+              [[#request-siteboundcredential-without-mediation]],
               passing in <var>origin</var>, <var>types</var> and
               <var>options</var>.
             </li>
@@ -1259,7 +1259,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
             </li>
             <li>
               Resolve <var>promise</var> with the result of executing
-              [[#request-originboundcredential-with-mediation]],
+              [[#request-siteboundcredential-with-mediation]],
               passing in <var>origin</var>, <var>types</var>, and
               <var>options</var>.
             </li>
@@ -1285,7 +1285,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   </h4>
 
   Given a {{Credential}} object (<var>credential</var>), this algorithm executes
-  a type-specific storage algorithm. {{OriginBoundCredential}} objects will
+  a type-specific storage algorithm. {{SiteBoundCredential}} objects will
   be persisted to the user agent's <a>credential store</a>. Future object types
   could, for instance, be persisted to some other (potentially remote) storage
   mechanism.
@@ -1329,13 +1329,13 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
 
       <dl>
         <dt>{{FederatedCredential}}</dt>
-        <dt>{{OriginBoundCredential}}</dt>
+        <dt>{{SiteBoundCredential}}</dt>
         <dt>{{PasswordCredential}}</dt>
         <dd>
           <ol>
             <li>
               Resolve <var>promise</var> with the result of executing
-              [[#store-originboundcredential]],
+              [[#store-siteboundcredential]],
               passing in <var>credential</var> and <var>origin</var>.
             </li>
           </ol>
@@ -1395,18 +1395,18 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
     </li>
   </ol>
 
-  <h3 id="processing-originbound">
-    Processing <code>OriginBoundCredential</code>s
+  <h3 id="processing-sitebound">
+    Processing <code>SiteBoundCredential</code>s
   </h3>
 
-  <h4 id="gather-originboundcredentials">
-    Gather <code>OriginBoundCredential</code>s
+  <h4 id="gather-siteboundcredentials">
+    Gather <code>SiteBoundCredential</code>s
   </h4>
 
   Given an <a>origin</a> (<var>origin</var>), and a set of <a>interfaces</a>
   (<var>types</var>), and an {{CredentialRequestOptions}} dictionary
   (<var>options</var>), this algorithm returns a sequence of
-  {{OriginBoundCredential}} from the user agent's <a>credential store</a>
+  {{SiteBoundCredential}} from the user agent's <a>credential store</a>
   which are potential candidates:
 
   <ol>
@@ -1432,14 +1432,14 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
     </li>
   </ol>
 
-  <h4 id="request-originboundcredential-without-mediation">
-    Request an <code>OriginBoundCredential</code> <em>without</em> user mediation
+  <h4 id="request-siteboundcredential-without-mediation">
+    Request an <code>SiteBoundCredential</code> <em>without</em> user mediation
   </h4>
 
   This algorithm accepts an <a>origin</a> (<var>origin</var>), a set of
   <a>interfaces</a> (<var>types</var>) and an {{CredentialRequestOptions}}
   dictionary (<var>options</var>), and returns either a single
-  {{OriginBoundCredential}} object <strong>if and only if</strong> one can be
+  {{SiteBoundCredential}} object <strong>if and only if</strong> one can be
   provided without user mediation, or <code>null</code> if not.
 
   <ol>
@@ -1453,7 +1453,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
     </li>
     <li>
       Let <var>credentials</var> be the result of executing
-      [[#gather-originboundcredentials]] on <var>origin</var>,
+      [[#gather-siteboundcredentials]] on <var>origin</var>,
       <var>types</var>, and <var>options</var>.
     </li>
     <li>
@@ -1477,20 +1477,20 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   recommend that this algorithm always return <code>null</code> when the user
   has enabled private browsing.
 
-  <h4 id="request-originboundcredential-with-mediation">
-    Request a <code>OriginBoundCredential</code> with user mediation
+  <h4 id="request-siteboundcredential-with-mediation">
+    Request a <code>SiteBoundCredential</code> with user mediation
   </h4>
 
   This algorithm accepts an <a>origin</a> (<var>origin</var>), a set of
   <a>interfaces</a> (<var>types</var>) and an {{CredentialRequestOptions}}
   dictionary (<var>options</var>), and returns either a single
-  {{OriginBoundCredential}} object, or <code>null</code> if none can be
+  {{SiteBoundCredential}} object, or <code>null</code> if none can be
   provided.
 
   <ol>
     <li>
       Let <var>credentials</var> be the result of executing
-      [[#gather-originboundcredentials]] on <var>origin</var>,
+      [[#gather-siteboundcredentials]] on <var>origin</var>,
       <var>types</var>, and <var>options</var>.
     </li>
     <li>
@@ -1509,11 +1509,11 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
     </li>
   </ol>
 
-  <h4 id="store-originboundcredential">
-    Store <code>OriginBoundCredential</code>
+  <h4 id="store-siteboundcredential">
+    Store <code>SiteBoundCredential</code>
   </h4>
 
-  This algorithm accepts a {{OriginBoundCredential}} (<var>credential</var>),
+  This algorithm accepts a {{SiteBoundCredential}} (<var>credential</var>),
   and an <a>origin</a> (<var>origin</var>), and hands it to the internal
   credential manager for processing. It returns <var>credential</var> regardless
   of whether the user allows or disallows the credential to be persisted to the
@@ -1525,9 +1525,9 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
       serialization</a> of <var>origin</var>.
     </li>
     <li>
-      If <var>credential</var>'s {{OriginBoundCredential/iconURL}} is an
+      If <var>credential</var>'s {{SiteBoundCredential/iconURL}} is an
       <a><i lang="la">a priori</i> insecure URL</a>, set <var>credential</var>'s
-      {{OriginBoundCredential/iconURL}} to the empty string.
+      {{SiteBoundCredential/iconURL}} to the empty string.
     </li>
     <li>
       Switch on <var>credential</var>'s primary interface, and execute the
@@ -1558,15 +1558,15 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
                     </li>
                     <li>
                       Set <var>storedCredential</var>'s
-                      {{OriginBoundCredential/name}} to the
+                      {{SiteBoundCredential/name}} to the
                       value of <var>credential</var>'s
-                      {{OriginBoundCredential/name}}.
+                      {{SiteBoundCredential/name}}.
                     </li>
                     <li>
                       Set <var>storedCredential</var>'s
-                      {{OriginBoundCredential/iconURL}} to
+                      {{SiteBoundCredential/iconURL}} to
                       the value of <var>credential</var>'s
-                      {{OriginBoundCredential/iconURL}}.
+                      {{SiteBoundCredential/iconURL}}.
                     </li>
                   </ol>
                 </li>
@@ -1650,7 +1650,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   <ol>
     <li>
       Let <var>origin A</var> be the value of <var>credential</var>'s
-      {{OriginBoundCredential/[[origin]]}} slot.
+      {{SiteBoundCredential/[[origin]]}} slot.
     </li>
     <li>
       If <var>origin A</var> is <a>the same</a> as <var>origin B</var>, return
@@ -1966,7 +1966,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   <h3 id="privacy-chooser-leakage">Chooser Leakage</h3>
 
   If a user agent displays images supplied by a website or federation (for
-  example, if a {{Credential}}'s {{OriginBoundCredential/iconURL}} is displayed),
+  example, if a {{Credential}}'s {{SiteBoundCredential/iconURL}} is displayed),
   requests for these images MUST NOT be directly tied to instantiating the
   chooser in order to avoid leaking chooser usage. One option would be to fetch
   the images in the background when saving or updating a {{Credential}}, and to

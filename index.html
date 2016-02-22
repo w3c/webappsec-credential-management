@@ -1246,7 +1246,7 @@
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="http://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/Icons/w3c_home" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-02-18">18 February 2016</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-02-22">22 February 2016</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1324,7 +1324,7 @@ store user credentials for future use.</p>
        <a href="#interfaces-credential-types"><span class="secno">3.1</span> <span class="content">Credential Types</span></a>
        <ol class="toc">
         <li><a href="#interfaces-credential-types-credential"><span class="secno">3.1.1</span> <span class="content"><code>Credential</code></span></a>
-        <li><a href="#interfaces-credential-types-originboundcredential"><span class="secno">3.1.2</span> <span class="content"> <code>OriginBoundCredential</code> </span></a>
+        <li><a href="#interfaces-credential-types-siteboundcredential"><span class="secno">3.1.2</span> <span class="content"> <code>SiteBoundCredential</code> </span></a>
         <li>
          <a href="#interfaces-credential-types-passwordcredential"><span class="secno">3.1.3</span> <span class="content"><code>PasswordCredential</code></span></a>
          <ol class="toc">
@@ -1367,12 +1367,12 @@ store user credentials for future use.</p>
         <li><a href="#clone-credential"><span class="secno">4.1.3</span> <span class="content"> Clone <var>credential</var> </span></a>
        </ol>
       <li>
-       <a href="#processing-originbound"><span class="secno">4.2</span> <span class="content"> Processing <code>OriginBoundCredential</code>s </span></a>
+       <a href="#processing-sitebound"><span class="secno">4.2</span> <span class="content"> Processing <code>SiteBoundCredential</code>s </span></a>
        <ol class="toc">
-        <li><a href="#gather-originboundcredentials"><span class="secno">4.2.1</span> <span class="content"> Gather <code>OriginBoundCredential</code>s </span></a>
-        <li><a href="#request-originboundcredential-without-mediation"><span class="secno">4.2.2</span> <span class="content"> Request an <code>OriginBoundCredential</code> <em>without</em> user mediation </span></a>
-        <li><a href="#request-originboundcredential-with-mediation"><span class="secno">4.2.3</span> <span class="content"> Request a <code>OriginBoundCredential</code> with user mediation </span></a>
-        <li><a href="#store-originboundcredential"><span class="secno">4.2.4</span> <span class="content"> Store <code>OriginBoundCredential</code> </span></a>
+        <li><a href="#gather-siteboundcredentials"><span class="secno">4.2.1</span> <span class="content"> Gather <code>SiteBoundCredential</code>s </span></a>
+        <li><a href="#request-siteboundcredential-without-mediation"><span class="secno">4.2.2</span> <span class="content"> Request an <code>SiteBoundCredential</code> <em>without</em> user mediation </span></a>
+        <li><a href="#request-siteboundcredential-with-mediation"><span class="secno">4.2.3</span> <span class="content"> Request a <code>SiteBoundCredential</code> with user mediation </span></a>
+        <li><a href="#store-siteboundcredential"><span class="secno">4.2.4</span> <span class="content"> Store <code>SiteBoundCredential</code> </span></a>
        </ol>
       <li>
        <a href="#helpers"><span class="secno">4.3</span> <span class="content"> Helpful Algorithms </span></a>
@@ -1726,9 +1726,9 @@ fetch("https://example.com/loginEndpoint", { body: credential, method: "POST" })
     <h2 class="heading settled" data-level="3" id="interfaces"><span class="secno">3. </span><span class="content">Interfaces</span><a class="self-link" href="#interfaces"></a></h2>
     <h3 class="heading settled" data-level="3.1" id="interfaces-credential-types"><span class="secno">3.1. </span><span class="content">Credential Types</span><a class="self-link" href="#interfaces-credential-types"></a></h3>
     <p>This document defines a generic and extensible <code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code> interface from
-  which all <a data-link-type="dfn" href="#credentials">credentials</a> will inherit, and a slightly less generic <code class="idl"><a data-link-type="idl" href="#originboundcredential">OriginBoundCredential</a></code>, which defines the specific attributes shared
+  which all <a data-link-type="dfn" href="#credentials">credentials</a> will inherit, and a slightly less generic <code class="idl"><a data-link-type="idl" href="#siteboundcredential">SiteBoundCredential</a></code>, which defines the specific attributes shared
   by any <a data-link-type="dfn" href="#credentials">Credential</a> persisted in user agent’s <a data-link-type="dfn" href="#credential-store">credential store</a>.</p>
-    <p><code class="idl"><a data-link-type="idl" href="#passwordcredential">PasswordCredential</a></code> and <code class="idl"><a data-link-type="idl" href="#federatedcredential">FederatedCredential</a></code> both inherit from <code class="idl"><a data-link-type="idl" href="#originboundcredential">OriginBoundCredential</a></code>, and, as you might expect, are the concrete types
+    <p><code class="idl"><a data-link-type="idl" href="#passwordcredential">PasswordCredential</a></code> and <code class="idl"><a data-link-type="idl" href="#federatedcredential">FederatedCredential</a></code> both inherit from <code class="idl"><a data-link-type="idl" href="#siteboundcredential">SiteBoundCredential</a></code>, and, as you might expect, are the concrete types
   mapped to <a data-link-type="dfn" href="#password-credentials">password credentials</a> and <a data-link-type="dfn" href="#federated-credentials">federated credentials</a>,
   respectively.</p>
     <h4 class="heading settled" data-level="3.1.1" id="interfaces-credential-types-credential"><span class="secno">3.1.1. </span><span class="content"><code>Credential</code></span><a class="self-link" href="#interfaces-credential-types-credential"></a></h4>
@@ -1759,44 +1759,44 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="cre
     <p><code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code> objects implement <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/html5/infrastructure.html#transferable">Transferable</a></code>, and MUST support the
   the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/infrastructure.html#structured-clone">structured clone</a> algorithm. Unless otherwise specified, the cloning
   mechanism for all objects which implement <code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code> is defined in <a href="#clone-credential">§4.1.3 Clone credential</a>.</p>
-<pre class="idl">dictionary <dfn class="idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-originboundcredentialdata">OriginBoundCredentialData<a class="self-link" href="#dictdef-originboundcredentialdata"></a></dfn> : <a data-link-type="idl-name" href="#dictdef-credentialdata">CredentialData</a> {
-  USVString <dfn class="idl-code" data-dfn-for="OriginBoundCredentialData" data-dfn-type="dict-member" data-export="" data-type="USVString " id="dom-originboundcredentialdata-name">name<a class="self-link" href="#dom-originboundcredentialdata-name"></a></dfn>;
-  USVString <dfn class="idl-code" data-dfn-for="OriginBoundCredentialData" data-dfn-type="dict-member" data-export="" data-type="USVString " id="dom-originboundcredentialdata-iconurl">iconURL<a class="self-link" href="#dom-originboundcredentialdata-iconurl"></a></dfn>;
+<pre class="idl">dictionary <dfn class="idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-siteboundcredentialdata">SiteBoundCredentialData<a class="self-link" href="#dictdef-siteboundcredentialdata"></a></dfn> : <a data-link-type="idl-name" href="#dictdef-credentialdata">CredentialData</a> {
+  USVString <dfn class="idl-code" data-dfn-for="SiteBoundCredentialData" data-dfn-type="dict-member" data-export="" data-type="USVString " id="dom-siteboundcredentialdata-name">name<a class="self-link" href="#dom-siteboundcredentialdata-name"></a></dfn>;
+  USVString <dfn class="idl-code" data-dfn-for="SiteBoundCredentialData" data-dfn-type="dict-member" data-export="" data-type="USVString " id="dom-siteboundcredentialdata-iconurl">iconURL<a class="self-link" href="#dom-siteboundcredentialdata-iconurl"></a></dfn>;
 };
 
-interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="originboundcredential">OriginBoundCredential<a class="self-link" href="#originboundcredential"></a></dfn> : <a data-link-type="idl-name" href="#credential">Credential</a> {
-  readonly attribute USVString <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="USVString " href="#dom-originboundcredential-name">name</a>;
-  readonly attribute USVString <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="USVString " href="#dom-originboundcredential-iconurl">iconURL</a>;
+interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="siteboundcredential">SiteBoundCredential<a class="self-link" href="#siteboundcredential"></a></dfn> : <a data-link-type="idl-name" href="#credential">Credential</a> {
+  readonly attribute USVString <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="USVString " href="#dom-siteboundcredential-name">name</a>;
+  readonly attribute USVString <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="USVString " href="#dom-siteboundcredential-iconurl">iconURL</a>;
 };
 </pre>
-    <h4 class="heading settled" data-level="3.1.2" id="interfaces-credential-types-originboundcredential"><span class="secno">3.1.2. </span><span class="content"> <code>OriginBoundCredential</code> </span><a class="self-link" href="#interfaces-credential-types-originboundcredential"></a></h4>
+    <h4 class="heading settled" data-level="3.1.2" id="interfaces-credential-types-siteboundcredential"><span class="secno">3.1.2. </span><span class="content"> <code>SiteBoundCredential</code> </span><a class="self-link" href="#interfaces-credential-types-siteboundcredential"></a></h4>
     <dl>
-     <dt><dfn class="idl-code" data-dfn-for="OriginBoundCredential" data-dfn-type="attribute" data-export="" id="dom-originboundcredential-name">name<a class="self-link" href="#dom-originboundcredential-name"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://heycam.github.io/webidl/#idl-USVString">USVString</a>, readonly</span>
+     <dt><dfn class="idl-code" data-dfn-for="SiteBoundCredential" data-dfn-type="attribute" data-export="" id="dom-siteboundcredential-name">name<a class="self-link" href="#dom-siteboundcredential-name"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://heycam.github.io/webidl/#idl-USVString">USVString</a>, readonly</span>
      <dd> A name associated with the credential, intended as a human-understandable
       public name. 
-     <dt><dfn class="idl-code" data-dfn-for="OriginBoundCredential" data-dfn-type="attribute" data-export="" id="dom-originboundcredential-iconurl">iconURL<a class="self-link" href="#dom-originboundcredential-iconurl"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://heycam.github.io/webidl/#idl-USVString">USVString</a>, readonly</span>
+     <dt><dfn class="idl-code" data-dfn-for="SiteBoundCredential" data-dfn-type="attribute" data-export="" id="dom-siteboundcredential-iconurl">iconURL<a class="self-link" href="#dom-siteboundcredential-iconurl"></a></dfn>, <span> of type <a data-link-type="idl-name" href="https://heycam.github.io/webidl/#idl-USVString">USVString</a>, readonly</span>
      <dd>
        A URL pointing to an image for the credential. This URL MUST NOT be an <a data-link-type="dfn" href="https://w3c.github.io/webappsec-mixed-content/#a-priori-insecure-url"><i lang="la">a priori</i> insecure URL</a>. 
       <p class="issue" id="issue-c874d302"><a class="self-link" href="#issue-c874d302"></a> Anne suggests that this might be better modeled
       as an <code>ImageBitmap</code> or <code>blob:</code>. We also need to
       figure out responsiveness. Perhaps <a data-link-type="biblio" href="#biblio-manifest">[MANIFEST]</a>'s format? <a href="https://github.com/w3c/webappsec/issues/247">&lt;https://github.com/w3c/webappsec/issues/247></a></p>
-     <dt><dfn class="idl-code" data-dfn-for="OriginBoundCredential" data-dfn-type="attribute" data-export="" id="dom-originboundcredential-origin-slot">[[origin]]<a class="self-link" href="#dom-originboundcredential-origin-slot"></a></dfn>
-     <dd> All <code class="idl"><a data-link-type="idl" href="#originboundcredential">OriginBoundCredential</a></code> objects have an internal slot named <code class="idl"><a data-link-type="idl" href="#dom-originboundcredential-origin-slot">[[origin]]</a></code>, which stores the <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a> to which the credential is
+     <dt><dfn class="idl-code" data-dfn-for="SiteBoundCredential" data-dfn-type="attribute" data-export="" id="dom-siteboundcredential-origin-slot">[[origin]]<a class="self-link" href="#dom-siteboundcredential-origin-slot"></a></dfn>
+     <dd> All <code class="idl"><a data-link-type="idl" href="#siteboundcredential">SiteBoundCredential</a></code> objects have an internal slot named <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot">[[origin]]</a></code>, which stores the <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a> to which the credential is
       bound. This property is not directly exposed to the web. 
     </dl>
-    <p>All <code class="idl"><a data-link-type="idl" href="#originboundcredential">OriginBoundCredential</a></code> objects MUST define an <dfn data-dfn-type="dfn" data-noexport="" id="options-matching-algorithm">options matching
+    <p>All <code class="idl"><a data-link-type="idl" href="#siteboundcredential">SiteBoundCredential</a></code> objects MUST define an <dfn data-dfn-type="dfn" data-noexport="" id="options-matching-algorithm">options matching
   algorithm<a class="self-link" href="#options-matching-algorithm"></a></dfn> which returns <dfn data-dfn-type="dfn" data-noexport="" id="match"><code>Match</code><a class="self-link" href="#match"></a></dfn> if the object
   matches a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions">CredentialRequestOptions</a></code> object, and <dfn data-dfn-type="dfn" data-noexport="" id="does-not-match"><code>Does Not
   Match</code><a class="self-link" href="#does-not-match"></a></dfn> otherwise.</p>
     <h4 class="heading settled" data-level="3.1.3" id="interfaces-credential-types-passwordcredential"><span class="secno">3.1.3. </span><span class="content"><code>PasswordCredential</code></span><a class="self-link" href="#interfaces-credential-types-passwordcredential"></a></h4>
-<pre class="idl">dictionary <dfn class="idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-passwordcredentialdata">PasswordCredentialData<a class="self-link" href="#dictdef-passwordcredentialdata"></a></dfn> : <a data-link-type="idl-name" href="#dictdef-originboundcredentialdata">OriginBoundCredentialData</a> {
+<pre class="idl">dictionary <dfn class="idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-passwordcredentialdata">PasswordCredentialData<a class="self-link" href="#dictdef-passwordcredentialdata"></a></dfn> : <a data-link-type="idl-name" href="#dictdef-siteboundcredentialdata">SiteBoundCredentialData</a> {
   USVString <dfn class="idl-code" data-dfn-for="PasswordCredentialData" data-dfn-type="dict-member" data-export="" data-type="USVString " id="dom-passwordcredentialdata-password">password<a class="self-link" href="#dom-passwordcredentialdata-password"></a></dfn>;
 };
 
 typedef (<a data-link-type="idl-name" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a> or <a data-link-type="idl-name" href="http://www.w3.org/TR/url/#dom-urlsearchparams">URLSearchParams</a>) <dfn class="idl-code" data-dfn-type="typedef" data-export="" id="typedefdef-credentialbodytype">CredentialBodyType<a class="self-link" href="#typedefdef-credentialbodytype"></a></dfn>;
 
 [<dfn class="idl-code" data-dfn-for="PasswordCredential" data-dfn-type="constructor" data-export="" data-lt="PasswordCredential(data)" id="dom-passwordcredential-passwordcredential">Constructor<a class="self-link" href="#dom-passwordcredential-passwordcredential"></a></dfn>(<a data-link-type="idl-name" href="#dictdef-passwordcredentialdata">PasswordCredentialData</a> <dfn class="idl-code" data-dfn-for="PasswordCredential/PasswordCredential(data)" data-dfn-type="argument" data-export="" id="dom-passwordcredential-passwordcredential-data-data">data<a class="self-link" href="#dom-passwordcredential-passwordcredential-data-data"></a></dfn>), Exposed=Window]
-interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="passwordcredential">PasswordCredential<a class="self-link" href="#passwordcredential"></a></dfn> : <a data-link-type="idl-name" href="#originboundcredential">OriginBoundCredential</a> {
+interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="passwordcredential">PasswordCredential<a class="self-link" href="#passwordcredential"></a></dfn> : <a data-link-type="idl-name" href="#siteboundcredential">SiteBoundCredential</a> {
   attribute USVString <a class="idl-code" data-link-type="attribute" data-type="USVString " href="#dom-passwordcredential-idname">idName</a>;
   attribute USVString <a class="idl-code" data-link-type="attribute" data-type="USVString " href="#dom-passwordcredential-passwordname">passwordName</a>;
 
@@ -1837,13 +1837,13 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="pas
     <p><code class="idl"><a data-link-type="idl" href="#passwordcredential">PasswordCredential</a></code> objects' <a data-link-type="dfn" href="#options-matching-algorithm">options matching algorithm</a> always
   returns <a data-link-type="dfn" href="#match"><code>Match</code></a>.</p>
     <h4 class="heading settled" data-level="3.1.4" id="interfaces-credential-types-federatedcredential"><span class="secno">3.1.4. </span><span class="content"><code>FederatedCredential</code></span><a class="self-link" href="#interfaces-credential-types-federatedcredential"></a></h4>
-<pre class="idl">dictionary <dfn class="idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-federatedcredentialdata">FederatedCredentialData<a class="self-link" href="#dictdef-federatedcredentialdata"></a></dfn> : <a data-link-type="idl-name" href="#dictdef-originboundcredentialdata">OriginBoundCredentialData</a> {
+<pre class="idl">dictionary <dfn class="idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-federatedcredentialdata">FederatedCredentialData<a class="self-link" href="#dictdef-federatedcredentialdata"></a></dfn> : <a data-link-type="idl-name" href="#dictdef-siteboundcredentialdata">SiteBoundCredentialData</a> {
   USVString <dfn class="idl-code" data-dfn-for="FederatedCredentialData" data-dfn-type="dict-member" data-export="" data-type="USVString " id="dom-federatedcredentialdata-provider">provider<a class="self-link" href="#dom-federatedcredentialdata-provider"></a></dfn>;
   DOMString <dfn class="idl-code" data-dfn-for="FederatedCredentialData" data-dfn-type="dict-member" data-export="" data-type="DOMString " id="dom-federatedcredentialdata-protocol">protocol<a class="self-link" href="#dom-federatedcredentialdata-protocol"></a></dfn>;
 };
 
 [<dfn class="idl-code" data-dfn-for="FederatedCredential" data-dfn-type="constructor" data-export="" data-lt="FederatedCredential(data)" id="dom-federatedcredential-federatedcredential">Constructor<a class="self-link" href="#dom-federatedcredential-federatedcredential"></a></dfn>(<a data-link-type="idl-name" href="#dictdef-federatedcredentialdata">FederatedCredentialData</a> <dfn class="idl-code" data-dfn-for="FederatedCredential/FederatedCredential(data)" data-dfn-type="argument" data-export="" id="dom-federatedcredential-federatedcredential-data-data">data<a class="self-link" href="#dom-federatedcredential-federatedcredential-data-data"></a></dfn>), Exposed=Window]
-interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="federatedcredential">FederatedCredential<a class="self-link" href="#federatedcredential"></a></dfn> : <a data-link-type="idl-name" href="#originboundcredential">OriginBoundCredential</a> {
+interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="federatedcredential">FederatedCredential<a class="self-link" href="#federatedcredential"></a></dfn> : <a data-link-type="idl-name" href="#siteboundcredential">SiteBoundCredential</a> {
   readonly attribute USVString <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="USVString " href="#dom-federatedcredential-provider">provider</a>;
   readonly attribute DOMString? <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMString? " href="#dom-federatedcredential-protocol">protocol</a>;
 };
@@ -2167,7 +2167,7 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
      <li>
        Let <var>type</var> be the lowest common ancestor interface of the
       interfaces contained in <var>types</var>. 
-      <p class="note" role="note">Note: That is, given a set containing <code class="idl"><a data-link-type="idl" href="#passwordcredential">PasswordCredential</a></code> and <code class="idl"><a data-link-type="idl" href="#federatedcredential">FederatedCredential</a></code>, <var>type</var> will be <code class="idl"><a data-link-type="idl" href="#originboundcredential">OriginBoundCredential</a></code>.</p>
+      <p class="note" role="note">Note: That is, given a set containing <code class="idl"><a data-link-type="idl" href="#passwordcredential">PasswordCredential</a></code> and <code class="idl"><a data-link-type="idl" href="#federatedcredential">FederatedCredential</a></code>, <var>type</var> will be <code class="idl"><a data-link-type="idl" href="#siteboundcredential">SiteBoundCredential</a></code>.</p>
      <li> Return a <code>Promise</code> rejected with <code>TypeMismatchError</code> if <var>type</var> is <code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code>. 
      <li> Let <var>promise</var> be a newly created <code>Promise</code> object. 
      <li> Return <var>promise</var>, and execute the remaining steps asynchronously. 
@@ -2175,16 +2175,16 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
        Switch on <var>type</var>, and execute the associated steps: 
       <dl>
        <dt><code class="idl"><a data-link-type="idl" href="#federatedcredential">FederatedCredential</a></code>
-       <dt><code class="idl"><a data-link-type="idl" href="#originboundcredential">OriginBoundCredential</a></code>
+       <dt><code class="idl"><a data-link-type="idl" href="#siteboundcredential">SiteBoundCredential</a></code>
        <dt><code class="idl"><a data-link-type="idl" href="#passwordcredential">PasswordCredential</a></code>
        <dd>
         <ol>
-         <li> Let <var>result</var> be the result of executing <a href="#request-originboundcredential-without-mediation">§4.2.2 Request an OriginBoundCredential without user mediation</a>,
+         <li> Let <var>result</var> be the result of executing <a href="#request-siteboundcredential-without-mediation">§4.2.2 Request an SiteBoundCredential without user mediation</a>,
               passing in <var>origin</var>, <var>types</var> and <var>options</var>. 
          <li> If <var>result</var> is not <code>null</code>, resolve <var>promise</var> with <var>result</var>, and terminate this
               algorithm. 
          <li> If <var>options</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-unmediated">unmediated</a></code> is <code>true</code>, resolve <var>promise</var> with <var>undefined</var>, and terminate this algorithm. 
-         <li> Resolve <var>promise</var> with the result of executing <a href="#request-originboundcredential-with-mediation">§4.2.3 Request a OriginBoundCredential with user mediation</a>,
+         <li> Resolve <var>promise</var> with the result of executing <a href="#request-siteboundcredential-with-mediation">§4.2.3 Request a SiteBoundCredential with user mediation</a>,
               passing in <var>origin</var>, <var>types</var>, and <var>options</var>. 
         </ol>
        <dt><em>This is an extension point.</em>
@@ -2197,7 +2197,7 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
   a more graceful fallback mechanism if/when new credential types are defined.</p>
     <h4 class="heading settled" data-level="4.1.2" id="store-credential"><span class="secno">4.1.2. </span><span class="content"> Store a <code>Credential</code> </span><a class="self-link" href="#store-credential"></a></h4>
     <p>Given a <code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code> object (<var>credential</var>), this algorithm executes
-  a type-specific storage algorithm. <code class="idl"><a data-link-type="idl" href="#originboundcredential">OriginBoundCredential</a></code> objects will
+  a type-specific storage algorithm. <code class="idl"><a data-link-type="idl" href="#siteboundcredential">SiteBoundCredential</a></code> objects will
   be persisted to the user agent’s <a data-link-type="dfn" href="#credential-store">credential store</a>. Future object types
   could, for instance, be persisted to some other (potentially remote) storage
   mechanism.</p>
@@ -2219,11 +2219,11 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
        Switch on <var>type</var>, and execute the associated steps: 
       <dl>
        <dt><code class="idl"><a data-link-type="idl" href="#federatedcredential">FederatedCredential</a></code>
-       <dt><code class="idl"><a data-link-type="idl" href="#originboundcredential">OriginBoundCredential</a></code>
+       <dt><code class="idl"><a data-link-type="idl" href="#siteboundcredential">SiteBoundCredential</a></code>
        <dt><code class="idl"><a data-link-type="idl" href="#passwordcredential">PasswordCredential</a></code>
        <dd>
         <ol>
-         <li> Resolve <var>promise</var> with the result of executing <a href="#store-originboundcredential">§4.2.4 Store OriginBoundCredential</a>,
+         <li> Resolve <var>promise</var> with the result of executing <a href="#store-siteboundcredential">§4.2.4 Store SiteBoundCredential</a>,
               passing in <var>credential</var> and <var>origin</var>. 
         </ol>
        <dt><em>This is an extension point.</em>
@@ -2252,13 +2252,13 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
       </ol>
      <li> Set <var>deep clone</var> to <code>own</code>. 
     </ol>
-    <h3 class="heading settled" data-level="4.2" id="processing-originbound"><span class="secno">4.2. </span><span class="content"> Processing <code>OriginBoundCredential</code>s </span><a class="self-link" href="#processing-originbound"></a></h3>
-    <h4 class="heading settled" data-level="4.2.1" id="gather-originboundcredentials"><span class="secno">4.2.1. </span><span class="content"> Gather <code>OriginBoundCredential</code>s </span><a class="self-link" href="#gather-originboundcredentials"></a></h4>
+    <h3 class="heading settled" data-level="4.2" id="processing-sitebound"><span class="secno">4.2. </span><span class="content"> Processing <code>SiteBoundCredential</code>s </span><a class="self-link" href="#processing-sitebound"></a></h3>
+    <h4 class="heading settled" data-level="4.2.1" id="gather-siteboundcredentials"><span class="secno">4.2.1. </span><span class="content"> Gather <code>SiteBoundCredential</code>s </span><a class="self-link" href="#gather-siteboundcredentials"></a></h4>
     <p>Given an <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a> (<var>origin</var>), and a set of <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface">interfaces</a> (<var>types</var>), and an <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions">CredentialRequestOptions</a></code> dictionary
-  (<var>options</var>), this algorithm returns a sequence of <code class="idl"><a data-link-type="idl" href="#originboundcredential">OriginBoundCredential</a></code> from the user agent’s <a data-link-type="dfn" href="#credential-store">credential store</a> which are potential candidates:</p>
+  (<var>options</var>), this algorithm returns a sequence of <code class="idl"><a data-link-type="idl" href="#siteboundcredential">SiteBoundCredential</a></code> from the user agent’s <a data-link-type="dfn" href="#credential-store">credential store</a> which are potential candidates:</p>
     <ol>
      <li>
-       Let <var>credentials</var> be the set of <code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code> objects in the <a data-link-type="dfn" href="#credential-store">credential store</a> whose <code class="idl"><a data-link-type="idl" href="#dom-originboundcredential-origin-slot">[[origin]]</a></code> slot is equal to the <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-6.2">ASCII
+       Let <var>credentials</var> be the set of <code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code> objects in the <a data-link-type="dfn" href="#credential-store">credential store</a> whose <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot">[[origin]]</a></code> slot is equal to the <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-6.2">ASCII
       serialization</a> of <var>origin</var>. 
       <p class="note" role="note">Note: This is an exact match, not a <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable domain</a> match.
       See <a href="#security-cross-origin-leakage">§6.1 Cross-origin Credential Leakage</a> for details as to why.</p>
@@ -2268,8 +2268,8 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
       algorithm</a> returns <a data-link-type="dfn" href="#does-not-match"><code>Does Not Match</code></a> when executed on <var>options</var>. 
      <li> Return <var>credentials</var>. 
     </ol>
-    <h4 class="heading settled" data-level="4.2.2" id="request-originboundcredential-without-mediation"><span class="secno">4.2.2. </span><span class="content"> Request an <code>OriginBoundCredential</code> <em>without</em> user mediation </span><a class="self-link" href="#request-originboundcredential-without-mediation"></a></h4>
-    <p>This algorithm accepts an <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a> (<var>origin</var>), a set of <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface">interfaces</a> (<var>types</var>) and an <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions">CredentialRequestOptions</a></code> dictionary (<var>options</var>), and returns either a single <code class="idl"><a data-link-type="idl" href="#originboundcredential">OriginBoundCredential</a></code> object <strong>if and only if</strong> one can be
+    <h4 class="heading settled" data-level="4.2.2" id="request-siteboundcredential-without-mediation"><span class="secno">4.2.2. </span><span class="content"> Request an <code>SiteBoundCredential</code> <em>without</em> user mediation </span><a class="self-link" href="#request-siteboundcredential-without-mediation"></a></h4>
+    <p>This algorithm accepts an <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a> (<var>origin</var>), a set of <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface">interfaces</a> (<var>types</var>) and an <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions">CredentialRequestOptions</a></code> dictionary (<var>options</var>), and returns either a single <code class="idl"><a data-link-type="idl" href="#siteboundcredential">SiteBoundCredential</a></code> object <strong>if and only if</strong> one can be
   provided without user mediation, or <code>null</code> if not.</p>
     <ol>
      <li>
@@ -2277,7 +2277,7 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
       mediation, or <var>origin</var>’s <a data-link-type="dfn" href="#requires-user-mediation">requires user mediation</a> flag
       in the user agent’s <a data-link-type="dfn" href="#credential-store">credential store</a> is <code>true</code>, return <code>null</code>. 
       <p class="note" role="note">Note: See <a href="#user-mediation-requirements">§5.2 Requiring User Mediation</a> for details.</p>
-     <li> Let <var>credentials</var> be the result of executing <a href="#gather-originboundcredentials">§4.2.1 Gather OriginBoundCredentials</a> on <var>origin</var>, <var>types</var>, and <var>options</var>. 
+     <li> Let <var>credentials</var> be the result of executing <a href="#gather-siteboundcredentials">§4.2.1 Gather SiteBoundCredentials</a> on <var>origin</var>, <var>types</var>, and <var>options</var>. 
      <li>
        If <var>credentials</var> is empty, or contains more than one <code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code> object, return <code>null</code>. 
       <p class="note" role="note">Note: In the future, we may wish to allow multiple <code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code> objects
@@ -2290,11 +2290,11 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
     <p class="note" role="note">Note: If a user agent implements some sort of "private browsing" mode, we
   recommend that this algorithm always return <code>null</code> when the user
   has enabled private browsing.</p>
-    <h4 class="heading settled" data-level="4.2.3" id="request-originboundcredential-with-mediation"><span class="secno">4.2.3. </span><span class="content"> Request a <code>OriginBoundCredential</code> with user mediation </span><a class="self-link" href="#request-originboundcredential-with-mediation"></a></h4>
-    <p>This algorithm accepts an <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a> (<var>origin</var>), a set of <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface">interfaces</a> (<var>types</var>) and an <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions">CredentialRequestOptions</a></code> dictionary (<var>options</var>), and returns either a single <code class="idl"><a data-link-type="idl" href="#originboundcredential">OriginBoundCredential</a></code> object, or <code>null</code> if none can be
+    <h4 class="heading settled" data-level="4.2.3" id="request-siteboundcredential-with-mediation"><span class="secno">4.2.3. </span><span class="content"> Request a <code>SiteBoundCredential</code> with user mediation </span><a class="self-link" href="#request-siteboundcredential-with-mediation"></a></h4>
+    <p>This algorithm accepts an <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a> (<var>origin</var>), a set of <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface">interfaces</a> (<var>types</var>) and an <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions">CredentialRequestOptions</a></code> dictionary (<var>options</var>), and returns either a single <code class="idl"><a data-link-type="idl" href="#siteboundcredential">SiteBoundCredential</a></code> object, or <code>null</code> if none can be
   provided.</p>
     <ol>
-     <li> Let <var>credentials</var> be the result of executing <a href="#gather-originboundcredentials">§4.2.1 Gather OriginBoundCredentials</a> on <var>origin</var>, <var>types</var>, and <var>options</var>. 
+     <li> Let <var>credentials</var> be the result of executing <a href="#gather-siteboundcredentials">§4.2.1 Gather SiteBoundCredentials</a> on <var>origin</var>, <var>types</var>, and <var>options</var>. 
      <li>
        Ask the user which <code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code> to share. 
       <p class="note" role="note">Note: This behavior is vendor-specific. Guidelines for user agent
@@ -2302,15 +2302,15 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
      <li> Let <var>credential</var> be the <code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code> the user chose, or <code>null</code> if the user chose not to share a credential with <var>origin</var>. 
      <li> Return <var>credential</var>. 
     </ol>
-    <h4 class="heading settled" data-level="4.2.4" id="store-originboundcredential"><span class="secno">4.2.4. </span><span class="content"> Store <code>OriginBoundCredential</code> </span><a class="self-link" href="#store-originboundcredential"></a></h4>
-    <p>This algorithm accepts a <code class="idl"><a data-link-type="idl" href="#originboundcredential">OriginBoundCredential</a></code> (<var>credential</var>),
+    <h4 class="heading settled" data-level="4.2.4" id="store-siteboundcredential"><span class="secno">4.2.4. </span><span class="content"> Store <code>SiteBoundCredential</code> </span><a class="self-link" href="#store-siteboundcredential"></a></h4>
+    <p>This algorithm accepts a <code class="idl"><a data-link-type="idl" href="#siteboundcredential">SiteBoundCredential</a></code> (<var>credential</var>),
   and an <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a> (<var>origin</var>), and hands it to the internal
   credential manager for processing. It returns <var>credential</var> regardless
   of whether the user allows or disallows the credential to be persisted to the <a data-link-type="dfn" href="#credential-store">credential store</a>:</p>
     <ol>
-     <li> Set <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-originboundcredential-origin-slot">[[origin]]</a></code> slot to the <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-6.2">ASCII
+     <li> Set <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot">[[origin]]</a></code> slot to the <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-6.2">ASCII
       serialization</a> of <var>origin</var>. 
-     <li> If <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-originboundcredential-iconurl">iconURL</a></code> is an <a data-link-type="dfn" href="https://w3c.github.io/webappsec-mixed-content/#a-priori-insecure-url"><i lang="la">a priori</i> insecure URL</a>, set <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-originboundcredential-iconurl">iconURL</a></code> to the empty string. 
+     <li> If <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-iconurl">iconURL</a></code> is an <a data-link-type="dfn" href="https://w3c.github.io/webappsec-mixed-content/#a-priori-insecure-url"><i lang="la">a priori</i> insecure URL</a>, set <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-iconurl">iconURL</a></code> to the empty string. 
      <li>
        Switch on <var>credential</var>’s primary interface, and execute the
       associated steps: 
@@ -2319,7 +2319,7 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
        <dd>
         <ol>
          <li>
-           If the user agent’s credential manager contains a <code class="idl"><a data-link-type="idl" href="#passwordcredential">PasswordCredential</a></code> <var>storedCredential</var> whose <code class="idl"><a data-link-type="idl" href="#dom-credential-id">id</a></code> attribute is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-id">id</a></code> and whose <code class="idl"><a data-link-type="idl" href="#dom-originboundcredential-origin-slot">[[origin]]</a></code> slot is <var>origin</var>, then: 
+           If the user agent’s credential manager contains a <code class="idl"><a data-link-type="idl" href="#passwordcredential">PasswordCredential</a></code> <var>storedCredential</var> whose <code class="idl"><a data-link-type="idl" href="#dom-credential-id">id</a></code> attribute is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-id">id</a></code> and whose <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot">[[origin]]</a></code> slot is <var>origin</var>, then: 
           <ol>
            <li>
              If the user grants <var>origin</var> permission to update
@@ -2328,10 +2328,10 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
             <ol>
              <li> Set <var>storedCredential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot">[[password]]</a></code> to the
                       value of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot">[[password]]</a></code> slot. 
-             <li> Set <var>storedCredential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-originboundcredential-name">name</a></code> to the
-                      value of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-originboundcredential-name">name</a></code>. 
-             <li> Set <var>storedCredential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-originboundcredential-iconurl">iconURL</a></code> to
-                      the value of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-originboundcredential-iconurl">iconURL</a></code>. 
+             <li> Set <var>storedCredential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-name">name</a></code> to the
+                      value of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-name">name</a></code>. 
+             <li> Set <var>storedCredential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-iconurl">iconURL</a></code> to
+                      the value of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-iconurl">iconURL</a></code>. 
             </ol>
           </ol>
          <li>
@@ -2368,7 +2368,7 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
     </ol>
     <h4 class="heading settled" data-level="4.3.2" id="is-match"><span class="secno">4.3.2. </span><span class="content"> Does <var>credential</var> match <var>origin B</var>? </span><a class="self-link" href="#is-match"></a></h4>
     <ol>
-     <li> Let <var>origin A</var> be the value of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-originboundcredential-origin-slot">[[origin]]</a></code> slot. 
+     <li> Let <var>origin A</var> be the value of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot">[[origin]]</a></code> slot. 
      <li> If <var>origin A</var> is <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-5">the same</a> as <var>origin B</var>, return <code>Exact Match</code>. 
      <li> If <var>origin A</var>’s <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#concept-url-scheme">scheme</a></code> is <var>origin B</var>’s <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#concept-url-scheme">scheme</a></code>, and <var>origin A</var>’s <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#concept-url-host">host</a></code>'s <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable
       domain</a> is <var>origin B</var>’s <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#concept-url-host">host</a></code>'s <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable
@@ -2467,7 +2467,7 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
       not the same. That is: credentials saved on <code>https://example.com/</code> will never be available to <code>http://example.com/</code> via a user agent’s autofill mechanism 
      <li> MAY use the Public Suffix List <a data-link-type="biblio" href="#biblio-psl">[PSL]</a> to determine the effective scope
       of a credential by comparing the <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable domains</a> of the
-      credential’s <code class="idl"><a data-link-type="idl" href="#dom-originboundcredential-origin-slot">[[origin]]</a></code> with the origin in which <code class="idl"><a data-link-type="idl" href="#dom-credentialcontainer-get">get()</a></code> is called. That is: credentials saved on <code>https://admin.example.com/</code> and <code>https://example.com/</code> MAY be offered to users when <code class="idl"><a data-link-type="idl" href="#dom-credentialcontainer-get">get()</a></code> is called from <code>https://www.example.com/</code>. 
+      credential’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot">[[origin]]</a></code> with the origin in which <code class="idl"><a data-link-type="idl" href="#dom-credentialcontainer-get">get()</a></code> is called. That is: credentials saved on <code>https://admin.example.com/</code> and <code>https://example.com/</code> MAY be offered to users when <code class="idl"><a data-link-type="idl" href="#dom-credentialcontainer-get">get()</a></code> is called from <code>https://www.example.com/</code>. 
      <li> MUST NOT offer credentials to an origin in response to <code class="idl"><a data-link-type="idl" href="#dom-credentialcontainer-get">get()</a></code> without user mediation if the credential’s
       origin is not an exact match for the calling origin. That is, <code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code> objects for <code>https://example.com</code> would not be
       returned directly to <code>https://www.example.com</code>, but could be
@@ -2552,7 +2552,7 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
   an origin, for example.</p>
     <h3 class="heading settled" data-level="7.3" id="privacy-chooser-leakage"><span class="secno">7.3. </span><span class="content">Chooser Leakage</span><a class="self-link" href="#privacy-chooser-leakage"></a></h3>
     <p>If a user agent displays images supplied by a website or federation (for
-  example, if a <code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code>'s <code class="idl"><a data-link-type="idl" href="#dom-originboundcredential-iconurl">iconURL</a></code> is displayed),
+  example, if a <code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code>'s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-iconurl">iconURL</a></code> is displayed),
   requests for these images MUST NOT be directly tied to instantiating the
   chooser in order to avoid leaking chooser usage. One option would be to fetch
   the images in the background when saving or updating a <code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code>, and to
@@ -2727,8 +2727,8 @@ partial dictionary CredentialRequestOptions {
    <li>
     iconURL
     <ul>
-     <li><a href="#dom-originboundcredentialdata-iconurl">dict-member for OriginBoundCredentialData</a><span>, in §3.1.1</span>
-     <li><a href="#dom-originboundcredential-iconurl">attribute for OriginBoundCredential</a><span>, in §3.1.2</span>
+     <li><a href="#dom-siteboundcredentialdata-iconurl">dict-member for SiteBoundCredentialData</a><span>, in §3.1.1</span>
+     <li><a href="#dom-siteboundcredential-iconurl">attribute for SiteBoundCredential</a><span>, in §3.1.2</span>
     </ul>
    <li>
     id
@@ -2743,16 +2743,14 @@ partial dictionary CredentialRequestOptions {
    <li>
     name
     <ul>
-     <li><a href="#dom-originboundcredentialdata-name">dict-member for OriginBoundCredentialData</a><span>, in §3.1.1</span>
-     <li><a href="#dom-originboundcredential-name">attribute for OriginBoundCredential</a><span>, in §3.1.2</span>
+     <li><a href="#dom-siteboundcredentialdata-name">dict-member for SiteBoundCredentialData</a><span>, in §3.1.1</span>
+     <li><a href="#dom-siteboundcredential-name">attribute for SiteBoundCredential</a><span>, in §3.1.2</span>
     </ul>
    <li><a href="#request-opaque-flag">opaque
   flag</a><span>, in §3.3</span>
    <li><a href="#options-matching-algorithm">options matching
   algorithm</a><span>, in §3.1.2</span>
-   <li><a href="#dom-originboundcredential-origin-slot">[[origin]]</a><span>, in §3.1.2</span>
-   <li><a href="#originboundcredential">OriginBoundCredential</a><span>, in §3.1.1</span>
-   <li><a href="#dictdef-originboundcredentialdata">OriginBoundCredentialData</a><span>, in §3.1.1</span>
+   <li><a href="#dom-siteboundcredential-origin-slot">[[origin]]</a><span>, in §3.1.2</span>
    <li><a href="#dom-passwordcredential-password-slot">[[password]]</a><span>, in §3.1.3</span>
    <li>
     password
@@ -2783,6 +2781,8 @@ partial dictionary CredentialRequestOptions {
    <li><a href="#dom-federatedcredentialrequestoptions-providers">providers</a><span>, in §3.2.1.2</span>
    <li><a href="#requires-user-mediation">requires user mediation</a><span>, in §2</span>
    <li><a href="#dom-credentialcontainer-requireusermediation">requireUserMediation()</a><span>, in §3.2</span>
+   <li><a href="#siteboundcredential">SiteBoundCredential</a><span>, in §3.1.1</span>
+   <li><a href="#dictdef-siteboundcredentialdata">SiteBoundCredentialData</a><span>, in §3.1.1</span>
    <li><a href="#dom-credentialcontainer-store">store(credential)</a><span>, in §3.2</span>
    <li><a href="#dom-credential-type">type</a><span>, in §3.1.1</span>
    <li><a href="#dom-credential-type-slot">[[type]]</a><span>, in §3.1.1</span>
@@ -2946,37 +2946,37 @@ interface <a href="#credential">Credential</a> {
 };
 <a data-link-type="idl-name" href="#credential">Credential</a> implements <a data-link-type="idl-name" href="http://www.w3.org/TR/html5/infrastructure.html#transferable">Transferable</a>;
 
-dictionary <a href="#dictdef-originboundcredentialdata">OriginBoundCredentialData</a> : <a data-link-type="idl-name" href="#dictdef-credentialdata">CredentialData</a> {
-  USVString <a data-type="USVString " href="#dom-originboundcredentialdata-name">name</a>;
-  USVString <a data-type="USVString " href="#dom-originboundcredentialdata-iconurl">iconURL</a>;
+dictionary <a href="#dictdef-siteboundcredentialdata">SiteBoundCredentialData</a> : <a data-link-type="idl-name" href="#dictdef-credentialdata">CredentialData</a> {
+  USVString <a data-type="USVString " href="#dom-siteboundcredentialdata-name">name</a>;
+  USVString <a data-type="USVString " href="#dom-siteboundcredentialdata-iconurl">iconURL</a>;
 };
 
-interface <a href="#originboundcredential">OriginBoundCredential</a> : <a data-link-type="idl-name" href="#credential">Credential</a> {
-  readonly attribute USVString <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="USVString " href="#dom-originboundcredential-name">name</a>;
-  readonly attribute USVString <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="USVString " href="#dom-originboundcredential-iconurl">iconURL</a>;
+interface <a href="#siteboundcredential">SiteBoundCredential</a> : <a data-link-type="idl-name" href="#credential">Credential</a> {
+  readonly attribute USVString <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="USVString " href="#dom-siteboundcredential-name">name</a>;
+  readonly attribute USVString <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="USVString " href="#dom-siteboundcredential-iconurl">iconURL</a>;
 };
 
-dictionary <a href="#dictdef-passwordcredentialdata">PasswordCredentialData</a> : <a data-link-type="idl-name" href="#dictdef-originboundcredentialdata">OriginBoundCredentialData</a> {
+dictionary <a href="#dictdef-passwordcredentialdata">PasswordCredentialData</a> : <a data-link-type="idl-name" href="#dictdef-siteboundcredentialdata">SiteBoundCredentialData</a> {
   USVString <a data-type="USVString " href="#dom-passwordcredentialdata-password">password</a>;
 };
 
 typedef (<a data-link-type="idl-name" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a> or <a data-link-type="idl-name" href="http://www.w3.org/TR/url/#dom-urlsearchparams">URLSearchParams</a>) <a href="#typedefdef-credentialbodytype">CredentialBodyType</a>;
 
 [<a href="#dom-passwordcredential-passwordcredential">Constructor</a>(<a data-link-type="idl-name" href="#dictdef-passwordcredentialdata">PasswordCredentialData</a> <a href="#dom-passwordcredential-passwordcredential-data-data">data</a>), Exposed=Window]
-interface <a href="#passwordcredential">PasswordCredential</a> : <a data-link-type="idl-name" href="#originboundcredential">OriginBoundCredential</a> {
+interface <a href="#passwordcredential">PasswordCredential</a> : <a data-link-type="idl-name" href="#siteboundcredential">SiteBoundCredential</a> {
   attribute USVString <a class="idl-code" data-link-type="attribute" data-type="USVString " href="#dom-passwordcredential-idname">idName</a>;
   attribute USVString <a class="idl-code" data-link-type="attribute" data-type="USVString " href="#dom-passwordcredential-passwordname">passwordName</a>;
 
   attribute <a data-link-type="idl-name" href="#typedefdef-credentialbodytype">CredentialBodyType</a>? <a class="idl-code" data-link-type="attribute" data-type="CredentialBodyType? " href="#dom-passwordcredential-additionaldata">additionalData</a>;
 };
 
-dictionary <a href="#dictdef-federatedcredentialdata">FederatedCredentialData</a> : <a data-link-type="idl-name" href="#dictdef-originboundcredentialdata">OriginBoundCredentialData</a> {
+dictionary <a href="#dictdef-federatedcredentialdata">FederatedCredentialData</a> : <a data-link-type="idl-name" href="#dictdef-siteboundcredentialdata">SiteBoundCredentialData</a> {
   USVString <a data-type="USVString " href="#dom-federatedcredentialdata-provider">provider</a>;
   DOMString <a data-type="DOMString " href="#dom-federatedcredentialdata-protocol">protocol</a>;
 };
 
 [<a href="#dom-federatedcredential-federatedcredential">Constructor</a>(<a data-link-type="idl-name" href="#dictdef-federatedcredentialdata">FederatedCredentialData</a> <a href="#dom-federatedcredential-federatedcredential-data-data">data</a>), Exposed=Window]
-interface <a href="#federatedcredential">FederatedCredential</a> : <a data-link-type="idl-name" href="#originboundcredential">OriginBoundCredential</a> {
+interface <a href="#federatedcredential">FederatedCredential</a> : <a data-link-type="idl-name" href="#siteboundcredential">SiteBoundCredential</a> {
   readonly attribute USVString <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="USVString " href="#dom-federatedcredential-provider">provider</a>;
   readonly attribute DOMString? <a class="idl-code" data-link-type="attribute" data-readonly="" data-type="DOMString? " href="#dom-federatedcredential-protocol">protocol</a>;
 };
