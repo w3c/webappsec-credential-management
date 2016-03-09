@@ -1246,7 +1246,7 @@
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="http://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/Icons/w3c_home" width="72"> </a> </p>
    <h1 class="p-name no-ref" id="title">Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-02-22">22 February 2016</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-03-09">9 March 2016</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1350,10 +1350,7 @@ store user credentials for future use.</p>
       <li>
        <a href="#monkey-patching-fetch"><span class="secno">3.3</span> <span class="content">Monkey-patching Fetch</span></a>
        <ol class="toc">
-        <li><a href="#monkey-patching-fetch-1"><span class="secno">3.3.1</span> <span class="content">Body extraction</span></a>
-        <li><a href="#monkey-patching-fetch-2"><span class="secno">3.3.2</span> <span class="content">Body consumption</span></a>
-        <li><a href="#monkey-patching-fetch-3"><span class="secno">3.3.3</span> <span class="content"><code>Request()</code> constructor</span></a>
-        <li><a href="#monkey-patching-fetch-4"><span class="secno">3.3.4</span> <span class="content"><code>RequestInit</code> dictionary</span></a>
+        <li><a href="#body-extraction"><span class="secno">3.3.1</span> <span class="content"> Extract a <var>body</var> and <var>Content-Type</var> for <var>request</var>’s attached credential </span></a>
        </ol>
      </ol>
     <li>
@@ -2054,15 +2051,22 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
   non-web-exposed slots on the <code class="idl"><a data-link-type="idl" href="#passwordcredential">PasswordCredential</a></code> object, and extract them
   during <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a></code> in ways that will remain opaque to anything other than the
   remote (same-origin) server.</p>
-    <p>To this end, <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request">request</a> objects have an <dfn data-dfn-for="request" data-dfn-type="dfn" data-noexport="" id="request-opaque-flag">opaque
-  flag<a class="self-link" href="#request-opaque-flag"></a></dfn>, which is unset unless otherwise specified.</p>
-    <h4 class="heading settled" data-level="3.3.1" id="monkey-patching-fetch-1"><span class="secno">3.3.1. </span><span class="content">Body extraction</span><a class="self-link" href="#monkey-patching-fetch-1"></a></h4>
-    <p>Add the following to the switch in step 3 of the current <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-bodyinit-extract">extract</a> algorithm for <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#body">Body</a></code>:</p>
-    <dl>
-     <dt data-md="">
-      <p><code class="idl"><a data-link-type="idl" href="#passwordcredential">PasswordCredential</a></code></p>
-     <dd data-md="">
+    <h4 class="heading settled" data-algorithm="Extract a body and Content-Type for request’s attached credential" data-level="3.3.1" id="body-extraction"><span class="secno">3.3.1. </span><span class="content"> Extract a <var>body</var> and <var>Content-Type</var> for <var>request</var>’s attached credential </span><a class="self-link" href="#body-extraction"></a></h4>
+    <p>Given a <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#request">Request</a></code> (<var>request</var>), this algorithm returns a <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#body">Body</a></code> (<var>body</var>) and
+  a string (<var>Content-Type</var>):</p>
+    <ol>
+     <li data-md="">
+      <p>Let <var>credential</var> be <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-attached-credential">attached credential</a>.</p>
+     <li data-md="">
+      <p>Let <var>body</var> be a new <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-body">body</a>, and <var>Content-Type</var> be the empty string.</p>
+     <li data-md="">
+      <p>If <var>credential</var> is a <code class="idl"><a data-link-type="idl" href="#passwordcredential">PasswordCredential</a></code>, run these substeps.</p>
       <ol>
+       <li data-md="">
+        <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url">url</a>’s scheme is not the same as <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>’s <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#concept-url-origin">origin</a></code>'s scheme,
+  or <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url">url</a>’s host’s <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable
+  domain</a> is not the same as <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>’s <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#concept-url-origin">origin</a></code>'s host’s <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable
+  domain</a>, then skip the remaining substeps.</p>
        <li data-md="">
         <p>Let <var>data</var> be a copy of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-additionaldata">additionalData</a></code> attribute if it is not <code>undefined</code>, and a new <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> object otherwise.</p>
        <li data-md="">
@@ -2084,8 +2088,8 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
           <p>Append <var>entry</var> to <var>list</var>.</p>
          <li data-md="">
           <p>Push the result of running the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/forms.html#multipart/form-data-encoding-algorithm"><code>multipart/form-data</code> encoding
-  algorithm</a>, with <var>list</var> as <var>form data set</var> and with "<code>utf-8</code>" as
-  the explicit character encoding, to <var>stream</var>.</p>
+  algorithm</a>, with <var>list</var> as the form data set and with "<code>utf-8</code>" as
+  the explicit character encoding, to <var>body</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-body-stream">stream</a>.</p>
          <li data-md="">
           <p>Set <var>Content-Type</var> to <code>multipart/form-data;boundary=</code>, followed by the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/forms.html#multipart/form-data-boundary-string"><code>multipart/form-data</code> boundary string</a> generated by the
   multipart/form-data encoding algorithm.</p>
@@ -2102,40 +2106,14 @@ interface <dfn class="idl-code" data-dfn-type="interface" data-export="" id="fed
           <p>Append a new name-value pair to <var>list</var> whose name is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname">passwordName</a></code> and whose value
   is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot">[[password]]</a></code>.</p>
          <li data-md="">
-          <p>Push the result of running the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/forms.html#application/x-www-form-urlencoded serializer"><code>application/x-www-form-urlencoded</code> serializer</a>, with <var>list</var>, to <var>stream</var>.</p>
+          <p>Push the result of running the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/forms.html#application/x-www-form-urlencoded serializer"><code>application/x-www-form-urlencoded</code> serializer</a>, with <var>list</var>, to <var>body</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-body-stream">stream</a>.</p>
          <li data-md="">
           <p>Set <var>Content-Type</var> to <code>application/x-www-form-urlencoded;charset=UTF-8</code>.</p>
         </ol>
       </ol>
-    </dl>
-    <h4 class="heading settled" data-level="3.3.2" id="monkey-patching-fetch-2"><span class="secno">3.3.2. </span><span class="content">Body consumption</span><a class="self-link" href="#monkey-patching-fetch-2"></a></h4>
-    <p>Add the following as step 2 of the current <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-consume-body">consume body</a> algorithm for <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#request">Request</a></code>:</p>
-    <ol start="2">
-     <li> If this <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#request">Request</a></code> object’s <a data-link-type="dfn" href="#request-opaque-flag">opaque flag</a> is set, throw a <code>TypeError</code>. 
+     <li data-md="">
+      <p>Return <var>body</var> and <var>Content-Type</var>.</p>
     </ol>
-    <h4 class="heading settled" data-level="3.3.3" id="monkey-patching-fetch-3"><span class="secno">3.3.3. </span><span class="content"><code>Request()</code> constructor</span><a class="self-link" href="#monkey-patching-fetch-3"></a></h4>
-    <p>Adjust step 8 of the current <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-request">Request()</a></code> algorithm to set the new <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request">request</a>’s <a data-link-type="dfn" href="#request-opaque-flag">opaque flag</a> to <var>request</var>’s <a data-link-type="dfn" href="#request-opaque-flag">opaque flag</a>.</p>
-    <p>Perform the following after step 33 of the current <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-request">Request()</a></code> constructor:</p>
-    <ol step="34">
-     <li>
-       If <var>init</var>’s <code>body</code> member is a <code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code> object: 
-      <ol>
-       <li data-md="">
-        <p>If <var>r</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url">url</a>’s scheme is not the same as <var>r</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>’s <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#concept-url-origin">origin</a></code>'s scheme, throw a <code>TypeError</code>.</p>
-       <li data-md="">
-        <p>If <var>r</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url">url</a>’s host’s <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable domain</a> is not the same as <var>r</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>’s <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#concept-url-origin">origin</a></code>'s host’s <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable domain</a>, throw a <code>TypeError</code>.</p>
-       <li data-md="">
-        <p>Set <var>r</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-redirect-mode">redirect mode</a> to "<code>error</code>".</p>
-       <li data-md="">
-        <p>Set <var>r</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#skip-service-worker-flag">skip-service-worker flag</a>.</p>
-       <li data-md="">
-        <p>Set <var>r</var>’s <a data-link-type="dfn" href="#request-opaque-flag">opaque flag</a>.</p>
-      </ol>
-    </ol>
-    <h4 class="heading settled" data-level="3.3.4" id="monkey-patching-fetch-4"><span class="secno">3.3.4. </span><span class="content"><code>RequestInit</code> dictionary</span><a class="self-link" href="#monkey-patching-fetch-4"></a></h4>
-    <p>Change the <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#requestinit">RequestInit</a></code> dictionary’s <code>body</code> member to be of the union type <code>(BodyInit or Credential)</code>.</p>
-    <p class="note" role="note">Note: The <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#requestinit">RequestInit</a></code> parameter to <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#request">Request</a></code> is the only piece of the
-  Fetch infrastructure that accepts a <code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code>. In particular, neither <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#response">Response</a></code> nor <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-xmlhttprequest">XMLHttpRequest</a></code>'s <code>send()</code> method accept <code class="idl"><a data-link-type="idl" href="#credential">Credential</a></code> objects.</p>
    </section>
    <section>
     <h2 class="heading settled" data-level="4" id="algorithms"><span class="secno">4. </span><span class="content">Algorithms</span><a class="self-link" href="#algorithms"></a></h2>
@@ -2746,8 +2724,6 @@ partial dictionary CredentialRequestOptions {
      <li><a href="#dom-siteboundcredentialdata-name">dict-member for SiteBoundCredentialData</a><span>, in §3.1.1</span>
      <li><a href="#dom-siteboundcredential-name">attribute for SiteBoundCredential</a><span>, in §3.1.2</span>
     </ul>
-   <li><a href="#request-opaque-flag">opaque
-  flag</a><span>, in §3.3</span>
    <li><a href="#options-matching-algorithm">options matching
   algorithm</a><span>, in §3.1.2</span>
    <li><a href="#dom-siteboundcredential-origin-slot">[[origin]]</a><span>, in §3.1.2</span>
@@ -2803,16 +2779,11 @@ partial dictionary CredentialRequestOptions {
     <ul>
      <li><a href="https://fetch.spec.whatwg.org/#body">Body</a>
      <li><a href="https://fetch.spec.whatwg.org/#request">Request</a>
-     <li><a href="https://fetch.spec.whatwg.org/#dom-request">Request()</a>
-     <li><a href="https://fetch.spec.whatwg.org/#requestinit">RequestInit</a>
-     <li><a href="https://fetch.spec.whatwg.org/#response">Response</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-request-attached-credential">attached credential</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-request-body">body</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>
-     <li><a href="https://fetch.spec.whatwg.org/#concept-request-consume-body">consume body</a>
-     <li><a href="https://fetch.spec.whatwg.org/#concept-bodyinit-extract">extract</a>
      <li><a href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a>
-     <li><a href="https://fetch.spec.whatwg.org/#concept-request-redirect-mode">redirect mode</a>
-     <li><a href="https://fetch.spec.whatwg.org/#concept-request">request</a>
-     <li><a href="https://fetch.spec.whatwg.org/#skip-service-worker-flag">skip-service-worker flag</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-body-stream">stream</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-request-url">url</a>
     </ul>
    <li>
