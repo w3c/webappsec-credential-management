@@ -84,6 +84,7 @@ spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
     text: extracting a MIME type; url: concept-header-extract-mime-type
     text: extract; url: concept-bodyinit-extract
     text: consume body; url: concept-request-consume-body
+    text: http-network-or-cache fetch; url: http-network-or-cache-fetch 
     for: body
       text: stream; url: concept-body-stream
     for: request
@@ -301,7 +302,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
                 return;
               }
               if (credential.type == "<a const>password</a>") {
-                fetch("https://example.com/loginEndpoint", { body: credential, method: "POST" })
+                fetch("https://example.com/loginEndpoint", { credentials: credential, method: "POST" })
                   .then(function (response) {
                     // Notify the user that signin succeeded! Do amazing, signed-in things!
                   });
@@ -352,7 +353,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
                 // ...
                 }
               } else {
-                fetch("https://example.com/loginEndpoint", { body: credential, method: "POST" })
+                fetch("https://example.com/loginEndpoint", { credentials: credential, method: "POST" })
                   .then(function (response) { ... })
                   .catch(function (response) { ... });
               }
@@ -381,7 +382,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
           "<a idl for="CredentialData">id</a>": "JaneDoe98",
           "<a idl for="PasswordCredentialData">password</a>": "MfPeRQq5P3yVry68Q4KZMMhB"
         });
-        fetch("https://example.com/sign-in/", { body: credential, method: "POST" })
+        fetch("https://example.com/sign-in/", { credentials: credential, method: "POST" })
           .then(function (response) {
             if (response.status == 200)
               navigator.<a attribute>credentials</a>.<a idl lt="store()">store</a>(credential);
@@ -459,7 +460,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
         // Given a <a idl>PasswordCredential</a> |credential|:
         credential.idName = "u";
         credential.passwordName = "p";
-        fetch("https://example.com/loginEndpoint", { body: credential, method: "POST" });
+        fetch("https://example.com/loginEndpoint", { credentials: credential, method: "POST" });
       </pre>
     </div>
 
@@ -472,7 +473,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
         credential.<a idl>additionalData</a> = new FormData();
         credential.<a idl>additionalData</a>.append("csrf", "[random token value goes here]");
         
-        fetch("https://example.com/loginEndpoint", { body: credential, method: "POST" });
+        fetch("https://example.com/loginEndpoint", { credentials: credential, method: "POST" });
       </pre>
     </div>
 
@@ -491,7 +492,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
         // object. Setting `additionalData` to an empty `URLSearchParams` object
         // is enough to change the content type of the submission.
         
-        fetch("https://example.com/loginEndpoint", { body: credential, method: "POST" });
+        fetch("https://example.com/loginEndpoint", { credentials: credential, method: "POST" });
       </pre>
     </div>
   </section>
@@ -1013,7 +1014,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
 
 <!-- Big Text: Fetch -->
 <section>
-  <h3 id="monkey-patching-fetch">Monkey-patching Fetch</h3>
+  <h3 id="fetch-integration">Integration with Fetch</h3>
   
   In order to actually authenticate a user, {{PasswordCredential}} objects may
   be submitted to a server for evaluation. To prevent the risk that sensitive
@@ -1022,6 +1023,34 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   non-web-exposed slots on the {{PasswordCredential}} object, and extract them
   during {{fetch()}} in ways that will remain opaque to anything other than the
   remote (same-origin) server.
+
+  {{PasswordCredential}} objects may be bound to a {{Request}} by passing them
+  into the {{Request}} constructor as the "`credentials`" member of a
+  {{RequestInit}} object:
+ 
+  <pre class="example">
+    [ Given a `PasswordCredential` named 'c' ]
+    var init = {
+      method: "POST",
+      credentials: c
+    };
+    var r = Request("https://example.com/endpoint", init);
+  </pre>
+
+  Note: The credential information will be transmitted as the request's body,
+  just as it would be for a form submission. This means that the "`method`"
+  cannot be "`GET`".
+
+  Until the request hits the network, the credential object will be hidden from
+  JavaScript. Once the user agent determines that the {{Request}} is going to
+  hit the network (that is, once Fetch hits the
+  "<a>HTTP-network-or-cache fetch</a>" algorithm), the {{PasswordCredential}}
+  will be serialized into a body and content type as defined in
+  [[#body-extraction]], and the request will proceed out to the server-side
+  authentication endpoint.
+
+  ISSUE(whatwg/fetch#237): Everything discussed here depends on an outstanding
+  pull request against Fetch.
 
   <h4 id="body-extraction" algorithm>
     Extract a |body| and |Content-Type| for |request|'s attached credential
