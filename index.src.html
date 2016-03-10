@@ -84,12 +84,16 @@ spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
     text: extracting a MIME type; url: concept-header-extract-mime-type
     text: extract; url: concept-bodyinit-extract
     text: consume body; url: concept-request-consume-body
+    text: http-network-or-cache fetch; url: http-network-or-cache-fetch 
+    for: body
+      text: stream; url: concept-body-stream
     for: request
       text: body; url: concept-request-body
       text: client; url: concept-request-client
       text: url; url: concept-request-url
       text: redirect mode; url: concept-request-redirect-mode
       text: skip-service-worker flag; url: skip-service-worker-flag
+      text: attached credential; url: concept-request-attached-credential
   type: interface
     text: RequestInit
     text: RequestInfo
@@ -298,7 +302,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
                 return;
               }
               if (credential.type == "<a const>password</a>") {
-                fetch("https://example.com/loginEndpoint", { body: credential, method: "POST" })
+                fetch("https://example.com/loginEndpoint", { credentials: credential, method: "POST" })
                   .then(function (response) {
                     // Notify the user that signin succeeded! Do amazing, signed-in things!
                   });
@@ -349,7 +353,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
                 // ...
                 }
               } else {
-                fetch("https://example.com/loginEndpoint", { body: credential, method: "POST" })
+                fetch("https://example.com/loginEndpoint", { credentials: credential, method: "POST" })
                   .then(function (response) { ... })
                   .catch(function (response) { ... });
               }
@@ -378,7 +382,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
           "<a idl for="CredentialData">id</a>": "JaneDoe98",
           "<a idl for="PasswordCredentialData">password</a>": "MfPeRQq5P3yVry68Q4KZMMhB"
         });
-        fetch("https://example.com/sign-in/", { body: credential, method: "POST" })
+        fetch("https://example.com/sign-in/", { credentials: credential, method: "POST" })
           .then(function (response) {
             if (response.status == 200)
               navigator.<a attribute>credentials</a>.<a idl lt="store()">store</a>(credential);
@@ -456,7 +460,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
         // Given a <a idl>PasswordCredential</a> |credential|:
         credential.idName = "u";
         credential.passwordName = "p";
-        fetch("https://example.com/loginEndpoint", { body: credential, method: "POST" });
+        fetch("https://example.com/loginEndpoint", { credentials: credential, method: "POST" });
       </pre>
     </div>
 
@@ -469,7 +473,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
         credential.<a idl>additionalData</a> = new FormData();
         credential.<a idl>additionalData</a>.append("csrf", "[random token value goes here]");
         
-        fetch("https://example.com/loginEndpoint", { body: credential, method: "POST" });
+        fetch("https://example.com/loginEndpoint", { credentials: credential, method: "POST" });
       </pre>
     </div>
 
@@ -488,7 +492,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
         // object. Setting `additionalData` to an empty `URLSearchParams` object
         // is enough to change the content type of the submission.
         
-        fetch("https://example.com/loginEndpoint", { body: credential, method: "POST" });
+        fetch("https://example.com/loginEndpoint", { credentials: credential, method: "POST" });
       </pre>
     </div>
   </section>
@@ -1010,7 +1014,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
 
 <!-- Big Text: Fetch -->
 <section>
-  <h3 id="monkey-patching-fetch">Monkey-patching Fetch</h3>
+  <h3 id="fetch-integration">Integration with Fetch</h3>
   
   In order to actually authenticate a user, {{PasswordCredential}} objects may
   be submitted to a server for evaluation. To prevent the risk that sensitive
@@ -1020,23 +1024,61 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   during {{fetch()}} in ways that will remain opaque to anything other than the
   remote (same-origin) server.
 
-  To this end, <a>request</a> objects have an <dfn for="request">opaque
-  flag</dfn>, which is unset unless otherwise specified.
+  {{PasswordCredential}} objects may be bound to a {{Request}} by passing them
+  into the {{Request}} constructor as the "`credentials`" member of a
+  {{RequestInit}} object:
+ 
+  <pre class="example">
+    [ Given a `PasswordCredential` named 'c' ]
+    var init = {
+      method: "POST",
+      credentials: c
+    };
+    var r = Request("https://example.com/endpoint", init);
+  </pre>
 
-  <h4 id="monkey-patching-fetch-1">Body extraction</h4>
+  Note: The credential information will be transmitted as the request's body,
+  just as it would be for a form submission. This means that the "`method`"
+  cannot be "`GET`".
 
-  Add the following to the switch in step 3 of the current <a>extract</a>
-  algorithm for {{Body}}:
+  Until the request hits the network, the credential object will be hidden from
+  JavaScript. Once the user agent determines that the {{Request}} is going to
+  hit the network (that is, once Fetch hits the
+  "<a>HTTP-network-or-cache fetch</a>" algorithm), the {{PasswordCredential}}
+  will be serialized into a body and content type as defined in
+  [[#body-extraction]], and the request will proceed out to the server-side
+  authentication endpoint.
 
-  :   {{PasswordCredential}}
-  ::  
-      1.  Let |data| be a copy of |credential|'s
+  ISSUE(whatwg/fetch#237): Everything discussed here depends on an outstanding
+  pull request against Fetch.
+
+  <h4 id="body-extraction" algorithm>
+    Extract a |body| and |Content-Type| for |request|'s attached credential
+  </h4>
+
+  Given a {{Request}} (|request|), this algorithm returns a {{Body}} (|body|) and
+  a string (|Content-Type|):
+
+  1.  Let |credential| be |request|'s <a>attached credential</a>.
+
+  2.  Let |body| be a new <a>body</a>, and |Content-Type| be the empty string.
+
+  3.  If |credential| is a {{PasswordCredential}}, run these substeps.
+
+      1.  If |request|'s <a for="request">url</a>'s scheme is not the same as
+          |request|'s <a for="request">client</a>'s {{URL/origin}}'s scheme,
+          or |request|'s <a for="request">url</a>'s host's <a>registerable
+          domain</a> is not the same as |request|'s
+          <a for="request">client</a>'s {{URL/origin}}'s host's <a>registerable
+          domain</a>, then skip the remaining substeps.
+
+      2.  Let |data| be a copy of |credential|'s
           {{PasswordCredential/additionalData}} attribute if it is not
           `undefined`, and a new {{FormData}} object otherwise.
 
-      2.  Let |list| be an empty list.
+      3.  Let |list| be an empty list.
 
-      3.  If |data| is a {{FormData}} object, then:
+      4.  If |data| is a {{FormData}} object, then:
 
           1.  Set |list| to a copy of |data|'s <a for="FormData">entries</a>.
 
@@ -1058,8 +1100,9 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
           6.  Append |entry| to |list|.
 
           7.  Push the result of running the <a>`multipart/form-data` encoding
-              algorithm</a>, with |list| as |form data set| and with "`utf-8`" as
-              the explicit character encoding, to |stream|.
+              algorithm</a>, with |list| as the form data set and with "`utf-8`" as
+              the explicit character encoding, to |body|'s
+              <a for="body">stream</a>.
 
           8.  Set |Content-Type| to `multipart/form-data;boundary=`, followed by the
               <a>`multipart/form-data` boundary string</a> generated by the
@@ -1084,62 +1127,12 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
 
           5.  Push the result of running the
               <a>`application/x-www-form-urlencoded` serializer</a>, with
-              |list|, to |stream|.
+              |list|, to |body|'s <a for="body">stream</a>.
 
           6.  Set |Content-Type| to
               `application/x-www-form-urlencoded;charset=UTF-8`.
 
-
-  <h4 id="monkey-patching-fetch-2">Body consumption</h4>
-
-  Add the following as step 2 of the current <a>consume body</a> algorithm for
-  {{Request}}:
-
-  <ol start="2">
-    <li>
-      If this {{Request}} object's <a>opaque flag</a> is set, throw a
-      `TypeError`.
-    </li>
-  </ol>
-
-  <h4 id="monkey-patching-fetch-3">`Request()` constructor</h4>
-
-  Adjust step 8 of the current {{Request()}} algorithm to set the new 
-  <a>request</a>'s <a for="request">opaque flag</a> to |request|'s
-  <a for="request">opaque flag</a>.
-
-  Perform the following after step 33 of the current {{Request()}} constructor:
-
-  <ol step="34">
-    <li>
-      If |init|'s `body` member is a {{Credential}} object:
-
-      1.  If |r|'s <a for="request">url</a>'s scheme is not the same as |r|'s
-          <a for="request">client</a>'s {{URL/origin}}'s scheme, throw a
-          `TypeError`.
-
-      2.  If |r|'s <a for="request">url</a>'s host's <a>registerable domain</a>
-          is not the same as |r|'s <a for="request">client</a>'s
-          {{URL/origin}}'s host's <a>registerable domain</a>, throw a
-          `TypeError`.
-
-      3.  Set |r|'s <a for="request">redirect mode</a> to "`error`".
-
-      4.  Set |r|'s <a for="request">skip-service-worker flag</a>.
-
-      5.  Set |r|'s <a for="request">opaque flag</a>.
-    </li>
-  </ol>
-
-  <h4 id="monkey-patching-fetch-4">`RequestInit` dictionary</h4>
-
-  Change the {{RequestInit}} dictionary's `body` member to be of the union type
-  `(BodyInit or Credential)`.
-
-  Note: The {{RequestInit}} parameter to {{Request}} is the only piece of the
-  Fetch infrastructure that accepts a {{Credential}}. In particular, neither
-  {{Response}} nor {{XMLHttpRequest}}'s `send()` method accept {{Credential}}
-  objects.
+  4.  Return |body| and |Content-Type|. 
 </section>
 
 <!--
