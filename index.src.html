@@ -38,8 +38,12 @@ spec: HTML5; urlPrefix: http://www.w3.org/TR/html5/
       text: resolve a url
       text: structured clone
       text: internal structured cloning algorithm
+      text: tree order
+      text: ASCII case-insensitive
     urlPrefix: forms.html
       text: autocomplete
+      text: submittable elements; url: category-submit
+      text: form owner
       text: multipart/form-data encoding algorithm; url: multipart/form-data-encoding-algorithm
       text: multipart/form-data boundary string; url: multipart/form-data-boundary-string
       text: application/x-www-form-urlencoded serializer; url: application/x-www-form-urlencoded serializer
@@ -50,7 +54,11 @@ spec: HTML5; urlPrefix: http://www.w3.org/TR/html5/
       text: active document
   type: element-attr
     urlPrefix: forms.html
-      text: autocomplete; for: form; url: autofilling-form-controls:-the-autocomplete-attribute
+      text: autocomplete; for: input; url: attr-fe-autocomplete
+      text: value; for: input; url: attr-input-value
+  type: element
+    urlPrefix: forms.html
+      text: input; url: the-input-element
   type: interface
     urlPrefix: browser.html
       text: Window
@@ -58,6 +66,16 @@ spec: HTML5; urlPrefix: http://www.w3.org/TR/html5/
       text: Transferable
     urlPrefix: webappapis.html
       text: Navigator
+spec: HTML; urlPrefix: https://html.spec.whatwg.org/multipage/
+  type: dfn
+    urlPrefix: forms.html
+      text: autofill detail tokens
+  type: attr-value
+    urlPrefix: forms.html
+      for: autocomplete
+        text: current-password; url: attr-fe-autocomplete-current-password
+        text: nickname; url: attr-fe-autocomplete-nickname
+        text: username; url: attr-fe-autocomplete-username
 spec: RFC6454; urlPrefix: https://tools.ietf.org/html/rfc6454
   type: dfn
     text: the same; url: section-5
@@ -137,6 +155,7 @@ spec: WebIDL; urlPrefix: https://heycam.github.io/webidl/
     text: dictionary member; url: dfn-dictionary-member
     text: value pairs to iterate over; url: dfn-value-pairs-to-iterate-over
     text: interface; url: dfn-interface
+    text: throw; url: dfn-throw
   type: interface
     text: USVString; url: idl-USVString
     text: object; url: idl-object
@@ -203,7 +222,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   passwords for websites, and those <a>credentials</a> are autofilled into
   sign-in forms with varying degrees of success.
 
-  The <code><a element-attr>autocomplete</a></code> attribute offers a
+  The <code><a element-attr for="input">autocomplete</a></code> attribute offers a
   declarative mechanism by which websites can work with user agents to improve
   the latter's ability to detect and fill sign-in forms by marking specific
   fields as "username" or "password", and user agents implement a wide variety
@@ -682,7 +701,10 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
 
     typedef (FormData or URLSearchParams) CredentialBodyType;
 
-    [Constructor(PasswordCredentialData data), Exposed=Window]
+    [Constructor(PasswordCredentialData data),
+     Constructor(HTMLFormElement form),
+     Exposed=Window]
+    
     interface PasswordCredential : SiteBoundCredential {
       attribute USVString idName;
       attribute USVString passwordName;
@@ -721,6 +743,120 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   credential's password. This property is not directly exposed to the web, but
   used to construct the request body during {{fetch()}}.
 
+  <h5 id="passwordcredential-data-constructor" algorithm>
+    `PasswordCredential(PasswordCredentialData data)` Constructor
+  </h5>
+
+  The <dfn constructor for="PasswordCredential">`PasswordCredential(data)`</dfn>
+  constructor, when invoked with a {{PasswordCredentialData}} (|data|), must run
+  these steps:
+
+  1.  Let |c| be a new {{PasswordCredential}} object.
+
+  2.  Set |c|'s properties as follows:
+  
+      :   {{Credential/[[type]]}} slot
+      ::  "`password`"
+      :   {{PasswordCredential/[[password]]}} slot
+      ::  |data|'s {{PasswordCredentialData/password}} member's value
+      :   {{Credential/id}}
+      ::  |data|'s {{CredentialData/id}} member's value
+      :   {{PasswordCredential/idName}}
+      ::  "`username`"
+      :   {{SiteBoundCredential/iconURL}}
+      ::  |data|'s {{SiteBoundCredentialData/iconURL}} member's value
+      :   {{SiteBoundCredential/name}}
+      ::  |data|'s {{SiteBoundCredentialData/name}} member's value
+      :   {{PasswordCredential/passwordName}}
+      ::  "`password`"
+
+  3.  Return |c|.
+
+  <h5 id="passwordcredential-form-constructor" algorithm>
+    `PasswordCredential(HTMLFormElement form)` Constructor
+  </h5>
+
+  The <dfn constructor for="PasswordCredential">`PasswordCredential(form)`</dfn>
+  constructor, when invoked with an {{HTMLFormElement}} (|form|), must run these
+  steps:
+
+  1.  Let |data| be a new {{PasswordCredentialData}} dictionary.
+
+  2.  Let |elements| be a list of all the <a>submittable elements</a> whose
+      <a>form owner</a> is |form|, in <a>tree order</a>.
+
+  3.  For each |field| in |elements|, run the following steps:
+
+      1.  If |field| is not an <{input}> element, or does not have an
+          <{input/autocomplete}> attribute, or does not have a
+          <{input/value}> attribute, then skip to the next |field|.
+
+      2.  If |field|'s <{input/autocomplete}> attribute's value contains an
+          <a>autofill detail token</a> that is an <a>ASCII case-insensitive</a>
+          match for any of the following strings, then run the associated steps:
+
+          :   "<a attr-value>`current-password`</a>"
+          ::  Set |data|'s {{PasswordCredentialData/password}} member's value to
+              |field|'s <{input/value}> attribute's value.
+          :   "<a attr-value>`nickname`</a>"
+          ::  Set |data|'s {{SiteBoundCredentialData/name}} member's value to
+              |field|'s <{input/value}> attribute's value.
+          :   "<a attr-value>`username`</a>"
+          ::  Set |data|'s {{CredentialData/id}} member's value to |field|'s
+              <{input/value}> attribute's value.
+
+  4.  If either |data|'s {{CredentialData/id}} member's value <em>or</em> its
+      {{PasswordCredentialData/password}} member's value is the empty string,
+      <a>throw</a> a `TypeError` exception.
+
+  5.  Return the result of executing the {{PasswordCredential(data)}}
+      constructor on |data|.
+
+  <div class="example">
+    This constructor is meant to support the common use case of storing
+    credential information after a successful, asynchronous sign-in. That is,
+    if a user types in a username and password into a form like the following:
+
+    <pre>
+      &lt;form action="https://example.com/login" method="POST" id="theForm"&gt;
+        &lt;label for="username"&gt;Username&lt;/label&gt;
+        &lt;input type="text" id="username" <a element-attr for="input">autocomplete</a>="<a attr-value>username</a>"&gt;
+        &lt;label for="password"&gt;Password&lt;/label&gt;
+        &lt;input type="text" id="password" <a element-attr for="input">autocomplete</a>="<a attr-value>current-password</a>"&gt;
+        &lt;input type="submit"&gt;
+      &lt;/form&gt;
+    </pre>
+
+    Then the developer can handle the form submission with something like the
+    following handler:
+
+    <pre>
+      document.querySelector('#theForm').addEventListener("submit", e =&gt; {
+          if (<a idl lt="credentials">navigator.credentials</a>) {
+            e.preventDefault();
+
+            // Construct a new <a idl>PasswordCredential</a> from the <a idl>HTMLFormElement</a>
+            // that fired the "submit" event: this will suck up the values of the fields
+            // labeled with "username" and "current-password" <a element-attr for="input">autocomplete</a>
+            // attributes:
+            var c = new <a idl lt="PasswordCredential(form)">PasswordCredential</a>(e.target);
+
+            // Fetch the form's action URL, passing that new credential object in
+            // as the fetch's credentials. If the response indicates success, ask
+            // the user agent to ask the user to store the credential for future use:
+            var init = { method: "POST", credentials: c };
+            fetch(e.target.action, init).then(r => {
+              if (/* |r| is a "successful" <a idl>Response</a> */)
+                <a idl lt="store()">navigator.credentials.store</a>(c);
+            });
+          }
+      });
+    </pre>
+  </div>
+
+  ISSUE(w3c/webappsec-credential-management#13): We're discussing this mechanism; consider it
+  a strawman proposal for the moment.
+  
   <h5 id="passwordcredential-matching">
     Matching Algorithm
   </h5>
