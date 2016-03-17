@@ -56,6 +56,7 @@ spec: HTML5; urlPrefix: http://www.w3.org/TR/html5/
     urlPrefix: forms.html
       text: autocomplete; for: input; url: attr-fe-autocomplete
       text: value; for: input; url: attr-input-value
+      text: name; for: input; url: attr-input-name
   type: element
     urlPrefix: forms.html
       text: input; url: the-input-element
@@ -74,6 +75,7 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/multipage/
     urlPrefix: forms.html
       for: autocomplete
         text: current-password; url: attr-fe-autocomplete-current-password
+        text: new-password; url: attr-fe-autocomplete-new-password
         text: nickname; url: attr-fe-autocomplete-nickname
         text: username; url: attr-fe-autocomplete-username
 spec: RFC6454; urlPrefix: https://tools.ietf.org/html/rfc6454
@@ -791,26 +793,47 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
           <{input/autocomplete}> attribute, or does not have a
           <{input/value}> attribute, then skip to the next |field|.
 
-      2.  If |field|'s <{input/autocomplete}> attribute's value contains an
+      2.  Let |idName| and |passwordName| be empty strings.
+
+      3.  If |field|'s <{input/autocomplete}> attribute's value contains an
           <a>autofill detail token</a> that is an <a>ASCII case-insensitive</a>
           match for any of the following strings, then run the associated steps:
 
           :   "<a attr-value>`current-password`</a>"
+          :   "<a attr-value>`new-password`</a>"
           ::  Set |data|'s {{PasswordCredentialData/password}} member's value to
-              |field|'s <{input/value}> attribute's value.
+              |field|'s <{input/value}> attribute's value, and |passwordName|
+              to |field|'s <{input/name}> attribute's value.
           :   "<a attr-value>`nickname`</a>"
           ::  Set |data|'s {{SiteBoundCredentialData/name}} member's value to
               |field|'s <{input/value}> attribute's value.
           :   "<a attr-value>`username`</a>"
           ::  Set |data|'s {{CredentialData/id}} member's value to |field|'s
-              <{input/value}> attribute's value.
+              <{input/value}> attribute's value, and |idName| to |field|'s
+              <{input/name}> attribute's value.
 
-  4.  If either |data|'s {{CredentialData/id}} member's value <em>or</em> its
-      {{PasswordCredentialData/password}} member's value is the empty string,
-      <a>throw</a> a `TypeError` exception.
+  4.  If any of the following are the empty string, <a>throw</a> a `TypeError`
+      exception:
+      
+      *   |data|'s {{CredentialData/id}} member's value
+      *   |data|'s {{PasswordCredentialData/password}} member's value 
+      *   |idName|
+      *   |passwordName|
 
-  5.  Return the result of executing the {{PasswordCredential(data)}}
+  5.  Let |c| be the result of executing the {{PasswordCredential(data)}}
       constructor on |data|.
+
+  6.  Set |c|'s {{PasswordCredential/idName}} attribute to |idName|.
+
+  7.  Set |c|'s {{PasswordCredential/passwordName}} attribute to |passwordName|.
+
+  8.  Set |c|'s {{PasswordCredential/additionalData}} attribute to the result of
+      executing the {{FormData}} constructor on |form|.
+
+      ISSUE(w3c/webappsec-credential-management#13): We probably need to support
+      `URLSearchParams` here as well.
+
+  9.  Return |c|.
 
   <div class="example">
     This constructor is meant to support the common use case of storing
