@@ -150,7 +150,9 @@ spec: XHR; urlPrefix: https://xhr.spec.whatwg.org/
     text: XMLHttpRequest; url: interface-xmlhttprequest
     text: FormData; url: interface-formdata
   type: method
-    text: set(); url: dom-formdata-set
+    text: get(); for: FormData; url: dom-formdata-get
+    text: has(); for: FormData; url: dom-formdata-has
+    text: set(); for: FormData; url: dom-formdata-set
   type: constructor
     text: FormData(); for: FormData; url: dom-formdata
 spec: WebIDL; urlPrefix: https://heycam.github.io/webidl/
@@ -756,8 +758,14 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   these steps:
 
   1.  Let |c| be a new {{PasswordCredential}} object.
+  
+  2.  If any of the following are the empty string, <a>throw</a> a `TypeError`
+      exception:
 
-  2.  Set |c|'s properties as follows:
+      *   |data|'s {{CredentialData/id}} member's value
+      *   |data|'s {{PasswordCredentialData/password}} member's value
+
+  3.  Set |c|'s properties as follows:
   
       :   {{Credential/[[type]]}} slot
       ::  "`password`"
@@ -774,7 +782,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
       :   {{PasswordCredential/passwordName}}
       ::  "`password`"
 
-  3.  Return |c|.
+  4.  Return |c|.
 
   <h5 id="passwordcredential-form-constructor" algorithm>
     `PasswordCredential(HTMLFormElement form)` Constructor
@@ -786,60 +794,61 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
 
   1.  Let |data| be a new {{PasswordCredentialData}} dictionary.
 
-  2.  Let |elements| be a list of all the <a>submittable elements</a> whose
+  2.  Let |formData| be the result of executing the {{FormData}} constructor
+      on |form|.
+
+  3.  Let |elements| be a list of all the <a>submittable elements</a> whose
       <a>form owner</a> is |form|, in <a>tree order</a>.
 
-  3.  For each |field| in |elements|, run the following steps:
+  4.  Let |idName| and |passwordName| be empty strings.
+
+  5.  For each |field| in |elements|, run the following steps:
 
       1.  If |field| does not have an <{input/autocomplete}> attribute, then
           skip to the next |field|.
 
-      2.  Let |idName| and |passwordName| be empty strings.
+      2.  Let |name| be the value of |field|'s <{input/name}> attribute.
 
-      3.  If |field|'s <{input/autocomplete}> attribute's value contains an
+      3.  If |formData|'s {{FormData/has()}} method returns `false` when executed
+          on |name|, then skip to the next |field|.
+
+      4.  If |field|'s <{input/autocomplete}> attribute's value contains an
           <a>autofill detail token</a> that is an <a>ASCII case-insensitive</a>
           match for any of the following strings, then run the associated steps:
 
           :   "<a attr-value>`current-password`</a>"
           :   "<a attr-value>`new-password`</a>"
           ::  Set |data|'s {{PasswordCredentialData/password}} member's value to
-              |field|'s <{input/value}> attribute's value, and |passwordName|
-              to |field|'s <{input/name}> attribute's value.
+              the result of executing |formData|'s {{FormData/get()}} method on
+              |name|, and |passwordName| to |name|.
           :   "<a attr-value>`photo`</a>"
           ::  Set |data|'s {{SiteBoundCredentialData/iconURL}} member's value to
-              |field|'s <{input/value}> attribute's value, and |idName| to
-              |field|'s <{input/name}> attribute's value.
+              the result of executing |formData|'s {{FormData/get()}} method on
+              |name|.
           :   "<a attr-value>`name`</a>"
           :   "<a attr-value>`nickname`</a>"
           ::  Set |data|'s {{SiteBoundCredentialData/name}} member's value to
-              |field|'s <{input/value}> attribute's value.
+              the result of executing |formData|'s {{FormData/get()}} method on
+              |name|.
           :   "<a attr-value>`username`</a>"
-          ::  Set |data|'s {{CredentialData/id}} member's value to |field|'s
-              <{input/value}> attribute's value, and |idName| to |field|'s
-              <{input/name}> attribute's value.
+          ::  Set |data|'s {{CredentialData/id}} member's value to the result
+              of executing |formData|'s {{FormData/get()}} method on |name|, and
+              |idName| to |name|.
 
-  4.  If any of the following are the empty string, <a>throw</a> a `TypeError`
-      exception:
+  6.  Let |c| be the result of executing the {{PasswordCredential(data)}}
+      constructor on |data|. Rethrow any exception generated.
 
-      *   |data|'s {{CredentialData/id}} member's value
-      *   |data|'s {{PasswordCredentialData/password}} member's value
-      *   |idName|
-      *   |passwordName|
+  7.  Set |c|'s {{PasswordCredential/idName}} attribute to |idName|.
 
-  5.  Let |c| be the result of executing the {{PasswordCredential(data)}}
-      constructor on |data|.
+  8.  Set |c|'s {{PasswordCredential/passwordName}} attribute to |passwordName|.
 
-  6.  Set |c|'s {{PasswordCredential/idName}} attribute to |idName|.
-
-  7.  Set |c|'s {{PasswordCredential/passwordName}} attribute to |passwordName|.
-
-  8.  Set |c|'s {{PasswordCredential/additionalData}} attribute to the result of
+  9.  Set |c|'s {{PasswordCredential/additionalData}} attribute to the result of
       executing the {{FormData}} constructor on |form|.
 
       ISSUE(w3c/webappsec-credential-management#13): We probably need to support
       `URLSearchParams` here as well.
 
-  9.  Return |c|.
+  10. Return |c|.
 
   <div class="example">
     This constructor is meant to support the common use case of storing
@@ -1004,7 +1013,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
     <dd>
       Request a credential from the credential manager.
 
-      The {{CredentialContainer/get()/options}} argument contains an object
+      The {{CredentialContainer/get(options)/options}} argument contains an object
       filled with type-specific sets of parameters which will be used to select
       a particular {{Credential}} to return. This process is described in each
       {{Credential}} type's <a>options matching algorithm</a>.
