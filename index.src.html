@@ -57,6 +57,7 @@ spec: HTML5; urlPrefix: http://www.w3.org/TR/html5/
       text: autocomplete; for: input; url: attr-fe-autocomplete
       text: value; for: input; url: attr-input-value
       text: name; for: input; url: attr-input-name
+      text: enctype; for: form; url: attr-fs-enctype
   type: element
     urlPrefix: forms.html
       text: input; url: the-input-element
@@ -146,6 +147,7 @@ spec: XHR; urlPrefix: https://xhr.spec.whatwg.org/
     text: entries; for: FormData; url: concept-formdata-entry
     text: name; for: entry; url: concept-formdata-entry-name
     text: value; for: entry; url: concept-formdata-entry-value
+    text: type; for: entry; url: concept-formdata-entry-type
   type: interface
     text: XMLHttpRequest; url: interface-xmlhttprequest
     text: FormData; url: interface-formdata
@@ -177,6 +179,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
     text: URL; url: dom-url
     text: URLSearchParams; url: dom-urlsearchparams
   type: method; for: URLSearchParams
+    text: append(); url: dom-urlsearchparams-append
     text: get(); url: dom-urlsearchparams-get
     text: getAll(); url: dom-urlsearchparams-getall 
   type: attribute
@@ -841,6 +844,27 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   7.  Set |c|'s {{PasswordCredential/idName}} attribute to |idName|.
 
   8.  Set |c|'s {{PasswordCredential/passwordName}} attribute to |passwordName|.
+
+  9.  If |form|'s <{form/enctype}> attribute's value is "`multipart/form-data`",
+      then:
+     
+      1.  Set |c|'s {{PasswordCredential/additionalData}} attribute
+          to |formData|.
+
+      Otherwise:
+
+      1.  Let |params| be a new {{URLSearchParams}} object.
+
+      2.  For each |entry| in |formData|'s <a for="FormData">entries</a>:
+
+          1.  If |entry|'s <a for="entry">type</a> is "file", skip to the
+              next |entry|.
+
+          2.  Execute |params| {{URLSearchParams/append()}} method on
+              |entry|'s <a for="entry">name</a> and <a for="entry">value</a>.
+
+      3.  Set |c|'s {{PasswordCredential/additionalData}} attribute
+          to |formData|.
 
   9.  Set |c|'s {{PasswordCredential/additionalData}} attribute to the result of
       executing the {{FormData}} constructor on |form|.

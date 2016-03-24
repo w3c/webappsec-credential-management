@@ -2024,7 +2024,7 @@ interface <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-expor
   developer to match whatever the backend service expects.</p>
      <dt data-md="">
       <p><dfn class="dfn-paneled idl-code" data-dfn-for="PasswordCredential" data-dfn-type="attribute" data-export="" data-lt="additionalData" id="dom-passwordcredential-additionaldata">additionalData<span class="dfn-panel" data-deco=""><b><a href="#dom-passwordcredential-additionaldata">#dom-passwordcredential-additionaldata</a></b><b>Referenced in:</b><span><a href="#ref-for-dom-passwordcredential-additionaldata-1">1.2.5. Layering on top of a legacy system</a> <a href="#ref-for-dom-passwordcredential-additionaldata-2">(2)</a> <a href="#ref-for-dom-passwordcredential-additionaldata-3">(3)</a> <a href="#ref-for-dom-passwordcredential-additionaldata-4">(4)</a> <a href="#ref-for-dom-passwordcredential-additionaldata-5">(5)</a></span><span><a href="#ref-for-dom-passwordcredential-additionaldata-6">3.1.3. PasswordCredential</a></span><span><a href="#ref-for-dom-passwordcredential-additionaldata-7">3.1.3.2. 
-    PasswordCredential(HTMLFormElement form) Constructor </a></span><span><a href="#ref-for-dom-passwordcredential-additionaldata-8">3.3.1. 
+    PasswordCredential(HTMLFormElement form) Constructor </a> <a href="#ref-for-dom-passwordcredential-additionaldata-8">(2)</a> <a href="#ref-for-dom-passwordcredential-additionaldata-9">(3)</a></span><span><a href="#ref-for-dom-passwordcredential-additionaldata-10">3.3.1. 
     Extract a body and Content-Type for request’s attached credential </a></span></span></dfn>, <span> of type <a data-link-type="idl-name" href="#typedefdef-credentialbodytype" id="ref-for-typedefdef-credentialbodytype-2">CredentialBodyType</a>, nullable</span></p>
      <dd data-md="">
       <p>If the developer wishes to specify additional data to insert into the
@@ -2155,7 +2155,32 @@ interface <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-expor
      <li data-md="">
       <p>Set <var>c</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-4">passwordName</a></code> attribute to <var>passwordName</var>.</p>
      <li data-md="">
-      <p>Set <var>c</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-additionaldata" id="ref-for-dom-passwordcredential-additionaldata-7">additionalData</a></code> attribute to the result of
+      <p>If <var>form</var>’s <code><a data-link-type="element-sub" href="http://www.w3.org/TR/html5/forms.html#attr-fs-enctype">enctype</a></code> attribute’s value is "<code>multipart/form-data</code>",
+  then:</p>
+      <ol>
+       <li data-md="">
+        <p>Set <var>c</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-additionaldata" id="ref-for-dom-passwordcredential-additionaldata-7">additionalData</a></code> attribute
+  to <var>formData</var>.</p>
+      </ol>
+      <p>Otherwise:</p>
+      <ol>
+       <li data-md="">
+        <p>Let <var>params</var> be a new <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#dom-urlsearchparams">URLSearchParams</a></code> object.</p>
+       <li data-md="">
+        <p>For each <var>entry</var> in <var>formData</var>’s <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entries</a>:</p>
+        <ol>
+         <li data-md="">
+          <p>If <var>entry</var>’s <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-type">type</a> is "file", skip to the
+  next <var>entry</var>.</p>
+         <li data-md="">
+          <p>Execute <var>params</var> <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#dom-urlsearchparams-append">append()</a></code> method on <var>entry</var>’s <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-name">name</a> and <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-value">value</a>.</p>
+        </ol>
+       <li data-md="">
+        <p>Set <var>c</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-additionaldata" id="ref-for-dom-passwordcredential-additionaldata-8">additionalData</a></code> attribute
+  to <var>formData</var>.</p>
+      </ol>
+     <li data-md="">
+      <p>Set <var>c</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-additionaldata" id="ref-for-dom-passwordcredential-additionaldata-9">additionalData</a></code> attribute to the result of
   executing the <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> constructor on <var>form</var>.</p>
       <p class="issue" id="issue-09a3f50f"><a class="self-link" href="#issue-09a3f50f"></a> We probably need to support <code>URLSearchParams</code> here as well. <a href="https://github.com/w3c/webappsec-credential-management/issues/13">&lt;https://github.com/w3c/webappsec-credential-management/issues/13></a></p>
      <li data-md="">
@@ -2504,7 +2529,7 @@ var r = Request("https://example.com/endpoint", init);
   domain</a> is not the same as <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>’s <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#concept-url-origin">origin</a></code>'s host’s <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable
   domain</a>, then skip the remaining substeps.</p>
        <li data-md="">
-        <p>Let <var>data</var> be a copy of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-additionaldata" id="ref-for-dom-passwordcredential-additionaldata-8">additionalData</a></code> attribute if it is not <code>undefined</code>, and a new <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> object otherwise.</p>
+        <p>Let <var>data</var> be a copy of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-additionaldata" id="ref-for-dom-passwordcredential-additionaldata-10">additionalData</a></code> attribute if it is not <code>undefined</code>, and a new <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> object otherwise.</p>
        <li data-md="">
         <p>Let <var>list</var> be an empty list.</p>
        <li data-md="">
@@ -3247,6 +3272,7 @@ partial dictionary CredentialRequestOptions {
      <li><a href="http://www.w3.org/TR/html5/forms.html#application/x-www-form-urlencoded serializer">application/x-www-form-urlencoded serializer</a>
      <li><a href="http://www.w3.org/TR/html5/infrastructure.html#ascii-case-insensitive">ascii case-insensitive</a>
      <li><a href="http://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete">autocomplete</a>
+     <li><a href="http://www.w3.org/TR/html5/forms.html#attr-fs-enctype">enctype</a>
      <li><a href="http://www.w3.org/TR/html5/forms.html#form-owner">form owner</a>
      <li><a href="http://www.w3.org/TR/html5/webappapis.html#incumbent-settings-object">incumbent settings object</a>
      <li><a href="http://www.w3.org/TR/html5/infrastructure.html#internal-structured-cloning-algorithm">internal structured cloning algorithm</a>
@@ -3287,6 +3313,7 @@ partial dictionary CredentialRequestOptions {
     <a data-link-type="biblio">[WHATWG-URL]</a> defines the following terms:
     <ul>
      <li><a href="http://www.w3.org/TR/url/#dom-urlsearchparams">URLSearchParams</a>
+     <li><a href="http://www.w3.org/TR/url/#dom-urlsearchparams-append">append()</a>
      <li><a href="http://www.w3.org/TR/url/#concept-url-host">host</a>
      <li><a href="http://www.w3.org/TR/url/#concept-urlsearchparams-list">list</a>
      <li><a href="http://www.w3.org/TR/url/#concept-url-origin">origin</a>
@@ -3315,6 +3342,7 @@ partial dictionary CredentialRequestOptions {
      <li><a href="https://xhr.spec.whatwg.org/#dom-formdata-get">get()</a>
      <li><a href="https://xhr.spec.whatwg.org/#dom-formdata-has">has()</a>
      <li><a href="https://xhr.spec.whatwg.org/#concept-formdata-entry-name">name</a>
+     <li><a href="https://xhr.spec.whatwg.org/#concept-formdata-entry-type">type</a>
      <li><a href="https://xhr.spec.whatwg.org/#concept-formdata-entry-value">value</a>
     </ul>
    <li>
