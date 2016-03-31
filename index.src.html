@@ -47,6 +47,7 @@ spec: HTML5; urlPrefix: http://www.w3.org/TR/html5/
       text: multipart/form-data encoding algorithm; url: multipart/form-data-encoding-algorithm
       text: multipart/form-data boundary string; url: multipart/form-data-boundary-string
       text: application/x-www-form-urlencoded serializer; url: application/x-www-form-urlencoded serializer
+      text: enctype; for: form; url: concept-fs-enctype
     urlPrefix: browsers.html
       text: browsing context
       text: top-level browsing context; url: top-level-browsing-context
@@ -57,7 +58,6 @@ spec: HTML5; urlPrefix: http://www.w3.org/TR/html5/
       text: autocomplete; for: input; url: attr-fe-autocomplete
       text: value; for: input; url: attr-input-value
       text: name; for: input; url: attr-input-name
-      text: enctype; for: form; url: attr-fs-enctype
   type: element
     urlPrefix: forms.html
       text: input; url: the-input-element
@@ -403,25 +403,43 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
       If a user is signed in by calling {{fetch()}} on a {{PasswordCredential}}
       object, submitting that data to a sign-in endpoint, then we can check the
       response to determine whether the user was signed in successfully, and
-      notify the user agent accordingly:
+      notify the user agent accordingly. Given a sign-in form like the following:
 
       <pre>
-        var credential = new <a idl>PasswordCredential</a>({
-          "<a idl for="CredentialData">id</a>": "JaneDoe98",
-          "<a idl for="PasswordCredentialData">password</a>": "MfPeRQq5P3yVry68Q4KZMMhB"
-        });
-        fetch("https://example.com/sign-in/", { credentials: credential, method: "POST" })
-          .then(function (response) {
-            if (response.status == 200)
-              navigator.<a attribute>credentials</a>.<a idl lt="store()">store</a>(credential);
-          });
+        &lt;form action="https://example.com/login" method="POST" id="theForm"&gt;
+          &lt;label for="username"&gt;Username&lt;/label&gt;
+          &lt;input type="text" id="username" <a element-attr for="input">autocomplete</a>="<a attr-value>username</a>"&gt;
+          &lt;label for="password"&gt;Password&lt;/label&gt;
+          &lt;input type="text" id="password" <a element-attr for="input">autocomplete</a>="<a attr-value>current-password</a>"&gt;
+          &lt;input type="submit"&gt;
+        &lt;/form&gt;
       </pre>
 
-      Note: This example assumes that the sign-in API endpoint will
-      differentiate between success and failure via an HTTP response code. This
-      is a reasonable model, but it would of course also be possible to parse
-      the response body for a <code>success</code> property, or some other form
-      of application-specific signal.
+      Then the developer can handle the form submission with something like the
+      following handler:
+
+      <pre>
+        document.querySelector('#theForm').addEventListener("submit", e =&gt; {
+            if (<a idl lt="credentials">navigator.credentials</a>) {
+              e.preventDefault();
+
+              // Construct a new <a idl>PasswordCredential</a> from the <a idl>HTMLFormElement</a>
+              // that fired the "submit" event: this will suck up the values of the fields
+              // labeled with "username" and "current-password" <a element-attr for="input">autocomplete</a>
+              // attributes:
+              var c = new <a idl lt="PasswordCredential(form)">PasswordCredential</a>(e.target);
+
+              // Fetch the form's action URL, passing that new credential object in
+              // as the fetch's credentials. If the response indicates success, ask
+              // the user agent to ask the user to store the credential for future use:
+              var init = { method: "POST", credentials: c };
+              fetch(e.target.action, init).then(r =&gt; {
+                if (/* |r| is a "successful" <a idl>Response</a> */)
+                  <a idl lt="store()">navigator.credentials.store</a>(c);
+              });
+            }
+        });
+      </pre>
     </div>
 
     <div class="example">
@@ -450,23 +468,42 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
       MegaCorp Inc. allows users to change their passwords by POSTing data to
       a backend server asynchronously. After doing so successfully, they can
       update the user's credentials by calling {{CredentialContainer/store()}}
-      with the new information:
+      with the new information.
+
+      Given a password change form like the following:
 
       <pre>
-        // Given |username| and |newPassword|, POST the data to the backend, and
-        // update the credential store upon success:
-        var data = new FormData();
-        data.append("user", username);
-        data.append("pass", newPassword);
-        fetch("https://example.com/changePassword", { body: data, method: "POST" })
-          .then(function(response) {
-            if (response.status == 200) {
-              navigator.credentials.store(new PasswordCredential({
-                "id": username,
-                "password": newPassword
-              });
-            }
-          });
+        &lt;form action="https://example.com/changePassword" method="POST" id="theForm"&gt;
+          &lt;input type="hidden" id="username" <a element-attr for="input">autocomplete</a>="<a attr-value>username</a>" value="user"&gt;
+          &lt;label for="password"&gt;New Password&lt;/label&gt;
+          &lt;input type="text" id="password" <a element-attr for="input">autocomplete</a>="<a attr-value>new-password</a>"&gt;
+          &lt;input type="submit"&gt;
+        &lt;/form&gt;
+      </pre>
+
+      The developer can handle the form submission with something like the following:
+
+      <pre>
+        document.querySelector('#theForm').addEventListener("submit", e =&gt; {
+          if (<a idl lt="credentials">navigator.credentials</a>) {
+            e.preventDefault();
+
+            // Construct a new <a idl>PasswordCredential</a> from the <a idl>HTMLFormElement</a>
+            // that fired the "submit" event: this will suck up the values of the fields
+            // labeled with "username" and "new-password" <a element-attr for="input">autocomplete</a>
+            // attributes:
+            var c = new <a idl lt="PasswordCredential(form)">PasswordCredential</a>(e.target);
+
+            // Fetch the form's action URL, passing that new credential object in
+            // as the fetch's credentials. If the response indicates success, ask
+            // the user agent to ask the user to store the credential for future use:
+            var init = { method: "POST", credentials: c };
+            fetch(e.target.action, init).then(r =&gt; {
+              if (/* |r| is a "successful" <a idl>Response</a> */)
+                <a idl lt="store()">navigator.credentials.store</a>(c);
+            });
+          }
+        });
       </pre>
     </div>
 
@@ -752,48 +789,16 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   credential's password. This property is not directly exposed to the web, but
   used to construct the request body during {{fetch()}}.
 
-  <h5 id="passwordcredential-data-constructor" algorithm>
-    `PasswordCredential(PasswordCredentialData data)` Constructor
-  </h5>
-
-  The <dfn constructor for="PasswordCredential">`PasswordCredential(data)`</dfn>
-  constructor, when invoked with a {{PasswordCredentialData}} (|data|), must run
-  these steps:
-
-  1.  Let |c| be a new {{PasswordCredential}} object.
-  
-  2.  If any of the following are the empty string, <a>throw</a> a `TypeError`
-      exception:
-
-      *   |data|'s {{CredentialData/id}} member's value
-      *   |data|'s {{PasswordCredentialData/password}} member's value
-
-  3.  Set |c|'s properties as follows:
-  
-      :   {{Credential/[[type]]}} slot
-      ::  "`password`"
-      :   {{PasswordCredential/[[password]]}} slot
-      ::  |data|'s {{PasswordCredentialData/password}} member's value
-      :   {{Credential/id}}
-      ::  |data|'s {{CredentialData/id}} member's value
-      :   {{PasswordCredential/idName}}
-      ::  "`username`"
-      :   {{SiteBoundCredential/iconURL}}
-      ::  |data|'s {{SiteBoundCredentialData/iconURL}} member's value
-      :   {{SiteBoundCredential/name}}
-      ::  |data|'s {{SiteBoundCredentialData/name}} member's value
-      :   {{PasswordCredential/passwordName}}
-      ::  "`password`"
-
-  4.  Return |c|.
-
   <h5 id="passwordcredential-form-constructor" algorithm>
     `PasswordCredential(HTMLFormElement form)` Constructor
   </h5>
 
   The <dfn constructor for="PasswordCredential">`PasswordCredential(form)`</dfn>
   constructor, when invoked with an {{HTMLFormElement}} (|form|), must run these
-  steps:
+  steps.
+  
+  Note: [[#examples-post-signin]] and [[#examples-change-password]] provide 
+  examples of the intended usage.
 
   1.  Let |data| be a new {{PasswordCredentialData}} dictionary.
 
@@ -845,7 +850,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
 
   8.  Set |c|'s {{PasswordCredential/passwordName}} attribute to |passwordName|.
 
-  9.  If |form|'s <{form/enctype}> attribute's value is "`multipart/form-data`",
+  9.  If |form|'s <a for="form">enctype</a> is "`multipart/form-data`",
       then:
      
       1.  Set |c|'s {{PasswordCredential/additionalData}} attribute
@@ -866,58 +871,42 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
       3.  Set |c|'s {{PasswordCredential/additionalData}} attribute
           to |formData|.
 
-  9.  Set |c|'s {{PasswordCredential/additionalData}} attribute to the result of
-      executing the {{FormData}} constructor on |form|.
-
-      ISSUE(w3c/webappsec-credential-management#13): We probably need to support
-      `URLSearchParams` here as well.
-
   10. Return |c|.
 
-  <div class="example">
-    This constructor is meant to support the common use case of storing
-    credential information after a successful, asynchronous sign-in. That is,
-    if a user types in a username and password into a form like the following:
+  <h5 id="passwordcredential-data-constructor" algorithm>
+    `PasswordCredential(PasswordCredentialData data)` Constructor
+  </h5>
 
-    <pre>
-      &lt;form action="https://example.com/login" method="POST" id="theForm"&gt;
-        &lt;label for="username"&gt;Username&lt;/label&gt;
-        &lt;input type="text" id="username" <a element-attr for="input">autocomplete</a>="<a attr-value>username</a>"&gt;
-        &lt;label for="password"&gt;Password&lt;/label&gt;
-        &lt;input type="text" id="password" <a element-attr for="input">autocomplete</a>="<a attr-value>current-password</a>"&gt;
-        &lt;input type="submit"&gt;
-      &lt;/form&gt;
-    </pre>
+  The <dfn constructor for="PasswordCredential">`PasswordCredential(data)`</dfn>
+  constructor, when invoked with a {{PasswordCredentialData}} (|data|), must run
+  these steps:
 
-    Then the developer can handle the form submission with something like the
-    following handler:
+  1.  Let |c| be a new {{PasswordCredential}} object.
+  
+  2.  If any of the following are the empty string, <a>throw</a> a `TypeError`
+      exception:
 
-    <pre>
-      document.querySelector('#theForm').addEventListener("submit", e =&gt; {
-          if (<a idl lt="credentials">navigator.credentials</a>) {
-            e.preventDefault();
+      *   |data|'s {{CredentialData/id}} member's value
+      *   |data|'s {{PasswordCredentialData/password}} member's value
 
-            // Construct a new <a idl>PasswordCredential</a> from the <a idl>HTMLFormElement</a>
-            // that fired the "submit" event: this will suck up the values of the fields
-            // labeled with "username" and "current-password" <a element-attr for="input">autocomplete</a>
-            // attributes:
-            var c = new <a idl lt="PasswordCredential(form)">PasswordCredential</a>(e.target);
+  3.  Set |c|'s properties as follows:
+  
+      :   {{Credential/[[type]]}} slot
+      ::  "`password`"
+      :   {{PasswordCredential/[[password]]}} slot
+      ::  |data|'s {{PasswordCredentialData/password}} member's value
+      :   {{Credential/id}}
+      ::  |data|'s {{CredentialData/id}} member's value
+      :   {{PasswordCredential/idName}}
+      ::  "`username`"
+      :   {{SiteBoundCredential/iconURL}}
+      ::  |data|'s {{SiteBoundCredentialData/iconURL}} member's value
+      :   {{SiteBoundCredential/name}}
+      ::  |data|'s {{SiteBoundCredentialData/name}} member's value
+      :   {{PasswordCredential/passwordName}}
+      ::  "`password`"
 
-            // Fetch the form's action URL, passing that new credential object in
-            // as the fetch's credentials. If the response indicates success, ask
-            // the user agent to ask the user to store the credential for future use:
-            var init = { method: "POST", credentials: c };
-            fetch(e.target.action, init).then(r => {
-              if (/* |r| is a "successful" <a idl>Response</a> */)
-                <a idl lt="store()">navigator.credentials.store</a>(c);
-            });
-          }
-      });
-    </pre>
-  </div>
-
-  ISSUE(w3c/webappsec-credential-management#13): We're discussing this mechanism; consider it
-  a strawman proposal for the moment.
+  4.  Return |c|.
   
   <h5 id="passwordcredential-matching">
     Matching Algorithm
