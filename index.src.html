@@ -116,7 +116,8 @@ spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
       text: url; url: concept-request-url
       text: redirect mode; url: concept-request-redirect-mode
       text: skip-service-worker flag; url: skip-service-worker-flag
-      text: attached credential; url: concept-request-attached-credential
+      text: credentials mode; url: concept-request-credentials-mode
+      text: method; url: concept-request-method
   type: interface
     text: RequestInit
     text: RequestInfo
@@ -124,6 +125,8 @@ spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
     text: Request
     text: Body
     text: BodyInit
+  type: enum
+    text: RequestCredentials
   type: method
     text: fetch(); url: dom-global-fetch
     text: arrayBuffer(); for: Body; url: dom-Body-arrayBuffer
@@ -420,7 +423,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
 
       <pre>
         document.querySelector('#theForm').addEventListener("submit", e =&gt; {
-            if (<a idl lt="credentials">navigator.credentials</a>) {
+            if (<a attribute lt="credentials">navigator.credentials</a>) {
               e.preventDefault();
 
               // Construct a new <a idl>PasswordCredential</a> from the <a idl>HTMLFormElement</a>
@@ -446,7 +449,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
       If we're using a <a>federated identity provider</a>:
 
       <pre>
-        if (navigator.<a attribute>credentials</a>) {
+        if (<a attribute lt="credentials">navigator.credentials</a>) {
           navigator.<a attribute>credentials</a>.<a idl lt="store()">store</a>(
             new <a idl>FederatedCredential</a>({
               "<a idl for="CredentialData">id</a>": "username",
@@ -485,7 +488,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
 
       <pre>
         document.querySelector('#theForm').addEventListener("submit", e =&gt; {
-          if (<a idl lt="credentials">navigator.credentials</a>) {
+          if (<a attribute lt="credentials">navigator.credentials</a>) {
             e.preventDefault();
 
             // Construct a new <a idl>PasswordCredential</a> from the <a idl>HTMLFormElement</a>
@@ -1148,7 +1151,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
     via the following call:
 
     <pre>
-      navigator.<a idl>credentials</a>.<a idl lt="get()" for="CredentialContainer">get</a>({
+      navigator.<a attribute>credentials</a>.<a idl lt="get()" for="CredentialContainer">get</a>({
         "<a dict-member>federated</a>": {
           "<a idl>providers</a>": [ "https://identity.example.com/" ]
         }
@@ -1163,7 +1166,7 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
     automatically sign into the origin):
 
     <pre>
-      navigator.<a idl>credentials</a>.<a idl lt="get()" for="CredentialContainer">get</a>(
+      navigator.<a attribute>credentials</a>.<a idl lt="get()" for="CredentialContainer">get</a>(
         "<a dict-member>federated</a>": {
           "<a idl>providers</a>": [ "https://identity.example.com/" ]
         },
@@ -1236,7 +1239,77 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   [[#body-extraction]], and the request will proceed out to the server-side
   authentication endpoint.
 
-  ISSUE(whatwg/fetch#237): Everything discussed here depends on an outstanding
+  <h4 id="monkey-patching">Monkey Patches to Fetch</h4>
+
+  To accomplish the above, Fetch could be modified in the following ways:
+
+  1.  A <a>request</a> has an associated <dfn for="request">attached
+      credential</dfn> (null, or a {{PasswordCredential}}). Unless stated
+      otherwise, it is null.
+
+  2.  A <a>request</a>'s <a for="request">credentials mode</a> gains a new
+      "`password`" value, which implies the same behavior as "`include`", with
+      the additional assertion that the <a>request</a> has a non-null
+      <a for="request">attached credential</a> which will be serialized into
+      its <a for="request">body</a> when it hits the network.
+      
+  3.  The {{RequestCredentials}} enum is renamed to "`RequestCredentialsMode`,
+      and likewise updated with the new "`password`" value:
+
+      <pre class="idl">
+        enum RequestCredentialsMode { "omit", "same-origin", "include", "password" };
+      </pre>
+
+  4.  The {{RequestInit}} dictionary is updated to accept a
+      {{PasswordCredential}} as its `credentials` member:
+
+      <pre class="idl">
+        typedef (<a>PasswordCredential</a> or RequestCredentials) CredentialInfo;
+
+        partial dictionary RequestInit {
+          CredentialInfo credentials;
+        };
+      </pre>
+
+  5.  Replace step 20 of the current {{Request}} constructor with the following:
+
+      20. If |credentials| is non-null:
+
+          1.  If |credentials| is a {{PasswordCredential}}, then set |request|'s
+              <a for="request">credentials mode</a> to "`password`", and
+              |request|'s <a for="request">attached credential</a> to
+              |credentials|.
+
+              Otherwise, set |request|'s <a for="request">credentials mode</a>
+              to |credentials|.
+
+  6.  Replace step 32 of the current {{Request}} constructor with the following:
+
+      32. If |request|'s <a for="request">method</a> is `GET` or `HEAD`, then
+          throw a `TypeError` if any of the following are true:
+
+          *   |init|'s `body` member is present and non-null
+          *   |inputBody| is non-null
+          *   |request|'s <a for="request">attached credential</a> is non-null
+
+  7.  The <a>HTTP-network-or-cache fetch</a> algorithm is updated with the
+      following step after the existing step 2:
+
+      3.  If |httpRequest|'s <a for="request">attached credential</a> is not
+          null, run these substeps:
+
+          1.  Assert: |httpRequest|'s <a for="request">body</a> is null.
+
+          2.  Let |body| and |type| be the result of running
+              [[#body-extraction]] on |httpRequest|.
+
+          3.  If |type| is the empty string, return a <a>network error</a>.
+
+          4.  Let |httpRequest|'s <a for="request">body</a> be |body|,
+              |Content-Type| be |type|, and <a for="request">redirect
+              mode</a> be "`manual`".
+
+  ISSUE(whatwg/fetch#237): These patches are combined into an outstanding
   pull request against Fetch.
 
   <h4 id="body-extraction" algorithm>
