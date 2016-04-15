@@ -57,7 +57,7 @@ spec: HTML5; urlPrefix: http://www.w3.org/TR/html5/
     urlPrefix: forms.html
       text: autocomplete; for: input; url: attr-fe-autocomplete
       text: value; for: input; url: attr-input-value
-      text: name; for: input; url: attr-input-name
+      text: name; for: input; url: attr-fe-name
   type: element
     urlPrefix: forms.html
       text: input; url: the-input-element
@@ -93,8 +93,7 @@ spec: PSL; urlPrefix: https://publicsuffix.org/list/
     text: public suffix; url: #
 spec: MIXED-CONTENT; urlPrefix: https://w3c.github.io/webappsec-mixed-content/
   type: dfn
-    text: a priori insecure origin
-    text: a priori insecure url
+    text: a priori authenticated URL
 spec: SECURE-CONTEXTS; urlPrefix: https://w3c.github.io/webappsec-secure-contexts/
   type: dfn
     text: secure context
@@ -118,8 +117,9 @@ spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
       text: skip-service-worker flag; url: skip-service-worker-flag
       text: credentials mode; url: concept-request-credentials-mode
       text: method; url: concept-request-method
-  type: interface
+  type: dictionary
     text: RequestInit
+  type: interface
     text: RequestInfo
     text: Response
     text: Request
@@ -174,7 +174,7 @@ spec: WebIDL; urlPrefix: https://heycam.github.io/webidl/
 spec: WEBMESSAGING; urlPrefix: http://www.w3.org/TR/webmessaging/
   type: method
     text: postMessage(); for: window; url: dom-window-postmessage
-spec: URL; urlPrefix: http://www.w3.org/TR/url/
+spec: URL; urlPrefix: https://url.spec.whatwg.org/
   type: dfn
     text: URL parser; url: concept-url-parser
     text: list; for: URLSearchParams; url: concept-urlsearchparams-list
@@ -723,8 +723,8 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
 
     <dt><dfn attribute>iconURL</dfn></dt>
     <dd>
-      A URL pointing to an image for the credential. This URL MUST NOT be an
-      <a><i lang="la">a priori</i> insecure URL</a>.
+      A URL pointing to an image for the credential. This URL MUST be an
+      <a><i lang="la">a priori</i> authenticated URL</a>.
 
       ISSUE(w3c/webappsec#247): Anne suggests that this might be better modeled
       as an <code>ImageBitmap</code> or <code>blob:</code>. We also need to
@@ -1779,8 +1779,8 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
       serialization</a> of <var>origin</var>.
     </li>
     <li>
-      If <var>credential</var>'s {{SiteBoundCredential/iconURL}} is an
-      <a><i lang="la">a priori</i> insecure URL</a>, set <var>credential</var>'s
+      If <var>credential</var>'s {{SiteBoundCredential/iconURL}} is not an
+      <a><i lang="la">a priori</i> authenticated URL</a>, set <var>credential</var>'s
       {{SiteBoundCredential/iconURL}} to the empty string.
     </li>
     <li>
@@ -2155,9 +2155,9 @@ spec: URL; urlPrefix: http://www.w3.org/TR/url/
   User agents MUST NOT expose the APIs defined here to environments which are
   not <a>secure contexts</a>. User agents MAY implement autofill mechanisms
   which store user credentials and fill sign-in forms on
-  <a><i lang="la">a priori</i> insecure origins</a>, but those sites cannot be
-  trusted to interact directly with the credential manager in any meaningful way,
-  and those sites MUST NOT have access to credentials saved in <a>secure
+  non-<a><i lang="la">a priori</i> authenticated URLs</a>, but those sites cannot
+  be trusted to interact directly with the credential manager in any meaningful
+  way, and those sites MUST NOT have access to credentials saved in <a>secure
   contexts</a> (as discussed in [[#security-cross-origin-leakage]].
 
   <h3 id="security-xss">Script Injection</h3>

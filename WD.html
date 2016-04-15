@@ -514,7 +514,7 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
      </div>
      <div class="example" id="example-d8bc2895">
       <a class="self-link" href="#example-d8bc2895"></a> MegaCorp Inc.'s backend servers cannot accept POST requests submitted as <code>multipart/form-data</code>. They need to submit the credential information as <code>application/x-www-form-urlencoded</code> instead. They can accomplish this by
-      setting the <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-additionaldata" id="ref-for-dom-passwordcredential-additionaldata-4">additionalData</a></code> attribute to a <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#dom-urlsearchparams">URLSearchParams</a></code> object (which serializes as a urlencoded submission): 
+      setting the <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-additionaldata" id="ref-for-dom-passwordcredential-additionaldata-4">additionalData</a></code> attribute to a <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#dom-urlsearchparams">URLSearchParams</a></code> object (which serializes as a urlencoded submission): 
 <pre>// Given a <a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-7">PasswordCredential</a> |credential|:
 credential.<a data-link-type="idl" href="#dom-passwordcredential-additionaldata" id="ref-for-dom-passwordcredential-additionaldata-5">additionalData</a> = new URLSearchParams();
         
@@ -682,7 +682,7 @@ interface <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-expor
     PasswordCredential(PasswordCredentialData data) Constructor </a></span><span><a href="#ref-for-dom-siteboundcredential-iconurl-3">4.2.4. 
     Store SiteBoundCredential </a> <a href="#ref-for-dom-siteboundcredential-iconurl-4">(2)</a> <a href="#ref-for-dom-siteboundcredential-iconurl-5">(3)</a> <a href="#ref-for-dom-siteboundcredential-iconurl-6">(4)</a></span><span><a href="#ref-for-dom-siteboundcredential-iconurl-7">7.3. Chooser Leakage</a></span></span></dfn>, <span> of type <a data-link-type="idl-name" href="https://heycam.github.io/webidl/#idl-USVString">USVString</a>, readonly</span>
      <dd>
-       A URL pointing to an image for the credential. This URL MUST NOT be an <a data-link-type="dfn" href="https://w3c.github.io/webappsec-mixed-content/#a-priori-insecure-url"><i lang="la">a priori</i> insecure URL</a>. 
+       A URL pointing to an image for the credential. This URL MUST be an <a data-link-type="dfn" href="https://w3c.github.io/webappsec-mixed-content/#a-priori-authenticated-url"><i lang="la">a priori</i> authenticated URL</a>. 
       <p class="issue" id="issue-c874d302"><a class="self-link" href="#issue-c874d302"></a> Anne suggests that this might be better modeled
       as an <code>ImageBitmap</code> or <code>blob:</code>. We also need to
       figure out responsiveness. Perhaps <a data-link-type="biblio" href="#biblio-manifest">[MANIFEST]</a>'s format? <a href="https://github.com/w3c/webappsec/issues/247">&lt;https://github.com/w3c/webappsec/issues/247></a></p>
@@ -720,7 +720,7 @@ interface <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-expor
   </a> <a href="#ref-for-dom-passwordcredentialdata-password-3">(2)</a></span></span></dfn>;
 };
 
-typedef (<a data-link-type="idl-name" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a> or <a data-link-type="idl-name" href="http://www.w3.org/TR/url/#dom-urlsearchparams">URLSearchParams</a>) <dfn class="dfn-paneled idl-code" data-dfn-type="typedef" data-export="" data-lt="CredentialBodyType" id="typedefdef-credentialbodytype">CredentialBodyType<span class="dfn-panel" data-deco=""><b><a href="#typedefdef-credentialbodytype">#typedefdef-credentialbodytype</a></b><b>Referenced in:</b><span><a href="#ref-for-typedefdef-credentialbodytype-1">3.1.3. PasswordCredential</a> <a href="#ref-for-typedefdef-credentialbodytype-2">(2)</a></span></span></dfn>;
+typedef (<a data-link-type="idl-name" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a> or <a data-link-type="idl-name" href="https://url.spec.whatwg.org/#dom-urlsearchparams">URLSearchParams</a>) <dfn class="dfn-paneled idl-code" data-dfn-type="typedef" data-export="" data-lt="CredentialBodyType" id="typedefdef-credentialbodytype">CredentialBodyType<span class="dfn-panel" data-deco=""><b><a href="#typedefdef-credentialbodytype">#typedefdef-credentialbodytype</a></b><b>Referenced in:</b><span><a href="#ref-for-typedefdef-credentialbodytype-1">3.1.3. PasswordCredential</a> <a href="#ref-for-typedefdef-credentialbodytype-2">(2)</a></span></span></dfn>;
 
 [<a class="idl-code" data-link-type="constructor" href="#dom-passwordcredential-passwordcredential-data" id="ref-for-dom-passwordcredential-passwordcredential-data-1">Constructor</a>(<a data-link-type="idl-name" href="#dictdef-passwordcredentialdata" id="ref-for-dictdef-passwordcredentialdata-1">PasswordCredentialData</a> <dfn class="idl-code" data-dfn-for="PasswordCredential/PasswordCredential(data)" data-dfn-type="argument" data-export="" id="dom-passwordcredential-passwordcredential-data-data">data<a class="self-link" href="#dom-passwordcredential-passwordcredential-data-data"></a></dfn>),
  <a class="idl-code" data-link-type="constructor" href="#dom-passwordcredential-passwordcredential" id="ref-for-dom-passwordcredential-passwordcredential-3">Constructor</a>(<a data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">HTMLFormElement</a> <dfn class="idl-code" data-dfn-for="PasswordCredential/PasswordCredential(form)" data-dfn-type="argument" data-export="" id="dom-passwordcredential-passwordcredential-form-form">form<a class="self-link" href="#dom-passwordcredential-passwordcredential-form-form"></a></dfn>),
@@ -773,7 +773,7 @@ interface <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-expor
      <dd data-md="">
       <p>If the developer wishes to specify additional data to insert into the
   request body when submitting the credential information to a remote
-  endpoint, they can do so by assigning a <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> or <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#dom-urlsearchparams">URLSearchParams</a></code> object to this attribute. The credential information
+  endpoint, they can do so by assigning a <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> or <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#dom-urlsearchparams">URLSearchParams</a></code> object to this attribute. The credential information
   will be mixed into the object to produce the body. The value is <code>null</code> unless otherwise specified.</p>
      <dt data-md="">
       <p><code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot-6">[[type]]</a></code></p>
@@ -810,7 +810,7 @@ interface <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-expor
         <p>If <var>field</var> does not have an <code><a data-link-type="element-sub" href="http://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete">autocomplete</a></code> attribute, then
   skip to the next <var>field</var>.</p>
        <li data-md="">
-        <p>Let <var>name</var> be the value of <var>field</var>’s <code><a data-link-type="element-sub" href="http://www.w3.org/TR/html5/forms.html#attr-input-name">name</a></code> attribute.</p>
+        <p>Let <var>name</var> be the value of <var>field</var>’s <code><a data-link-type="element-sub" href="http://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a></code> attribute.</p>
        <li data-md="">
         <p>If <var>formData</var>’s <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#dom-formdata-has">has()</a></code> method returns <code>false</code> when executed
   on <var>name</var>, then skip to the next <var>field</var>.</p>
@@ -860,7 +860,7 @@ interface <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-expor
       <p>Otherwise:</p>
       <ol>
        <li data-md="">
-        <p>Let <var>params</var> be a new <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#dom-urlsearchparams">URLSearchParams</a></code> object.</p>
+        <p>Let <var>params</var> be a new <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#dom-urlsearchparams">URLSearchParams</a></code> object.</p>
        <li data-md="">
         <p>For each <var>entry</var> in <var>formData</var>’s <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entries</a>:</p>
         <ol>
@@ -868,7 +868,7 @@ interface <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-expor
           <p>If <var>entry</var>’s <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-type">type</a> is "file", skip to the
   next <var>entry</var>.</p>
          <li data-md="">
-          <p>Execute <var>params</var> <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#dom-urlsearchparams-append">append()</a></code> method on <var>entry</var>’s <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-name">name</a> and <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-value">value</a>.</p>
+          <p>Execute <var>params</var> <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#dom-urlsearchparams-append">append()</a></code> method on <var>entry</var>’s <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-name">name</a> and <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-value">value</a>.</p>
         </ol>
        <li data-md="">
         <p>Set <var>c</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-additionaldata" id="ref-for-dom-passwordcredential-additionaldata-8">additionalData</a></code> attribute
@@ -1233,7 +1233,7 @@ var r = Request("https://example.com/endpoint", init);
       <p>The <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#requestinit">RequestInit</a></code> dictionary is updated to accept a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-22">PasswordCredential</a></code> as its <code>credentials</code> member:</p>
 <pre class="idl def">typedef (<a data-link-type="idl-name" href="#passwordcredential" id="ref-for-passwordcredential-23">PasswordCredential</a> or <a data-link-type="idl-name" href="https://fetch.spec.whatwg.org/#requestcredentials">RequestCredentials</a>) <dfn class="dfn-paneled idl-code" data-dfn-type="typedef" data-export="" data-lt="CredentialInfo" id="typedefdef-credentialinfo">CredentialInfo<span class="dfn-panel" data-deco=""><b><a href="#typedefdef-credentialinfo">#typedefdef-credentialinfo</a></b><b>Referenced in:</b><span><a href="#ref-for-typedefdef-credentialinfo-1">3.3.1. Monkey Patches to Fetch</a></span></span></dfn>;
 
-partial dictionary <dfn class="idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-requestinit">RequestInit<a class="self-link" href="#dictdef-requestinit"></a></dfn> {
+partial dictionary <a class="idl-code" data-link-type="dictionary" href="https://fetch.spec.whatwg.org/#requestinit">RequestInit</a> {
   <a data-link-type="idl-name" href="#typedefdef-credentialinfo" id="ref-for-typedefdef-credentialinfo-1">CredentialInfo</a> <dfn class="idl-code" data-dfn-for="RequestInit" data-dfn-type="dict-member" data-export="" data-type="CredentialInfo " id="dom-requestinit-credentials">credentials<a class="self-link" href="#dom-requestinit-credentials"></a></dfn>;
 };
 </pre>
@@ -1297,9 +1297,9 @@ partial dictionary <dfn class="idl-code" data-dfn-type="dictionary" data-export=
       <p>If <var>credential</var> is a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-25">PasswordCredential</a></code>, run these substeps.</p>
       <ol>
        <li data-md="">
-        <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url">url</a>’s scheme is not the same as <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>’s <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#concept-url-origin">origin</a></code>'s scheme,
+        <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url">url</a>’s scheme is not the same as <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#concept-url-origin">origin</a></code>'s scheme,
   or <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url">url</a>’s host’s <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable
-  domain</a> is not the same as <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>’s <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#concept-url-origin">origin</a></code>'s host’s <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable
+  domain</a> is not the same as <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#concept-url-origin">origin</a></code>'s host’s <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable
   domain</a>, then skip the remaining substeps.</p>
        <li data-md="">
         <p>Let <var>data</var> be a copy of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-additionaldata" id="ref-for-dom-passwordcredential-additionaldata-9">additionalData</a></code> attribute if it is not <code>undefined</code>, and a new <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> object otherwise.</p>
@@ -1328,10 +1328,10 @@ partial dictionary <dfn class="idl-code" data-dfn-type="dictionary" data-export=
           <p>Set <var>Content-Type</var> to <code>multipart/form-data;boundary=</code>, followed by the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/forms.html#multipart/form-data-boundary-string"><code>multipart/form-data</code> boundary string</a> generated by the
   multipart/form-data encoding algorithm.</p>
         </ol>
-        <p>Otherwise <var>data</var> is a <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#dom-urlsearchparams">URLSearchParams</a></code> object, so:</p>
+        <p>Otherwise <var>data</var> is a <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#dom-urlsearchparams">URLSearchParams</a></code> object, so:</p>
         <ol>
          <li data-md="">
-          <p>Set <var>list</var> to a copy of <var>data</var>’s <a data-link-type="dfn" href="http://www.w3.org/TR/url/#concept-urlsearchparams-list">list</a>.</p>
+          <p>Set <var>list</var> to a copy of <var>data</var>’s <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-urlsearchparams-list">list</a>.</p>
          <li data-md="">
           <p>Remove all name-value pairs from <var>list</var> whose name is either <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname" id="ref-for-dom-passwordcredential-idname-7">idName</a></code> or <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-7">passwordName</a></code>.</p>
          <li data-md="">
@@ -1340,7 +1340,7 @@ partial dictionary <dfn class="idl-code" data-dfn-type="dictionary" data-export=
           <p>Append a new name-value pair to <var>list</var> whose name is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-8">passwordName</a></code> and whose value
   is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-3">[[password]]</a></code>.</p>
          <li data-md="">
-          <p>Push the result of running the <a data-link-type="dfn" href="http://www.w3.org/TR/url/#concept-urlencoded-serializer"><code>application/x-www-form-urlencoded</code> serializer</a>, with <var>list</var>, to <var>body</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-body-stream">stream</a>.</p>
+          <p>Push the result of running the <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-urlencoded-serializer"><code>application/x-www-form-urlencoded</code> serializer</a>, with <var>list</var>, to <var>body</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-body-stream">stream</a>.</p>
          <li data-md="">
           <p>Set <var>Content-Type</var> to <code>application/x-www-form-urlencoded;charset=UTF-8</code>.</p>
         </ol>
@@ -1522,7 +1522,7 @@ partial dictionary <dfn class="idl-code" data-dfn-type="dictionary" data-export=
     <ol>
      <li> Set <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-3">[[origin]]</a></code> slot to the <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-6.2">ASCII
       serialization</a> of <var>origin</var>. 
-     <li> If <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-iconurl" id="ref-for-dom-siteboundcredential-iconurl-3">iconURL</a></code> is an <a data-link-type="dfn" href="https://w3c.github.io/webappsec-mixed-content/#a-priori-insecure-url"><i lang="la">a priori</i> insecure URL</a>, set <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-iconurl" id="ref-for-dom-siteboundcredential-iconurl-4">iconURL</a></code> to the empty string. 
+     <li> If <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-iconurl" id="ref-for-dom-siteboundcredential-iconurl-3">iconURL</a></code> is not an <a data-link-type="dfn" href="https://w3c.github.io/webappsec-mixed-content/#a-priori-authenticated-url"><i lang="la">a priori</i> authenticated URL</a>, set <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-iconurl" id="ref-for-dom-siteboundcredential-iconurl-4">iconURL</a></code> to the empty string. 
      <li>
        Switch on <var>credential</var>’s primary interface, and execute the
       associated steps: 
@@ -1582,8 +1582,8 @@ partial dictionary <dfn class="idl-code" data-dfn-type="dictionary" data-export=
     <ol>
      <li> Let <var>origin A</var> be the value of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-5">[[origin]]</a></code> slot. 
      <li> If <var>origin A</var> is <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-5">the same</a> as <var>origin B</var>, return <code>Exact Match</code>. 
-     <li> If <var>origin A</var>’s <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#concept-url-scheme">scheme</a></code> is <var>origin B</var>’s <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#concept-url-scheme">scheme</a></code>, and <var>origin A</var>’s <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#concept-url-host">host</a></code>'s <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable
-      domain</a> is <var>origin B</var>’s <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/url/#concept-url-host">host</a></code>'s <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable
+     <li> If <var>origin A</var>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#concept-url-scheme">scheme</a></code> is <var>origin B</var>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#concept-url-scheme">scheme</a></code>, and <var>origin A</var>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#concept-url-host">host</a></code>'s <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable
+      domain</a> is <var>origin B</var>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#concept-url-host">host</a></code>'s <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable
       domain</a>, then return <code>Fuzzy Match</code>. 
      <li> Return <code>No Match</code> 
     </ol>
@@ -1721,9 +1721,10 @@ partial dictionary <dfn class="idl-code" data-dfn-type="dictionary" data-export=
     <h3 class="heading settled" data-level="6.4" id="security-insecure-origins"><span class="secno">6.4. </span><span class="content">Insecure Sites</span><a class="self-link" href="#security-insecure-origins"></a></h3>
     <p>User agents MUST NOT expose the APIs defined here to environments which are
   not <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#secure-context">secure contexts</a>. User agents MAY implement autofill mechanisms
-  which store user credentials and fill sign-in forms on <a data-link-type="dfn" href="https://w3c.github.io/webappsec-mixed-content/#a-priori-insecure-origin"><i lang="la">a priori</i> insecure origins</a>, but those sites cannot be
-  trusted to interact directly with the credential manager in any meaningful way,
-  and those sites MUST NOT have access to credentials saved in <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#secure-context">secure
+  which store user credentials and fill sign-in forms on
+  non-<a data-link-type="dfn" href="https://w3c.github.io/webappsec-mixed-content/#a-priori-authenticated-url"><i lang="la">a priori</i> authenticated URLs</a>, but those sites cannot
+  be trusted to interact directly with the credential manager in any meaningful
+  way, and those sites MUST NOT have access to credentials saved in <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#secure-context">secure
   contexts</a> (as discussed in <a href="#security-cross-origin-leakage">§6.1 Cross-origin Credential Leakage</a>.</p>
     <h3 class="heading settled" data-level="6.5" id="security-xss"><span class="secno">6.5. </span><span class="content">Script Injection</span><a class="self-link" href="#security-xss"></a></h3>
     <p>If a malicious party is able to inject script into an origin, they could
@@ -2003,7 +2004,6 @@ partial dictionary CredentialRequestOptions {
     </ul>
    <li><a href="#dom-federatedcredentialrequestoptions-providers">providers</a><span>, in §3.2.1.2</span>
    <li><a href="#enumdef-requestcredentialsmode">RequestCredentialsMode</a><span>, in §3.3.1</span>
-   <li><a href="#dictdef-requestinit">RequestInit</a><span>, in §3.3.1</span>
    <li><a href="#requires-user-mediation">requires user mediation</a><span>, in §2</span>
    <li><a href="#dom-credentialscontainer-requireusermediation">requireUserMediation()</a><span>, in §3.2</span>
    <li><a href="#dom-requestcredentialsmode-same-origin">"same-origin"</a><span>, in §3.3.1</span>
@@ -2069,7 +2069,7 @@ partial dictionary CredentialRequestOptions {
      <li><a href="http://www.w3.org/TR/html5/infrastructure.html#internal-structured-cloning-algorithm">internal structured cloning algorithm</a>
      <li><a href="http://www.w3.org/TR/html5/forms.html#multipart/form-data-boundary-string">multipart/form-data boundary string</a>
      <li><a href="http://www.w3.org/TR/html5/forms.html#multipart/form-data-encoding-algorithm">multipart/form-data encoding algorithm</a>
-     <li><a href="http://www.w3.org/TR/html5/forms.html#attr-input-name">name</a>
+     <li><a href="http://www.w3.org/TR/html5/forms.html#attr-fe-name">name</a>
      <li><a href="http://www.w3.org/TR/html5/browsers.html#nested-browsing-context">nested browsing context</a>
      <li><a href="http://www.w3.org/TR/html5/webappapis.html#responsible-document">responsible document</a>
      <li><a href="http://www.w3.org/TR/html5/infrastructure.html#structured-clone">structured clone</a>
@@ -2080,8 +2080,7 @@ partial dictionary CredentialRequestOptions {
    <li>
     <a data-link-type="biblio">[mixed-content]</a> defines the following terms:
     <ul>
-     <li><a href="https://w3c.github.io/webappsec-mixed-content/#a-priori-insecure-origin">a priori insecure origin</a>
-     <li><a href="https://w3c.github.io/webappsec-mixed-content/#a-priori-insecure-url">a priori insecure url</a>
+     <li><a href="https://w3c.github.io/webappsec-mixed-content/#a-priori-authenticated-url">a priori authenticated url</a>
     </ul>
    <li>
     <a data-link-type="biblio">[PSL]</a> defines the following terms:
@@ -2103,13 +2102,13 @@ partial dictionary CredentialRequestOptions {
    <li>
     <a data-link-type="biblio">[WHATWG-URL]</a> defines the following terms:
     <ul>
-     <li><a href="http://www.w3.org/TR/url/#dom-urlsearchparams">URLSearchParams</a>
-     <li><a href="http://www.w3.org/TR/url/#dom-urlsearchparams-append">append()</a>
-     <li><a href="http://www.w3.org/TR/url/#concept-urlencoded-serializer">application/x-www-form-urlencoded serializer</a>
-     <li><a href="http://www.w3.org/TR/url/#concept-url-host">host</a>
-     <li><a href="http://www.w3.org/TR/url/#concept-urlsearchparams-list">list</a>
-     <li><a href="http://www.w3.org/TR/url/#concept-url-origin">origin</a>
-     <li><a href="http://www.w3.org/TR/url/#concept-url-scheme">scheme</a>
+     <li><a href="https://url.spec.whatwg.org/#dom-urlsearchparams">URLSearchParams</a>
+     <li><a href="https://url.spec.whatwg.org/#dom-urlsearchparams-append">append()</a>
+     <li><a href="https://url.spec.whatwg.org/#concept-urlencoded-serializer">application/x-www-form-urlencoded serializer</a>
+     <li><a href="https://url.spec.whatwg.org/#concept-url-host">host</a>
+     <li><a href="https://url.spec.whatwg.org/#concept-urlsearchparams-list">list</a>
+     <li><a href="https://url.spec.whatwg.org/#concept-url-origin">origin</a>
+     <li><a href="https://url.spec.whatwg.org/#concept-url-scheme">scheme</a>
     </ul>
    <li>
     <a data-link-type="biblio">[WEBMESSAGING]</a> defines the following terms:
@@ -2216,7 +2215,7 @@ dictionary <a href="#dictdef-passwordcredentialdata">PasswordCredentialData</a> 
   USVString <a data-type="USVString " href="#dom-passwordcredentialdata-password">password</a>;
 };
 
-typedef (<a data-link-type="idl-name" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a> or <a data-link-type="idl-name" href="http://www.w3.org/TR/url/#dom-urlsearchparams">URLSearchParams</a>) <a href="#typedefdef-credentialbodytype">CredentialBodyType</a>;
+typedef (<a data-link-type="idl-name" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a> or <a data-link-type="idl-name" href="https://url.spec.whatwg.org/#dom-urlsearchparams">URLSearchParams</a>) <a href="#typedefdef-credentialbodytype">CredentialBodyType</a>;
 
 [<a class="idl-code" data-link-type="constructor" href="#dom-passwordcredential-passwordcredential-data">Constructor</a>(<a data-link-type="idl-name" href="#dictdef-passwordcredentialdata">PasswordCredentialData</a> <a href="#dom-passwordcredential-passwordcredential-data-data">data</a>),
  <a class="idl-code" data-link-type="constructor" href="#dom-passwordcredential-passwordcredential">Constructor</a>(<a data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">HTMLFormElement</a> <a href="#dom-passwordcredential-passwordcredential-form-form">form</a>),
@@ -2266,7 +2265,7 @@ enum <a href="#enumdef-requestcredentialsmode">RequestCredentialsMode</a> { <a h
 
 typedef (<a data-link-type="idl-name" href="#passwordcredential">PasswordCredential</a> or <a data-link-type="idl-name" href="https://fetch.spec.whatwg.org/#requestcredentials">RequestCredentials</a>) <a href="#typedefdef-credentialinfo">CredentialInfo</a>;
 
-partial dictionary <a href="#dictdef-requestinit">RequestInit</a> {
+partial dictionary <a class="idl-code" data-link-type="dictionary" href="https://fetch.spec.whatwg.org/#requestinit">RequestInit</a> {
   <a data-link-type="idl-name" href="#typedefdef-credentialinfo">CredentialInfo</a> <a data-type="CredentialInfo " href="#dom-requestinit-credentials">credentials</a>;
 };
 
