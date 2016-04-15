@@ -2315,6 +2315,7 @@ interface <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-expor
       <p class="note" role="note">Note: If and when we need to support returning more than a single
       credential in response to a single call, we will likely introduce a <code>getAll()</code> method which would return <code>Promise&lt;sequence&lt;Credential>></code>.</p>
       <table class="argumentdef data">
+       <caption>Arguments for the <a class="idl-code" data-link-type="method" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-5">CredentialsContainer.get(options)</a> method.</caption>
        <thead>
         <tr>
          <th>Parameter 
@@ -2329,7 +2330,6 @@ interface <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-expor
          <td> <span class="no">✘</span>
          <td> <span class="no">✘</span>
          <td>The set of properties governing the scope of the request. 
-       <caption>Arguments for the <a class="idl-code" data-link-type="method" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-5">CredentialsContainer.get(options)</a> method.</caption>
       </table>
      <dt><dfn class="dfn-paneled idl-code" data-dfn-for="CredentialsContainer" data-dfn-type="method" data-export="" data-lt="store(credential)" id="dom-credentialscontainer-store">store()<span class="dfn-panel" data-deco=""><b><a href="#dom-credentialscontainer-store">#dom-credentialscontainer-store</a></b><b>Referenced in:</b><span><a href="#ref-for-dom-credentialscontainer-store-1">1.2.3. Post-sign-in Confirmation</a> <a href="#ref-for-dom-credentialscontainer-store-2">(2)</a></span><span><a href="#ref-for-dom-credentialscontainer-store-3">1.2.4. Change Password</a> <a href="#ref-for-dom-credentialscontainer-store-4">(2)</a></span><span><a href="#ref-for-dom-credentialscontainer-store-5">3.2. Credential Manager</a> <a href="#ref-for-dom-credentialscontainer-store-6">(2)</a> <a href="#ref-for-dom-credentialscontainer-store-7">(3)</a></span><span><a href="#ref-for-dom-credentialscontainer-store-8">5.1. Storing and Updating Credentials</a></span><span><a href="#ref-for-dom-credentialscontainer-store-9">6.3. Origin Confusion</a></span><span><a href="#ref-for-dom-credentialscontainer-store-10">6.5. Script Injection</a></span><span><a href="#ref-for-dom-credentialscontainer-store-11">8.3. Browser Extensions</a></span></span></dfn>
      <dd>
@@ -2340,6 +2340,7 @@ interface <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-expor
       defined in <a href="#store-credential">§4.1.2 Store a Credential</a> with <var>credential</var> as an
       argument.</p>
       <table class="argumentdef data">
+       <caption>Arguments for the <a class="idl-code" data-link-type="method" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-7">CredentialsContainer.store(credential)</a> method.</caption>
        <thead>
         <tr>
          <th>Parameter 
@@ -2354,7 +2355,6 @@ interface <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-expor
          <td> <span class="no">✘</span>
          <td> <span class="no">✘</span>
          <td>The credential to be stored. 
-       <caption>Arguments for the <a class="idl-code" data-link-type="method" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-7">CredentialsContainer.store(credential)</a> method.</caption>
       </table>
      <dt><dfn class="dfn-paneled idl-code" data-dfn-for="CredentialsContainer" data-dfn-type="method" data-export="" data-lt="requireUserMediation()" id="dom-credentialscontainer-requireusermediation">requireUserMediation()<span class="dfn-panel" data-deco=""><b><a href="#dom-credentialscontainer-requireusermediation">#dom-credentialscontainer-requireusermediation</a></b><b>Referenced in:</b><span><a href="#ref-for-dom-credentialscontainer-requireusermediation-1">3.2. Credential Manager</a> <a href="#ref-for-dom-credentialscontainer-requireusermediation-2">(2)</a></span><span><a href="#ref-for-dom-credentialscontainer-requireusermediation-3">7.2. Signing-Out</a></span></span></dfn>
      <dd>
@@ -2631,7 +2631,7 @@ partial dictionary <dfn class="idl-code" data-dfn-type="dictionary" data-export=
           <p>Append a new name-value pair to <var>list</var> whose name is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-8">passwordName</a></code> and whose value
   is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-3">[[password]]</a></code>.</p>
          <li data-md="">
-          <p>Push the result of running the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/forms.html#application/x-www-form-urlencoded serializer"><code>application/x-www-form-urlencoded</code> serializer</a>, with <var>list</var>, to <var>body</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-body-stream">stream</a>.</p>
+          <p>Push the result of running the <a data-link-type="dfn" href="http://www.w3.org/TR/url/#concept-urlencoded-serializer"><code>application/x-www-form-urlencoded</code> serializer</a>, with <var>list</var>, to <var>body</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-body-stream">stream</a>.</p>
          <li data-md="">
           <p>Set <var>Content-Type</var> to <code>application/x-www-form-urlencoded;charset=UTF-8</code>.</p>
         </ol>
@@ -3352,7 +3352,6 @@ partial dictionary CredentialRequestOptions {
      <li><a href="http://www.w3.org/TR/html5/webappapis.html#navigator">Navigator</a>
      <li><a href="http://www.w3.org/TR/html5/infrastructure.html#transferable">Transferable</a>
      <li><a href="http://www.w3.org/TR/html5/browsers.html#active-document">active document</a>
-     <li><a href="http://www.w3.org/TR/html5/forms.html#application/x-www-form-urlencoded serializer">application/x-www-form-urlencoded serializer</a>
      <li><a href="http://www.w3.org/TR/html5/infrastructure.html#ascii-case-insensitive">ascii case-insensitive</a>
      <li><a href="http://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete">autocomplete</a>
      <li><a href="http://www.w3.org/TR/html5/forms.html#concept-fs-enctype">enctype</a>
@@ -3397,6 +3396,7 @@ partial dictionary CredentialRequestOptions {
     <ul>
      <li><a href="http://www.w3.org/TR/url/#dom-urlsearchparams">URLSearchParams</a>
      <li><a href="http://www.w3.org/TR/url/#dom-urlsearchparams-append">append()</a>
+     <li><a href="http://www.w3.org/TR/url/#concept-urlencoded-serializer">application/x-www-form-urlencoded serializer</a>
      <li><a href="http://www.w3.org/TR/url/#concept-url-host">host</a>
      <li><a href="http://www.w3.org/TR/url/#concept-urlsearchparams-list">list</a>
      <li><a href="http://www.w3.org/TR/url/#concept-url-origin">origin</a>
