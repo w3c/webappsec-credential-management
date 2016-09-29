@@ -658,7 +658,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
   <h4 id="interfaces-credential-types-credential"><code>Credential</code></h4>
   <pre class="idl">
     dictionary CredentialData {
-      USVString id;
+      required USVString id;
     };
 
     interface Credential {
@@ -746,7 +746,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
   <h4 id="interfaces-credential-types-passwordcredential"><code>PasswordCredential</code></h4>
   <pre class="idl">
     dictionary PasswordCredentialData : SiteBoundCredentialData {
-      USVString password;
+      required USVString password;
     };
 
     typedef (FormData or URLSearchParams) CredentialBodyType;
@@ -922,7 +922,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
   <h4 id="interfaces-credential-types-federatedcredential"><code>FederatedCredential</code></h4>
   <pre class="idl">
     dictionary FederatedCredentialData : SiteBoundCredentialData {
-      USVString provider;
+      required USVString provider;
       DOMString protocol;
     };
 
@@ -1020,7 +1020,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
   </pre>
   <pre class="idl">
     interface CredentialsContainer {
-      Promise&lt;Credential?&gt; get(CredentialRequestOptions options);
+      Promise&lt;Credential?&gt; get(optional CredentialRequestOptions options);
       Promise&lt;Credential&gt; store(Credential credential);
       Promise&lt;void&gt; requireUserMediation();
     };
