@@ -824,28 +824,33 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
       3.  If |formData|'s {{FormData/has()}} method returns `false` when executed
           on |name|, then skip to the next |field|.
 
-      4.  If |field|'s <{input/autocomplete}> attribute's value contains an
-          <a>autofill detail token</a> that is an <a>ASCII case-insensitive</a>
-          match for any of the following strings, then run the associated steps:
+      4.  If |field|'s <{input/autocomplete}> attribute's value contains one or
+          more <a>autofill detail tokens</a> (|tokens|), then:
+          
+          1.  For each |token| in |tokens|:
+          
+              1.  If |token| is an <a>ASCII case-insensitive</a> match for one
+                  of the following strings, run the associated steps:
 
-          :   "<a attr-value>`current-password`</a>"
-          :   "<a attr-value>`new-password`</a>"
-          ::  Set |data|'s {{PasswordCredentialData/password}} member's value to
-              the result of executing |formData|'s {{FormData/get()}} method on
-              |name|, and |passwordName| to |name|.
-          :   "<a attr-value>`photo`</a>"
-          ::  Set |data|'s {{SiteBoundCredentialData/iconURL}} member's value to
-              the result of executing |formData|'s {{FormData/get()}} method on
-              |name|.
-          :   "<a attr-value>`name`</a>"
-          :   "<a attr-value>`nickname`</a>"
-          ::  Set |data|'s {{SiteBoundCredentialData/name}} member's value to
-              the result of executing |formData|'s {{FormData/get()}} method on
-              |name|.
-          :   "<a attr-value>`username`</a>"
-          ::  Set |data|'s {{CredentialData/id}} member's value to the result
-              of executing |formData|'s {{FormData/get()}} method on |name|, and
-              |idName| to |name|.
+                  :   "<a attr-value>`current-password`</a>"
+                  :   "<a attr-value>`new-password`</a>"
+                  ::  Set |data|'s {{PasswordCredentialData/password}} member's
+                      value to the result of executing |formData|'s
+                      {{FormData/get()}} method on |name|, and |passwordName| to
+                      |name|.
+                  :   "<a attr-value>`photo`</a>"
+                  ::  Set |data|'s {{SiteBoundCredentialData/iconURL}} member's
+                      value to the result of executing |formData|'s
+                      {{FormData/get()}} method on |name|.
+                  :   "<a attr-value>`name`</a>"
+                  :   "<a attr-value>`nickname`</a>"
+                  ::  Set |data|'s {{SiteBoundCredentialData/name}} member's
+                      value to the result of executing |formData|'s
+                      {{FormData/get()}} method on |name|.
+                  :   "<a attr-value>`username`</a>"
+                  ::  Set |data|'s {{CredentialData/id}} member's value to the
+                      result of executing |formData|'s {{FormData/get()}} method
+                      on |name|, and |idName| to |name|.
 
   6.  Let |c| be the result of executing the {{PasswordCredential(data)}}
       constructor on |data|. Rethrow any exception generated.
