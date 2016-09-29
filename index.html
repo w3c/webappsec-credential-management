@@ -2905,14 +2905,14 @@ var r = Request("https://example.com/endpoint", init);
   exposing the <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-6">[[password]]</a></code> slot directly to a page’s JavaScript, but only
   allowing its submission to a same-origin server-side endpoint via <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a></code>.</p>
     <p>Additionally, authors SHOULD mitigate the risk of leakage by setting a
-  reasonable Content Security Policy <a data-link-type="biblio" href="#biblio-csp2">[CSP2]</a> which restricts the origins to
+  reasonable Content Security Policy <a data-link-type="biblio" href="#biblio-csp">[CSP]</a> which restricts the origins to
   which data can be sent. In particular, authors should ensure that the
   following directives are set, explicitly or implicitly, in
   their pages' policies:</p>
     <ol>
-     <li> <code><a data-link-type="dfn" href="https://w3c.github.io/webappsec/specs/content-security-policy/#directive-connect-src">connect-src</a></code> further restricts the origins to which <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a></code> may submit data (which mitigates the risk of redirect-based
+     <li> <code><a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#connect-src">connect-src</a></code> further restricts the origins to which <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a></code> may submit data (which mitigates the risk of redirect-based
       attacks). 
-     <li> <code><a data-link-type="dfn" href="https://w3c.github.io/webappsec/specs/content-security-policy/#directive-child-src">child-src</a></code> restricts the nested browsing
+     <li> <code><a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#child-src">child-src</a></code> restricts the nested browsing
       contexts which may be embedded in a page, making it more difficult to
       inject a malicious <code class="idl"><a data-link-type="idl" href="http://www.w3.org/TR/webmessaging/#dom-window-postmessage">postMessage()</a></code> target. <a data-link-type="biblio" href="#biblio-webmessaging">[WEBMESSAGING]</a> 
     </ol>
@@ -2921,7 +2921,7 @@ var r = Request("https://example.com/endpoint", init);
   credential information via a vulnerable same-origin endpoint. To mitigate
   this kind of risk, authors SHOULD set a reasonable Content Security Policy
   which restricts the kinds of content which can execute in their sites'
-  context. <a data-link-type="biblio" href="#biblio-csp2">[CSP2]</a> Moreover, authors should ensure that both <code><a data-link-type="dfn" href="https://w3c.github.io/webappsec/specs/content-security-policy/#directive-script-src">script-src</a></code> and <code><a data-link-type="dfn" href="https://w3c.github.io/webappsec/specs/content-security-policy/#directive-object-src">object-src</a></code> directives
+  context. <a data-link-type="biblio" href="#biblio-csp">[CSP]</a> Moreover, authors should ensure that both <code><a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#script-src">script-src</a></code> and <code><a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#object-src">object-src</a></code> directives
   are set in any policy they specify in order to ensure that only trusted
   script is executed on a page with access to a user’s credentials.</p>
     <h3 class="heading settled" data-level="6.3" id="security-origin-confusion"><span class="secno">6.3. </span><span class="content">Origin Confusion</span><a class="self-link" href="#security-origin-confusion"></a></h3>
@@ -2947,7 +2947,7 @@ var r = Request("https://example.com/endpoint", init);
   (among many other things you wouldn’t like) overwrite the behavior of <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-10">store()</a></code> to steal a user’s credentials as they’re written into the <a data-link-type="dfn" href="#credential-store" id="ref-for-credential-store-11">credential store</a>.</p>
     <p>Authors SHOULD mitigate the risk of such attacks by properly escaping input
   and output, and add layers of defense in depth by setting a reasonably
-  strong Content Security Policy <a data-link-type="biblio" href="#biblio-csp2">[CSP2]</a> which restricts the origins from
+  strong Content Security Policy <a data-link-type="biblio" href="#biblio-csp">[CSP]</a> which restricts the origins from
   which script can be injected, and by using Subresource Integrity checks <a data-link-type="biblio" href="#biblio-sri">[SRI]</a> to ensure that only trusted JavaScript is executed.</p>
    </section>
    <section>
@@ -3235,12 +3235,12 @@ partial dictionary CredentialRequestOptions {
   <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
   <ul class="index">
    <li>
-    <a data-link-type="biblio">[CSP2]</a> defines the following terms:
+    <a data-link-type="biblio">[CSP]</a> defines the following terms:
     <ul>
-     <li><a href="https://w3c.github.io/webappsec/specs/content-security-policy/#directive-child-src">child-src</a>
-     <li><a href="https://w3c.github.io/webappsec/specs/content-security-policy/#directive-connect-src">connect-src</a>
-     <li><a href="https://w3c.github.io/webappsec/specs/content-security-policy/#directive-object-src">object-src</a>
-     <li><a href="https://w3c.github.io/webappsec/specs/content-security-policy/#directive-script-src">script-src</a>
+     <li><a href="https://w3c.github.io/webappsec-csp/#child-src">child-src</a>
+     <li><a href="https://w3c.github.io/webappsec-csp/#connect-src">connect-src</a>
+     <li><a href="https://w3c.github.io/webappsec-csp/#object-src">object-src</a>
+     <li><a href="https://w3c.github.io/webappsec-csp/#script-src">script-src</a>
     </ul>
    <li>
     <a data-link-type="biblio">[FETCH]</a> defines the following terms:
@@ -3361,8 +3361,8 @@ partial dictionary CredentialRequestOptions {
   <h2 class="no-num no-ref heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
   <h3 class="no-num no-ref heading settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
   <dl>
-   <dt id="biblio-csp2">[CSP2]
-   <dd>Mike West; Adam Barth; Daniel Veditz. <a href="https://w3c.github.io/webappsec/specs/CSP2/">Content Security Policy Level 2</a>. 21 July 2015. CR. URL: <a href="https://w3c.github.io/webappsec/specs/CSP2/">https://w3c.github.io/webappsec/specs/CSP2/</a>
+   <dt id="biblio-csp">[CSP]
+   <dd>Brandon Sterne; Adam Barth. <a href="http://dvcs.w3.org/hg/content-security-policy/raw-file/tip/csp-1.0-specification.html">Content Security Policy 1.0</a>. 19 February 2015. NOTE. URL: <a href="http://dvcs.w3.org/hg/content-security-policy/raw-file/tip/csp-1.0-specification.html">http://dvcs.w3.org/hg/content-security-policy/raw-file/tip/csp-1.0-specification.html</a>
    <dt id="biblio-fetch">[FETCH]
    <dd>Anne van Kesteren. <a href="https://fetch.spec.whatwg.org/">Fetch Standard</a>. Living Standard. URL: <a href="https://fetch.spec.whatwg.org/">https://fetch.spec.whatwg.org/</a>
    <dt id="biblio-html">[HTML]

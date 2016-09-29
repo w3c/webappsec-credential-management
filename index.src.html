@@ -137,13 +137,6 @@ spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
   type: constructor
     text: Request(); url: dom-request
     text: Response(); url: dom-response
-spec: CSP2; urlPrefix: https://w3c.github.io/webappsec/specs/content-security-policy/
-  type: dfn
-    text: form-action; url: directive-form-action
-    text: connect-src; url: directive-connect-src
-    text: child-src; url: directive-child-src
-    text: script-src; url: directive-script-src
-    text: object-src; url: directive-object-src
 spec: XHR; urlPrefix: https://xhr.spec.whatwg.org/
   type: dfn
     text: entry; url: concept-formdata-entry
@@ -160,17 +153,6 @@ spec: XHR; urlPrefix: https://xhr.spec.whatwg.org/
     text: set(); for: FormData; url: dom-formdata-set
   type: constructor
     text: FormData(); for: FormData; url: dom-formdata
-spec: WebIDL; urlPrefix: https://heycam.github.io/webidl/
-  type: dfn
-    text: type name; url: dfn-type-name
-    text: dictionary member; url: dfn-dictionary-member
-    text: value pairs to iterate over; url: dfn-value-pairs-to-iterate-over
-    text: interface; url: dfn-interface
-    text: throw; url: dfn-throw
-  type: interface
-    text: USVString; url: idl-USVString
-    text: object; url: idl-object
-    text: boolean; url: idl-boolean
 spec: WEBMESSAGING; urlPrefix: http://www.w3.org/TR/webmessaging/
   type: method
     text: postMessage(); for: window; url: dom-window-postmessage
@@ -2104,7 +2086,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
   allowing its submission to a same-origin server-side endpoint via {{fetch()}}.
 
   Additionally, authors SHOULD mitigate the risk of leakage by setting a
-  reasonable Content Security Policy [[!CSP2]] which restricts the origins to
+  reasonable Content Security Policy [[!CSP]] which restricts the origins to
   which data can be sent. In particular, authors should ensure that the
   following directives are set, explicitly or implicitly, in
   their pages' policies:
@@ -2129,7 +2111,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
   credential information via a vulnerable same-origin endpoint. To mitigate
   this kind of risk, authors SHOULD set a reasonable Content Security Policy
   which restricts the kinds of content which can execute in their sites'
-  context. [[!CSP2]] Moreover, authors should ensure that both
+  context. [[!CSP]] Moreover, authors should ensure that both
   <code><a>script-src</a></code> and <code><a>object-src</a></code> directives
   are set in any policy they specify in order to ensure that only trusted
   script is executed on a page with access to a user's credentials.
@@ -2169,7 +2151,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
 
   Authors SHOULD mitigate the risk of such attacks by properly escaping input
   and output, and add layers of defense in depth by setting a reasonably
-  strong Content Security Policy [[CSP2]] which restricts the origins from
+  strong Content Security Policy [[CSP]] which restricts the origins from
   which script can be injected, and by using Subresource Integrity checks
   [[SRI]] to ensure that only trusted JavaScript is executed.
 </section>
