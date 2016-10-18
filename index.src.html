@@ -1207,7 +1207,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
       method: "POST",
       credentials: c
     };
-    var r = Request("https://example.com/endpoint", init);
+    var r = new Request("https://example.com/endpoint", init);
   </pre>
 
   Note: The credential information will be transmitted as the request's body,
