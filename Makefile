@@ -10,5 +10,5 @@ WD:
 	bikeshed -f spec --md-status=WD ./index.src.html ./WD.html
 
 publish:
-	git push origin master master:gh-pages
+	git push origin master
 
