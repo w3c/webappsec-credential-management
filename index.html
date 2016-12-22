@@ -2624,7 +2624,7 @@ var r = new Request("https://example.com/endpoint", init);
               passing in <var>origin</var>, <var>types</var> and <var>options</var>. 
          <li> If <var>result</var> is not <code>null</code>, resolve <var>promise</var> with <var>result</var>, and terminate this
               algorithm. 
-         <li> If <var>options</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-unmediated" id="ref-for-dom-credentialrequestoptions-unmediated-3">unmediated</a></code> is <code>true</code>, resolve <var>promise</var> with <var>undefined</var>, and terminate this algorithm. 
+         <li> If <var>options</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-unmediated" id="ref-for-dom-credentialrequestoptions-unmediated-3">unmediated</a></code> is <code>true</code>, resolve <var>promise</var> with <code>undefined</code>, and terminate this algorithm. 
          <li> Resolve <var>promise</var> with the result of executing <a href="#request-siteboundcredential-with-mediation">§4.2.3 Request a SiteBoundCredential with user mediation</a>,
               passing in <var>origin</var>, <var>types</var>, and <var>options</var>. 
         </ol>
