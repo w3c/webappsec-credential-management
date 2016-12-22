@@ -353,7 +353,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
         navigator.<a attribute>credentials</a>.<a idl lt="get()" for="CredentialsContainer">get</a>({
           "<a for="CredentialRequestOptions" dict-member>password</a>": true,
           "<a dict-member>federated</a>": {
-            "<a idl>providers</a>": [ "https://federation.com" ]
+            "<a idl>providers</a>": [ "https://www.facebook.com", "https://accounts.google.com" ]
           }
         }).then(
             function(credential) {
@@ -409,9 +409,9 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
       <pre>
         &lt;form action="https://example.com/login" method="POST" id="theForm"&gt;
           &lt;label for="username"&gt;Username&lt;/label&gt;
-          &lt;input type="text" id="username" <a element-attr for="input">autocomplete</a>="<a attr-value>username</a>"&gt;
+          &lt;input type="text" id="username" name="username" <a element-attr for="input">autocomplete</a>="<a attr-value>username</a>"&gt;
           &lt;label for="password"&gt;Password&lt;/label&gt;
-          &lt;input type="text" id="password" <a element-attr for="input">autocomplete</a>="<a attr-value>current-password</a>"&gt;
+          &lt;input type="text" id="password" name="password" <a element-attr for="input">autocomplete</a>="<a attr-value>current-password</a>"&gt;
           &lt;input type="submit"&gt;
         &lt;/form&gt;
       </pre>
@@ -475,9 +475,9 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
 
       <pre>
         &lt;form action="https://example.com/changePassword" method="POST" id="theForm"&gt;
-          &lt;input type="hidden" id="username" <a element-attr for="input">autocomplete</a>="<a attr-value>username</a>" value="user"&gt;
+          &lt;input type="hidden" name="username" <a element-attr for="input">autocomplete</a>="<a attr-value>username</a>" value="user"&gt;
           &lt;label for="password"&gt;New Password&lt;/label&gt;
-          &lt;input type="text" id="password" <a element-attr for="input">autocomplete</a>="<a attr-value>new-password</a>"&gt;
+          &lt;input type="text" id="password" name="password" <a element-attr for="input">autocomplete</a>="<a attr-value>new-password</a>"&gt;
           &lt;input type="submit"&gt;
         &lt;/form&gt;
       </pre>

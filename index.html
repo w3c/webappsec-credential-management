@@ -1431,7 +1431,7 @@ pre.idl.highlight { color: #708090; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-12-20">20 December 2016</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-12-22">22 December 2016</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1736,12 +1736,12 @@ store user credentials for future use.</p>
      <p>A website that supports <a data-link-type="dfn" href="#federated-identity-provider" id="ref-for-federated-identity-provider-2">federated identity providers</a> as well as
     passwords can request credentials, and use them to kick off the sign-in flow
     for the user’s chosen provider:</p>
-     <div class="example" id="example-4ae6446d">
-      <a class="self-link" href="#example-4ae6446d"></a> 
+     <div class="example" id="example-46df84f4">
+      <a class="self-link" href="#example-46df84f4"></a> 
 <pre>navigator.<a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-3">credentials</a>.<a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-3">get</a>({
   "<a class="idl-code" data-link-type="dict-member" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password-2">password</a>": true,
   "<a class="idl-code" data-link-type="dict-member" href="#dom-credentialrequestoptions-federated" id="ref-for-dom-credentialrequestoptions-federated-1">federated</a>": {
-    "<a data-link-type="idl" href="#dom-federatedcredentialrequestoptions-providers" id="ref-for-dom-federatedcredentialrequestoptions-providers-1">providers</a>": [ "https://federation.com" ]
+    "<a data-link-type="idl" href="#dom-federatedcredentialrequestoptions-providers" id="ref-for-dom-federatedcredentialrequestoptions-providers-1">providers</a>": [ "https://www.facebook.com", "https://accounts.google.com" ]
   }
 }).then(
     function(credential) {
@@ -1783,15 +1783,15 @@ store user credentials for future use.</p>
      <h4 class="heading settled" data-level="1.2.3" id="examples-post-signin"><span class="secno">1.2.3. </span><span class="content">Post-sign-in Confirmation</span><a class="self-link" href="#examples-post-signin"></a></h4>
      <p>To offer the user that credentials are persisted after a successful
     sign-in, they need to be passed to <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-2">store()</a></code>.</p>
-     <div class="example" id="example-29573e10">
-      <a class="self-link" href="#example-29573e10"></a> If a user is signed in by calling <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a></code> on a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-1">PasswordCredential</a></code> object, submitting that data to a sign-in endpoint, then we can check the
+     <div class="example" id="example-21124b1e">
+      <a class="self-link" href="#example-21124b1e"></a> If a user is signed in by calling <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a></code> on a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-1">PasswordCredential</a></code> object, submitting that data to a sign-in endpoint, then we can check the
       response to determine whether the user was signed in successfully, and
       notify the user agent accordingly. Given a sign-in form like the following: 
 <pre>&lt;form action="https://example.com/login" method="POST" id="theForm">
   &lt;label for="username">Username&lt;/label>
-  &lt;input type="text" id="username" <a data-link-type="element-attr" href="http://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete">autocomplete</a>="<a data-link-type="attr-value" href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-username">username</a>">
+  &lt;input type="text" id="username" name="username" <a data-link-type="element-attr" href="http://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete">autocomplete</a>="<a data-link-type="attr-value" href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-username">username</a>">
   &lt;label for="password">Password&lt;/label>
-  &lt;input type="text" id="password" <a data-link-type="element-attr" href="http://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete">autocomplete</a>="<a data-link-type="attr-value" href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-current-password">current-password</a>">
+  &lt;input type="text" id="password" name="password" <a data-link-type="element-attr" href="http://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete">autocomplete</a>="<a data-link-type="attr-value" href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-current-password">current-password</a>">
   &lt;input type="submit">
 &lt;/form>
 </pre>
@@ -1836,15 +1836,15 @@ store user credentials for future use.</p>
     modifications: if the user changes her credentials, the website can notify
     the user agent that she’s successfully signed in with new credentials. The
     user agent can then update the credentials it stores:</p>
-     <div class="example" id="example-ac45f873">
-      <a class="self-link" href="#example-ac45f873"></a> MegaCorp Inc. allows users to change their passwords by POSTing data to
+     <div class="example" id="example-86eac981">
+      <a class="self-link" href="#example-86eac981"></a> MegaCorp Inc. allows users to change their passwords by POSTing data to
       a backend server asynchronously. After doing so successfully, they can
       update the user’s credentials by calling <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-5">store()</a></code> with the new information. 
       <p>Given a password change form like the following:</p>
 <pre>&lt;form action="https://example.com/changePassword" method="POST" id="theForm">
-  &lt;input type="hidden" id="username" <a data-link-type="element-attr" href="http://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete">autocomplete</a>="<a data-link-type="attr-value" href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-username">username</a>" value="user">
+  &lt;input type="hidden" name="username" <a data-link-type="element-attr" href="http://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete">autocomplete</a>="<a data-link-type="attr-value" href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-username">username</a>" value="user">
   &lt;label for="password">New Password&lt;/label>
-  &lt;input type="text" id="password" <a data-link-type="element-attr" href="http://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete">autocomplete</a>="<a data-link-type="attr-value" href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-new-password">new-password</a>">
+  &lt;input type="text" id="password" name="password" <a data-link-type="element-attr" href="http://www.w3.org/TR/html5/forms.html#attr-fe-autocomplete">autocomplete</a>="<a data-link-type="attr-value" href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-new-password">new-password</a>">
   &lt;input type="submit">
 &lt;/form>
 </pre>
