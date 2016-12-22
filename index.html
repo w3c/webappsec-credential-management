@@ -1724,12 +1724,12 @@ store user credentials for future use.</p>
      <p>A website that supports <a data-link-type="dfn" href="#federated-identity-provider" id="ref-for-federated-identity-provider-2">federated identity providers</a> as well as
     passwords can request credentials, and use them to kick off the sign-in flow
     for the user’s chosen provider:</p>
-     <div class="example" id="example-4ae6446d">
-      <a class="self-link" href="#example-4ae6446d"></a> 
+     <div class="example" id="example-46df84f4">
+      <a class="self-link" href="#example-46df84f4"></a> 
 <pre>navigator.<a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-2">credentials</a>.<a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-2">get</a>({
   "<a class="idl-code" data-link-type="dict-member" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password-2">password</a>": true,
   "<a class="idl-code" data-link-type="dict-member" href="#dom-credentialrequestoptions-federated" id="ref-for-dom-credentialrequestoptions-federated-1">federated</a>": {
-    "<a data-link-type="idl" href="#dom-federatedcredentialrequestoptions-providers" id="ref-for-dom-federatedcredentialrequestoptions-providers-1">providers</a>": [ "https://federation.com" ]
+    "<a data-link-type="idl" href="#dom-federatedcredentialrequestoptions-providers" id="ref-for-dom-federatedcredentialrequestoptions-providers-1">providers</a>": [ "https://www.facebook.com", "https://accounts.google.com" ]
   }
 }).then(
     function(credential) {
