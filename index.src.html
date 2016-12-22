@@ -318,13 +318,28 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
               if (credential.type == "<a const>password</a>") {
                 fetch("https://example.com/loginEndpoint", { credentials: credential, method: "POST" })
                   .then(function (response) {
-                    // Notify the user that signin succeeded! Do amazing, signed-in things!
+                    if (/* |response| indicates a successful login */) {
+                      // Store the credential again, see note below.
+                      navigator.<a attribute>credentials</a>.<a idl lt="store()" for="CredentialsContainer">store</a>(credential);
+                      // Notify the user that signin succeeded! Do amazing, signed-in things!
+                    } else {
+                      // Insert some code here to show a basic login form.
+                    }
                   });
               } else {
                 // See <a href="#examples-federated-signin">the Federated Sign-in example</a>
               }
             });
       </pre>
+      Note: To ensure that credentials are persisted correctly, a website
+      should always tell the credential manager when a sign-in succeeded - even
+      if the credentials were just retrieved from
+      {{CredentialsContainer/get()}}. This ensures that PSL matched credentials
+      (for example credentials stored for <code>https://www.example.com</code>
+      but provided for <code>https://m.example.com</code>, see
+      [[#security-cross-origin-leakage]]) become eligible for unmediated
+      access. If the verbatim credentials have been persisted before, this
+      storing has no effect and is invisible to the user.
     </div>
 
     <h4 id="examples-federated-signin">Federated Sign-in</h4>
@@ -382,8 +397,8 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
 
     <h4 id="examples-post-signin">Post-sign-in Confirmation</h4>
 
-    To ensure that credentials are persisted correctly, it may be useful for a
-    website to tell the credential manager that sign-in succeeded.
+    To offer the user that credentials are persisted after a successful
+    sign-in, they need to be passed to {{CredentialsContainer/store()}}.
 
     <div class="example">
       If a user is signed in by calling {{fetch()}} on a {{PasswordCredential}}
