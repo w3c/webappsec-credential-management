@@ -1103,11 +1103,19 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
     <dd>
       If <code>true</code>, the user agent will only attempt to provide
       a {{Credential}} without user interaction. It MUST NOT present the user
-      with any visible prompt to grant access to a {{Credential}}: if the user
-      has opted-into always giving a particular site access to a particular set
-      of credentials, they will be provided. If not, the promise will resolve
-      with <code>undefined</code>. For processing details, see the algorithm
-      defined in [[#request-credential]].
+      with any visible prompt to grant access to a {{Credential}} or to select
+      a {{Credential}}: if the user has opted-into always giving a particular
+      site access to a particular credential, it will be provided. If not, the
+      promise will resolve with <code>undefined</code>.
+
+      If <code>false</code>, the user agent MAY ask the user to grant access to
+      or select a {{Credential}}. If the user has opted-into always giving a
+      particular site access to a particular credential, it MUST be provided
+      without user interaction until the opt-in is revoked, for example, via
+      {{requireUserMediation()}}.
+
+      For processing details, see the algorithm defined in
+      [[#request-credential]].
     </dd>
   </dl>
 
