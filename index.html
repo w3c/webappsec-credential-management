@@ -2780,18 +2780,18 @@ var r = new Request("https://example.com/endpoint", init);
           <ol>
            <li> If the user grants <var>origin</var> permission to store
                   credentials (as discussed in <a href="#user-mediated-storage">§5.1 Storing and Updating Credentials</a>), then
-                  store <var>credential</var> in the <a data-link-type="dfn" href="#credential-store" id="ref-for-credential-store-7">credential store</a>. 
+                  store <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id-7">id</a></code>, <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot-11">[[type]]</a></code>, <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-name" id="ref-for-dom-siteboundcredential-name-5">name</a></code>, <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-iconurl" id="ref-for-dom-siteboundcredential-iconurl-7">iconURL</a></code>, <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-5">[[origin]]</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-6">[[password]]</a></code> of the <var>credential</var> in the <a data-link-type="dfn" href="#credential-store" id="ref-for-credential-store-7">credential store</a>. 
           </ol>
         </ol>
        <dt><code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential-12">FederatedCredential</a></code>
        <dd>
         <ol>
          <li>
-           If the user agent’s credential manager does not contain a <code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential-13">FederatedCredential</a></code> <var>storedCredential</var> whose <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id-7">id</a></code> attribute is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id-8">id</a></code> and whose <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-provider" id="ref-for-dom-federatedcredential-provider-6">provider</a></code> attribute is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-provider" id="ref-for-dom-federatedcredential-provider-7">provider</a></code>, then: 
+           If the user agent’s credential manager does not contain a <code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential-13">FederatedCredential</a></code> <var>storedCredential</var> whose <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id-8">id</a></code> attribute is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id-9">id</a></code> and whose <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-provider" id="ref-for-dom-federatedcredential-provider-6">provider</a></code> attribute is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-provider" id="ref-for-dom-federatedcredential-provider-7">provider</a></code> and whose <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-6">[[origin]]</a></code> slot is <var>origin</var>, then: 
           <ol>
            <li> If the user grants <var>origin</var> permission to store
                   credentials (as discussed in <a href="#user-mediated-storage">§5.1 Storing and Updating Credentials</a>),
-                  store <var>credential</var> in the <a data-link-type="dfn" href="#credential-store" id="ref-for-credential-store-8">credential store</a>. 
+                  store <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id-10">id</a></code>, <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot-12">[[type]]</a></code>, <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-name" id="ref-for-dom-siteboundcredential-name-6">name</a></code>, <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-iconurl" id="ref-for-dom-siteboundcredential-iconurl-8">iconURL</a></code>, <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-7">[[origin]]</a></code>, <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-provider" id="ref-for-dom-federatedcredential-provider-8">provider</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-protocol" id="ref-for-dom-federatedcredential-protocol-3">protocol</a></code> of the <var>credential</var> in the <a data-link-type="dfn" href="#credential-store" id="ref-for-credential-store-8">credential store</a>. 
           </ol>
         </ol>
        <dt><em>This is an extension point.</em>
@@ -2809,7 +2809,7 @@ var r = new Request("https://example.com/endpoint", init);
     </ol>
     <h4 class="heading settled" data-level="4.3.2" id="is-match"><span class="secno">4.3.2. </span><span class="content"> Does <var>credential</var> match <var>origin B</var>? </span><a class="self-link" href="#is-match"></a></h4>
     <ol>
-     <li> Let <var>origin A</var> be the value of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-5">[[origin]]</a></code> slot. 
+     <li> Let <var>origin A</var> be the value of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-8">[[origin]]</a></code> slot. 
      <li> If <var>origin A</var> is <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-5">the same</a> as <var>origin B</var>, return <code>Exact Match</code>. 
      <li> If <var>origin A</var>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#concept-url-scheme">scheme</a></code> is <var>origin B</var>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#concept-url-scheme">scheme</a></code>, and <var>origin A</var>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#concept-url-host">host</a></code>'s <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable
       domain</a> is <var>origin B</var>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#concept-url-host">host</a></code>'s <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable
@@ -2908,14 +2908,14 @@ var r = new Request("https://example.com/endpoint", init);
       not the same. That is: credentials saved on <code>https://example.com/</code> will never be available to <code>http://example.com/</code> via a user agent’s autofill mechanism. 
      <li> MAY use the Public Suffix List <a data-link-type="biblio" href="#biblio-psl">[PSL]</a> to determine the effective scope
       of a credential by comparing the <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable domains</a> of the
-      credential’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-6">[[origin]]</a></code> with the origin in which <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-11">get()</a></code> is called. That is: credentials saved on <code>https://admin.example.com/</code> and <code>https://example.com/</code> MAY be offered to users when <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-12">get()</a></code> is called from <code>https://www.example.com/</code>. 
+      credential’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-9">[[origin]]</a></code> with the origin in which <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-11">get()</a></code> is called. That is: credentials saved on <code>https://admin.example.com/</code> and <code>https://example.com/</code> MAY be offered to users when <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-12">get()</a></code> is called from <code>https://www.example.com/</code>. 
      <li> MUST NOT offer credentials to an origin in response to <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-13">get()</a></code> without user mediation if the credential’s
       origin is not an exact match for the calling origin. That is, <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-35">Credential</a></code> objects for <code>https://example.com</code> would not be
       returned directly to <code>https://www.example.com</code>, but could be
       offered to the user via the chooser. 
     </ol>
     <p><code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-32">PasswordCredential</a></code>s further mitigate the risk of data leakage by never
-  exposing the <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-6">[[password]]</a></code> slot directly to a page’s JavaScript, but only
+  exposing the <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-7">[[password]]</a></code> slot directly to a page’s JavaScript, but only
   allowing its submission to a same-origin server-side endpoint via <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a></code>.</p>
     <p>Additionally, authors SHOULD mitigate the risk of leakage by setting a
   reasonable Content Security Policy <a data-link-type="biblio" href="#biblio-csp">[CSP]</a> which restricts the origins to
@@ -2994,7 +2994,7 @@ var r = new Request("https://example.com/endpoint", init);
   an origin, for example.</p>
     <h3 class="heading settled" data-level="7.3" id="privacy-chooser-leakage"><span class="secno">7.3. </span><span class="content">Chooser Leakage</span><a class="self-link" href="#privacy-chooser-leakage"></a></h3>
     <p>If a user agent displays images supplied by a website or federation (for
-  example, if a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-37">Credential</a></code>'s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-iconurl" id="ref-for-dom-siteboundcredential-iconurl-7">iconURL</a></code> is displayed),
+  example, if a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-37">Credential</a></code>'s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-iconurl" id="ref-for-dom-siteboundcredential-iconurl-9">iconURL</a></code> is displayed),
   requests for these images MUST NOT be directly tied to instantiating the
   chooser in order to avoid leaking chooser usage. One option would be to fetch
   the images in the background when saving or updating a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-38">Credential</a></code>, and to
@@ -3032,20 +3032,20 @@ var r = new Request("https://example.com/endpoint", init);
      <a class="self-link" href="#example-488fdc05"></a> If we wished to add a new credential type, how would we spell it out? 
      <ol>
       <li>
-        Define a new <code>ExampleCredential</code> that inherits from <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-41">Credential</a></code>, and define the value of its <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot-11">[[type]]</a></code> slot: 
+        Define a new <code>ExampleCredential</code> that inherits from <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-41">Credential</a></code>, and define the value of its <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot-13">[[type]]</a></code> slot: 
 <pre>interface ExampleCredential : Credential {
   // Definition goes here.
 };
 
 ...
 
-All <code>ExampleCredential</code> objects have their <a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot-12">[[type]]</a> slot’s
+All <code>ExampleCredential</code> objects have their <a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot-14">[[type]]</a> slot’s
 value set to the string "example".
 </pre>
       <li>
         Define the options that the new credential type requires, and add them
         to the <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-10">CredentialRequestOptions</a></code> dictionary with a property name that
-        matches the <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot-13">[[type]]</a></code> slot’s value. 
+        matches the <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot-15">[[type]]</a></code> slot’s value. 
 <pre>dictionary ExampleCredentialRequestOptions {
   // Definition goes here.
 };
@@ -3633,7 +3633,7 @@ partial dictionary CredentialRequestOptions {
     <li><a href="#ref-for-dom-credential-id-3">3.3.2. 
     Extract a body and Content-Type for request’s attached credential </a> <a href="#ref-for-dom-credential-id-4">(2)</a>
     <li><a href="#ref-for-dom-credential-id-5">4.2.4. 
-    Store SiteBoundCredential </a> <a href="#ref-for-dom-credential-id-6">(2)</a> <a href="#ref-for-dom-credential-id-7">(3)</a> <a href="#ref-for-dom-credential-id-8">(4)</a>
+    Store SiteBoundCredential </a> <a href="#ref-for-dom-credential-id-6">(2)</a> <a href="#ref-for-dom-credential-id-7">(3)</a> <a href="#ref-for-dom-credential-id-8">(4)</a> <a href="#ref-for-dom-credential-id-9">(5)</a> <a href="#ref-for-dom-credential-id-10">(6)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-credential-type">
@@ -3650,7 +3650,9 @@ partial dictionary CredentialRequestOptions {
     <li><a href="#ref-for-dom-credential-type-slot-8">3.1.3.2. 
     PasswordCredential(PasswordCredentialData data) Constructor </a>
     <li><a href="#ref-for-dom-credential-type-slot-9">3.1.4. FederatedCredential</a> <a href="#ref-for-dom-credential-type-slot-10">(2)</a>
-    <li><a href="#ref-for-dom-credential-type-slot-11">8.2. Extension Points</a> <a href="#ref-for-dom-credential-type-slot-12">(2)</a> <a href="#ref-for-dom-credential-type-slot-13">(3)</a>
+    <li><a href="#ref-for-dom-credential-type-slot-11">4.2.4. 
+    Store SiteBoundCredential </a> <a href="#ref-for-dom-credential-type-slot-12">(2)</a>
+    <li><a href="#ref-for-dom-credential-type-slot-13">8.2. Extension Points</a> <a href="#ref-for-dom-credential-type-slot-14">(2)</a> <a href="#ref-for-dom-credential-type-slot-15">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dictdef-siteboundcredentialdata">
@@ -3707,7 +3709,7 @@ partial dictionary CredentialRequestOptions {
     <li><a href="#ref-for-dom-siteboundcredential-name-2">3.1.3.2. 
     PasswordCredential(PasswordCredentialData data) Constructor </a>
     <li><a href="#ref-for-dom-siteboundcredential-name-3">4.2.4. 
-    Store SiteBoundCredential </a> <a href="#ref-for-dom-siteboundcredential-name-4">(2)</a>
+    Store SiteBoundCredential </a> <a href="#ref-for-dom-siteboundcredential-name-4">(2)</a> <a href="#ref-for-dom-siteboundcredential-name-5">(3)</a> <a href="#ref-for-dom-siteboundcredential-name-6">(4)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-siteboundcredential-iconurl">
@@ -3717,8 +3719,8 @@ partial dictionary CredentialRequestOptions {
     <li><a href="#ref-for-dom-siteboundcredential-iconurl-2">3.1.3.2. 
     PasswordCredential(PasswordCredentialData data) Constructor </a>
     <li><a href="#ref-for-dom-siteboundcredential-iconurl-3">4.2.4. 
-    Store SiteBoundCredential </a> <a href="#ref-for-dom-siteboundcredential-iconurl-4">(2)</a> <a href="#ref-for-dom-siteboundcredential-iconurl-5">(3)</a> <a href="#ref-for-dom-siteboundcredential-iconurl-6">(4)</a>
-    <li><a href="#ref-for-dom-siteboundcredential-iconurl-7">7.3. Chooser Leakage</a>
+    Store SiteBoundCredential </a> <a href="#ref-for-dom-siteboundcredential-iconurl-4">(2)</a> <a href="#ref-for-dom-siteboundcredential-iconurl-5">(3)</a> <a href="#ref-for-dom-siteboundcredential-iconurl-6">(4)</a> <a href="#ref-for-dom-siteboundcredential-iconurl-7">(5)</a> <a href="#ref-for-dom-siteboundcredential-iconurl-8">(6)</a>
+    <li><a href="#ref-for-dom-siteboundcredential-iconurl-9">7.3. Chooser Leakage</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-siteboundcredential-origin-slot">
@@ -3729,10 +3731,10 @@ partial dictionary CredentialRequestOptions {
     <li><a href="#ref-for-dom-siteboundcredential-origin-slot-2">4.2.1. 
     Gather SiteBoundCredentials </a>
     <li><a href="#ref-for-dom-siteboundcredential-origin-slot-3">4.2.4. 
-    Store SiteBoundCredential </a> <a href="#ref-for-dom-siteboundcredential-origin-slot-4">(2)</a>
-    <li><a href="#ref-for-dom-siteboundcredential-origin-slot-5">4.3.2. 
+    Store SiteBoundCredential </a> <a href="#ref-for-dom-siteboundcredential-origin-slot-4">(2)</a> <a href="#ref-for-dom-siteboundcredential-origin-slot-5">(3)</a> <a href="#ref-for-dom-siteboundcredential-origin-slot-6">(4)</a> <a href="#ref-for-dom-siteboundcredential-origin-slot-7">(5)</a>
+    <li><a href="#ref-for-dom-siteboundcredential-origin-slot-8">4.3.2. 
     Does credential match origin B? </a>
-    <li><a href="#ref-for-dom-siteboundcredential-origin-slot-6">6.1. Cross-origin Credential Leakage</a>
+    <li><a href="#ref-for-dom-siteboundcredential-origin-slot-9">6.1. Cross-origin Credential Leakage</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="options-matching-algorithm">
@@ -3870,8 +3872,8 @@ partial dictionary CredentialRequestOptions {
     <li><a href="#ref-for-dom-passwordcredential-password-slot-2">3.3.2. 
     Extract a body and Content-Type for request’s attached credential </a> <a href="#ref-for-dom-passwordcredential-password-slot-3">(2)</a>
     <li><a href="#ref-for-dom-passwordcredential-password-slot-4">4.2.4. 
-    Store SiteBoundCredential </a> <a href="#ref-for-dom-passwordcredential-password-slot-5">(2)</a>
-    <li><a href="#ref-for-dom-passwordcredential-password-slot-6">6.1. Cross-origin Credential Leakage</a>
+    Store SiteBoundCredential </a> <a href="#ref-for-dom-passwordcredential-password-slot-5">(2)</a> <a href="#ref-for-dom-passwordcredential-password-slot-6">(3)</a>
+    <li><a href="#ref-for-dom-passwordcredential-password-slot-7">6.1. Cross-origin Credential Leakage</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-passwordcredential-passwordcredential">
@@ -3932,7 +3934,7 @@ partial dictionary CredentialRequestOptions {
     Matching Algorithm </a>
     <li><a href="#ref-for-dom-federatedcredential-provider-5">3.2.2. Identifying providers</a>
     <li><a href="#ref-for-dom-federatedcredential-provider-6">4.2.4. 
-    Store SiteBoundCredential </a> <a href="#ref-for-dom-federatedcredential-provider-7">(2)</a>
+    Store SiteBoundCredential </a> <a href="#ref-for-dom-federatedcredential-provider-7">(2)</a> <a href="#ref-for-dom-federatedcredential-provider-8">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-federatedcredential-protocol">
@@ -3941,6 +3943,8 @@ partial dictionary CredentialRequestOptions {
     <li><a href="#ref-for-dom-federatedcredential-protocol-1">3.1.4. FederatedCredential</a>
     <li><a href="#ref-for-dom-federatedcredential-protocol-2">3.1.4.1. 
     Matching Algorithm </a>
+    <li><a href="#ref-for-dom-federatedcredential-protocol-3">4.2.4. 
+    Store SiteBoundCredential </a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-federatedcredential-federated">

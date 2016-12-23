@@ -1820,7 +1820,11 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
                 <li>
                   If the user grants <var>origin</var> permission to store
                   credentials (as discussed in [[#user-mediated-storage]]), then
-                  store <var>credential</var> in the <a>credential store</a>.
+                  store {{Credential/id}}, {{[[type]]}},
+                  {{SiteBoundCredential/name}},
+                  {{SiteBoundCredential/iconURL}}, {{[[origin]]}} and
+                  {{[[password]]}} of the <var>credential</var> in the
+                  <a>credential store</a>.
                 </li>
               </ol>
             </li>
@@ -1836,13 +1840,19 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
               {{Credential/id}} attribute is <var>credential</var>'s
               {{Credential/id}} and whose {{FederatedCredential/provider}}
               attribute is <var>credential</var>'s
-              {{FederatedCredential/provider}}, then:
+              {{FederatedCredential/provider}} and whose {{[[origin]]}} slot is
+              <var>origin</var>, then:
 
               <ol>
                 <li>
                   If the user grants <var>origin</var> permission to store
                   credentials (as discussed in [[#user-mediated-storage]]),
-                  store <var>credential</var> in the <a>credential store</a>.
+                  store {{Credential/id}}, {{[[type]]}},
+                  {{SiteBoundCredential/name}},
+                  {{SiteBoundCredential/iconURL}}, {{[[origin]]}},
+                  {{FederatedCredential/provider}} and
+                  {{FederatedCredential/protocol}} of the <var>credential</var>
+                  in the <a>credential store</a>.
                 </li>
               </ol>
             </li>
