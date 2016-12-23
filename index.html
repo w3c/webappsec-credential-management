@@ -2376,8 +2376,8 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
      <dt><dfn class="dfn-paneled idl-code" data-dfn-for="FederatedCredentialRequestOptions" data-dfn-type="dict-member" data-export="" id="dom-federatedcredentialrequestoptions-protocols">protocols</dfn>, <span> of type sequence&lt;<a data-link-type="idl-name" href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a>></span>
      <dd> A sequence of protocol identifiers. 
     </dl>
-    <div class="example" id="example-22bf1a62">
-     <a class="self-link" href="#example-22bf1a62"></a> Suppose <code>https://example.com/</code> only supports federated sign-in
+    <div class="example" id="example-7eb6c193">
+     <a class="self-link" href="#example-7eb6c193"></a> Suppose <code>https://example.com/</code> only supports federated sign-in
     via <code>https://identity.example.com/</code>. It could request credentials
     via the following call: 
 <pre>navigator.<a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-7">credentials</a>.<a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-7">get</a>({
@@ -2396,7 +2396,7 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
   "<a class="idl-code" data-link-type="dict-member" href="#dom-credentialrequestoptions-federated" id="ref-for-dom-credentialrequestoptions-federated-5">federated</a>": {
     "<a data-link-type="idl" href="#dom-federatedcredentialrequestoptions-providers" id="ref-for-dom-federatedcredentialrequestoptions-providers-5">providers</a>": [ "https://identity.example.com/" ]
   },
-  "<a data-link-type="idl" href="#dom-credentialrequestoptions-unmediated" id="ref-for-dom-credentialrequestoptions-unmediated-2">unmediated</a>: true
+  "<a data-link-type="idl" href="#dom-credentialrequestoptions-unmediated" id="ref-for-dom-credentialrequestoptions-unmediated-2">unmediated</a>": true
 ).then(function (credential) {
   // ...
 });
