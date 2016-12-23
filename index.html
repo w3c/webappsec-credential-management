@@ -2739,7 +2739,8 @@ var r = new Request("https://example.com/endpoint", init);
      <li>
        Ask the user which <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-28">Credential</a></code> to share. 
       <p class="note" role="note">Note: This behavior is vendor-specific. Guidelines for user agent
-      behavior are presented in <a href="#user-mediation">§5 User Mediation</a>.</p>
+      behavior are presented in <a href="#user-mediation">§5 User Mediation</a>. A user agent MAY offer
+      the user to enter and save new credentials in this step.</p>
      <li> Let <var>credential</var> be the <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-29">Credential</a></code> the user chose, or <code>null</code> if the user chose not to share a credential with <var>origin</var>. 
      <li> Return <var>credential</var>. 
     </ol>
