@@ -2905,7 +2905,7 @@ var r = new Request("https://example.com/endpoint", init);
   agents:</p>
     <ol>
      <li> MUST NOT share credentials between origins whose scheme components are
-      not the same. That is: credentials saved on <code>https://example.com/</code> will never be available to <code>http://example.com/</code> via a user agent’s autofill mechanism 
+      not the same. That is: credentials saved on <code>https://example.com/</code> will never be available to <code>http://example.com/</code> via a user agent’s autofill mechanism. 
      <li> MAY use the Public Suffix List <a data-link-type="biblio" href="#biblio-psl">[PSL]</a> to determine the effective scope
       of a credential by comparing the <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable domains</a> of the
       credential’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-6">[[origin]]</a></code> with the origin in which <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-11">get()</a></code> is called. That is: credentials saved on <code>https://admin.example.com/</code> and <code>https://example.com/</code> MAY be offered to users when <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-12">get()</a></code> is called from <code>https://www.example.com/</code>. 
