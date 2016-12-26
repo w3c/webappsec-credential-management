@@ -1276,8 +1276,8 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
       32. If |request|'s <a for="request">method</a> is `GET` or `HEAD`, then
           throw a `TypeError` if any of the following are true:
 
-          *   |init|'s `body` member is present and non-null
-          *   |inputBody| is non-null
+          *   <var ignore>init</var>'s `body` member is present and non-null
+          *   <var ignore>inputBody</var> is non-null
           *   |request|'s <a for="request">attached credential</a> is non-null
 
   7.  The <a>HTTP-network-or-cache fetch</a> algorithm is updated with the
@@ -1294,7 +1294,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
           3.  If |type| is the empty string, return a <a>network error</a>.
 
           4.  Let |httpRequest|'s <a for="request">body</a> be |body|,
-              |Content-Type| be |type|, and <a for="request">redirect
+              <var ignore>Content-Type</var> be |type|, and <a for="request">redirect
               mode</a> be "`manual`".
 
   ISSUE(whatwg/fetch#237): These patches are combined into an outstanding
@@ -1496,7 +1496,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
             <li>
               If <var>options</var>'s {{CredentialRequestOptions/unmediated}}
               is <code>true</code>, resolve <var>promise</var> with
-              <var>undefined</var>, and terminate this algorithm.
+              <code>undefined</code>, and terminate this algorithm.
             </li>
             <li>
               Resolve <var>promise</var> with the result of executing
@@ -1617,7 +1617,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
         <li>
           Let <var>cloned value</var> be the result of invoking the <a>internal
           structured cloning algorithm</a> with <var>source value</var> as the
-          "<code>input</code>" argument, and <var>memory</var> as the
+          "<code>input</code>" argument, and <var ignore>memory</var> as the
           "<code>memory</code>" argument.
         </li>
         <li>
@@ -1632,7 +1632,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
       </ol>
     </li>
     <li>
-      Set <var>deep clone</var> to <code>own</code>.
+      Set <var ignore>deep clone</var> to <code>own</code>.
     </li>
   </ol>
 
