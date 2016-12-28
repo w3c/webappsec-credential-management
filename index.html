@@ -1431,7 +1431,7 @@ pre.idl.highlight { color: #708090; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-12-27">27 December 2016</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-12-28">28 December 2016</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1540,7 +1540,7 @@ store user credentials for future use.</p>
        <a href="#fetch-integration"><span class="secno">3.3</span> <span class="content">Integration with Fetch</span></a>
        <ol class="toc">
         <li><a href="#monkey-patching"><span class="secno">3.3.1</span> <span class="content">Monkey Patches to Fetch</span></a>
-        <li><a href="#body-extraction"><span class="secno">3.3.2</span> <span class="content"> Extract a <var>body</var> and <var>Content-Type</var> for <var>request</var>’s attached credential </span></a>
+        <li><a href="#body-extraction"><span class="secno">3.3.2</span> <span class="content"> Extract an <var>action</var> and <var>Content-Type</var> for <var>request</var>’s attached credential </span></a>
        </ol>
      </ol>
     <li>
@@ -2011,7 +2011,7 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
   <span class="kt">required</span> <span class="kt">USVString</span> <dfn class="nv dfn-paneled idl-code" data-dfn-for="PasswordCredentialData" data-dfn-type="dict-member" data-export="" data-type="USVString " id="dom-passwordcredentialdata-password">password</dfn>;
 };
 
-<span class="kt">typedef</span> (<a class="n" data-link-type="idl-name" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a> <span class="kt">or</span> <a class="n" data-link-type="idl-name" href="https://url.spec.whatwg.org/#dom-urlsearchparams">URLSearchParams</a>) <dfn class="nv dfn-paneled idl-code" data-dfn-type="typedef" data-export="" id="typedefdef-credentialbodytype">CredentialBodyType</dfn>;
+<span class="kt">typedef</span> (<a class="n" data-link-type="idl-name" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a> <span class="kt">or</span> <a class="n" data-link-type="idl-name" href="https://url.spec.whatwg.org/#dom-urlsearchparams">URLSearchParams</a> <span class="kt">or</span> <span class="kt">record</span>&lt;<span class="kt">DOMString</span>, <span class="kt">any</span>>) <dfn class="nv dfn-paneled idl-code" data-dfn-type="typedef" data-export="" id="typedefdef-credentialbodytype">CredentialBodyType</dfn>;
 
 [<a class="nv idl-code" data-link-type="constructor" href="#dom-passwordcredential-passwordcredential-data" id="ref-for-dom-passwordcredential-passwordcredential-data-1">Constructor</a>(<a class="n" data-link-type="idl-name" href="#dictdef-passwordcredentialdata" id="ref-for-dictdef-passwordcredentialdata-1">PasswordCredentialData</a> <dfn class="nv idl-code" data-dfn-for="PasswordCredential/PasswordCredential(data)" data-dfn-type="argument" data-export="" id="dom-passwordcredential-passwordcredential-data-data">data<a class="self-link" href="#dom-passwordcredential-passwordcredential-data-data"></a></dfn>),
  <a class="nv idl-code" data-link-type="constructor" href="#dom-passwordcredential-passwordcredential" id="ref-for-dom-passwordcredential-passwordcredential-3">Constructor</a>(<a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">HTMLFormElement</a> <dfn class="nv idl-code" data-dfn-for="PasswordCredential/PasswordCredential(form)" data-dfn-type="argument" data-export="" id="dom-passwordcredential-passwordcredential-form-form">form<a class="self-link" href="#dom-passwordcredential-passwordcredential-form-form"></a></dfn>),
@@ -2042,8 +2042,10 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
      <dd data-md="">
       <p>If the developer wishes to specify additional data to insert into the
   request body when submitting the credential information to a remote
-  endpoint, they can do so by assigning a <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> or <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#dom-urlsearchparams">URLSearchParams</a></code> object to this attribute. The credential information
-  will be mixed into the object to produce the body. The value is <code>null</code> unless otherwise specified.</p>
+  endpoint, they can do so by assigning a <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code>, <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#dom-urlsearchparams">URLSearchParams</a></code> or a record with <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a></code> keys and values of
+  arbitrary types to this attribute. The credential information will be
+  mixed into the object to produce the body. The value is <code>null</code> unless
+  otherwise specified.</p>
      <dt data-md="">
       <p><code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot-6">[[type]]</a></code></p>
      <dd data-md="">
@@ -2439,7 +2441,7 @@ var r = new Request("https://example.com/endpoint", init);
     <p>Until the request hits the network, the credential object will be hidden from
   JavaScript. Once the user agent determines that the <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#request">Request</a></code> is going to
   hit the network (that is, once Fetch hits the
-  "<a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-network-or-cache-fetch">HTTP-network-or-cache fetch</a>" algorithm), the <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-20">PasswordCredential</a></code> will be serialized into a body and content type as defined in <a href="#body-extraction">§3.3.2 Extract a body and Content-Type for request’s attached credential</a>, and the request will proceed out to the server-side
+  "<a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-network-or-cache-fetch">HTTP-network-or-cache fetch</a>" algorithm), the <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-20">PasswordCredential</a></code> will be serialized into a body and content type as defined in <a href="#body-extraction">§3.3.2 Extract an action and Content-Type for request’s attached credential</a>, and the request will proceed out to the server-side
   authentication endpoint.</p>
     <h4 class="heading settled" data-level="3.3.1" id="monkey-patching"><span class="secno">3.3.1. </span><span class="content">Monkey Patches to Fetch</span><a class="self-link" href="#monkey-patching"></a></h4>
     <p>To accomplish the above, Fetch could be modified in the following ways:</p>
@@ -2503,7 +2505,7 @@ var r = new Request("https://example.com/endpoint", init);
          <li data-md="">
           <p class="assertion">Assert: <var>httpRequest</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-body">body</a> is null.</p>
          <li data-md="">
-          <p>Let <var>body</var> and <var>type</var> be the result of running <a href="#body-extraction">§3.3.2 Extract a body and Content-Type for request’s attached credential</a> on <var>httpRequest</var>.</p>
+          <p>Let <var>body</var> and <var>type</var> be the result of running <a href="#body-extraction">§3.3.2 Extract an action and Content-Type for request’s attached credential</a> on <var>httpRequest</var>.</p>
          <li data-md="">
           <p>If <var>type</var> is the empty string, return a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error">network error</a>.</p>
          <li data-md="">
@@ -2514,68 +2516,77 @@ var r = new Request("https://example.com/endpoint", init);
     </ol>
     <p class="issue" id="issue-25d38e5c"><a class="self-link" href="#issue-25d38e5c"></a> These patches are combined into an outstanding
   pull request against Fetch. <a href="https://github.com/whatwg/fetch/issues/237">&lt;https://github.com/whatwg/fetch/issues/237></a></p>
-    <h4 class="heading settled algorithm" data-algorithm="Extract a body and Content-Type for request’s attached credential" data-level="3.3.2" id="body-extraction"><span class="secno">3.3.2. </span><span class="content"> Extract a <var>body</var> and <var>Content-Type</var> for <var>request</var>’s attached credential </span><a class="self-link" href="#body-extraction"></a></h4>
-    <p>Given a <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#request">Request</a></code> (<var>request</var>), this algorithm returns a <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#body">Body</a></code> (<var>body</var>) and
-  a string (<var>Content-Type</var>):</p>
+    <h4 class="heading settled algorithm" data-algorithm="Extract an action and Content-Type for request’s attached credential" data-level="3.3.2" id="body-extraction"><span class="secno">3.3.2. </span><span class="content"> Extract an <var>action</var> and <var>Content-Type</var> for <var>request</var>’s attached credential </span><a class="self-link" href="#body-extraction"></a></h4>
+    <p>The following algorithm specializes the body mixin method to <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-bodyinit-extract">extract</a> a
+  request body from an object, for objects of type <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-25">PasswordCredential</a></code>.
+  Given a <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#request">Request</a></code> <var>request</var> and its <a data-link-type="dfn" href="#request-attached-credential" id="ref-for-request-attached-credential-5">attached credential</a> <var>credential</var>, this algorithm returns an <var>action</var> and a string <var>Content-Type</var>:</p>
     <ol>
      <li data-md="">
-      <p>Let <var>credential</var> be <var>request</var>’s <a data-link-type="dfn" href="#request-attached-credential" id="ref-for-request-attached-credential-5">attached credential</a>.</p>
+      <p>Let <var>action</var> be <code>null</code>, and <var>Content-Type</var> be the empty string.</p>
      <li data-md="">
-      <p>Let <var>body</var> be a new <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-body">body</a>, and <var>Content-Type</var> be the empty string.</p>
-     <li data-md="">
-      <p>If <var>credential</var> is a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-25">PasswordCredential</a></code>, run these substeps.</p>
-      <ol>
-       <li data-md="">
-        <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url">url</a>’s scheme is not the same as <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#concept-url-origin">origin</a></code>'s scheme,
+      <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url">url</a>’s scheme is not the same as <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#concept-url-origin">origin</a></code>'s scheme,
   or <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url">url</a>’s host’s <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable
   domain</a> is not the same as <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#concept-url-origin">origin</a></code>'s host’s <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable
-  domain</a>, then skip the remaining substeps.</p>
+  domain</a>, then return <var>action</var> and <var>Content-Type</var>.</p>
+     <li data-md="">
+      <p>Let <var>data</var> be a copy of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-additionaldata" id="ref-for-dom-passwordcredential-additionaldata-9">additionalData</a></code> attribute if it is not <code>undefined</code>, and a new <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> object otherwise.</p>
+     <li data-md="">
+      <p>Let <var>list</var> be an empty list.</p>
+     <li data-md="">
+      <p>If <var>data</var> is a <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> object, then:</p>
+      <ol>
        <li data-md="">
-        <p>Let <var>data</var> be a copy of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-additionaldata" id="ref-for-dom-passwordcredential-additionaldata-9">additionalData</a></code> attribute if it is not <code>undefined</code>, and a new <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> object otherwise.</p>
+        <p>Set <var>list</var> to a copy of <var>data</var>’s <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entries</a>.</p>
        <li data-md="">
-        <p>Let <var>list</var> be an empty list.</p>
+        <p>Remove all <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entry</a> objects from <var>list</var> whose <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-name">name</a> is either <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname" id="ref-for-dom-passwordcredential-idname-5">idName</a></code> or <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-5">passwordName</a></code>.</p>
        <li data-md="">
-        <p>If <var>data</var> is a <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> object, then:</p>
-        <ol>
-         <li data-md="">
-          <p>Set <var>list</var> to a copy of <var>data</var>’s <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entries</a>.</p>
-         <li data-md="">
-          <p>Remove all <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entry</a> objects from <var>list</var> whose <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-name">name</a> is either <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname" id="ref-for-dom-passwordcredential-idname-5">idName</a></code> or <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-5">passwordName</a></code>.</p>
-         <li data-md="">
-          <p>Let <var>entry</var> be a new <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entry</a> whose <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-name">name</a> is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname" id="ref-for-dom-passwordcredential-idname-6">idName</a></code> and whose <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-value">value</a> is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id-3">id</a></code>.</p>
-         <li data-md="">
-          <p>Append <var>entry</var> to <var>list</var>.</p>
-         <li data-md="">
-          <p>Let <var>entry</var> be a new <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entry</a> whose <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-name">name</a> is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-6">passwordName</a></code> and whose <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-value">value</a> is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-2">[[password]]</a></code>.</p>
-         <li data-md="">
-          <p>Append <var>entry</var> to <var>list</var>.</p>
-         <li data-md="">
-          <p>Push the result of running the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/forms.html#multipart/form-data-encoding-algorithm"><code>multipart/form-data</code> encoding
-  algorithm</a>, with <var>list</var> as the form data set and with "<code>utf-8</code>" as
-  the explicit character encoding, to <var>body</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-body-stream">stream</a>.</p>
-         <li data-md="">
-          <p>Set <var>Content-Type</var> to <code>multipart/form-data;boundary=</code>, followed by the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/forms.html#multipart/form-data-boundary-string"><code>multipart/form-data</code> boundary string</a> generated by the
+        <p>Let <var>entry</var> be a new <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entry</a> whose <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-name">name</a> is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname" id="ref-for-dom-passwordcredential-idname-6">idName</a></code> and whose <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-value">value</a> is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id-3">id</a></code>.</p>
+       <li data-md="">
+        <p>Append <var>entry</var> to <var>list</var>.</p>
+       <li data-md="">
+        <p>Let <var>entry</var> be a new <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entry</a> whose <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-name">name</a> is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-6">passwordName</a></code> and whose <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-value">value</a> is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-2">[[password]]</a></code>.</p>
+       <li data-md="">
+        <p>Append <var>entry</var> to <var>list</var>.</p>
+       <li data-md="">
+        <p>Set <var>action</var> to an action that runs the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/forms.html#multipart/form-data-encoding-algorithm"><code>multipart/form-data</code> encoding algorithm</a>, with <var>list</var> as form data set and with UTF-8
+  as the explicit character encoding.</p>
+       <li data-md="">
+        <p>Set <var>Content-Type</var> to <code>multipart/form-data;boundary=</code>, followed by the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/forms.html#multipart/form-data-boundary-string"><code>multipart/form-data</code> boundary string</a> generated by the
   multipart/form-data encoding algorithm.</p>
-        </ol>
-        <p>Otherwise <var>data</var> is a <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#dom-urlsearchparams">URLSearchParams</a></code> object, so:</p>
-        <ol>
-         <li data-md="">
-          <p>Set <var>list</var> to a copy of <var>data</var>’s <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-urlsearchparams-list">list</a>.</p>
-         <li data-md="">
-          <p>Remove all name-value pairs from <var>list</var> whose name is either <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname" id="ref-for-dom-passwordcredential-idname-7">idName</a></code> or <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-7">passwordName</a></code>.</p>
-         <li data-md="">
-          <p>Append a new name-value pair to <var>list</var> whose name is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname" id="ref-for-dom-passwordcredential-idname-8">idName</a></code> and whose value is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id-4">id</a></code>.</p>
-         <li data-md="">
-          <p>Append a new name-value pair to <var>list</var> whose name is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-8">passwordName</a></code> and whose value
+      </ol>
+      <p>Else if <var>data</var> is a <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#dom-urlsearchparams">URLSearchParams</a></code> object:</p>
+      <ol>
+       <li data-md="">
+        <p>Set <var>list</var> to a copy of <var>data</var>’s <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-urlsearchparams-list">list</a>.</p>
+       <li data-md="">
+        <p>Remove all name-value pairs from <var>list</var> whose name is either <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname" id="ref-for-dom-passwordcredential-idname-7">idName</a></code> or <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-7">passwordName</a></code>.</p>
+       <li data-md="">
+        <p>Append a new name-value pair to <var>list</var> whose name is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname" id="ref-for-dom-passwordcredential-idname-8">idName</a></code> and whose value is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id-4">id</a></code>.</p>
+       <li data-md="">
+        <p>Append a new name-value pair to <var>list</var> whose name is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-8">passwordName</a></code> and whose value
   is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-3">[[password]]</a></code>.</p>
-         <li data-md="">
-          <p>Push the result of running the <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-urlencoded-serializer"><code>application/x-www-form-urlencoded</code> serializer</a>, with <var>list</var>, to <var>body</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-body-stream">stream</a>.</p>
-         <li data-md="">
-          <p>Set <var>Content-Type</var> to <code>application/x-www-form-urlencoded;charset=UTF-8</code>.</p>
-        </ol>
+       <li data-md="">
+        <p>Set <var>action</var> to an action that runs the <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-urlencoded-serializer"><code>application/x-www-form-urlencoded</code> serializer</a> with <var>list</var>.</p>
+       <li data-md="">
+        <p>Set <var>Content-Type</var> to <code>application/x-www-form-urlencoded;charset=UTF-8</code>.</p>
+      </ol>
+      <p>Otherwise, <var>data</var> is a <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-record">record</a>&lt;<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a></code>, <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-any">any</a></code>>, so:</p>
+      <ol>
+       <li data-md="">
+        <p>Let <var>nameKey</var> be the <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname" id="ref-for-dom-passwordcredential-idname-9">idName</a></code> and <var>nameValue</var> the <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id-5">id</a></code>.</p>
+       <li data-md="">
+        <p>If <var>nameKey</var> is already a key in <var>data</var>, set its value to <var>nameValue</var>. Otherwise append (<var>nameKey</var>, <var>nameValue</var>) to the <a data-link-type="dfn" href="https://heycam.github.io/webidl/#record-mappings">mappings</a> of <var>data</var>.</p>
+       <li data-md="">
+        <p>Let <var>passwordKey</var> be the <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-9">passwordName</a></code> and <var>passwordValue</var> the <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-4">[[password]]</a></code>.</p>
+       <li data-md="">
+        <p>If <var>passwordKey</var> is already a key in <var>data</var>, set its value to <var>passwordValue</var>. Otherwise append (<var>passwordKey</var>, <var>passwordValue</var>) to the <a data-link-type="dfn" href="https://heycam.github.io/webidl/#record-mappings">mappings</a> of <var>data</var>.</p>
+       <li data-md="">
+        <p>Set <var>action</var> to an action that runs <code>JSON.stringify</code> on <var>data</var>, followed by <a data-link-type="dfn" href="https://encoding.spec.whatwg.org/#utf-8-encode">UTF-8 encode</a>.</p>
+       <li data-md="">
+        <p>Set <var>Content-Type</var> to <code>application/json;charset=UTF-8</code>.</p>
       </ol>
      <li data-md="">
-      <p>Return <var>body</var> and <var>Content-Type</var>.</p>
+      <p>Return <var>action</var> and <var>Content-Type</var>.</p>
     </ol>
    </section>
    <section>
@@ -2759,15 +2770,15 @@ var r = new Request("https://example.com/endpoint", init);
        <dd>
         <ol>
          <li>
-           If the user agent’s credential manager contains a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-31">PasswordCredential</a></code> <var>storedCredential</var> whose <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id-5">id</a></code> attribute is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id-6">id</a></code> and whose <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-4">[[origin]]</a></code> slot is <var>origin</var>, then: 
+           If the user agent’s credential manager contains a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-31">PasswordCredential</a></code> <var>storedCredential</var> whose <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id-6">id</a></code> attribute is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id-7">id</a></code> and whose <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-4">[[origin]]</a></code> slot is <var>origin</var>, then: 
           <ol>
            <li>
              If the user grants <var>origin</var> permission to update
                   credentials (as discussed in <a href="#user-mediated-storage">§5.1 Storing and Updating Credentials</a>),
                   then: 
             <ol>
-             <li> Set <var>storedCredential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-4">[[password]]</a></code> to the
-                      value of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-5">[[password]]</a></code> slot. 
+             <li> Set <var>storedCredential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-5">[[password]]</a></code> to the
+                      value of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-6">[[password]]</a></code> slot. 
              <li> Set <var>storedCredential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-name" id="ref-for-dom-siteboundcredential-name-3">name</a></code> to the
                       value of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-name" id="ref-for-dom-siteboundcredential-name-4">name</a></code>. 
              <li> Set <var>storedCredential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-iconurl" id="ref-for-dom-siteboundcredential-iconurl-5">iconURL</a></code> to
@@ -2786,7 +2797,7 @@ var r = new Request("https://example.com/endpoint", init);
        <dd>
         <ol>
          <li>
-           If the user agent’s credential manager does not contain a <code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential-13">FederatedCredential</a></code> <var>storedCredential</var> whose <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id-7">id</a></code> attribute is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id-8">id</a></code> and whose <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-provider" id="ref-for-dom-federatedcredential-provider-6">provider</a></code> attribute is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-provider" id="ref-for-dom-federatedcredential-provider-7">provider</a></code>, then: 
+           If the user agent’s credential manager does not contain a <code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential-13">FederatedCredential</a></code> <var>storedCredential</var> whose <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id-8">id</a></code> attribute is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id-9">id</a></code> and whose <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-provider" id="ref-for-dom-federatedcredential-provider-6">provider</a></code> attribute is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-provider" id="ref-for-dom-federatedcredential-provider-7">provider</a></code>, then: 
           <ol>
            <li> If the user grants <var>origin</var> permission to store
                   credentials (as discussed in <a href="#user-mediated-storage">§5.1 Storing and Updating Credentials</a>),
@@ -2914,7 +2925,7 @@ var r = new Request("https://example.com/endpoint", init);
       offered to the user via the chooser. 
     </ol>
     <p><code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-32">PasswordCredential</a></code>s further mitigate the risk of data leakage by never
-  exposing the <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-6">[[password]]</a></code> slot directly to a page’s JavaScript, but only
+  exposing the <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-7">[[password]]</a></code> slot directly to a page’s JavaScript, but only
   allowing its submission to a same-origin server-side endpoint via <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a></code>.</p>
     <p>Additionally, authors SHOULD mitigate the risk of leakage by setting a
   reasonable Content Security Policy <a data-link-type="biblio" href="#biblio-csp">[CSP]</a> which restricts the origins to
@@ -3255,9 +3266,13 @@ partial dictionary CredentialRequestOptions {
      <li><a href="https://w3c.github.io/webappsec-csp/#script-src">script-src</a>
     </ul>
    <li>
+    <a data-link-type="biblio">[WHATWG-ENCODING]</a> defines the following terms:
+    <ul>
+     <li><a href="https://encoding.spec.whatwg.org/#utf-8-encode">utf-8 encode</a>
+    </ul>
+   <li>
     <a data-link-type="biblio">[FETCH]</a> defines the following terms:
     <ul>
-     <li><a href="https://fetch.spec.whatwg.org/#body">Body</a>
      <li><a href="https://fetch.spec.whatwg.org/#request">Request</a>
      <li><a href="https://fetch.spec.whatwg.org/#requestcredentials">RequestCredentials</a>
      <li><a href="https://fetch.spec.whatwg.org/#requestinit">RequestInit</a>
@@ -3265,13 +3280,13 @@ partial dictionary CredentialRequestOptions {
      <li><a href="https://fetch.spec.whatwg.org/#concept-request-body">body</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-request-credentials-mode">credentials mode</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-bodyinit-extract">extract</a>
      <li><a href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a>
      <li><a href="https://fetch.spec.whatwg.org/#http-network-or-cache-fetch">http-network-or-cache fetch</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-request-method">method</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-network-error">network error</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-request-redirect-mode">redirect mode</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-request">request</a>
-     <li><a href="https://fetch.spec.whatwg.org/#concept-body-stream">stream</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-request-url">url</a>
     </ul>
    <li>
@@ -3347,8 +3362,11 @@ partial dictionary CredentialRequestOptions {
      <li><a href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a>
      <li><a href="https://heycam.github.io/webidl/#Exposed">Exposed</a>
      <li><a href="https://heycam.github.io/webidl/#idl-USVString">USVString</a>
+     <li><a href="https://heycam.github.io/webidl/#idl-any">any</a>
      <li><a href="https://heycam.github.io/webidl/#idl-boolean">boolean</a>
      <li><a href="https://heycam.github.io/webidl/#dfn-interface">interface</a>
+     <li><a href="https://heycam.github.io/webidl/#record-mappings">mappings</a>
+     <li><a href="https://heycam.github.io/webidl/#idl-record">record</a>
      <li><a href="https://heycam.github.io/webidl/#dfn-throw">throw</a>
     </ul>
    <li>
@@ -3395,6 +3413,8 @@ partial dictionary CredentialRequestOptions {
    <dd>Cameron McCormack; Boris Zbarsky; Tobie Langel. <a href="https://heycam.github.io/webidl/">Web IDL</a>. URL: <a href="https://heycam.github.io/webidl/">https://heycam.github.io/webidl/</a>
    <dt id="biblio-webmessaging">[WEBMESSAGING]
    <dd>Ian Hickson. <a href="http://dev.w3.org/html5/postmsg/">HTML5 Web Messaging</a>. URL: <a href="http://dev.w3.org/html5/postmsg/">http://dev.w3.org/html5/postmsg/</a>
+   <dt id="biblio-whatwg-encoding">[WHATWG-ENCODING]
+   <dd>Anne van Kesteren. <a href="https://encoding.spec.whatwg.org/">Encoding Standard</a>. Living Standard. URL: <a href="https://encoding.spec.whatwg.org/">https://encoding.spec.whatwg.org/</a>
    <dt id="biblio-whatwg-url">[WHATWG-URL]
    <dd>Anne van Kesteren. <a href="https://url.spec.whatwg.org/">URL Standard</a>. Living Standard. URL: <a href="https://url.spec.whatwg.org/">https://url.spec.whatwg.org/</a>
    <dt id="biblio-xhr">[XHR]
@@ -3440,7 +3460,7 @@ partial dictionary CredentialRequestOptions {
   <span class="kt">required</span> <span class="kt">USVString</span> <a class="nv" data-type="USVString " href="#dom-passwordcredentialdata-password">password</a>;
 };
 
-<span class="kt">typedef</span> (<a class="n" data-link-type="idl-name" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a> <span class="kt">or</span> <a class="n" data-link-type="idl-name" href="https://url.spec.whatwg.org/#dom-urlsearchparams">URLSearchParams</a>) <a class="nv" href="#typedefdef-credentialbodytype">CredentialBodyType</a>;
+<span class="kt">typedef</span> (<a class="n" data-link-type="idl-name" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a> <span class="kt">or</span> <a class="n" data-link-type="idl-name" href="https://url.spec.whatwg.org/#dom-urlsearchparams">URLSearchParams</a> <span class="kt">or</span> <span class="kt">record</span>&lt;<span class="kt">DOMString</span>, <span class="kt">any</span>>) <a class="nv" href="#typedefdef-credentialbodytype">CredentialBodyType</a>;
 
 [<a class="nv idl-code" data-link-type="constructor" href="#dom-passwordcredential-passwordcredential-data">Constructor</a>(<a class="n" data-link-type="idl-name" href="#dictdef-passwordcredentialdata">PasswordCredentialData</a> <a class="nv" href="#dom-passwordcredential-passwordcredential-data-data">data</a>),
  <a class="nv idl-code" data-link-type="constructor" href="#dom-passwordcredential-passwordcredential">Constructor</a>(<a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">HTMLFormElement</a> <a class="nv" href="#dom-passwordcredential-passwordcredential-form-form">form</a>),
@@ -3630,9 +3650,9 @@ partial dictionary CredentialRequestOptions {
     <li><a href="#ref-for-dom-credential-id-2">3.1.3.2. 
     PasswordCredential(PasswordCredentialData data) Constructor </a>
     <li><a href="#ref-for-dom-credential-id-3">3.3.2. 
-    Extract a body and Content-Type for request’s attached credential </a> <a href="#ref-for-dom-credential-id-4">(2)</a>
-    <li><a href="#ref-for-dom-credential-id-5">4.2.4. 
-    Store SiteBoundCredential </a> <a href="#ref-for-dom-credential-id-6">(2)</a> <a href="#ref-for-dom-credential-id-7">(3)</a> <a href="#ref-for-dom-credential-id-8">(4)</a>
+    Extract an action and Content-Type for request’s attached credential </a> <a href="#ref-for-dom-credential-id-4">(2)</a> <a href="#ref-for-dom-credential-id-5">(3)</a>
+    <li><a href="#ref-for-dom-credential-id-6">4.2.4. 
+    Store SiteBoundCredential </a> <a href="#ref-for-dom-credential-id-7">(2)</a> <a href="#ref-for-dom-credential-id-8">(3)</a> <a href="#ref-for-dom-credential-id-9">(4)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-credential-type">
@@ -3809,7 +3829,7 @@ partial dictionary CredentialRequestOptions {
     <li><a href="#ref-for-passwordcredential-17">3.3. Integration with Fetch</a> <a href="#ref-for-passwordcredential-18">(2)</a> <a href="#ref-for-passwordcredential-19">(3)</a> <a href="#ref-for-passwordcredential-20">(4)</a>
     <li><a href="#ref-for-passwordcredential-21">3.3.1. Monkey Patches to Fetch</a> <a href="#ref-for-passwordcredential-22">(2)</a> <a href="#ref-for-passwordcredential-23">(3)</a> <a href="#ref-for-passwordcredential-24">(4)</a>
     <li><a href="#ref-for-passwordcredential-25">3.3.2. 
-    Extract a body and Content-Type for request’s attached credential </a>
+    Extract an action and Content-Type for request’s attached credential </a>
     <li><a href="#ref-for-passwordcredential-26">4.1.1. 
     Request a Credential </a> <a href="#ref-for-passwordcredential-27">(2)</a> <a href="#ref-for-passwordcredential-28">(3)</a>
     <li><a href="#ref-for-passwordcredential-29">4.1.2. 
@@ -3830,7 +3850,7 @@ partial dictionary CredentialRequestOptions {
     <li><a href="#ref-for-dom-passwordcredential-idname-4">3.1.3.2. 
     PasswordCredential(PasswordCredentialData data) Constructor </a>
     <li><a href="#ref-for-dom-passwordcredential-idname-5">3.3.2. 
-    Extract a body and Content-Type for request’s attached credential </a> <a href="#ref-for-dom-passwordcredential-idname-6">(2)</a> <a href="#ref-for-dom-passwordcredential-idname-7">(3)</a> <a href="#ref-for-dom-passwordcredential-idname-8">(4)</a>
+    Extract an action and Content-Type for request’s attached credential </a> <a href="#ref-for-dom-passwordcredential-idname-6">(2)</a> <a href="#ref-for-dom-passwordcredential-idname-7">(3)</a> <a href="#ref-for-dom-passwordcredential-idname-8">(4)</a> <a href="#ref-for-dom-passwordcredential-idname-9">(5)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-passwordcredential-passwordname">
@@ -3843,7 +3863,7 @@ partial dictionary CredentialRequestOptions {
     <li><a href="#ref-for-dom-passwordcredential-passwordname-4">3.1.3.2. 
     PasswordCredential(PasswordCredentialData data) Constructor </a>
     <li><a href="#ref-for-dom-passwordcredential-passwordname-5">3.3.2. 
-    Extract a body and Content-Type for request’s attached credential </a> <a href="#ref-for-dom-passwordcredential-passwordname-6">(2)</a> <a href="#ref-for-dom-passwordcredential-passwordname-7">(3)</a> <a href="#ref-for-dom-passwordcredential-passwordname-8">(4)</a>
+    Extract an action and Content-Type for request’s attached credential </a> <a href="#ref-for-dom-passwordcredential-passwordname-6">(2)</a> <a href="#ref-for-dom-passwordcredential-passwordname-7">(3)</a> <a href="#ref-for-dom-passwordcredential-passwordname-8">(4)</a> <a href="#ref-for-dom-passwordcredential-passwordname-9">(5)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-passwordcredential-additionaldata">
@@ -3854,7 +3874,7 @@ partial dictionary CredentialRequestOptions {
     <li><a href="#ref-for-dom-passwordcredential-additionaldata-7">3.1.3.1. 
     PasswordCredential(HTMLFormElement form) Constructor </a> <a href="#ref-for-dom-passwordcredential-additionaldata-8">(2)</a>
     <li><a href="#ref-for-dom-passwordcredential-additionaldata-9">3.3.2. 
-    Extract a body and Content-Type for request’s attached credential </a>
+    Extract an action and Content-Type for request’s attached credential </a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-passwordcredential-password">
@@ -3869,10 +3889,10 @@ partial dictionary CredentialRequestOptions {
     <li><a href="#ref-for-dom-passwordcredential-password-slot-1">3.1.3.2. 
     PasswordCredential(PasswordCredentialData data) Constructor </a>
     <li><a href="#ref-for-dom-passwordcredential-password-slot-2">3.3.2. 
-    Extract a body and Content-Type for request’s attached credential </a> <a href="#ref-for-dom-passwordcredential-password-slot-3">(2)</a>
-    <li><a href="#ref-for-dom-passwordcredential-password-slot-4">4.2.4. 
-    Store SiteBoundCredential </a> <a href="#ref-for-dom-passwordcredential-password-slot-5">(2)</a>
-    <li><a href="#ref-for-dom-passwordcredential-password-slot-6">6.1. Cross-origin Credential Leakage</a>
+    Extract an action and Content-Type for request’s attached credential </a> <a href="#ref-for-dom-passwordcredential-password-slot-3">(2)</a> <a href="#ref-for-dom-passwordcredential-password-slot-4">(3)</a>
+    <li><a href="#ref-for-dom-passwordcredential-password-slot-5">4.2.4. 
+    Store SiteBoundCredential </a> <a href="#ref-for-dom-passwordcredential-password-slot-6">(2)</a>
+    <li><a href="#ref-for-dom-passwordcredential-password-slot-7">6.1. Cross-origin Credential Leakage</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-passwordcredential-passwordcredential">
@@ -4107,7 +4127,7 @@ partial dictionary CredentialRequestOptions {
    <ul>
     <li><a href="#ref-for-request-attached-credential-1">3.3.1. Monkey Patches to Fetch</a> <a href="#ref-for-request-attached-credential-2">(2)</a> <a href="#ref-for-request-attached-credential-3">(3)</a> <a href="#ref-for-request-attached-credential-4">(4)</a>
     <li><a href="#ref-for-request-attached-credential-5">3.3.2. 
-    Extract a body and Content-Type for request’s attached credential </a>
+    Extract an action and Content-Type for request’s attached credential </a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="typedefdef-credentialinfo">
