@@ -731,7 +731,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
       required USVString password;
     };
 
-    typedef (FormData or URLSearchParams or object) CredentialBodyType;
+    typedef (FormData or URLSearchParams or record&lt;DOMString, any&gt;) CredentialBodyType;
 
     [Constructor(PasswordCredentialData data),
      Constructor(HTMLFormElement form),
@@ -761,9 +761,10 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
   ::  If the developer wishes to specify additional data to insert into the
       request body when submitting the credential information to a remote
       endpoint, they can do so by assigning a {{FormData}},
-      {{URLSearchParams}} or a generic object to this attribute. The
-      credential information will be mixed into the object to produce the
-      body. The value is `null` unless otherwise specified.
+      {{URLSearchParams}} or a record with {{DOMString}} keys and values of
+      arbitrary types to this attribute. The credential information will be
+      mixed into the object to produce the body. The value is `null` unless
+      otherwise specified.
 
   : {{[[type]]}}
   ::  All {{PasswordCredential}} objects have their {{[[type]]}} slot's
@@ -1377,27 +1378,27 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
       6.  Set |Content-Type| to
           `application/x-www-form-urlencoded;charset=UTF-8`.
 
-      Otherwise, |data| is a generic object, so:
+      Otherwise, |data| is a [=record=]&lt;{{DOMString}}, {{any}}&gt;, so:
 
-      1.  If |data| has a property named like the |credential|'s
-          {{PasswordCredential/idName}} or
-          {{PasswordCredential/passwordName}}, <a>throw</a> a `TypeError`
-          exception.
+      1.  Let |nameKey| be the |credential|'s {{PasswordCredential/idName}}
+          and |nameValue| the |credential|'s {{Credential/id}}.
 
-      2.  Add a property to |data| with name being the |credential|'s
-          {{PasswordCredential/idName}} and value the |credential|'s
-          {{Credential/id}}.
+      2.  If |nameKey| is already a key in |data|, set its value to
+          |nameValue|. Otherwise append (|nameKey|, |nameValue|) to the
+          [=mappings=] of |data|.
 
-      3.  Add a property to |data| with name being the |credential|'s
-          {{PasswordCredential/passwordName}} and value the |credential|'s
-          {{[[password]]}}.
+      3.  Let |passwordKey| be the |credential|'s
+          {{PasswordCredential/passwordName}} and |passwordValue| the
+          |credential|'s {{[[password]]}}.
 
-      4.  Push the result of applying `JSON.stringify` to |data| with
-          "`utf-8`" as the explicit character encoding, to |body|'s <a
-          for="body">stream</a>.
+      4.  If |passwordKey| is already a key in |data|, set its value to
+          |passwordValue|. Otherwise append (|passwordKey|,
+          |passwordValue|) to the [=mappings=] of |data|.
 
-      8.  Set |Content-Type| to `application/json;charset=UTF-8`.
+      5.  Set |action| to an action that runs `JSON.stringify`
+          on |data|, followed by <a>UTF-8 encode</a>.
 
+      6.  Set |Content-Type| to `application/json;charset=UTF-8`.
 
   6. Return |action| and |Content-Type|.
 </section>

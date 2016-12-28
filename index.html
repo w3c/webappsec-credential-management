@@ -2011,7 +2011,7 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
   <span class="kt">required</span> <span class="kt">USVString</span> <dfn class="nv dfn-paneled idl-code" data-dfn-for="PasswordCredentialData" data-dfn-type="dict-member" data-export="" data-type="USVString " id="dom-passwordcredentialdata-password">password</dfn>;
 };
 
-<span class="kt">typedef</span> (<a class="n" data-link-type="idl-name" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a> <span class="kt">or</span> <a class="n" data-link-type="idl-name" href="https://url.spec.whatwg.org/#dom-urlsearchparams">URLSearchParams</a> <span class="kt">or</span> <span class="kt">object</span>) <dfn class="nv dfn-paneled idl-code" data-dfn-type="typedef" data-export="" id="typedefdef-credentialbodytype">CredentialBodyType</dfn>;
+<span class="kt">typedef</span> (<a class="n" data-link-type="idl-name" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a> <span class="kt">or</span> <a class="n" data-link-type="idl-name" href="https://url.spec.whatwg.org/#dom-urlsearchparams">URLSearchParams</a> <span class="kt">or</span> <span class="kt">record</span>&lt;<span class="kt">DOMString</span>, <span class="kt">any</span>>) <dfn class="nv dfn-paneled idl-code" data-dfn-type="typedef" data-export="" id="typedefdef-credentialbodytype">CredentialBodyType</dfn>;
 
 [<a class="nv idl-code" data-link-type="constructor" href="#dom-passwordcredential-passwordcredential-data" id="ref-for-dom-passwordcredential-passwordcredential-data-1">Constructor</a>(<a class="n" data-link-type="idl-name" href="#dictdef-passwordcredentialdata" id="ref-for-dictdef-passwordcredentialdata-1">PasswordCredentialData</a> <dfn class="nv idl-code" data-dfn-for="PasswordCredential/PasswordCredential(data)" data-dfn-type="argument" data-export="" id="dom-passwordcredential-passwordcredential-data-data">data<a class="self-link" href="#dom-passwordcredential-passwordcredential-data-data"></a></dfn>),
  <a class="nv idl-code" data-link-type="constructor" href="#dom-passwordcredential-passwordcredential" id="ref-for-dom-passwordcredential-passwordcredential-3">Constructor</a>(<a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">HTMLFormElement</a> <dfn class="nv idl-code" data-dfn-for="PasswordCredential/PasswordCredential(form)" data-dfn-type="argument" data-export="" id="dom-passwordcredential-passwordcredential-form-form">form<a class="self-link" href="#dom-passwordcredential-passwordcredential-form-form"></a></dfn>),
@@ -2042,9 +2042,10 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
      <dd data-md="">
       <p>If the developer wishes to specify additional data to insert into the
   request body when submitting the credential information to a remote
-  endpoint, they can do so by assigning a <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code>, <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#dom-urlsearchparams">URLSearchParams</a></code> or a generic object to this attribute. The
-  credential information will be mixed into the object to produce the
-  body. The value is <code>null</code> unless otherwise specified.</p>
+  endpoint, they can do so by assigning a <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code>, <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#dom-urlsearchparams">URLSearchParams</a></code> or a record with <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a></code> keys and values of
+  arbitrary types to this attribute. The credential information will be
+  mixed into the object to produce the body. The value is <code>null</code> unless
+  otherwise specified.</p>
      <dt data-md="">
       <p><code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot-6">[[type]]</a></code></p>
      <dd data-md="">
@@ -2569,17 +2570,18 @@ var r = new Request("https://example.com/endpoint", init);
        <li data-md="">
         <p>Set <var>Content-Type</var> to <code>application/x-www-form-urlencoded;charset=UTF-8</code>.</p>
       </ol>
-      <p>Otherwise, <var>data</var> is a generic object, so:</p>
+      <p>Otherwise, <var>data</var> is a <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-record">record</a>&lt;<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a></code>, <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-any">any</a></code>>, so:</p>
       <ol>
        <li data-md="">
-        <p>If <var>data</var> has a property named like the <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname" id="ref-for-dom-passwordcredential-idname-9">idName</a></code> or <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-9">passwordName</a></code>, <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-throw">throw</a> a <code>TypeError</code> exception.</p>
+        <p>Let <var>nameKey</var> be the <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname" id="ref-for-dom-passwordcredential-idname-9">idName</a></code> and <var>nameValue</var> the <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id-5">id</a></code>.</p>
        <li data-md="">
-        <p>Add a property to <var>data</var> with name being the <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname" id="ref-for-dom-passwordcredential-idname-10">idName</a></code> and value the <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id-5">id</a></code>.</p>
+        <p>If <var>nameKey</var> is already a key in <var>data</var>, set its value to <var>nameValue</var>. Otherwise append (<var>nameKey</var>, <var>nameValue</var>) to the <a data-link-type="dfn" href="https://heycam.github.io/webidl/#record-mappings">mappings</a> of <var>data</var>.</p>
        <li data-md="">
-        <p>Add a property to <var>data</var> with name being the <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-10">passwordName</a></code> and value the <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-4">[[password]]</a></code>.</p>
+        <p>Let <var>passwordKey</var> be the <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-9">passwordName</a></code> and <var>passwordValue</var> the <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-4">[[password]]</a></code>.</p>
        <li data-md="">
-        <p>Push the result of applying <code>JSON.stringify</code> to <var>data</var> with
-  "<code>utf-8</code>" as the explicit character encoding, to <var>body</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-body-stream">stream</a>.</p>
+        <p>If <var>passwordKey</var> is already a key in <var>data</var>, set its value to <var>passwordValue</var>. Otherwise append (<var>passwordKey</var>, <var>passwordValue</var>) to the <a data-link-type="dfn" href="https://heycam.github.io/webidl/#record-mappings">mappings</a> of <var>data</var>.</p>
+       <li data-md="">
+        <p>Set <var>action</var> to an action that runs <code>JSON.stringify</code> on <var>data</var>, followed by <a data-link-type="dfn" href="https://encoding.spec.whatwg.org/#utf-8-encode">UTF-8 encode</a>.</p>
        <li data-md="">
         <p>Set <var>Content-Type</var> to <code>application/json;charset=UTF-8</code>.</p>
       </ol>
@@ -3264,6 +3266,11 @@ partial dictionary CredentialRequestOptions {
      <li><a href="https://w3c.github.io/webappsec-csp/#script-src">script-src</a>
     </ul>
    <li>
+    <a data-link-type="biblio">[WHATWG-ENCODING]</a> defines the following terms:
+    <ul>
+     <li><a href="https://encoding.spec.whatwg.org/#utf-8-encode">utf-8 encode</a>
+    </ul>
+   <li>
     <a data-link-type="biblio">[FETCH]</a> defines the following terms:
     <ul>
      <li><a href="https://fetch.spec.whatwg.org/#request">Request</a>
@@ -3280,7 +3287,6 @@ partial dictionary CredentialRequestOptions {
      <li><a href="https://fetch.spec.whatwg.org/#concept-network-error">network error</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-request-redirect-mode">redirect mode</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-request">request</a>
-     <li><a href="https://fetch.spec.whatwg.org/#concept-body-stream">stream</a>
      <li><a href="https://fetch.spec.whatwg.org/#concept-request-url">url</a>
     </ul>
    <li>
@@ -3356,8 +3362,11 @@ partial dictionary CredentialRequestOptions {
      <li><a href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a>
      <li><a href="https://heycam.github.io/webidl/#Exposed">Exposed</a>
      <li><a href="https://heycam.github.io/webidl/#idl-USVString">USVString</a>
+     <li><a href="https://heycam.github.io/webidl/#idl-any">any</a>
      <li><a href="https://heycam.github.io/webidl/#idl-boolean">boolean</a>
      <li><a href="https://heycam.github.io/webidl/#dfn-interface">interface</a>
+     <li><a href="https://heycam.github.io/webidl/#record-mappings">mappings</a>
+     <li><a href="https://heycam.github.io/webidl/#idl-record">record</a>
      <li><a href="https://heycam.github.io/webidl/#dfn-throw">throw</a>
     </ul>
    <li>
@@ -3404,6 +3413,8 @@ partial dictionary CredentialRequestOptions {
    <dd>Cameron McCormack; Boris Zbarsky; Tobie Langel. <a href="https://heycam.github.io/webidl/">Web IDL</a>. URL: <a href="https://heycam.github.io/webidl/">https://heycam.github.io/webidl/</a>
    <dt id="biblio-webmessaging">[WEBMESSAGING]
    <dd>Ian Hickson. <a href="http://dev.w3.org/html5/postmsg/">HTML5 Web Messaging</a>. URL: <a href="http://dev.w3.org/html5/postmsg/">http://dev.w3.org/html5/postmsg/</a>
+   <dt id="biblio-whatwg-encoding">[WHATWG-ENCODING]
+   <dd>Anne van Kesteren. <a href="https://encoding.spec.whatwg.org/">Encoding Standard</a>. Living Standard. URL: <a href="https://encoding.spec.whatwg.org/">https://encoding.spec.whatwg.org/</a>
    <dt id="biblio-whatwg-url">[WHATWG-URL]
    <dd>Anne van Kesteren. <a href="https://url.spec.whatwg.org/">URL Standard</a>. Living Standard. URL: <a href="https://url.spec.whatwg.org/">https://url.spec.whatwg.org/</a>
    <dt id="biblio-xhr">[XHR]
@@ -3449,7 +3460,7 @@ partial dictionary CredentialRequestOptions {
   <span class="kt">required</span> <span class="kt">USVString</span> <a class="nv" data-type="USVString " href="#dom-passwordcredentialdata-password">password</a>;
 };
 
-<span class="kt">typedef</span> (<a class="n" data-link-type="idl-name" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a> <span class="kt">or</span> <a class="n" data-link-type="idl-name" href="https://url.spec.whatwg.org/#dom-urlsearchparams">URLSearchParams</a> <span class="kt">or</span> <span class="kt">object</span>) <a class="nv" href="#typedefdef-credentialbodytype">CredentialBodyType</a>;
+<span class="kt">typedef</span> (<a class="n" data-link-type="idl-name" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a> <span class="kt">or</span> <a class="n" data-link-type="idl-name" href="https://url.spec.whatwg.org/#dom-urlsearchparams">URLSearchParams</a> <span class="kt">or</span> <span class="kt">record</span>&lt;<span class="kt">DOMString</span>, <span class="kt">any</span>>) <a class="nv" href="#typedefdef-credentialbodytype">CredentialBodyType</a>;
 
 [<a class="nv idl-code" data-link-type="constructor" href="#dom-passwordcredential-passwordcredential-data">Constructor</a>(<a class="n" data-link-type="idl-name" href="#dictdef-passwordcredentialdata">PasswordCredentialData</a> <a class="nv" href="#dom-passwordcredential-passwordcredential-data-data">data</a>),
  <a class="nv idl-code" data-link-type="constructor" href="#dom-passwordcredential-passwordcredential">Constructor</a>(<a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">HTMLFormElement</a> <a class="nv" href="#dom-passwordcredential-passwordcredential-form-form">form</a>),
@@ -3839,7 +3850,7 @@ partial dictionary CredentialRequestOptions {
     <li><a href="#ref-for-dom-passwordcredential-idname-4">3.1.3.2. 
     PasswordCredential(PasswordCredentialData data) Constructor </a>
     <li><a href="#ref-for-dom-passwordcredential-idname-5">3.3.2. 
-    Extract an action and Content-Type for request’s attached credential </a> <a href="#ref-for-dom-passwordcredential-idname-6">(2)</a> <a href="#ref-for-dom-passwordcredential-idname-7">(3)</a> <a href="#ref-for-dom-passwordcredential-idname-8">(4)</a> <a href="#ref-for-dom-passwordcredential-idname-9">(5)</a> <a href="#ref-for-dom-passwordcredential-idname-10">(6)</a>
+    Extract an action and Content-Type for request’s attached credential </a> <a href="#ref-for-dom-passwordcredential-idname-6">(2)</a> <a href="#ref-for-dom-passwordcredential-idname-7">(3)</a> <a href="#ref-for-dom-passwordcredential-idname-8">(4)</a> <a href="#ref-for-dom-passwordcredential-idname-9">(5)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-passwordcredential-passwordname">
@@ -3852,7 +3863,7 @@ partial dictionary CredentialRequestOptions {
     <li><a href="#ref-for-dom-passwordcredential-passwordname-4">3.1.3.2. 
     PasswordCredential(PasswordCredentialData data) Constructor </a>
     <li><a href="#ref-for-dom-passwordcredential-passwordname-5">3.3.2. 
-    Extract an action and Content-Type for request’s attached credential </a> <a href="#ref-for-dom-passwordcredential-passwordname-6">(2)</a> <a href="#ref-for-dom-passwordcredential-passwordname-7">(3)</a> <a href="#ref-for-dom-passwordcredential-passwordname-8">(4)</a> <a href="#ref-for-dom-passwordcredential-passwordname-9">(5)</a> <a href="#ref-for-dom-passwordcredential-passwordname-10">(6)</a>
+    Extract an action and Content-Type for request’s attached credential </a> <a href="#ref-for-dom-passwordcredential-passwordname-6">(2)</a> <a href="#ref-for-dom-passwordcredential-passwordname-7">(3)</a> <a href="#ref-for-dom-passwordcredential-passwordname-8">(4)</a> <a href="#ref-for-dom-passwordcredential-passwordname-9">(5)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-passwordcredential-additionaldata">
