@@ -1276,8 +1276,8 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
       32. If |request|'s <a for="request">method</a> is `GET` or `HEAD`, then
           throw a `TypeError` if any of the following are true:
 
-          *   |init|'s `body` member is present and non-null
-          *   |inputBody| is non-null
+          *   <var ignore>init</var>'s `body` member is present and non-null
+          *   <var ignore>inputBody</var> is non-null
           *   |request|'s <a for="request">attached credential</a> is non-null
 
   7.  The <a>HTTP-network-or-cache fetch</a> algorithm is updated with the
@@ -1294,7 +1294,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
           3.  If |type| is the empty string, return a <a>network error</a>.
 
           4.  Let |httpRequest|'s <a for="request">body</a> be |body|,
-              |Content-Type| be |type|, and <a for="request">redirect
+              <var ignore>Content-Type</var> be |type|, and <a for="request">redirect
               mode</a> be "`manual`".
 
   ISSUE(whatwg/fetch#237): These patches are combined into an outstanding
@@ -1403,11 +1403,10 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
     Request a <code>Credential</code>
   </h4>
 
-  Given a <code>sequence&lt;DOMString&gt;</code> (<var>types</var>) and a
-  {{CredentialRequestOptions}} object (<var>options</var>), this
-  algorithm returns a <code>Promise</code> which resolves with either a
-  single {{Credential}} object if one can be obtained, or <code>undefined</code>
-  if not.
+  Given a {{CredentialRequestOptions}} object (<var>options</var>), this
+  algorithm returns a <code>Promise</code> which resolves with either a single
+  {{Credential}} object if one can be obtained, or <code>undefined</code> if
+  not.
 
   If called from an environment which is not a <a>secure context</a>, or
   from somewhere other than a <a>top-level browsing context</a>, the
@@ -1445,9 +1444,9 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
 
       <ol>
         <li>
-          Let <var>interface</var> be the interface whose name is
-          <var>key</var>, or <code>null</code> if no interface's name
-          matches.
+          Let <var>interface</var> be the interface such that {{[[type]]}}
+          across all objects implementing that interface is <var>key</var>, or
+          <code>null</code> if no interface's name matches.
         </li>
         <li>
           If <var>interface</var> is not <code>null</code>, insert
@@ -1496,7 +1495,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
             <li>
               If <var>options</var>'s {{CredentialRequestOptions/unmediated}}
               is <code>true</code>, resolve <var>promise</var> with
-              <var>undefined</var>, and terminate this algorithm.
+              <code>undefined</code>, and terminate this algorithm.
             </li>
             <li>
               Resolve <var>promise</var> with the result of executing
@@ -1617,7 +1616,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
         <li>
           Let <var>cloned value</var> be the result of invoking the <a>internal
           structured cloning algorithm</a> with <var>source value</var> as the
-          "<code>input</code>" argument, and <var>memory</var> as the
+          "<code>input</code>" argument, and <var ignore>memory</var> as the
           "<code>memory</code>" argument.
         </li>
         <li>
@@ -1632,7 +1631,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
       </ol>
     </li>
     <li>
-      Set <var>deep clone</var> to <code>own</code>.
+      Set <var ignore>deep clone</var> to <code>own</code>.
     </li>
   </ol>
 
