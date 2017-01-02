@@ -1738,8 +1738,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
       Ask the user which {{Credential}} to share.
 
       Note: This behavior is vendor-specific. Guidelines for user agent
-      behavior are presented in [[#user-mediation]]. A user agent MAY offer
-      the user to enter and save new credentials in this step.
+      behavior are presented in [[#user-mediation]].
     </li>
     <li>
       Let <var>credential</var> be the {{Credential}} the user chose, or
@@ -2024,6 +2023,8 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
 
   The chooser interface SHOULD include all {{Credential}} objects associated
   with the origin that requested credentials.
+
+  The chooser interface MAY offer the user to enter and save new credentials.
 
   <em>The following image is an exceptionally non-normative mock:</em>
 
