@@ -1431,7 +1431,7 @@ pre.idl.highlight { color: #708090; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2016-12-23">23 December 2016</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-01-02">2 January 2017</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1453,7 +1453,7 @@ pre.idl.highlight { color: #708090; }
     </dl>
    </div>
    <div data-fill-with="warning"></div>
-   <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2016 <a href="https://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup> (<a href="https://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>, <a href="https://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>, <a href="https://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>). W3C <a href="https://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>, <a href="https://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and <a href="https://www.w3.org/Consortium/Legal/copyright-documents">document use</a> rules apply. </p>
+   <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2017 <a href="https://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup> (<a href="https://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>, <a href="https://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>, <a href="https://www.keio.ac.jp/">Keio</a>, <a href="http://ev.buaa.edu.cn/">Beihang</a>). W3C <a href="https://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>, <a href="https://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and <a href="https://www.w3.org/Consortium/Legal/copyright-documents">document use</a> rules apply. </p>
    <hr title="Separator for header">
   </div>
   <h2 class="no-num no-toc no-ref heading settled" id="abstract"><span class="content">Abstract</span></h2>
@@ -2363,9 +2363,10 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
       site access to a particular credential, it will be provided. If not, the
       promise will resolve with <code>undefined</code>. 
       <p>If <code>false</code>, the user agent MAY ask the user to grant access to
-      or select a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-18">Credential</a></code>. If the user has opted-into always giving a
-      particular site access to a particular credential, it MUST be provided
-      without user interaction until the opt-in is revoked, for example, via <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-requireusermediation" id="ref-for-dom-credentialscontainer-requireusermediation-3">requireUserMediation()</a></code>.</p>
+      or select a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-18">Credential</a></code>. See <a href="#user-mediated-selection">§5.3 Credential Selection</a> for
+      guidelines. If the user has opted-into always giving a particular site
+      access to a particular credential, it will be provided without user
+      interaction until the opt-in is revoked, for example, via <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-requireusermediation" id="ref-for-dom-credentialscontainer-requireusermediation-3">requireUserMediation()</a></code>.</p>
       <p>For processing details, see the algorithm defined in <a href="#request-credential">§4.1.1 Request a Credential</a>.</p>
     </dl>
     <h5 class="heading settled" data-level="3.2.1.2" id="interfaces-federatedcredentialrequestoptions"><span class="secno">3.2.1.2. </span><span class="content"> <code>FederatedCredentialRequestOptions</code> dictionary </span><a class="self-link" href="#interfaces-federatedcredentialrequestoptions"></a></h5>

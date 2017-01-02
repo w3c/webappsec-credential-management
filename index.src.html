@@ -1109,9 +1109,10 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
       promise will resolve with <code>undefined</code>.
 
       If <code>false</code>, the user agent MAY ask the user to grant access to
-      or select a {{Credential}}. If the user has opted-into always giving a
-      particular site access to a particular credential, it MUST be provided
-      without user interaction until the opt-in is revoked, for example, via
+      or select a {{Credential}}. See [[#user-mediated-selection]] for
+      guidelines. If the user has opted-into always giving a particular site
+      access to a particular credential, it will be provided without user
+      interaction until the opt-in is revoked, for example, via
       {{requireUserMediation()}}.
 
       For processing details, see the algorithm defined in
