@@ -643,7 +643,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
       required USVString id;
     };
 
-    interface Credential {
+    [SecureContext] interface Credential {
       readonly attribute USVString id;
       readonly attribute DOMString type;
     };
@@ -686,7 +686,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
       USVString iconURL;
     };
 
-    interface SiteBoundCredential : Credential {
+    [SecureContext] interface SiteBoundCredential : Credential {
       readonly attribute USVString name;
       readonly attribute USVString iconURL;
     };
@@ -735,8 +735,8 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
 
     [Constructor(PasswordCredentialData data),
      Constructor(HTMLFormElement form),
-     Exposed=Window]
-    
+     Exposed=Window,
+     SecureContext]
     interface PasswordCredential : SiteBoundCredential {
       attribute USVString idName;
       attribute USVString passwordName;
@@ -913,7 +913,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
       DOMString protocol;
     };
 
-    [Constructor(FederatedCredentialData data), Exposed=Window]
+    [Constructor(FederatedCredentialData data), Exposed=Window, SecureContext]
     interface FederatedCredential : SiteBoundCredential {
       readonly attribute USVString provider;
       readonly attribute DOMString? protocol;
@@ -1002,11 +1002,11 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
 
   <pre class="idl">
     partial interface Navigator {
-      readonly attribute CredentialsContainer credentials;
+      [SecureContext] readonly attribute CredentialsContainer credentials;
     };
   </pre>
   <pre class="idl">
-    interface CredentialsContainer {
+    [SecureContext] interface CredentialsContainer {
       Promise&lt;Credential?&gt; get(optional CredentialRequestOptions options);
       Promise&lt;Credential&gt; store(Credential credential);
       Promise&lt;void&gt; requireUserMediation();

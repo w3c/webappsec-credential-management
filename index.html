@@ -1431,7 +1431,7 @@ pre.idl.highlight { color: #708090; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-01-02">2 January 2017</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-01-13">13 January 2017</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1954,7 +1954,7 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
   <span class="kt">required</span> <span class="kt">USVString</span> <dfn class="nv dfn-paneled idl-code" data-dfn-for="CredentialData" data-dfn-type="dict-member" data-export="" data-type="USVString " id="dom-credentialdata-id">id</dfn>;
 };
 
-<span class="kt">interface</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="credential">Credential</dfn> {
+[<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>] <span class="kt">interface</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="credential">Credential</dfn> {
   <span class="kt">readonly</span> <span class="kt">attribute</span> <span class="kt">USVString</span> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="USVString" href="#dom-credential-id" id="ref-for-dom-credential-id-1">id</a>;
   <span class="kt">readonly</span> <span class="kt">attribute</span> <span class="kt">DOMString</span> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="DOMString" href="#dom-credential-type" id="ref-for-dom-credential-type-1">type</a>;
 };
@@ -1982,7 +1982,7 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
   <span class="kt">USVString</span> <dfn class="nv dfn-paneled idl-code" data-dfn-for="SiteBoundCredentialData" data-dfn-type="dict-member" data-export="" data-type="USVString " id="dom-siteboundcredentialdata-iconurl">iconURL</dfn>;
 };
 
-<span class="kt">interface</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="siteboundcredential">SiteBoundCredential</dfn> : <a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential-7">Credential</a> {
+[<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>] <span class="kt">interface</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="siteboundcredential">SiteBoundCredential</dfn> : <a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential-7">Credential</a> {
   <span class="kt">readonly</span> <span class="kt">attribute</span> <span class="kt">USVString</span> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="USVString" href="#dom-siteboundcredential-name" id="ref-for-dom-siteboundcredential-name-1">name</a>;
   <span class="kt">readonly</span> <span class="kt">attribute</span> <span class="kt">USVString</span> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="USVString" href="#dom-siteboundcredential-iconurl" id="ref-for-dom-siteboundcredential-iconurl-1">iconURL</a>;
 };
@@ -2015,8 +2015,8 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
 
 [<a class="nv idl-code" data-link-type="constructor" href="#dom-passwordcredential-passwordcredential-data" id="ref-for-dom-passwordcredential-passwordcredential-data-1">Constructor</a>(<a class="n" data-link-type="idl-name" href="#dictdef-passwordcredentialdata" id="ref-for-dictdef-passwordcredentialdata-1">PasswordCredentialData</a> <dfn class="nv idl-code" data-dfn-for="PasswordCredential/PasswordCredential(data)" data-dfn-type="argument" data-export="" id="dom-passwordcredential-passwordcredential-data-data">data<a class="self-link" href="#dom-passwordcredential-passwordcredential-data-data"></a></dfn>),
  <a class="nv idl-code" data-link-type="constructor" href="#dom-passwordcredential-passwordcredential" id="ref-for-dom-passwordcredential-passwordcredential-3">Constructor</a>(<a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">HTMLFormElement</a> <dfn class="nv idl-code" data-dfn-for="PasswordCredential/PasswordCredential(form)" data-dfn-type="argument" data-export="" id="dom-passwordcredential-passwordcredential-form-form">form<a class="self-link" href="#dom-passwordcredential-passwordcredential-form-form"></a></dfn>),
- <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<span class="n">Window</span>]
-    
+ <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<span class="n">Window</span>,
+ <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>]
 <span class="kt">interface</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="passwordcredential">PasswordCredential</dfn> : <a class="n" data-link-type="idl-name" href="#siteboundcredential" id="ref-for-siteboundcredential-5">SiteBoundCredential</a> {
   <span class="kt">attribute</span> <span class="kt">USVString</span> <a class="nv idl-code" data-link-type="attribute" data-type="USVString" href="#dom-passwordcredential-idname" id="ref-for-dom-passwordcredential-idname-2">idName</a>;
   <span class="kt">attribute</span> <span class="kt">USVString</span> <a class="nv idl-code" data-link-type="attribute" data-type="USVString" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-2">passwordName</a>;
@@ -2212,7 +2212,7 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
   <span class="kt">DOMString</span> <dfn class="nv idl-code" data-dfn-for="FederatedCredentialData" data-dfn-type="dict-member" data-export="" data-type="DOMString " id="dom-federatedcredentialdata-protocol">protocol<a class="self-link" href="#dom-federatedcredentialdata-protocol"></a></dfn>;
 };
 
-[<dfn class="nv idl-code" data-dfn-for="FederatedCredential" data-dfn-type="constructor" data-export="" data-lt="FederatedCredential(data)" id="dom-federatedcredential-federatedcredential">Constructor<a class="self-link" href="#dom-federatedcredential-federatedcredential"></a></dfn>(<a class="n" data-link-type="idl-name" href="#dictdef-federatedcredentialdata" id="ref-for-dictdef-federatedcredentialdata-1">FederatedCredentialData</a> <dfn class="nv idl-code" data-dfn-for="FederatedCredential/FederatedCredential(data)" data-dfn-type="argument" data-export="" id="dom-federatedcredential-federatedcredential-data-data">data<a class="self-link" href="#dom-federatedcredential-federatedcredential-data-data"></a></dfn>), <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<span class="n">Window</span>]
+[<dfn class="nv idl-code" data-dfn-for="FederatedCredential" data-dfn-type="constructor" data-export="" data-lt="FederatedCredential(data)" id="dom-federatedcredential-federatedcredential">Constructor<a class="self-link" href="#dom-federatedcredential-federatedcredential"></a></dfn>(<a class="n" data-link-type="idl-name" href="#dictdef-federatedcredentialdata" id="ref-for-dictdef-federatedcredentialdata-1">FederatedCredentialData</a> <dfn class="nv idl-code" data-dfn-for="FederatedCredential/FederatedCredential(data)" data-dfn-type="argument" data-export="" id="dom-federatedcredential-federatedcredential-data-data">data<a class="self-link" href="#dom-federatedcredential-federatedcredential-data-data"></a></dfn>), <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<span class="n">Window</span>, <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>]
 <span class="kt">interface</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="federatedcredential">FederatedCredential</dfn> : <a class="n" data-link-type="idl-name" href="#siteboundcredential" id="ref-for-siteboundcredential-6">SiteBoundCredential</a> {
   <span class="kt">readonly</span> <span class="kt">attribute</span> <span class="kt">USVString</span> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="USVString" href="#dom-federatedcredential-provider" id="ref-for-dom-federatedcredential-provider-2">provider</a>;
   <span class="kt">readonly</span> <span class="kt">attribute</span> <span class="kt">DOMString</span>? <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="DOMString?" href="#dom-federatedcredential-protocol" id="ref-for-dom-federatedcredential-protocol-1">protocol</a>;
@@ -2261,10 +2261,10 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
   methods to request credentials, and to notify the user agent when interesting
   events occur: successful sign in and sign out.</p>
 <pre class="idl highlight def"><span class="kt">partial</span> <span class="kt">interface</span> <a class="nv idl-code" data-link-type="interface" href="http://www.w3.org/TR/html5/webappapis.html#navigator">Navigator</a> {
-  <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n" data-link-type="idl-name" href="#credentialscontainer" id="ref-for-credentialscontainer-1">CredentialsContainer</a> <dfn class="nv dfn-paneled idl-code" data-dfn-for="Navigator" data-dfn-type="attribute" data-export="" data-readonly="" data-type="CredentialsContainer" id="dom-navigator-credentials">credentials</dfn>;
+  [<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>] <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n" data-link-type="idl-name" href="#credentialscontainer" id="ref-for-credentialscontainer-1">CredentialsContainer</a> <dfn class="nv dfn-paneled idl-code" data-dfn-for="Navigator" data-dfn-type="attribute" data-export="" data-readonly="" data-type="CredentialsContainer" id="dom-navigator-credentials">credentials</dfn>;
 };
 </pre>
-<pre class="idl highlight def"><span class="kt">interface</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="credentialscontainer">CredentialsContainer</dfn> {
+<pre class="idl highlight def">[<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>] <span class="kt">interface</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="credentialscontainer">CredentialsContainer</dfn> {
   <span class="kt">Promise</span>&lt;<a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential-8">Credential</a>?> <a class="nv idl-code" data-link-type="method" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-3">get</a>(<span class="kt">optional</span> <a class="n" data-link-type="idl-name" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-3">CredentialRequestOptions</a> <a class="nv idl-code" data-link-type="argument" href="#dom-credentialscontainer-get-options-options" id="ref-for-dom-credentialscontainer-get-options-options-1">options</a>);
   <span class="kt">Promise</span>&lt;<a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential-9">Credential</a>> <a class="nv idl-code" data-link-type="method" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-5">store</a>(<a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential-10">Credential</a> <a class="nv idl-code" data-link-type="argument" href="#dom-credentialscontainer-store-credential-credential" id="ref-for-dom-credentialscontainer-store-credential-credential-1">credential</a>);
   <span class="kt">Promise</span>&lt;<span class="kt">void</span>> <a class="nv idl-code" data-link-type="method" href="#dom-credentialscontainer-requireusermediation" id="ref-for-dom-credentialscontainer-requireusermediation-1">requireUserMediation</a>();
@@ -3346,6 +3346,7 @@ partial dictionary CredentialRequestOptions {
     <ul>
      <li><a href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a>
      <li><a href="https://heycam.github.io/webidl/#Exposed">Exposed</a>
+     <li><a href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>
      <li><a href="https://heycam.github.io/webidl/#idl-USVString">USVString</a>
      <li><a href="https://heycam.github.io/webidl/#idl-boolean">boolean</a>
      <li><a href="https://heycam.github.io/webidl/#dfn-interface">interface</a>
@@ -3420,7 +3421,7 @@ partial dictionary CredentialRequestOptions {
   <span class="kt">required</span> <span class="kt">USVString</span> <a class="nv" data-type="USVString " href="#dom-credentialdata-id">id</a>;
 };
 
-<span class="kt">interface</span> <a class="nv" href="#credential">Credential</a> {
+[<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>] <span class="kt">interface</span> <a class="nv" href="#credential">Credential</a> {
   <span class="kt">readonly</span> <span class="kt">attribute</span> <span class="kt">USVString</span> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="USVString" href="#dom-credential-id">id</a>;
   <span class="kt">readonly</span> <span class="kt">attribute</span> <span class="kt">DOMString</span> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="DOMString" href="#dom-credential-type">type</a>;
 };
@@ -3431,7 +3432,7 @@ partial dictionary CredentialRequestOptions {
   <span class="kt">USVString</span> <a class="nv" data-type="USVString " href="#dom-siteboundcredentialdata-iconurl">iconURL</a>;
 };
 
-<span class="kt">interface</span> <a class="nv" href="#siteboundcredential">SiteBoundCredential</a> : <a class="n" data-link-type="idl-name" href="#credential">Credential</a> {
+[<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>] <span class="kt">interface</span> <a class="nv" href="#siteboundcredential">SiteBoundCredential</a> : <a class="n" data-link-type="idl-name" href="#credential">Credential</a> {
   <span class="kt">readonly</span> <span class="kt">attribute</span> <span class="kt">USVString</span> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="USVString" href="#dom-siteboundcredential-name">name</a>;
   <span class="kt">readonly</span> <span class="kt">attribute</span> <span class="kt">USVString</span> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="USVString" href="#dom-siteboundcredential-iconurl">iconURL</a>;
 };
@@ -3444,8 +3445,8 @@ partial dictionary CredentialRequestOptions {
 
 [<a class="nv idl-code" data-link-type="constructor" href="#dom-passwordcredential-passwordcredential-data">Constructor</a>(<a class="n" data-link-type="idl-name" href="#dictdef-passwordcredentialdata">PasswordCredentialData</a> <a class="nv" href="#dom-passwordcredential-passwordcredential-data-data">data</a>),
  <a class="nv idl-code" data-link-type="constructor" href="#dom-passwordcredential-passwordcredential">Constructor</a>(<a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">HTMLFormElement</a> <a class="nv" href="#dom-passwordcredential-passwordcredential-form-form">form</a>),
- <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<span class="n">Window</span>]
-    
+ <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<span class="n">Window</span>,
+ <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>]
 <span class="kt">interface</span> <a class="nv" href="#passwordcredential">PasswordCredential</a> : <a class="n" data-link-type="idl-name" href="#siteboundcredential">SiteBoundCredential</a> {
   <span class="kt">attribute</span> <span class="kt">USVString</span> <a class="nv idl-code" data-link-type="attribute" data-type="USVString" href="#dom-passwordcredential-idname">idName</a>;
   <span class="kt">attribute</span> <span class="kt">USVString</span> <a class="nv idl-code" data-link-type="attribute" data-type="USVString" href="#dom-passwordcredential-passwordname">passwordName</a>;
@@ -3458,17 +3459,17 @@ partial dictionary CredentialRequestOptions {
   <span class="kt">DOMString</span> <a class="nv" data-type="DOMString " href="#dom-federatedcredentialdata-protocol">protocol</a>;
 };
 
-[<a class="nv" href="#dom-federatedcredential-federatedcredential">Constructor</a>(<a class="n" data-link-type="idl-name" href="#dictdef-federatedcredentialdata">FederatedCredentialData</a> <a class="nv" href="#dom-federatedcredential-federatedcredential-data-data">data</a>), <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<span class="n">Window</span>]
+[<a class="nv" href="#dom-federatedcredential-federatedcredential">Constructor</a>(<a class="n" data-link-type="idl-name" href="#dictdef-federatedcredentialdata">FederatedCredentialData</a> <a class="nv" href="#dom-federatedcredential-federatedcredential-data-data">data</a>), <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<span class="n">Window</span>, <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>]
 <span class="kt">interface</span> <a class="nv" href="#federatedcredential">FederatedCredential</a> : <a class="n" data-link-type="idl-name" href="#siteboundcredential">SiteBoundCredential</a> {
   <span class="kt">readonly</span> <span class="kt">attribute</span> <span class="kt">USVString</span> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="USVString" href="#dom-federatedcredential-provider">provider</a>;
   <span class="kt">readonly</span> <span class="kt">attribute</span> <span class="kt">DOMString</span>? <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="DOMString?" href="#dom-federatedcredential-protocol">protocol</a>;
 };
 
 <span class="kt">partial</span> <span class="kt">interface</span> <a class="nv idl-code" data-link-type="interface" href="http://www.w3.org/TR/html5/webappapis.html#navigator">Navigator</a> {
-  <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n" data-link-type="idl-name" href="#credentialscontainer">CredentialsContainer</a> <a class="nv" data-readonly="" data-type="CredentialsContainer" href="#dom-navigator-credentials">credentials</a>;
+  [<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>] <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n" data-link-type="idl-name" href="#credentialscontainer">CredentialsContainer</a> <a class="nv" data-readonly="" data-type="CredentialsContainer" href="#dom-navigator-credentials">credentials</a>;
 };
 
-<span class="kt">interface</span> <a class="nv" href="#credentialscontainer">CredentialsContainer</a> {
+[<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>] <span class="kt">interface</span> <a class="nv" href="#credentialscontainer">CredentialsContainer</a> {
   <span class="kt">Promise</span>&lt;<a class="n" data-link-type="idl-name" href="#credential">Credential</a>?> <a class="nv idl-code" data-link-type="method" href="#dom-credentialscontainer-get">get</a>(<span class="kt">optional</span> <a class="n" data-link-type="idl-name" href="#dictdef-credentialrequestoptions">CredentialRequestOptions</a> <a class="nv idl-code" data-link-type="argument" href="#dom-credentialscontainer-get-options-options">options</a>);
   <span class="kt">Promise</span>&lt;<a class="n" data-link-type="idl-name" href="#credential">Credential</a>> <a class="nv idl-code" data-link-type="method" href="#dom-credentialscontainer-store">store</a>(<a class="n" data-link-type="idl-name" href="#credential">Credential</a> <a class="nv idl-code" data-link-type="argument" href="#dom-credentialscontainer-store-credential-credential">credential</a>);
   <span class="kt">Promise</span>&lt;<span class="kt">void</span>> <a class="nv idl-code" data-link-type="method" href="#dom-credentialscontainer-requireusermediation">requireUserMediation</a>();
