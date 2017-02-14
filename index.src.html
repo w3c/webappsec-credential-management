@@ -820,17 +820,17 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
                   ::  Set |data|'s {{PasswordCredentialData/password}} member's
                       value to the result of executing |formData|'s
                       {{FormData/get()}} method on |name|, |passwordName| to
-                      |name|, and |newPasswordObserved| to true.
+                      |name|, and |newPasswordObserved| to `true`.
                   :   "<a attr-value>`current-password`</a>"
-                  ::  If |newPasswordObserved| is false,
+                  ::  If |newPasswordObserved| is `false`,
                       set |data|'s {{PasswordCredentialData/password}} member's
                       value to the result of executing |formData|'s
                       {{FormData/get()}} method on |name|, and |passwordName| to
                       |name|.
 
-                      Note: By checking that |newPasswordObserved| is false,
-                      new-password fields take precedence over current-password
-                      fields.
+                      Note: By checking that |newPasswordObserved| is `false`,
+                      `new-password` fields take precedence over
+                      `current-password` fields.
                   :   "<a attr-value>`photo`</a>"
                   ::  Set |data|'s {{SiteBoundCredentialData/iconURL}} member's
                       value to the result of executing |formData|'s
