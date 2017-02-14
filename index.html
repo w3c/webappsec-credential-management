@@ -1431,7 +1431,7 @@ pre.idl.highlight { color: #708090; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-01-13">13 January 2017</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-02-14">14 February 2017</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -2070,6 +2070,8 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
      <li data-md="">
       <p>Let <var>idName</var> and <var>passwordName</var> be empty strings.</p>
      <li data-md="">
+      <p>Let <var>newPasswordObserved</var> be <code>false</code>.</p>
+     <li data-md="">
       <p>For each <var>field</var> in <var>elements</var>, run the following steps:</p>
       <ol>
        <li data-md="">
@@ -2092,12 +2094,19 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
   of the following strings, run the associated steps:</p>
             <dl>
              <dt data-md="">
-              <p>"<a data-link-type="attr-value" href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-current-password"><code>current-password</code></a>"</p>
-             <dt data-md="">
               <p>"<a data-link-type="attr-value" href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-new-password"><code>new-password</code></a>"</p>
              <dd data-md="">
               <p>Set <var>data</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredentialdata-password" id="ref-for-dom-passwordcredentialdata-password-1">password</a></code> member’s
+  value to the result of executing <var>formData</var>’s <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#dom-formdata-get">get()</a></code> method on <var>name</var>, <var>passwordName</var> to <var>name</var>, and <var>newPasswordObserved</var> to true.</p>
+             <dt data-md="">
+              <p>"<a data-link-type="attr-value" href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-current-password"><code>current-password</code></a>"</p>
+             <dd data-md="">
+              <p>If <var>newPasswordObserved</var> is false,
+  set <var>data</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredentialdata-password" id="ref-for-dom-passwordcredentialdata-password-2">password</a></code> member’s
   value to the result of executing <var>formData</var>’s <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#dom-formdata-get">get()</a></code> method on <var>name</var>, and <var>passwordName</var> to <var>name</var>.</p>
+              <p class="note" role="note">Note: By checking that <var>newPasswordObserved</var> is false,
+  new-password fields take precedence over current-password
+  fields.</p>
              <dt data-md="">
               <p>"<a data-link-type="attr-value" href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-photo"><code>photo</code></a>"</p>
              <dd data-md="">
@@ -2166,7 +2175,7 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
        <li data-md="">
         <p><var>data</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credentialdata-id" id="ref-for-dom-credentialdata-id-3">id</a></code> member’s value</p>
        <li data-md="">
-        <p><var>data</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredentialdata-password" id="ref-for-dom-passwordcredentialdata-password-2">password</a></code> member’s value</p>
+        <p><var>data</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredentialdata-password" id="ref-for-dom-passwordcredentialdata-password-3">password</a></code> member’s value</p>
       </ul>
      <li data-md="">
       <p>Set <var>c</var>’s properties as follows:</p>
@@ -2178,7 +2187,7 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
        <dt data-md="">
         <p><code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-1">[[password]]</a></code> slot</p>
        <dd data-md="">
-        <p><var>data</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredentialdata-password" id="ref-for-dom-passwordcredentialdata-password-3">password</a></code> member’s value</p>
+        <p><var>data</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredentialdata-password" id="ref-for-dom-passwordcredentialdata-password-4">password</a></code> member’s value</p>
        <dt data-md="">
         <p><code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id-2">id</a></code></p>
        <dd data-md="">
@@ -3783,9 +3792,9 @@ partial dictionary CredentialRequestOptions {
    <b><a href="#dom-passwordcredentialdata-password">#dom-passwordcredentialdata-password</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-passwordcredentialdata-password-1">3.1.3.1. 
-    PasswordCredential(HTMLFormElement form) Constructor </a>
-    <li><a href="#ref-for-dom-passwordcredentialdata-password-2">3.1.3.2. 
-    PasswordCredential(PasswordCredentialData data) Constructor </a> <a href="#ref-for-dom-passwordcredentialdata-password-3">(2)</a>
+    PasswordCredential(HTMLFormElement form) Constructor </a> <a href="#ref-for-dom-passwordcredentialdata-password-2">(2)</a>
+    <li><a href="#ref-for-dom-passwordcredentialdata-password-3">3.1.3.2. 
+    PasswordCredential(PasswordCredentialData data) Constructor </a> <a href="#ref-for-dom-passwordcredentialdata-password-4">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="typedefdef-credentialbodytype">
