@@ -318,7 +318,16 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
               if (credential.type == "<a const>password</a>") {
                 fetch("https://example.com/loginEndpoint", { credentials: credential, method: "POST" })
                   .then(function (response) {
-                    // Notify the user that signin succeeded! Do amazing, signed-in things!
+                    if (/* |response| is a <a idl>Response</a> indicating a successful login */) {
+                      // Call store() again in case the password was retrieved
+                      // via the public suffix list. See <a href="#security-cross-origin-leakage">Cross-origin Credential Leakage</a>.
+                      <a idl lt="store()">navigator.credentials.store</a>(c);
+                      // Notify the user that signin succeeded! Do amazing, signed-in things!
+                    } else if (/* |response| indicates an expired credential */) {
+                      // Let the browser deal with the situation.
+                      <a idl lt="bad()">navigator.credentials.bad</a>(c);
+                      // Insert some code here to show a basic login form.
+                    }
                   });
               } else {
                 // See <a href="#examples-federated-signin">the Federated Sign-in example</a>
@@ -383,7 +392,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
     <h4 id="examples-post-signin">Post-sign-in Confirmation</h4>
 
     To ensure that credentials are persisted correctly, it may be useful for a
-    website to tell the credential manager that sign-in succeeded.
+    website to tell the credential manager that sign-in succeeded or failed.
 
     <div class="example">
       If a user is signed in by calling {{fetch()}} on a {{PasswordCredential}}
@@ -420,8 +429,11 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
               // the user agent to ask the user to store the credential for future use:
               var init = { method: "POST", credentials: c };
               fetch(e.target.action, init).then(r =&gt; {
-                if (/* |r| is a "successful" <a idl>Response</a> */)
+                if (/* |r| is a <a idl>Response</a> indicating a successful login. */) {
                   <a idl lt="store()">navigator.credentials.store</a>(c);
+                } else if (/* |r| indicates an expired credential */ {
+                  <a idl lt="bad()">navigator.credentials.bad</a>(c);
+                }
               });
             }
         });
@@ -1009,6 +1021,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
     [SecureContext] interface CredentialsContainer {
       Promise&lt;Credential?&gt; get(optional CredentialRequestOptions options);
       Promise&lt;Credential&gt; store(Credential credential);
+      Promise&lt;void&gt; bad(Credential credential);
       Promise&lt;void&gt; requireUserMediation();
     };
   </pre>
@@ -1047,6 +1060,20 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
 
       <pre class="argumentdef" for="CredentialsContainer/store(credential)">
         credential: The credential to be stored.
+      </pre>
+    </dd>
+    <dt><dfn method>bad()</dfn></dt>
+    <dd>
+      Notify the credential manager that an authentication or authorization via
+      the passed credential failed. This might be called because a credential
+      is expired.
+
+      When {{bad()}} is called, the user agement MAY offer the user to delete the
+      credential, MAY delete it silently or MAY apply different heuristics to
+      deal with the broken credential.
+      <pre class="argumentdef" for="CredentialsContainer/bad(credential)">
+        credential: The credential that failed to authenticate or authorize the
+        user.
       </pre>
     </dd>
     <dt><dfn method>requireUserMediation()</dfn></dt>
