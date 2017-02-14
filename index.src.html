@@ -2089,11 +2089,30 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
       MUST NOT offer credentials to an origin in response to
       {{CredentialsContainer/get()}} without user mediation if the credential's
       origin is not an exact match for the calling origin. That is,
-      {{Credential}} objects for <code>https://example.com</code> would not be
-      returned directly to <code>https://www.example.com</code>, but could be
+      {{Credential}} objects for <code>https://example.com/</code> would not be
+      returned directly to <code>https://www.example.com/</code>, but could be
       offered to the user via the chooser.
     </li>
+    <li>
+      MAY store credentials without user mediation when
+      {{CredentialsContainer/store()}} is called if the credential was
+      retrieved via a user mediated {{CredentialsContainer/get()}} from a
+      PSL-matched domain and new domain is still PSL-matching the original
+      domain for which the credentials were stored.
   </ol>
+
+  <div class="example">
+    A user stores a credential for <code>https://www.example.com/</code> on
+    their computer. This credential is synced via the browser's syncing
+    technologies to the user's phone. The user visits
+    <code>https://m.example.com/</code>. The browser may provide the stored
+    credential to <code>https://m.example.com/</code> in a user mediated way
+    due to the Public Suffix List [[!PSL]].  After that the website can call
+    {{CredentialsContainer/store()}} and the browser may silently store a
+    second credential or a reference that allows
+    <code>https://m.example.com/</code> to retrieve the credential without user
+    mediation in the future.
+  </div>
 
   {{PasswordCredential}}s further mitigate the risk of data leakage by never
   exposing the {{[[password]]}} slot directly to a page's JavaScript, but only
