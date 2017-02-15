@@ -416,7 +416,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
           &lt;label for="username"&gt;Username&lt;/label&gt;
           &lt;input type="text" id="username" name="username" <a element-attr for="input">autocomplete</a>="<a attr-value>username</a>"&gt;
           &lt;label for="password"&gt;Password&lt;/label&gt;
-          &lt;input type="text" id="password" name="password" <a element-attr for="input">autocomplete</a>="<a attr-value>current-password</a>"&gt;
+          &lt;input type="password" id="password" name="password" <a element-attr for="input">autocomplete</a>="<a attr-value>current-password</a>"&gt;
           &lt;input type="submit"&gt;
         &lt;/form&gt;
       </pre>
@@ -482,7 +482,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
         &lt;form action="https://example.com/changePassword" method="POST" id="theForm"&gt;
           &lt;input type="hidden" name="username" <a element-attr for="input">autocomplete</a>="<a attr-value>username</a>" value="user"&gt;
           &lt;label for="password"&gt;New Password&lt;/label&gt;
-          &lt;input type="text" id="password" name="password" <a element-attr for="input">autocomplete</a>="<a attr-value>new-password</a>"&gt;
+          &lt;input type="password" id="password" name="password" <a element-attr for="input">autocomplete</a>="<a attr-value>new-password</a>"&gt;
           &lt;input type="submit"&gt;
         &lt;/form&gt;
       </pre>
@@ -663,7 +663,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
       required USVString id;
     };
 
-    interface Credential {
+    [SecureContext] interface Credential {
       readonly attribute USVString id;
       readonly attribute DOMString type;
     };
@@ -706,7 +706,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
       USVString iconURL;
     };
 
-    interface SiteBoundCredential : Credential {
+    [SecureContext] interface SiteBoundCredential : Credential {
       readonly attribute USVString name;
       readonly attribute USVString iconURL;
     };
@@ -755,8 +755,8 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
 
     [Constructor(PasswordCredentialData data),
      Constructor(HTMLFormElement form),
-     Exposed=Window]
-    
+     Exposed=Window,
+     SecureContext]
     interface PasswordCredential : SiteBoundCredential {
       attribute USVString idName;
       attribute USVString passwordName;
@@ -816,7 +816,9 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
 
   4.  Let |idName| and |passwordName| be empty strings.
 
-  5.  For each |field| in |elements|, run the following steps:
+  5.  Let |newPasswordObserved| be `false`.
+
+  6.  For each |field| in |elements|, run the following steps:
 
       1.  If |field| does not have an <{input/autocomplete}> attribute, then
           skip to the next |field|.
@@ -834,12 +836,21 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
               1.  If |token| is an <a>ASCII case-insensitive</a> match for one
                   of the following strings, run the associated steps:
 
-                  :   "<a attr-value>`current-password`</a>"
                   :   "<a attr-value>`new-password`</a>"
                   ::  Set |data|'s {{PasswordCredentialData/password}} member's
                       value to the result of executing |formData|'s
+                      {{FormData/get()}} method on |name|, |passwordName| to
+                      |name|, and |newPasswordObserved| to `true`.
+                  :   "<a attr-value>`current-password`</a>"
+                  ::  If |newPasswordObserved| is `false`,
+                      set |data|'s {{PasswordCredentialData/password}} member's
+                      value to the result of executing |formData|'s
                       {{FormData/get()}} method on |name|, and |passwordName| to
                       |name|.
+
+                      Note: By checking that |newPasswordObserved| is `false`,
+                      `new-password` fields take precedence over
+                      `current-password` fields.
                   :   "<a attr-value>`photo`</a>"
                   ::  Set |data|'s {{SiteBoundCredentialData/iconURL}} member's
                       value to the result of executing |formData|'s
@@ -854,14 +865,14 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
                       result of executing |formData|'s {{FormData/get()}} method
                       on |name|, and |idName| to |name|.
 
-  6.  Let |c| be the result of executing the {{PasswordCredential(data)}}
+  7.  Let |c| be the result of executing the {{PasswordCredential(data)}}
       constructor on |data|. Rethrow any exception generated.
 
-  7.  Set |c|'s {{PasswordCredential/idName}} attribute to |idName|.
+  8.  Set |c|'s {{PasswordCredential/idName}} attribute to |idName|.
 
-  8.  Set |c|'s {{PasswordCredential/passwordName}} attribute to |passwordName|.
+  9.  Set |c|'s {{PasswordCredential/passwordName}} attribute to |passwordName|.
 
-  9.  If |form|'s <a for="form">enctype</a> is "`multipart/form-data`",
+  10. If |form|'s <a for="form">enctype</a> is "`multipart/form-data`",
       then:
      
       1.  Set |c|'s {{PasswordCredential/additionalData}} attribute
@@ -882,7 +893,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
       3.  Set |c|'s {{PasswordCredential/additionalData}} attribute
           to |params|.
 
-  10. Return |c|.
+  11. Return |c|.
 
   <h5 id="passwordcredential-data-constructor" algorithm>
     `PasswordCredential(PasswordCredentialData data)` Constructor
@@ -933,7 +944,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
       DOMString protocol;
     };
 
-    [Constructor(FederatedCredentialData data), Exposed=Window]
+    [Constructor(FederatedCredentialData data), Exposed=Window, SecureContext]
     interface FederatedCredential : SiteBoundCredential {
       readonly attribute USVString provider;
       readonly attribute DOMString? protocol;
@@ -1022,11 +1033,11 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
 
   <pre class="idl">
     partial interface Navigator {
-      readonly attribute CredentialsContainer credentials;
+      [SecureContext] readonly attribute CredentialsContainer credentials;
     };
   </pre>
   <pre class="idl">
-    interface CredentialsContainer {
+    [SecureContext] interface CredentialsContainer {
       Promise&lt;Credential?&gt; get(optional CredentialRequestOptions options);
       Promise&lt;Credential&gt; store(Credential credential);
       Promise&lt;void&gt; requireUserMediation();
@@ -1178,7 +1189,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
         "<a dict-member>federated</a>": {
           "<a idl>providers</a>": [ "https://identity.example.com/" ]
         },
-        "<a idl>unmediated</a>: true
+        "<a idl>unmediated</a>": true
       ).then(function (credential) {
         // ...
       });
@@ -1296,8 +1307,8 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
       32. If |request|'s <a for="request">method</a> is `GET` or `HEAD`, then
           throw a `TypeError` if any of the following are true:
 
-          *   |init|'s `body` member is present and non-null
-          *   |inputBody| is non-null
+          *   <var ignore>init</var>'s `body` member is present and non-null
+          *   <var ignore>inputBody</var> is non-null
           *   |request|'s <a for="request">attached credential</a> is non-null
 
   7.  The <a>HTTP-network-or-cache fetch</a> algorithm is updated with the
@@ -1314,7 +1325,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
           3.  If |type| is the empty string, return a <a>network error</a>.
 
           4.  Let |httpRequest|'s <a for="request">body</a> be |body|,
-              |Content-Type| be |type|, and <a for="request">redirect
+              <var ignore>Content-Type</var> be |type|, and <a for="request">redirect
               mode</a> be "`manual`".
 
   ISSUE(whatwg/fetch#237): These patches are combined into an outstanding
@@ -1423,11 +1434,10 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
     Request a <code>Credential</code>
   </h4>
 
-  Given a <code>sequence&lt;DOMString&gt;</code> (<var>types</var>) and a
-  {{CredentialRequestOptions}} object (<var>options</var>), this
-  algorithm returns a <code>Promise</code> which resolves with either a
-  single {{Credential}} object if one can be obtained, or <code>undefined</code>
-  if not.
+  Given a {{CredentialRequestOptions}} object (<var>options</var>), this
+  algorithm returns a <code>Promise</code> which resolves with either a single
+  {{Credential}} object if one can be obtained, or <code>undefined</code> if
+  not.
 
   If called from an environment which is not a <a>secure context</a>, or
   from somewhere other than a <a>top-level browsing context</a>, the
@@ -1465,13 +1475,13 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
 
       <ol>
         <li>
-          Let <var>interface</var> be the interface whose name is
-          <var>key</var>, or <code>null</code> if no interface's name
-          matches.
+          Let <var>interface</var> be the interface such that {{[[type]]}}
+          across all objects implementing that interface is <var>key</var>, or
+          <code>null</code> if no interface's name matches.
         </li>
         <li>
           If <var>interface</var> is not <code>null</code>, insert
-          <var>interface</var> into <var>possible types</var>.
+          <var>interface</var> into <var>types</var>.
         </li>
       </ol>
     </li>
@@ -1516,7 +1526,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
             <li>
               If <var>options</var>'s {{CredentialRequestOptions/unmediated}}
               is <code>true</code>, resolve <var>promise</var> with
-              <var>undefined</var>, and terminate this algorithm.
+              <code>undefined</code>, and terminate this algorithm.
             </li>
             <li>
               Resolve <var>promise</var> with the result of executing
@@ -1637,7 +1647,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
         <li>
           Let <var>cloned value</var> be the result of invoking the <a>internal
           structured cloning algorithm</a> with <var>source value</var> as the
-          "<code>input</code>" argument, and <var>memory</var> as the
+          "<code>input</code>" argument, and <var ignore>memory</var> as the
           "<code>memory</code>" argument.
         </li>
         <li>
@@ -1652,7 +1662,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
       </ol>
     </li>
     <li>
-      Set <var>deep clone</var> to <code>own</code>.
+      Set <var ignore>deep clone</var> to <code>own</code>.
     </li>
   </ol>
 
@@ -1840,7 +1850,11 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
                 <li>
                   If the user grants <var>origin</var> permission to store
                   credentials (as discussed in [[#user-mediated-storage]]), then
-                  store <var>credential</var> in the <a>credential store</a>.
+                  store {{Credential/id}}, {{[[type]]}},
+                  {{SiteBoundCredential/name}},
+                  {{SiteBoundCredential/iconURL}}, {{[[origin]]}} and
+                  {{[[password]]}} of <var>credential</var> in the
+                  <a>credential store</a>.
                 </li>
               </ol>
             </li>
@@ -1856,13 +1870,19 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
               {{Credential/id}} attribute is <var>credential</var>'s
               {{Credential/id}} and whose {{FederatedCredential/provider}}
               attribute is <var>credential</var>'s
-              {{FederatedCredential/provider}}, then:
+              {{FederatedCredential/provider}} and whose {{[[origin]]}} slot is
+              <var>origin</var>, then:
 
               <ol>
                 <li>
                   If the user grants <var>origin</var> permission to store
                   credentials (as discussed in [[#user-mediated-storage]]),
-                  store <var>credential</var> in the <a>credential store</a>.
+                  store {{Credential/id}}, {{[[type]]}},
+                  {{SiteBoundCredential/name}},
+                  {{SiteBoundCredential/iconURL}}, {{[[origin]]}},
+                  {{FederatedCredential/provider}} and
+                  {{FederatedCredential/protocol}} of <var>credential</var>
+                  in the <a>credential store</a>.
                 </li>
               </ol>
             </li>
@@ -2084,7 +2104,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
       MUST NOT share credentials between origins whose scheme components are
       not the same. That is: credentials saved on
       <code>https://example.com/</code> will never be available to
-      <code>http://example.com/</code> via a user agent's autofill mechanism
+      <code>http://example.com/</code> via a user agent's autofill mechanism.
     </li>
     <li>
       MAY use the Public Suffix List [[!PSL]] to determine the effective scope
