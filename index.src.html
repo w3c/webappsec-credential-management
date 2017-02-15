@@ -310,21 +310,41 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
             function(credential) {
               if (!credential) {
                 // The user either doesn't have credentials for this site, or
-                // refused to share them. Insert some code here to show a basic
-                // login form (or, ideally, do nothing, since this API should
-                // really be progressive enhancement on top of an existing form).
+                // refused to share them. Insert some code here to fall back to
+                // a basic login form (or, ideally, do nothing, since this API
+                // should really be progressive enhancement on top of an
+                // existing form).
                 return;
               }
               if (credential.type == "<a const>password</a>") {
                 fetch("https://example.com/loginEndpoint", { credentials: credential, method: "POST" })
                   .then(function (response) {
-                    // Notify the user that signin succeeded! Do amazing, signed-in things!
+                    if (/* |response| indicates a successful login */) {
+                      // Store the credential again, see note below.
+                      navigator.<a attribute>credentials</a>.<a idl lt="store()" for="CredentialsContainer">store</a>(credential);
+                      // Notify the user that sign-in succeeded! Do amazing, signed-in things!
+                    } else {
+                      // Insert some code here to fall back to a basic login form.
+                    }
                   });
               } else {
                 // See <a href="#examples-federated-signin">the Federated Sign-in example</a>
               }
             });
       </pre>
+
+      Note: The <a>credential chooser</a> presented by the user agent could
+      allow the user to choose credentials that aren't actually stored for the
+      current origin. For instance, it might offer up credentials from
+      <code>https://m.example.com</code> when signing into
+      <code>https://www.example.com</code> (as described in
+      [[#security-cross-origin-leakage]]), or it might allow a user to create a
+      new credential on the fly. Developers can deal gracefully with this uncertainty by
+      calling {{CredentialsContainer/store()}} every time credentials are
+      successfully used, even right after credentials have been retrieved from
+      {{CredentialsContainer/get()}}: if the credentials aren't yet stored for
+      the origin, the user will be given the opportunity to do so. If they are
+      stored, the user won't be prompted.
     </div>
 
     <h4 id="examples-federated-signin">Federated Sign-in</h4>
@@ -382,8 +402,8 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
 
     <h4 id="examples-post-signin">Post-sign-in Confirmation</h4>
 
-    To ensure that credentials are persisted correctly, it may be useful for a
-    website to tell the credential manager that sign-in succeeded.
+    To ensure that users are offered to store new credentials after a successful
+    sign-in, they need to be passed to {{CredentialsContainer/store()}}.
 
     <div class="example">
       If a user is signed in by calling {{fetch()}} on a {{PasswordCredential}}
