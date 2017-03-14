@@ -2437,7 +2437,7 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
   agents to be helpful.</p>
     <p>For consistency, federations passed into the APIs defined in this document
   (e.g. <code class="idl"><a data-link-type="idl" href="#dictdef-federatedcredentialrequestoptions" id="ref-for-dictdef-federatedcredentialrequestoptions-3">FederatedCredentialRequestOptions</a></code>'s <code class="idl"><a data-link-type="idl" href="#dom-federatedcredentialrequestoptions-providers" id="ref-for-dom-federatedcredentialrequestoptions-providers-6">providers</a></code> array, or <code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential-8">FederatedCredential</a></code>'s <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-provider" id="ref-for-dom-federatedcredential-provider-5">provider</a></code> property)
-  MUST be identified by the <a data-link-type="dfn">ASCII serialization</a> of the origin the
+  MUST be identified by the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/#ascii-serialisation-of-an-origin">ASCII serialization</a> of the origin the
   provider uses for sign in. That is, Facebook would be represented by <code>https://www.facebook.com</code> and Google by <code>https://accounts.google.com</code>.</p>
     <p>The ASCII serialization of an origin does <em>not</em> include a trailing
   U+002F SOLIDUS ("<code>/</code>"), but user agents SHOULD accept them
@@ -2726,7 +2726,7 @@ var r = new Request("https://example.com/endpoint", init);
   (<var>options</var>), this algorithm returns a sequence of <code class="idl"><a data-link-type="idl" href="#siteboundcredential" id="ref-for-siteboundcredential-11">SiteBoundCredential</a></code> from the user agent’s <a data-link-type="dfn" href="#credential-store" id="ref-for-credential-store-3">credential store</a> which are potential candidates:</p>
     <ol>
      <li>
-       Let <var>credentials</var> be the set of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-26">Credential</a></code> objects in the <a data-link-type="dfn" href="#credential-store" id="ref-for-credential-store-4">credential store</a> whose <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-2">[[origin]]</a></code> slot is equal to the <a data-link-type="dfn">ASCII
+       Let <var>credentials</var> be the set of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-26">Credential</a></code> objects in the <a data-link-type="dfn" href="#credential-store" id="ref-for-credential-store-4">credential store</a> whose <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-2">[[origin]]</a></code> slot is equal to the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/#ascii-serialisation-of-an-origin">ASCII
       serialization</a> of <var>origin</var>. 
       <p class="note" role="note">Note: This is an exact match, not a <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable domain</a> match.
       See <a href="#security-cross-origin-leakage">§6.1 Cross-origin Credential Leakage</a> for details as to why.</p>
@@ -2776,7 +2776,7 @@ var r = new Request("https://example.com/endpoint", init);
   credential manager for processing. It returns <var>credential</var> regardless
   of whether the user allows or disallows the credential to be persisted to the <a data-link-type="dfn" href="#credential-store" id="ref-for-credential-store-6">credential store</a>:</p>
     <ol>
-     <li> Set <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-3">[[origin]]</a></code> slot to the <a data-link-type="dfn">ASCII
+     <li> Set <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-3">[[origin]]</a></code> slot to the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/#ascii-serialisation-of-an-origin">ASCII
       serialization</a> of <var>origin</var>. 
      <li> If <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-iconurl" id="ref-for-dom-siteboundcredential-iconurl-3">iconURL</a></code> is not an <a data-link-type="dfn" href="https://w3c.github.io/webappsec-mixed-content/#a-priori-authenticated-url"><i lang="la">a priori</i> authenticated URL</a>, set <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-iconurl" id="ref-for-dom-siteboundcredential-iconurl-4">iconURL</a></code> to the empty string. 
      <li>
@@ -3306,6 +3306,7 @@ partial dictionary CredentialRequestOptions {
     <a data-link-type="biblio">[HTML]</a> defines the following terms:
     <ul>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">HTMLFormElement</a>
+     <li><a href="https://html.spec.whatwg.org/multipage/#ascii-serialisation-of-an-origin">ascii serialization</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#autofill-detail-tokens">autofill detail tokens</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-current-password">current-password</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-name">name</a>
