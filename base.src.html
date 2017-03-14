@@ -1,0 +1,419 @@
+<h1>Credential Management Level 1</h1>
+<pre class="metadata">
+Status: ED
+ED: https://w3c.github.io/webappsec-credential-management/
+TR: http://www.w3.org/TR/credential-management-1/
+Previous Version: http://www.w3.org/TR/2015/WD-credential-management-1-20150430/
+Shortname: credential-management
+Level: 1
+Editor: Mike West 56384, Google Inc., mkwst@google.com
+Group: webappsec
+Abstract:
+  This specification describes an imperative API enabling a website to request a
+  user's credentials from a user agent, and to help the user agent correctly
+  store user credentials for future use.
+Indent: 2
+Version History: https://github.com/w3c/webappsec-credential-management/commits/master/index.src.html
+Boilerplate: omit conformance, omit feedback-header
+!Participate: <a href="https://github.com/w3c/webappsec-credential-management/issues/new">File an issue</a> (<a href="https://github.com/w3c/webappsec-credential-management/issues">open issues</a>)
+Markup Shorthands: css off, markdown on
+</pre>
+<pre class="anchors">
+spec: ECMA262; urlPrefix: https://tc39.github.io/ecma262/
+  type: dfn
+    text: JavaScript realm; url: sec-code-realms
+</pre>
+<pre class="link-defaults">
+spec:html; type:dfn; for:/; text:origin
+</pre>
+<section>
+  # Introduction # {#introduction}
+
+  <em>This section is not normative.</em>
+
+  ISSUE: Add an introduction.
+</section>
+<section>
+  # Framework # {#framework}
+
+  ## Infrastructure ## {#framework-infra}
+
+  This document depends on the Infra Standard for a number of foundational concepts used in its
+  algorithms and prose [[!INFRA]].
+
+  ## Credentials ## {#framework-credentials}
+
+  From a developer's perspective, a <dfn export id="concept-credential">credential</dfn> is an
+  object which allows a developer to make an authentication decision for a particular action. This
+  document defines a generic and extensible {{Credential}} interface which serves as a base class
+  for [=credentials=] defined in other documents.
+
+  User agents MUST internally provide a <dfn export id="concept-credential-store">credential
+  store</dfn>, which is a vendor-specific, opaque storage mechanism that offers the following
+  capabilities:
+
+  1.  <dfn for="credential store" abstract-op export>Store a credential</dfn> for later retrieval.
+      This accepts a [=credential=], and inserts it into the [=credential store=].
+
+  2.  <dfn for="credential store" abstract-op export>Retrieve a list of credentials</dfn>. This
+      accepts an arbitrary filter, and returns a `Sequence<Credential>` of those [=credentials=]
+      that match the filter.
+
+  3.  <dfn for="credential store" abstract-op export>Modify a credential</dfn>. This accepts a
+      [=credential=], and overwrites the state of an existing [=credential=] in the
+      [=credential store=].
+
+  4.  <dfn for="credential store" abstract-op export>Retrieve an origin's `requires user
+      mediation` flag</dfn>.
+
+  5.  <dfn for="credential store" abstract-op export>Set an origin's `requires user mediation`
+      flag</dfn>.
+
+  Note: The [=credential store=] is an internal implementation detail of a user agent's
+  implementation of the API specified in this document, and is not exposed to the web directly.
+  More capabilities may be specified by other documents in support of specific [=credential=]
+  types.
+
+  ### The `Credential` Interface ### {#the-credential-interface}
+
+  <pre class="idl">
+    interface Credential {
+      readonly attribute USVString id;
+      readonly attribute DOMString type;
+    };
+  </pre>
+
+  <dl dfn-for="Credential">
+    :   <dfn attribute>id</dfn></dt>
+    ::  The credential's identifier. The requirements for the identifier are distinct for each type
+        of [=credential=]. It might represent a username for username/password tuples, for example.
+
+    :   <dfn attribute>type</dfn></dt>
+    ::  This attribute's getter returns the value of the object's [=interface object=]'s
+        {{[[type]]}} slot, which specifies the kind of credential represented by this object.
+
+    :   <dfn attribute>\[[type]]</dfn></dt>
+    ::  The {{Credential}} [=interface object=] has an internal slot named `[[type]]`, which
+        unsurprisingly contains a string representing the type of the credential. The slot's value
+        is the empty string unless otherwise specified.
+
+        Note: The {{[[type]]}} slot's value will be the same for all credentials implementing a
+        particular interface, which means that developers can rely on `obj.type` returning a string
+        that unambigiously represents the specific kind of {{Credential}} they're dealing with.
+  </dl>
+
+  ISSUE: Talk to Tobie/Dominic about the [=interface object=] bits, here and in
+  [[#algorithm-request]], etc. I'm not sure I've gotten the terminology right. [=interface prototype
+  object=], maybe?
+
+  #### `Credential` Internal Methods #### {#credential-internal-methods}
+
+  <section algorithm="'[[Clone]]' internal method">
+    {{Credential}} objects are <a>cloneable objects</a>. Each {{Credential}} object's
+    <a for="platform object" lt="[[Clone]]()" method>`[[Clone]](targetRealm, memory)`</a> internal method
+    will run these steps unless overridden by a subclass:
+
+    Given a [=JavaScript realm=] (|targetRealm|):
+
+    <ul class="algorithm">
+      1.  Let |output| be a new {{Credential}} object in |targetRealm|.
+
+      2.  Set |output|'s {{Credential/id}} to <b>this</b>' {{Credential/id}}, and |output|'s
+          {{[[type]]}} to <b>this</b>' {{[[type]]}}.
+
+      3.  Return |output|.
+    </ul>
+  </section>
+
+  The [=interface object=] for {{Credential}} defines two internal methods that allow retrieval and
+  storage of {{Credential}} objects:
+
+  <section algorithm="'retrieve a credential' internal method">
+    <dfn for="Credential" method export>\[[Retrieve]](options, allowMediation)</dfn> is called with a
+    {{CredentialRequestOptions}} object, and either "`allow user mediation`" or "`do not allow user
+    mediation`". It returns {{Credential}} if one can be retrieved from the [=credential store=], or
+    `null` otherwise:
+
+    <ul class="algorithm">
+      1.  Return `null`.
+    </ul>
+  </section>
+  
+  <section algorithm="'store a credential' internal method">
+    <dfn for="Credential" method export>\[[Store]](credential)</dfn> is called with a {{Credential}},
+    and returns once {{Credential}} is persisted to the [=credential store=]:
+
+    <ul class="algorithm">
+      1.  Return.
+    </ul>
+  </section>
+
+  Unless otherwise specified, the [=interface objects=] for [=interfaces=] which [=interface/inherit=] from
+  {{Credential}} will use {{Credential}}'s implementation of these two internal methods. Since that
+  implementation isn't particularly useful, derived interfaces MUST override one or the other.
+
+  ## Credential Management ## {#framework-credential-management}
+
+  Developers interact with the user agent's [=credential store=] via methods exposed on the
+  {{CredentialsContainer}} interface, which hangs off the {{Navigator}} object as
+  <a attribute for="Navigator" lt="credentials">`navigator.credentials`</a>.
+
+  <pre class="idl">
+    partial interface Navigator {
+      [SecureContext] readonly attribute CredentialsContainer credentials;
+    };
+  </pre>
+
+  Note: As discussed in [[#insecure-sites]], the credential management API is exposed only in
+  [=Secure Contexts=].
+
+  <pre class="idl">
+    interface CredentialsContainer {
+      Promise&lt;Credential?&gt; get(optional CredentialRequestOptions options);
+      Promise&lt;Credential&gt; store(Credential credential);
+      Promise&lt;void&gt; requireUserMediation();
+    };
+  </pre>
+
+  <dl dfn-for="CredentialsContainer">
+    :   <dfn method>get()</dfn></dt>
+    ::  When {{CredentialsContainer/get()}} is called, the user agent MUST return the result of
+        executing <a abstract-op>Request a `Credential`</a> on
+        {{CredentialsContainer/get(options)/options}}.
+
+        Note: If and when we need to support returning more than a single credential in response to
+        a single call, we will likely introduce a <code>getAll()</code> method which would return
+        <code>Promise&lt;sequence&lt;Credential&gt;&gt;</code>.
+
+        <pre class="argumentdef" for="CredentialsContainer/get(options)">
+          options: The set of properties governing the scope of the request.
+        </pre>
+
+    :   <dfn method>store()</dfn></dt>
+    ::  When {{CredentialsContainer/store()}} is called, the user agent MUST return the result of
+        executing <a abstract-op>Store a `Credential`</a> on 
+        {{CredentialsContainer/store(credential)/credential}}.
+
+        <pre class="argumentdef" for="CredentialsContainer/store(credential)">
+          credential: The credential to be stored.
+        </pre>
+    
+    :   <dfn method>requireUserMediation()</dfn></dt>
+    ::  When {{CredentialsContainer/requireUserMediation()}} is called, the user agent MUST return
+        the result of executing <a abstract-op>Require user mediation</a> on the <a>current settings
+        object</a>.
+  </dl>
+
+  ### The `CredentialRequestOptions` Dictionary ### {#credentialrequestoptions-dictionary}
+
+  In order to retrieve a {{Credential}} via {{CredentialsContainer/get()}}, the caller specifies a
+  few parameters in a {{CredentialRequestOptions}} object.
+
+  Note: The {{CredentialRequestOptions}} dictionary is an extension point. If and when new types of
+  credentials are introduced that require options, their dictionary types will be added to the
+  dictionary so they can be passed into the request. See [[#implementation-extension]].
+
+  <pre class="idl">
+    dictionary CredentialRequestOptions {
+      boolean unmediated = false;
+    };
+  </pre>
+  <dl dfn-for="CredentialRequestOptions">
+    :   <dfn dict-member>unmediated</dfn></dt>
+    ::  If `true`, the user agent will only attempt to provide a {{Credential}} without user
+        interaction. It MUST NOT present the user with any visible prompt to grant access to a
+        {{Credential}}: if the user has opted-into always giving a particular site access to a
+        particular set of credentials, they will be provided. If not, the promise will resolve
+        with `null`. For processing details, see the algorithm defined in
+        [[#algorithm-request]].
+  </dl>
+</section>
+<section>
+  # Algorithms # {#algorithms}
+
+  <h3 id="algorithm-request" algorithm>Request a `Credential`</h3>
+
+  The <dfn abstract-op>Request a `Credential`</dfn> algorithm accepts a {{CredentialRequestOptions}}
+  (|options|), and returns a {{Promise}} which resolves with a {{Credential}} if one can be
+  obtained, or with `null` if not.
+
+  <ul class="algorithm">
+    1.  Let |settings| be the <a>current settings object</a>
+
+    2.  Assert: |settings| is a [=secure context=].
+
+    3.  Return a {{Promise}} rejected with `NotSupportedError` if any of the following statements
+        are true:
+
+        1.  |settings| does not have a [=environment settings object/responsible document=].
+
+        2.  |settings|' [=environment settings object/responsible document=] is not the
+            [=active document=] in a [=top-level browsing context=].
+
+    4.  Let |retriever| be `null`.
+
+    5.  For each |key| in |options|' <a for="map" lt="get the keys">keys</a>:
+
+        1.  Let |credential interfaces| be the set of [=interfaces=] whose [=inherited interfaces=]
+            <a for="set">contain</a> {{Credential}}.
+
+        2.  For each |interface| in |credential interfaces|:
+
+            1.  If |interface|'s [=interface object=]'s {{[[type]]}} slot's value is not |key|,
+                <a for="iteration">continue</a>.
+
+            2.  Let |interface retriever| be |interface|'s {{[[Retrieve]](options, allowMediation)}}
+                internal method.
+
+            3.  If |retriever| is neither `null` nor |interface retriever|, return a new {{Promise}}
+                rejected with `TypeMismatchError`.
+
+            4.  Set |retriever| to |interface retriever|.
+
+        Note: The goal here is to walk through all the known types of credentials, comparing them
+        to the keys in |options| to figure out which {{[[Retrieve]]()}} method we'll use to poke at
+        the [=credential store=]. If the developer requests multiple types, we verify that they're
+        implemented using the same {{[[Retrieve]]()}} method. If so, great! If not, we error out.
+
+    6.  Let |p| be a new {{Promise}}.
+    
+    7.  Return |p|, and execute the following steps asynchronously:
+
+    8.  Let |c| be the result of executing |retriever| on |options| and "`do not allow user
+        mediation`".
+
+    9.  If |c| is not `null`, resolve |p| with |c|, and skip the remaining steps.
+
+    10. If |options|' {{CredentialRequestOptions/unmediated}} is `true`, resolve |p| with `null` and
+        skip the remaining steps.
+
+    11. Resolve |p| with the result of executing |retriever| on |options| and "`allow user
+        mediation`".
+  </ul>
+
+  <h3 id="algorithm-store" algorithm>Store a `Credential`</h3>
+
+  The <dfn abstract-op>Store a `Credential`</dfn> algorithm accepts a {{Credential}}
+  (|credential|), and returns a {{Promise}} which resolves once the object is persisted to the
+  [=credential store=].
+
+  <ul class="algorithm">
+    1.  Let |settings| be the <a>current settings object</a>
+
+    2.  Assert: |settings| is a [=secure context=].
+
+    3.  Return a {{Promise}} rejected with `NotSupportedError` if any of the following statements
+        are true:
+
+        1.  |settings| does not have a [=environment settings object/responsible document=].
+
+        2.  |settings|' [=environment settings object/responsible document=] is not the
+            [=active document=] in a [=top-level browsing context=].
+
+    4.  Return a {{Promise}} which resolves with the result of executing |credential|'s
+        [=interface object=]'s {{[[Store]](credential)}} internal method on |credential|.
+  </ul>
+
+  <h3 id="algorithm-require-mediation" algorithm>Require User Mediation</h3>
+
+  The <dfn abstract-op>Require user mediation</dfn> algorithm accepts an [=environment settings
+  object=] (|settings|), and returns a {{Promise}} which resolves once the `requires user mediation`
+  flag is persisted to the [=credential store=].
+
+  <ul class="algorithm">
+    1.  Let |origin| be |settings|' [=environment settings object/origin=].
+
+    2.  Let |p| be a new {{Promise}}.
+
+    3.  Return |p|, and execute the following steps asynchronously:
+
+        1.  <a abstract-op lt="Set an origin's requires user mediation flag">Set the `requires user
+            mediation` flag</a> for |origin| in the [=credential store=].
+
+        2.  Resolve |p|.
+  </ul>
+</section>
+
+<section>
+  # Security and Privacy Considerations # {#security-and-privacy}
+
+  ## Insecure Sites ## {#insecure-sites}
+
+  User agents MUST NOT expose the APIs defined here to environments which are not [=secure
+  contexts=]. User agents might implement autofill mechanisms which store user credentials and fill
+  sign-in forms on non-<a><i lang="la">a priori</i> authenticated URLs</a>, but those sites cannot
+  be trusted to interact directly with the credential manager in any meaningful way, and those sites
+  MUST NOT have access to credentials saved in [=secure contexts=].
+</section>
+
+<section>
+  # Implementation Considerations # {#implementation}
+
+  <em>This section is non-normative.</em>
+
+  ## Website Authors ## {#implementation-authors}
+
+  ISSUE(w3c/webappsec#290): Add some thoughts here about when and how the API
+  should be used, especially with regard to {{unmediated}}.
+
+  ## Extension Points ## {#implementation-extension}
+
+  This document provides a generic, high-level API that's meant to be extended with specific types
+  of [=credentials=] that serve specific authentication needs. Doing so is, hopefully,
+  straightforward:
+
+  1.  Define a new interface (say, `ExampleCredential`) that inherits from {{Credential}}.
+  
+      <pre>
+        [Constructor(...),
+         Exposed=Window,
+         SecureContext]
+        interface ExampleCredential : Credential {
+          // Definition goes here.
+        };
+      </pre>
+
+  2.  Define {{[[Retrieve]](options, allowMediation)}} and {{[[Store]](credential)}} internal
+      methods on `ExampleCredential`'s [=interface object=].
+
+  3.  Define the value of the `ExampleCredential` [=interface object=]'s {{[[type]]}} slot:
+
+      <div class="example">
+        The `ExampleCredential` [=interface object=] has an internal slot named `[[type]]` whose
+        value is the string "`example`".
+      </div>
+
+  4.  Extend {{CredentialRequestOptions}} with the options the new credential type needs to respond
+      reasonably to {{get()}}:
+
+      <pre>
+        dictionary ExampleCredentialRequestOptions {
+          // Definition goes here.
+        };
+
+        partial dictionary CredentialRequestOptions {
+          ExampleCredentialRequestOptions? example;
+        };
+      </pre>
+  </div>
+
+  You might also need new primitives. For instance, you might want to return many {{Credential}}
+  objects rather than just one. That might be accomplished in a generic fashion by adding a
+  `getAll()` method to {{CredentialsContainer}}, and defining a `CredentialSet` object that
+  contained a `Sequence<Credential>`, and could be easily extended to meet some use case.
+
+  For any such extension, we recommend getting in touch with
+  <a href="mailto:public-webappsec@w3.org">public-webappsec@</a> for
+  consultation and review.
+
+  <h3 id="implementation-browser-extensions">Browser Extensions</h3>
+
+  Ideally, user agents that implement an extension system of some sort will
+  allow third-parties to hook into these API endpoints in order to improve
+  the behavior of third party credential management software in the same way
+  that user agents can improve their own via this imperative approach.
+
+  This could range from a complex new API that the user agent mediates, or
+  simply by allowing extensions to overwrite the {{CredentialsContainer/get()}}
+  and {{CredentialsContainer/store()}} endpoints for their own purposes.
+</section>
