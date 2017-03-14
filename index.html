@@ -1431,7 +1431,7 @@ pre.idl.highlight { color: #708090; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-02-15">15 February 2017</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-03-14">14 March 2017</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1937,9 +1937,9 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
        <li data-md="">
         <p>Store, retrieve, and modify <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-1">Credential</a></code> objects.</p>
        <li data-md="">
-        <p>To mark an <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a> with a <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="requires-user-mediation">requires user mediation</dfn> flag.</p>
+        <p>To mark an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/#concept-origin">origin</a> with a <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="requires-user-mediation">requires user mediation</dfn> flag.</p>
        <li data-md="">
-        <p>To associate an <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a> with a <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="protocol-set">protocol set</dfn>.</p>
+        <p>To associate an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/#concept-origin">origin</a> with a <dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="protocol-set">protocol set</dfn>.</p>
       </ol>
       <p>The implementation is vendor-specific, and the interface provided is not
       exposed to the web.</p>
@@ -2014,7 +2014,7 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
       as an <code>ImageBitmap</code> or <code>blob:</code>. We also need to
       figure out responsiveness. Perhaps <a data-link-type="biblio" href="#biblio-manifest">[MANIFEST]</a>'s format? <a href="https://github.com/w3c/webappsec/issues/247">&lt;https://github.com/w3c/webappsec/issues/247></a></p>
      <dt><dfn class="dfn-paneled idl-code" data-dfn-for="SiteBoundCredential" data-dfn-type="attribute" data-export="" id="dom-siteboundcredential-origin-slot">[[origin]]</dfn>
-     <dd> All <code class="idl"><a data-link-type="idl" href="#siteboundcredential" id="ref-for-siteboundcredential-3">SiteBoundCredential</a></code> objects have an internal slot named <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-1">[[origin]]</a></code>, which stores the <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a> to which the credential is
+     <dd> All <code class="idl"><a data-link-type="idl" href="#siteboundcredential" id="ref-for-siteboundcredential-3">SiteBoundCredential</a></code> objects have an internal slot named <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-1">[[origin]]</a></code>, which stores the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/#concept-origin">origin</a> to which the credential is
       bound. This property is not directly exposed to the web. 
     </dl>
     <p>All <code class="idl"><a data-link-type="idl" href="#siteboundcredential" id="ref-for-siteboundcredential-4">SiteBoundCredential</a></code> objects MUST define an <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="options matching algorithm" data-noexport="" id="options-matching-algorithm">options matching
@@ -2352,7 +2352,7 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
       called after a user signs out of a website, for instance, in order to
       ensure that she isn’t automatically signed back in next time she visits. 
       <p>When <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-requireusermediation" id="ref-for-dom-credentialscontainer-requireusermediation-2">requireUserMediation()</a></code> is called, the user agent MUST execute the
-      algorithm defined in <a href="#require-user-mediation-for-origin">§4.3.1 Require user mediation for origin</a> with the <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a> of the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/webappapis.html#incumbent-settings-object">incumbent settings object</a> in which this method
+      algorithm defined in <a href="#require-user-mediation-for-origin">§4.3.1 Require user mediation for origin</a> with the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/#concept-origin">origin</a> of the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/webappapis.html#incumbent-settings-object">incumbent settings object</a> in which this method
       is called.</p>
     </dl>
     <h4 class="heading settled" data-level="3.2.1" id="interfaces-request-options"><span class="secno">3.2.1. </span><span class="content"> <code>get()</code> Parameters </span><a class="self-link" href="#interfaces-request-options"></a></h4>
@@ -2437,7 +2437,7 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
   agents to be helpful.</p>
     <p>For consistency, federations passed into the APIs defined in this document
   (e.g. <code class="idl"><a data-link-type="idl" href="#dictdef-federatedcredentialrequestoptions" id="ref-for-dictdef-federatedcredentialrequestoptions-3">FederatedCredentialRequestOptions</a></code>'s <code class="idl"><a data-link-type="idl" href="#dom-federatedcredentialrequestoptions-providers" id="ref-for-dom-federatedcredentialrequestoptions-providers-6">providers</a></code> array, or <code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential-8">FederatedCredential</a></code>'s <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-provider" id="ref-for-dom-federatedcredential-provider-5">provider</a></code> property)
-  MUST be identified by the <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-6.2">ASCII serialization</a> of the origin the
+  MUST be identified by the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/#ascii-serialisation-of-an-origin">ASCII serialization</a> of the origin the
   provider uses for sign in. That is, Facebook would be represented by <code>https://www.facebook.com</code> and Google by <code>https://accounts.google.com</code>.</p>
     <p>The ASCII serialization of an origin does <em>not</em> include a trailing
   U+002F SOLIDUS ("<code>/</code>"), but user agents SHOULD accept them
@@ -2617,7 +2617,7 @@ var r = new Request("https://example.com/endpoint", init);
   from somewhere other than a <a data-link-type="dfn" href="http://www.w3.org/TR/html5/browsers.html#top-level-browsing-context">top-level browsing context</a>, the <code>Promise</code> will be rejected with a <code>NotSupportedError</code>.</p>
     <ol>
      <li> Let <var>settings</var> be the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/webappapis.html#incumbent-settings-object">incumbent settings object</a>. 
-     <li> Let <var>origin</var> be <var>settings</var>’ <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a>. 
+     <li> Let <var>origin</var> be <var>settings</var>’ <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/#concept-origin">origin</a>. 
      <li>
        Return a <code>Promise</code> rejected with <code>NotSupportedError</code> if any of the following statements are true: 
       <ol>
@@ -2673,7 +2673,7 @@ var r = new Request("https://example.com/endpoint", init);
   from somewhere other than a <a data-link-type="dfn" href="http://www.w3.org/TR/html5/browsers.html#top-level-browsing-context">top-level browsing context</a>, the <code>Promise</code> will be rejected with a <code>NotSupportedError</code>.</p>
     <ol>
      <li> Let <var>settings</var> be the <a data-link-type="dfn" href="http://www.w3.org/TR/html5/webappapis.html#incumbent-settings-object">incumbent settings object</a>. 
-     <li> Let <var>origin</var> be <var>settings</var>’ <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a>. 
+     <li> Let <var>origin</var> be <var>settings</var>’ <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/#concept-origin">origin</a>. 
      <li>
        Return a <code>Promise</code> rejected with <code>NotSupportedError</code> if any of the following statements are true: 
       <ol>
@@ -2722,11 +2722,11 @@ var r = new Request("https://example.com/endpoint", init);
     </ol>
     <h3 class="heading settled" data-level="4.2" id="processing-sitebound"><span class="secno">4.2. </span><span class="content"> Processing <code>SiteBoundCredential</code>s </span><a class="self-link" href="#processing-sitebound"></a></h3>
     <h4 class="heading settled" data-level="4.2.1" id="gather-siteboundcredentials"><span class="secno">4.2.1. </span><span class="content"> Gather <code>SiteBoundCredential</code>s </span><a class="self-link" href="#gather-siteboundcredentials"></a></h4>
-    <p>Given an <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a> (<var>origin</var>), and a set of <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface">interfaces</a> (<var>types</var>), and an <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-7">CredentialRequestOptions</a></code> dictionary
+    <p>Given an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/#concept-origin">origin</a> (<var>origin</var>), and a set of <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface">interfaces</a> (<var>types</var>), and an <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-7">CredentialRequestOptions</a></code> dictionary
   (<var>options</var>), this algorithm returns a sequence of <code class="idl"><a data-link-type="idl" href="#siteboundcredential" id="ref-for-siteboundcredential-11">SiteBoundCredential</a></code> from the user agent’s <a data-link-type="dfn" href="#credential-store" id="ref-for-credential-store-3">credential store</a> which are potential candidates:</p>
     <ol>
      <li>
-       Let <var>credentials</var> be the set of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-26">Credential</a></code> objects in the <a data-link-type="dfn" href="#credential-store" id="ref-for-credential-store-4">credential store</a> whose <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-2">[[origin]]</a></code> slot is equal to the <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-6.2">ASCII
+       Let <var>credentials</var> be the set of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-26">Credential</a></code> objects in the <a data-link-type="dfn" href="#credential-store" id="ref-for-credential-store-4">credential store</a> whose <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-2">[[origin]]</a></code> slot is equal to the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/#ascii-serialisation-of-an-origin">ASCII
       serialization</a> of <var>origin</var>. 
       <p class="note" role="note">Note: This is an exact match, not a <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable domain</a> match.
       See <a href="#security-cross-origin-leakage">§6.1 Cross-origin Credential Leakage</a> for details as to why.</p>
@@ -2737,7 +2737,7 @@ var r = new Request("https://example.com/endpoint", init);
      <li> Return <var>credentials</var>. 
     </ol>
     <h4 class="heading settled" data-level="4.2.2" id="request-siteboundcredential-without-mediation"><span class="secno">4.2.2. </span><span class="content"> Request an <code>SiteBoundCredential</code> <em>without</em> user mediation </span><a class="self-link" href="#request-siteboundcredential-without-mediation"></a></h4>
-    <p>This algorithm accepts an <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a> (<var>origin</var>), a set of <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface">interfaces</a> (<var>types</var>) and an <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-8">CredentialRequestOptions</a></code> dictionary (<var>options</var>), and returns either a single <code class="idl"><a data-link-type="idl" href="#siteboundcredential" id="ref-for-siteboundcredential-12">SiteBoundCredential</a></code> object <strong>if and only if</strong> one can be
+    <p>This algorithm accepts an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/#concept-origin">origin</a> (<var>origin</var>), a set of <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface">interfaces</a> (<var>types</var>) and an <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-8">CredentialRequestOptions</a></code> dictionary (<var>options</var>), and returns either a single <code class="idl"><a data-link-type="idl" href="#siteboundcredential" id="ref-for-siteboundcredential-12">SiteBoundCredential</a></code> object <strong>if and only if</strong> one can be
   provided without user mediation, or <code>null</code> if not.</p>
     <ol>
      <li>
@@ -2759,7 +2759,7 @@ var r = new Request("https://example.com/endpoint", init);
   recommend that this algorithm always return <code>null</code> when the user
   has enabled private browsing.</p>
     <h4 class="heading settled" data-level="4.2.3" id="request-siteboundcredential-with-mediation"><span class="secno">4.2.3. </span><span class="content"> Request a <code>SiteBoundCredential</code> with user mediation </span><a class="self-link" href="#request-siteboundcredential-with-mediation"></a></h4>
-    <p>This algorithm accepts an <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a> (<var>origin</var>), a set of <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface">interfaces</a> (<var>types</var>) and an <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-9">CredentialRequestOptions</a></code> dictionary (<var>options</var>), and returns either a single <code class="idl"><a data-link-type="idl" href="#siteboundcredential" id="ref-for-siteboundcredential-13">SiteBoundCredential</a></code> object, or <code>null</code> if none can be
+    <p>This algorithm accepts an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/#concept-origin">origin</a> (<var>origin</var>), a set of <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface">interfaces</a> (<var>types</var>) and an <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-9">CredentialRequestOptions</a></code> dictionary (<var>options</var>), and returns either a single <code class="idl"><a data-link-type="idl" href="#siteboundcredential" id="ref-for-siteboundcredential-13">SiteBoundCredential</a></code> object, or <code>null</code> if none can be
   provided.</p>
     <ol>
      <li> Let <var>credentials</var> be the result of executing <a href="#gather-siteboundcredentials">§4.2.1 Gather SiteBoundCredentials</a> on <var>origin</var>, <var>types</var>, and <var>options</var>. 
@@ -2772,11 +2772,11 @@ var r = new Request("https://example.com/endpoint", init);
     </ol>
     <h4 class="heading settled" data-level="4.2.4" id="store-siteboundcredential"><span class="secno">4.2.4. </span><span class="content"> Store <code>SiteBoundCredential</code> </span><a class="self-link" href="#store-siteboundcredential"></a></h4>
     <p>This algorithm accepts a <code class="idl"><a data-link-type="idl" href="#siteboundcredential" id="ref-for-siteboundcredential-14">SiteBoundCredential</a></code> (<var>credential</var>),
-  and an <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a> (<var>origin</var>), and hands it to the internal
+  and an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/#concept-origin">origin</a> (<var>origin</var>), and hands it to the internal
   credential manager for processing. It returns <var>credential</var> regardless
   of whether the user allows or disallows the credential to be persisted to the <a data-link-type="dfn" href="#credential-store" id="ref-for-credential-store-6">credential store</a>:</p>
     <ol>
-     <li> Set <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-3">[[origin]]</a></code> slot to the <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-6.2">ASCII
+     <li> Set <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-3">[[origin]]</a></code> slot to the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/#ascii-serialisation-of-an-origin">ASCII
       serialization</a> of <var>origin</var>. 
      <li> If <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-iconurl" id="ref-for-dom-siteboundcredential-iconurl-3">iconURL</a></code> is not an <a data-link-type="dfn" href="https://w3c.github.io/webappsec-mixed-content/#a-priori-authenticated-url"><i lang="la">a priori</i> authenticated URL</a>, set <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-iconurl" id="ref-for-dom-siteboundcredential-iconurl-4">iconURL</a></code> to the empty string. 
      <li>
@@ -2837,7 +2837,7 @@ var r = new Request("https://example.com/endpoint", init);
     <h4 class="heading settled" data-level="4.3.2" id="is-match"><span class="secno">4.3.2. </span><span class="content"> Does <var>credential</var> match <var>origin B</var>? </span><a class="self-link" href="#is-match"></a></h4>
     <ol>
      <li> Let <var>origin A</var> be the value of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-8">[[origin]]</a></code> slot. 
-     <li> If <var>origin A</var> is <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-5">the same</a> as <var>origin B</var>, return <code>Exact Match</code>. 
+     <li> If <var>origin A</var> is <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/#concept-origin-effective-domain">the same</a> as <var>origin B</var>, return <code>Exact Match</code>. 
      <li> If <var>origin A</var>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#concept-url-scheme">scheme</a></code> is <var>origin B</var>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#concept-url-scheme">scheme</a></code>, and <var>origin A</var>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#concept-url-host">host</a></code>'s <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable
       domain</a> is <var>origin B</var>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#concept-url-host">host</a></code>'s <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable
       domain</a>, then return <code>Fuzzy Match</code>. 
@@ -2873,7 +2873,7 @@ var r = new Request("https://example.com/endpoint", init);
       with a notification as described above. 
     </ol>
     <h3 class="heading settled" data-level="5.2" id="user-mediation-requirements"><span class="secno">5.2. </span><span class="content">Requiring User Mediation</span><a class="self-link" href="#user-mediation-requirements"></a></h3>
-    <p>If a an <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a>’s <a data-link-type="dfn" href="#requires-user-mediation" id="ref-for-requires-user-mediation-3">requires user mediation</a> flag is set to <code>false</code> in the user agent’s <a data-link-type="dfn" href="#credential-store" id="ref-for-credential-store-10">credential store</a>, then <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-32">Credential</a></code> objects from that origin MAY be provided to pages from that
+    <p>If a an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/#concept-origin">origin</a>’s <a data-link-type="dfn" href="#requires-user-mediation" id="ref-for-requires-user-mediation-3">requires user mediation</a> flag is set to <code>false</code> in the user agent’s <a data-link-type="dfn" href="#credential-store" id="ref-for-credential-store-10">credential store</a>, then <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-32">Credential</a></code> objects from that origin MAY be provided to pages from that
   origin without user interaction. The user will be signed-in to that origin
   persistently, which, on the one hand, is desirable from the perspective of
   usability and convenience, but which might nevertheless surprise the user.</p>
@@ -3034,7 +3034,7 @@ var r = new Request("https://example.com/endpoint", init);
   exposed to the website (consider a user who names two credentials for an
   origin "My fake account" and "My real account", for instance).</p>
     <h3 class="heading settled" data-level="7.4" id="locally-stored-data"><span class="secno">7.4. </span><span class="content">Locally Stored Data</span><a class="self-link" href="#locally-stored-data"></a></h3>
-    <p>This API offers an <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a> the ability to store data persistently along
+    <p>This API offers an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/#concept-origin">origin</a> the ability to store data persistently along
   with a user’s profile. Since most user agents treat credential data
   differently than "browsing data" (cookies, etc.) this might have the side
   effect of surprising a user who might believe that all traces of an origin
@@ -3042,7 +3042,7 @@ var r = new Request("https://example.com/endpoint", init);
     <p>User agents SHOULD provide UI that makes it clear to a user that credential
   data is stored for an origin, and SHOULD make it easy for users to remove
   such data when they’re no longer interested in keeping it around.</p>
-    <p>Moreover, the <a data-link-type="dfn" href="#credential-store" id="ref-for-credential-store-13">credential store</a>’s association between <a data-link-type="dfn" href="https://tools.ietf.org/html/rfc6454#section-3.2">origins</a> and <a data-link-type="dfn" href="#protocol-set" id="ref-for-protocol-set-1">protocol sets</a> SHOULD be cleared along with "browsing data" if
+    <p>Moreover, the <a data-link-type="dfn" href="#credential-store" id="ref-for-credential-store-13">credential store</a>’s association between <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/#concept-origin">origins</a> and <a data-link-type="dfn" href="#protocol-set" id="ref-for-protocol-set-1">protocol sets</a> SHOULD be cleared along with "browsing data" if
   no <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-42">Credential</a></code> has been stored for the origin.</p>
    </section>
    <section>
@@ -3306,12 +3306,15 @@ partial dictionary CredentialRequestOptions {
     <a data-link-type="biblio">[HTML]</a> defines the following terms:
     <ul>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">HTMLFormElement</a>
+     <li><a href="https://html.spec.whatwg.org/multipage/#ascii-serialisation-of-an-origin">ascii serialization</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#autofill-detail-tokens">autofill detail tokens</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-current-password">current-password</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-name">name</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-new-password">new-password</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-nickname">nickname</a>
+     <li><a href="https://html.spec.whatwg.org/multipage/#concept-origin">origin</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-photo">photo</a>
+     <li><a href="https://html.spec.whatwg.org/multipage/#concept-origin-effective-domain">the same</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-username">username</a>
     </ul>
    <li>
@@ -3345,13 +3348,6 @@ partial dictionary CredentialRequestOptions {
     <a data-link-type="biblio">[PSL]</a> defines the following terms:
     <ul>
      <li><a href="https://publicsuffix.org/list/#">registerable domain</a>
-    </ul>
-   <li>
-    <a data-link-type="biblio">[rfc6454]</a> defines the following terms:
-    <ul>
-     <li><a href="https://tools.ietf.org/html/rfc6454#section-6.2">ascii serialization</a>
-     <li><a href="https://tools.ietf.org/html/rfc6454#section-3.2">origin</a>
-     <li><a href="https://tools.ietf.org/html/rfc6454#section-5">the same</a>
     </ul>
    <li>
     <a data-link-type="biblio">[secure-contexts]</a> defines the following terms:
@@ -3416,8 +3412,6 @@ partial dictionary CredentialRequestOptions {
    <dd>Mozilla Foundation. <a href="https://publicsuffix.org/">Public Suffix List</a>. URL: <a href="https://publicsuffix.org/">https://publicsuffix.org/</a>
    <dt id="biblio-rfc2119">[RFC2119]
    <dd>S. Bradner. <a href="https://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119">https://tools.ietf.org/html/rfc2119</a>
-   <dt id="biblio-rfc6454">[RFC6454]
-   <dd>A. Barth. <a href="https://tools.ietf.org/html/rfc6454">The Web Origin Concept</a>. December 2011. Proposed Standard. URL: <a href="https://tools.ietf.org/html/rfc6454">https://tools.ietf.org/html/rfc6454</a>
    <dt id="biblio-secure-contexts">[SECURE-CONTEXTS]
    <dd>Mike West. <a href="https://w3c.github.io/webappsec-secure-contexts/">Secure Contexts</a>. URL: <a href="https://w3c.github.io/webappsec-secure-contexts/">https://w3c.github.io/webappsec-secure-contexts/</a>
    <dt id="biblio-webidl">[WebIDL]
