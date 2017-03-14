@@ -28,6 +28,9 @@ Markup Shorthands: css off, markdown on
   }
 </style>
 
+<pre class="link-defaults">
+spec:html; type:dfn; for:/; text:origin
+</pre>
 <pre class="anchors">
 spec: HTML5; urlPrefix: http://www.w3.org/TR/html5/
   type: dfn
@@ -70,9 +73,6 @@ spec: HTML5; urlPrefix: http://www.w3.org/TR/html5/
       text: Navigator
 spec: HTML; urlPrefix: https://html.spec.whatwg.org/multipage/
   type: dfn
-    text: same-origin; url: concept-origin-effective-domain
-    text: origin; url: concept-origin
-    text: ASCII serialization; url: ascii-serialisation-of-an-origin
     urlPrefix: forms.html
       text: autofill detail tokens
   type: attr-value
@@ -1216,7 +1216,8 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
   (e.g. {{FederatedCredentialRequestOptions}}'s
   {{FederatedCredentialRequestOptions/providers}} array, or
   {{FederatedCredential}}'s {{FederatedCredential/provider}} property)
-  MUST be identified by the <a>ASCII serialization</a> of the origin the
+  MUST be identified by the
+  <a lt="ASCII serialization of an origin">ASCII serialization</a> of the origin the
   provider uses for sign in. That is, Facebook would be represented by
   <code>https://www.facebook.com</code> and Google by
   <code>https://accounts.google.com</code>.
@@ -1689,8 +1690,9 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
   <ol>
     <li>
       Let <var>credentials</var> be the set of {{Credential}} objects in the
-      <a>credential store</a> whose {{[[origin]]}} slot is equal to the <a>ASCII
-      serialization</a> of <var>origin</var>.
+      <a>credential store</a> whose {{[[origin]]}} slot is equal to the
+      <a lt="ASCII serialization of an origin">ASCII serialization</a> of
+      <var>origin</var>.
 
       Note: This is an exact match, not a <a>registerable domain</a> match.
       See [[#security-cross-origin-leakage]] for details as to why.
@@ -1798,8 +1800,8 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
 
   <ol>
     <li>
-      Set <var>credential</var>'s {{[[origin]]}} slot to the <a>ASCII
-      serialization</a> of <var>origin</var>.
+      Set <var>credential</var>'s {{[[origin]]}} slot to the
+      <a lt="ASCII serialization of an origin">ASCII serialization</a> of <var>origin</var>.
     </li>
     <li>
       If <var>credential</var>'s {{SiteBoundCredential/iconURL}} is not an
