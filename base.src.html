@@ -131,8 +131,8 @@ spec:html; type:dfn; for:/; text:origin
   <section algorithm="'retrieve a credential' internal method">
     <dfn for="Credential" method export>\[[Retrieve]](options, allowMediation)</dfn> is called with a
     {{CredentialRequestOptions}} object, and either "`allow user mediation`" or "`do not allow user
-    mediation`". It returns {{Credential}} if one can be retrieved from the [=credential store=], or
-    `null` otherwise:
+    mediation`". It returns a {{Credential}} if one can be retrieved from the [=credential store=],
+    or `null` otherwise:
 
     <ul class="algorithm">
       1.  Return `null`.
@@ -180,10 +180,6 @@ spec:html; type:dfn; for:/; text:origin
     ::  When {{CredentialsContainer/get()}} is called, the user agent MUST return the result of
         executing <a abstract-op>Request a `Credential`</a> on
         {{CredentialsContainer/get(options)/options}}.
-
-        Note: If and when we need to support returning more than a single credential in response to
-        a single call, we will likely introduce a <code>getAll()</code> method which would return
-        <code>Promise&lt;sequence&lt;Credential&gt;&gt;</code>.
 
         <pre class="argumentdef" for="CredentialsContainer/get(options)">
           options: The set of properties governing the scope of the request.
@@ -362,19 +358,36 @@ spec:html; type:dfn; for:/; text:origin
   of [=credentials=] that serve specific authentication needs. Doing so is, hopefully,
   straightforward:
 
-  1.  Define a new interface (say, `ExampleCredential`) that inherits from {{Credential}}.
-  
-      <pre>
-        [Constructor(...),
-         Exposed=Window,
-         SecureContext]
-        interface ExampleCredential : Credential {
-          // Definition goes here.
-        };
-      </pre>
+  1.  Define a new interface that inherits from {{Credential}}:
+ 
+      <div class="example"> 
+        <pre>
+          [Constructor(...),
+           Exposed=Window,
+           SecureContext]
+          interface ExampleCredential : Credential {
+            // Definition goes here.
+          };
+        </pre>
+      </div>
 
   2.  Define {{[[Retrieve]](options, allowMediation)}} and {{[[Store]](credential)}} internal
-      methods on `ExampleCredential`'s [=interface object=].
+      methods on `ExampleCredential`'s [=interface object=]:
+
+      <div class="example">
+        `ExampleCredential`'s `[[Retrieve]](options, allowMediation)` internal method is called
+        with a CredentialRequestOptions object (`options`), and either "`allow user mediation`" or
+        "`do not allow user mediation`". It returns a `Credential` if one can be retrieved from the
+        credential store, or `null` otherwise:
+
+        1.  Return a new `Promise` `p`, and execute the remaining steps asynchronously.
+
+        2.  Let `c` be a new `ExampleCredential` with its properties set as follows:
+        
+            * ...
+
+        3.  Resolve `p` with `c`.
+      </div>
 
   3.  Define the value of the `ExampleCredential` [=interface object=]'s {{[[type]]}} slot:
 
@@ -386,25 +399,26 @@ spec:html; type:dfn; for:/; text:origin
   4.  Extend {{CredentialRequestOptions}} with the options the new credential type needs to respond
       reasonably to {{get()}}:
 
-      <pre>
-        dictionary ExampleCredentialRequestOptions {
-          // Definition goes here.
-        };
+      <div class="example">
+        <pre>
+          dictionary ExampleCredentialRequestOptions {
+            // Definition goes here.
+          };
 
-        partial dictionary CredentialRequestOptions {
-          ExampleCredentialRequestOptions? example;
-        };
-      </pre>
-  </div>
+          partial dictionary CredentialRequestOptions {
+            ExampleCredentialRequestOptions? example;
+          };
+        </pre>
+      </div>
 
-  You might also need new primitives. For instance, you might want to return many {{Credential}}
-  objects rather than just one. That might be accomplished in a generic fashion by adding a
-  `getAll()` method to {{CredentialsContainer}}, and defining a `CredentialSet` object that
-  contained a `Sequence<Credential>`, and could be easily extended to meet some use case.
+  You might also find that new primitives are necessary. For instance, you might want to return
+  many {{Credential}} objects rather than just one in some sort of complicated, multi-factor
+  sign-in process. That might be accomplished in a generic fashion by adding a `getAll()` method to
+  {{CredentialsContainer}} which returned a `sequence<Credential>`, and defining a reasonable
+  mechanism for dealing with requesting credentials of distinct types.
 
   For any such extension, we recommend getting in touch with
-  <a href="mailto:public-webappsec@w3.org">public-webappsec@</a> for
-  consultation and review.
+  <a href="mailto:public-webappsec@w3.org">public-webappsec@</a> for consultation and review.
 
   <h3 id="implementation-browser-extensions">Browser Extensions</h3>
 

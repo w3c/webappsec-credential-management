@@ -1423,7 +1423,7 @@ pre.idl.highlight { color: #708090; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-03-14">14 March 2017</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-03-15">15 March 2017</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1622,7 +1622,8 @@ store user credentials for future use.</p>
     <p>The <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a> for <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-7">Credential</a></code> defines two internal methods that allow retrieval and
   storage of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-8">Credential</a></code> objects:</p>
     <section class="algorithm" data-algorithm="&apos;retrieve a credential&apos; internal method">
-      <dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="method" data-export="" id="dom-credential-retrieve-slot">[[Retrieve]](options, allowMediation)</dfn> is called with a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-1">CredentialRequestOptions</a></code> object, and either "<code>allow user mediation</code>" or "<code>do not allow user mediation</code>". It returns <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-9">Credential</a></code> if one can be retrieved from the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-4">credential store</a>, or <code>null</code> otherwise: 
+      <dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="method" data-export="" id="dom-credential-retrieve-slot">[[Retrieve]](options, allowMediation)</dfn> is called with a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-1">CredentialRequestOptions</a></code> object, and either "<code>allow user mediation</code>" or "<code>do not allow user mediation</code>". It returns a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-9">Credential</a></code> if one can be retrieved from the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-4">credential store</a>,
+    or <code>null</code> otherwise: 
      <ul class="algorithm">
       <ol>
        <li data-md="">
@@ -1662,8 +1663,6 @@ store user credentials for future use.</p>
       <dd data-md="">
        <p>When <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-2">get()</a></code> is called, the user agent MUST return the result of
   executing <a data-link-type="abstract-op" href="#abstract-opdef-request-a-credential" id="ref-for-abstract-opdef-request-a-credential-1">Request a <code>Credential</code></a> on <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get-options-options" id="ref-for-dom-credentialscontainer-get-options-options-2">options</a></code>.</p>
-       <p class="note" role="note"><span>Note:</span> If and when we need to support returning more than a single credential in response to
-  a single call, we will likely introduce a <code>getAll()</code> method which would return <code>Promise&lt;sequence&lt;Credential>></code>.</p>
      </dl>
      <table class="argumentdef data">
       <caption>Arguments for the <a class="idl-code" data-link-type="method" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-3">CredentialsContainer.get(options)</a> method.</caption>
@@ -1856,7 +1855,9 @@ store user credentials for future use.</p>
   straightforward:</p>
     <ol>
      <li data-md="">
-      <p>Define a new interface (say, <code>ExampleCredential</code>) that inherits from <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-23">Credential</a></code>.</p>
+      <p>Define a new interface that inherits from <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-23">Credential</a></code>:</p>
+      <div class="example" id="example-c4fb2a06">
+       <a class="self-link" href="#example-c4fb2a06"></a> 
 <pre>[Constructor(...),
  Exposed=Window,
  SecureContext]
@@ -1864,9 +1865,28 @@ interface ExampleCredential : Credential {
   // Definition goes here.
 };
 </pre>
+      </div>
      <li data-md="">
       <p>Define <code class="idl"><a data-link-type="idl" href="#dom-credential-retrieve-slot" id="ref-for-dom-credential-retrieve-slot-4">[[Retrieve]](options, allowMediation)</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-credential-store-slot" id="ref-for-dom-credential-store-slot-2">[[Store]](credential)</a></code> internal
-  methods on <code>ExampleCredential</code>'s <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a>.</p>
+  methods on <code>ExampleCredential</code>'s <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a>:</p>
+      <div class="example" id="example-f7acd2d3">
+       <a class="self-link" href="#example-f7acd2d3"></a> <code>ExampleCredential</code>'s <code>[[Retrieve]](options, allowMediation)</code> internal method is called
+    with a CredentialRequestOptions object (<code>options</code>), and either "<code>allow user mediation</code>" or
+    "<code>do not allow user mediation</code>". It returns a <code>Credential</code> if one can be retrieved from the
+    credential store, or <code>null</code> otherwise: 
+       <ol>
+        <li data-md="">
+         <p>Return a new <code>Promise</code> <code>p</code>, and execute the remaining steps asynchronously.</p>
+        <li data-md="">
+         <p>Let <code>c</code> be a new <code>ExampleCredential</code> with its properties set as follows:</p>
+         <ul>
+          <li data-md="">
+           <p>...</p>
+         </ul>
+        <li data-md="">
+         <p>Resolve <code>p</code> with <code>c</code>.</p>
+       </ol>
+      </div>
      <li data-md="">
       <p>Define the value of the <code>ExampleCredential</code> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a>'s <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot-6">[[type]]</a></code> slot:</p>
       <div class="example" id="example-cff8c3fc"><a class="self-link" href="#example-cff8c3fc"></a> The <code>ExampleCredential</code> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a> has an internal slot named <code>[[type]]</code> whose
@@ -1874,6 +1894,8 @@ interface ExampleCredential : Credential {
      <li data-md="">
       <p>Extend <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-6">CredentialRequestOptions</a></code> with the options the new credential type needs to respond
   reasonably to <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-5">get()</a></code>:</p>
+      <div class="example" id="example-980172a4">
+       <a class="self-link" href="#example-980172a4"></a> 
 <pre>dictionary ExampleCredentialRequestOptions {
   // Definition goes here.
 };
@@ -1882,11 +1904,13 @@ partial dictionary CredentialRequestOptions {
   ExampleCredentialRequestOptions? example;
 };
 </pre>
+      </div>
     </ol>
-    <p>You might also need new primitives. For instance, you might want to return many <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-24">Credential</a></code> objects rather than just one. That might be accomplished in a generic fashion by adding a <code>getAll()</code> method to <code class="idl"><a data-link-type="idl" href="#credentialscontainer" id="ref-for-credentialscontainer-3">CredentialsContainer</a></code>, and defining a <code>CredentialSet</code> object that
-  contained a <code>Sequence&lt;Credential></code>, and could be easily extended to meet some use case.</p>
-    <p>For any such extension, we recommend getting in touch with <a href="mailto:public-webappsec@w3.org">public-webappsec@</a> for
-  consultation and review.</p>
+    <p>You might also find that new primitives are necessary. For instance, you might want to return
+  many <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-24">Credential</a></code> objects rather than just one in some sort of complicated, multi-factor
+  sign-in process. That might be accomplished in a generic fashion by adding a <code>getAll()</code> method to <code class="idl"><a data-link-type="idl" href="#credentialscontainer" id="ref-for-credentialscontainer-3">CredentialsContainer</a></code> which returned a <code>sequence&lt;Credential></code>, and defining a reasonable
+  mechanism for dealing with requesting credentials of distinct types.</p>
+    <p>For any such extension, we recommend getting in touch with <a href="mailto:public-webappsec@w3.org">public-webappsec@</a> for consultation and review.</p>
     <h3 class="heading settled" data-level="5.3" id="implementation-browser-extensions"><span class="secno">5.3. </span><span class="content">Browser Extensions</span><a class="self-link" href="#implementation-browser-extensions"></a></h3>
     <p>Ideally, user agents that implement an extension system of some sort will
   allow third-parties to hook into these API endpoints in order to improve
