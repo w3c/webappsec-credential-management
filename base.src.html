@@ -133,13 +133,13 @@ spec:html; type:dfn; for:/; text:origin
     </ul>
   </section>
 
-  The [=interface object=] for {{Credential}} defines two internal methods that allow retrieval and
+  The [=interface object=] for {{Credential}} defines three internal methods that allow retrieval and
   storage of {{Credential}} objects:
 
   <section algorithm="'retrieve a credential' internal method">
-    <dfn for="Credential" method export>\[[Retrieve]](options, allowMediation)</dfn> is called with a
-    {{CredentialRequestOptions}} object, and either "`allow user mediation`" or "`do not allow user
-    mediation`". It returns a {{Credential}} if one can be retrieved from the [=credential store=],
+    <dfn for="Credential" method export>\[[Retrieve]](options, mediation)</dfn> is called with a
+    {{CredentialRequestOptions}} object, and either "`With User Mediation`" or "`Without User
+    Mediation`". It returns a {{Credential}} if one can be retrieved from the [=credential store=],
     or `null` otherwise:
 
     <ul class="algorithm">
@@ -157,7 +157,7 @@ spec:html; type:dfn; for:/; text:origin
   </section>
 
   Unless otherwise specified, the [=interface objects=] for [=interfaces=] which [=interface/inherit=] from
-  {{Credential}} will use {{Credential}}'s implementation of these two internal methods. Since that
+  {{Credential}} will alias {{Credential}}'s implementation of these three internal methods. Since that
   implementation isn't particularly useful, derived interfaces MUST override one or the other.
 
   ## Credential Management ## {#framework-credential-management}
@@ -372,7 +372,7 @@ spec:html; type:dfn; for:/; text:origin
             1.  If |interface|'s [=interface object=]'s {{[[type]]}} slot's value is not |key|,
                 <a for="iteration">continue</a>.
 
-            2.  Let |interface retriever| be |interface|'s {{[[Retrieve]](options, allowMediation)}}
+            2.  Let |interface retriever| be |interface|'s {{[[Retrieve]](options, mediation)}}
                 internal method.
 
             3.  If |retriever| is neither `null` nor |interface retriever|, return a new {{Promise}}
@@ -389,16 +389,15 @@ spec:html; type:dfn; for:/; text:origin
     
     7.  Return |p|, and execute the following steps asynchronously:
 
-    8.  Let |c| be the result of executing |retriever| on |options| and "`do not allow user
-        mediation`".
+    8.  Let |c| be the result of executing |retriever| on |options| and "`Without User Mediation`".
 
     9.  If |c| is not `null`, resolve |p| with |c|, and skip the remaining steps.
 
     10. If |options|' {{CredentialRequestOptions/unmediated}} is `true`, resolve |p| with `null` and
         skip the remaining steps.
 
-    11. Resolve |p| with the result of executing |retriever| on |options| and "`allow user
-        mediation`".
+    11. Resolve |p| with the result of executing |retriever| on |options| and "`With User
+        Mediation`".
   </ul>
 
   <h3 id="algorithm-store" algorithm>Store a `Credential`</h3>
@@ -587,13 +586,13 @@ spec:html; type:dfn; for:/; text:origin
         </pre>
       </div>
 
-  2.  Define {{[[Retrieve]](options, allowMediation)}} and {{[[Store]](credential)}} internal
+  2.  Define {{[[Retrieve]](options, mediation)}} and {{[[Store]](credential)}} internal
       methods on `ExampleCredential`'s [=interface object=]:
 
       <div class="example">
-        `ExampleCredential`'s `[[Retrieve]](options, allowMediation)` internal method is called
-        with a CredentialRequestOptions object (`options`), and either "`allow user mediation`" or
-        "`do not allow user mediation`". It returns a `Credential` if one can be retrieved from the
+        `ExampleCredential`'s `[[Retrieve]](options, mediation)` internal method is called
+        with a CredentialRequestOptions object (`options`), and either "`With User Mediation`" or
+        "`Without User Mediation`". It returns a `Credential` if one can be retrieved from the
         credential store, or `null` otherwise:
 
         1.  Return a new `Promise` `p`, and execute the remaining steps asynchronously.

@@ -50,13 +50,30 @@ spec: XHR; urlPrefix: https://xhr.spec.whatwg.org/
     text: type; for: entry; url: concept-formdata-entry-type
   type: interface
     text: FormData; url: interface-formdata
+spec: PSL; urlPrefix: https://publicsuffix.org/list/
+  type: dfn
+    text: registerable domain; url: #
+    text: public suffix; url: #
 
 urlPrefix: https://w3c.github.io/webappsec-credential-management/base.html
   type: abstract-op
-    for: credential store
-      text: Retrieve a list of credentials
-      text: Store a credential
-      text: Retrieve an origin's requires user mediation flag
+    text: Retrieve a list of credentials
+    text: Store a credential
+    text: Retrieve an origin's requires user mediation flag
+</pre>
+<pre class="biblio">
+{
+  "PSL": {
+    "authors": [ "Mozilla Foundation" ],
+    "href": "https://publicsuffix.org/",
+    "title": "Public Suffix List"
+  },
+  "WEB-LOGIN": {
+    "authors": [ "Jason Denizac", "Robin Berjon", "Anne van Kesteren" ],
+    "href": "https://github.com/jden/web-login",
+    "title": "web-login"
+  }
+}
 </pre>
 <!--
 ████ ██    ██ ████████ ████████   ███████
@@ -416,7 +433,7 @@ urlPrefix: https://w3c.github.io/webappsec-credential-management/base.html
   {{SiteBoundCredential}}'s [=interface object=] defines two internal methods that override
   {{Credential}}'s implementation:
 
-  <dfn for="SiteBoundCredential" method>\[[Retrieve]](options, allowMediation)</dfn> is defined in
+  <dfn for="SiteBoundCredential" method>\[[Retrieve]](options, mediation)</dfn> is defined in
   [[#request-credential]].
 
   <dfn for="SiteBoundCredential" method>\[[Store]](credential)</dfn> is defined in
@@ -478,7 +495,7 @@ urlPrefix: https://w3c.github.io/webappsec-credential-management/base.html
   </dl>
 
   {{PasswordCredential}}'s [=interface object=] contains two internal methods:
-  <dfn for="PasswordCredential" method>\[[Retrieve]](options, allowMediation)</dfn> and
+  <dfn for="PasswordCredential" method>\[[Retrieve]](options, mediation)</dfn> and
   <dfn for="PasswordCredential" method>\[[Store]](credential)</dfn>. Both are aliases to the
   {{SiteBoundCredential}} internal methods of the same name.
 
@@ -519,9 +536,29 @@ urlPrefix: https://w3c.github.io/webappsec-credential-management/base.html
   </dl>
 
   {{FederatedCredential}}'s [=interface object=] contains two internal methods:
-  <dfn for="FederatedCredential" method>\[[Retrieve]](options, allowMediation)</dfn> and
+  <dfn for="FederatedCredential" method>\[[Retrieve]](options, mediation)</dfn> and
   <dfn for="FederatedCredential" method>\[[Store]](credential)</dfn>. Both are aliases to the
   {{SiteBoundCredential}} internal methods of the same name.
+
+  ### Identifying Providers ### {#provider-identification}
+
+  Every site should use the same identifier when referring to a specific federated identity
+  provider. For example,
+  <a href="https://developers.facebook.com/docs/facebook-login/v2.0">Facebook Login</a>
+  shouldn't be referred to as "Facebook" and "Facebook Login" and "FB" and "FBL" and "Facebook.com"
+  and so on. It should have a canonical identifier which everyone can make use of, as consistent
+  identification makes it possible for user agents to be helpful.
+
+  For consistency, federations passed into the APIs defined in this document (e.g.
+  {{FederatedCredentialRequestOptions}}'s {{FederatedCredentialRequestOptions/providers}} array, or
+  {{FederatedCredential}}'s {{FederatedCredential/provider}} property) MUST be identified by the
+  <a lt="ASCII serialization of an origin">ASCII serialization</a> of the origin the provider uses
+  for sign in. That is, Facebook would be represented by `https://www.facebook.com` and Google by
+  `https://accounts.google.com`.
+
+  This serialization of an [=origin=] does _not_ include a trailing U+002F SOLIDUS ("`/`"), but
+  user agents SHOULD accept them silently: `https://accounts.google.com/` is clearly
+  intended to be the same as `https://accounts.google.com`.
 
   ## `CredentialRequestOptions` Extension ## {#credentialrequestoptions-extension}
 
@@ -551,29 +588,147 @@ urlPrefix: https://w3c.github.io/webappsec-credential-management/base.html
     Request a `SiteBoundCredential`
   </h4>
 
-  {{SiteBoundCredential}}'s {{SiteBoundCredential/[[Retrieve]](options, allowMediation)}} internal
-  method is called with a {{SiteBoundCredentialRequestOptions}} object (|options|), and either
-  "`allow user mediation`" or "`do not allow user mediation`" (|allowMediation|). It returns a
+  {{SiteBoundCredential}}'s {{SiteBoundCredential/[[Retrieve]](options, mediation)}} internal
+  method is called with a {{CredentialRequestOptions}} object (|options|), and either
+  "`With User Mediation`" or "`Without User Mediation`" (|mediation|). It returns a
   {{SiteBoundCredential}} if one can be retrieved from the [=credential store=], or `null`
   otherwise:
 
-  1.  Let |origin| be the [=environment settings object/origin=] of the
-      [=current settings object=].
+  <ol class="algorithm">
+    1.  Let |origin| be the [=environment settings object/origin=] of the
+        [=current settings object=].
 
-  2.  <a abstract-op>Retrieve the `require user mediation` flag</a> from the [=credential store=]
-      for |origin|, and set |flag| to its value.
+    2.  <a abstract-op>Retrieve an origin's `requires user mediation` flag</a> from the
+        [=credential store=] for |origin|, and set |require mediation| to its value.
 
-  3.  If |flag| is `true` and |allowMediation| is "`do not allow user mediation`", return `null`.
+    3.  If |require mediation| is `true` and |mediation| is "`Without User Mediation`", return
+        `null`.
 
-  4.  <a abstract-op>Retrieve a list of credentials</a> from the [=credential store=] whose
-      {{SiteBoundCredential/[[origin]]}} is the <a>same origin</a> as |origin|.
+        Note: If a user agent implements a "private browsing" mode, we recommend that this algorithm
+        always return `null` when "private browsing mode" is activated and |mediation| is
+        "`Without User Mediation`".
+
+    4.  <a abstract-op>Retrieve a list of credentials</a> from the [=credential store=] which
+        represent {{SiteBoundCredential}} objects whose {{SiteBoundCredential/[[origin]]}} is the
+        <a>same origin</a> as |origin|. Let |list| be the result.
+
+    5.  If |options| does not have a {{CredentialRequestOptions/password}} member whose value is
+        `true`, remove all {{PasswordCredential}} objects from |list|.
+
+    6.  If |options| does not have a {{CredentialRequestOptions/federated}} member, remove all
+        {{FederatedCredential}} objects from |list|.
+
+    7.  If |options| has a {{CredentialRequestOptions/federated}} member (|federated options|),
+        then:
+
+        1.  For each |credential| in |list|, remove |credential| from |list| _unless_ one or more
+            of the following statements is true:
+
+            *   |credential|'s {{FederatedCredential/provider}} is <a for="list">contained</a> in
+                |federated options| {{FederatedCredentialRequestOptions/providers}} member's value.
+
+            *   |credential|'s {{FederatedCredential/protocol}} is <a for="list">contained</a> in
+                |federated options| {{FederatedCredentialRequestOptions/protocols}} member's value.
+
+        Otherwise, remove all {{FederatedCredential}} objects from |list|.
+
+    8.  If |mediation| is "`Without User Mediation`":
+
+        1.  Assert: |require mediation| is `false`.
+
+        2.  If |list|'s <a for="list">size</a> is 1, then return |list|[0].
+
+        3.  Return `null`.
+
+    9.  Present the user with a [=credential chooser=], using |list| as a data source.
+
+        Note: This behavior is vendor-specific and unspecified outside the guidelines enumerated
+        in the dicussion of [=credential choosers=] in [[CREDENTIAL-MANAGEMENT-1]].
+
+    10. Return the {{SiteBoundCredential}} the user chose, or `null` if the user
+        declined to share a credential.
+  </ol>
   
-      Let |flag| be the result of <a> </a>.
-
   <h4 algorithm id="store-credential">
     Store a `SiteBoundCredential`
   </h4>
-  
+ 
+  Given a {{SiteBoundCredential}} (|credential|), this algorithm persists it to the
+  [=credential store=], and then returns.
+
+  <ol class="algorithm">
+    1.  Assert: |credential|'s {{SiteBoundCredential/[[origin]]}} slot is the [=same origin=]
+        as the [=current settings object=]'s [=environment settings object/origin=].
+
+    2.  Assert: |credential|'s {{SiteBoundCredential/iconURL}} is an <a><i lang="la">a priori</i>
+        authenticated URL</a>, or the empty string.
+
+    3.  If |credential| is a {{PasswordCredential}}:
+
+        1.  If the user agent's [=credential store=] contains a {{PasswordCredential}} (|stored|)
+            whose {{Credential/id}} attribute is |credential|'s {{Credential/id}} and whose
+            {{[[origin]]}} slot is the [=same origin=] as |credential|'s
+            {{SiteBoundCredential/[[origin]]}}, then:
+
+            1.  If the user grants permission to update credentials (as discussed in
+                [[#user-mediated-storage]]), then:
+
+                1.  Set |stored|'s {{[[password]]}} slot's value to the value of |credential|'s
+                    {{[[password]]}} slot.
+
+                2.  Set |stored|'s {{SiteBoundCredential/name}} to |credential|'s
+                    {{SiteBoundCredential/name}}.
+
+                3.  Set |stored|'s {{SiteBoundCredential/iconURL}} to |credential|'s
+                    {{SiteBoundCredential/iconURL}}.
+
+                Otherwise, if the user grants permission to store credentials (as discussed in
+                [[#user-mediated-storage]]), then:
+
+                1.  Store a {{PasswordCredential}} in the [=credential store=] with the following
+                    properties:
+                    
+                    :   {{Credential/id}}
+                    ::  |credential|'s {{Credential/id}}
+                    :   {{SiteBoundCredential/name}},
+                    ::  |credential|'s {{SiteBoundCredential/name}}
+                    :   {{SiteBoundCredential/iconURL}}
+                    ::  |credential|'s {{SiteBoundCredential/iconURL}}
+                    :   {{[[origin]]}}
+                    ::  |credential|'s {{[[origin]]}}
+                    :   {{[[password]]}}
+                    ::  |credential|'s {{[[password]]}}
+
+                    Note: Ancillary properties like {{PasswordCredential/idName}},
+                    {{PasswordCredential/passwordName}}, and {{PasswordCredential/additionalData}}
+                    are _not_ stored in the [=credential store=]. They are used for a single
+                    authentication event, and are expected to be populated at request time.
+
+    4.  Otherwise, |credential| is a {{FederatedCredential}}:
+
+        1.  If the user agent's [=credential store=] contains a {{FederatedCredential}} whose
+            {{Credential/id}} attribute is |credential|'s {{Credential/id}} and whose {{[[origin]]}}
+            slot is the [=same origin=] as |credential|'s {{SiteBoundCredential/[[origin]]}}, and
+            whose {{FederatedCredential/provider}} is |credential|'s
+            {{FederatedCredential/provider}}, then return.
+
+        2.  Store a {{FederatedCredential}} in the [=credential store=] with the following
+            properties:
+
+            :   {{Credential/id}}
+            ::  |credential|'s {{Credential/id}}
+            :   {{SiteBoundCredential/name}},
+            ::  |credential|'s {{SiteBoundCredential/name}}
+            :   {{SiteBoundCredential/iconURL}}
+            ::  |credential|'s {{SiteBoundCredential/iconURL}}
+            :   {{[[origin]]}}
+            ::  |credential|'s {{[[origin]]}}
+            :   {{FederatedCredential/provider}}
+            ::  |credential|'s {{FederatedCredential/provider}}
+            :   {{FederatedCredential/protocol}}
+            ::  |credential|'s {{FederatedCredential/protocol}}
+  </ol>
+
   ## `PasswordCredential` Algorithms ## {#passwordcredential-algorithms}
 
   <h4 algorithm id="construct-passwordcredential-form">
@@ -711,6 +866,19 @@ urlPrefix: https://w3c.github.io/webappsec-credential-management/base.html
     4.  Return |c|.
   </ol>
 
+  <h4 algorithm id="passwordcredential-matching">
+    `CredentialRequestOptions` Matching for `PasswordCredential`
+  </h4>
+
+  Given a {{CredentialRequestOptions}} (|options|), the following algorithm returns "`Matches`" if
+  the {{PasswordCredential}} should be available as a response to a {{CredentialsContainer/get()}}
+  request, and "`Does Not Match`" otherwise.
+
+  1.  If |options| has a {{CredentialRequestOptions/password}} member whose value is `true`, then
+      return "`Matches`".
+
+  2.  Return "`Does Not Match`".
+
   ## `FederatedCredential` Algorithms ## {#federatedcredential-algorithms}
 
   <h4 algorithm id="construct-federatedcredential-data">
@@ -743,4 +911,82 @@ urlPrefix: https://w3c.github.io/webappsec-credential-management/base.html
 
     4.  Return |c|.
   </ol>
+</section>
+
+<section>
+  # Security and Privacy Considerations # {#security-and-privacy}
+
+  ## Cross-origin Credential Leakage ## {#security-cross-origin-leakage}
+
+  Credentials are sensitive information, and user agents need to exercise caution in determining
+  when they can be safely shared with a website. The safest option is to restrict credential
+  sharing to the exact origin on which they were saved. That is likely too restrictive for the
+  web, however: consider sites which divide functionality into subdomains like `example.com` vs
+  `admin.example.com`.
+
+  As a compromise between annoying users, and securing their credentials, user agents:
+
+  1.  MUST NOT share credentials between origins whose scheme components represent a downgrade in
+      security. That is, it may make sense to allow credentials saved on `http://example.com/` to
+      be made available to `https://example.com/` (in order to encourage developers to migrate to
+      secure transport), but the inverse would be dangerous.
+
+  2.  MAY use the Public Suffix List [[!PSL]] to determine the effective scope of a credential by
+      comparing the [=registerable domain=] of the credential's {{[[origin]]}} with the origin in
+      which {{CredentialsContainer/get()}} is called. That is: credentials saved on
+      `https://admin.example.com/` and `https://example.com/` MAY be offered to users when
+      {{CredentialsContainer/get()}} is called from `https://www.example.com/`, and vice versa.
+
+  3.  MUST NOT offer credentials to an origin in response to {{CredentialsContainer/get()}} without
+      [=user mediation=] if the credential's origin is not an exact match for the calling origin.
+      That is, {{Credential}} objects for `https://example.com` would not be returned directly to
+      `https://www.example.com`, but could be offered to the user via the chooser.
+
+  {{PasswordCredential}}s further mitigate the risk of data leakage by never exposing the
+  {{[[password]]}} slot directly to a page's JavaScript, but only allowing its submission to a
+  same-origin server-side endpoint via {{fetch()}}.
+</section>
+
+<section>
+  # Future Work # {#future-work}
+
+  <em>This section is non-normative.</em>
+
+  The API defined here does the bare minimum to expose user agent's credential managers to the web,
+  and allows the web to help those credential managers understand when federated identity providers
+  are in use. The next logical step will be along the lines sketched in documents like [[WEB-LOGIN]]
+  (and, to some extent, Mozilla's BrowserID [[BROWSERID]]).
+
+  The user agent is in the unique position of being able to effectively mediate the relationship
+  between users, identity providers, and websites. If the user agent can remove some of the risk and
+  confusion associated with the typical authentication flows, users will be in a significantly
+  better position than today.
+
+  A natural way to expose this information might be to extend the {{FederatedCredential}} interface
+  with properties like authentication tokens, and possibly to add some form of manifest format with
+  properties that declare the authentication type which the provider supports.
+
+  The API described here is designed to be extensible enough to support use cases that require user
+  interaction, perhaps with websites other than the one which requested credentials. We hope that
+  the {{Promise}}-based system we've settled on is extensible enough to support these kinds of
+  asynchronous flows which could require some level of interaction between multiple browsing
+  contexts (e.g. mediated activity on `idp.com` might resolve a {{Promise}} handed back to `rp.com`)
+  in the future without redesigning the API from the ground up.
+
+  Baby steps.
+
+  <div class="note">
+    Groups like the
+    <a href="http://www.w3.org/Payments/IG/">Web Payments IG</a>
+    and the
+    <a href="https://www.w3.org/community/credentials/">Credentials CG</a>
+    have expressed interest in extending the API defined in this document in
+    order to address use cases beyond those outlined in [[#use-cases]]. They've
+    documented these use cases in detail in
+    <a href="http://www.w3.org/TR/web-payments-use-cases/">Web Payments Use Cases 1.0</a>
+    and
+    <a href="http://opencreds.org/specs/source/use-cases/">Credentials CG Use Cases</a>,
+    and anticipate extending the API in a separate document to solve a different
+    set of problems than WebAppSec is currently chartered to deal with.
+  </div>
 </section>

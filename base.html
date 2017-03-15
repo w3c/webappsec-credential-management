@@ -1636,10 +1636,10 @@ store user credentials for future use.</p>
       </ol>
      </ul>
     </section>
-    <p>The <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a> for <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-7">Credential</a></code> defines two internal methods that allow retrieval and
+    <p>The <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a> for <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-7">Credential</a></code> defines three internal methods that allow retrieval and
   storage of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-8">Credential</a></code> objects:</p>
     <section class="algorithm" data-algorithm="&apos;retrieve a credential&apos; internal method">
-      <dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="method" data-export="" id="dom-credential-retrieve-slot">[[Retrieve]](options, allowMediation)</dfn> is called with a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-1">CredentialRequestOptions</a></code> object, and either "<code>allow user mediation</code>" or "<code>do not allow user mediation</code>". It returns a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-9">Credential</a></code> if one can be retrieved from the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-5">credential store</a>,
+      <dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="method" data-export="" id="dom-credential-retrieve-slot">[[Retrieve]](options, mediation)</dfn> is called with a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-1">CredentialRequestOptions</a></code> object, and either "<code>With User Mediation</code>" or "<code>Without User Mediation</code>". It returns a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-9">Credential</a></code> if one can be retrieved from the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-5">credential store</a>,
     or <code>null</code> otherwise: 
      <ul class="algorithm">
       <ol>
@@ -1658,7 +1658,7 @@ store user credentials for future use.</p>
       </ol>
      </ul>
     </section>
-    <p>Unless otherwise specified, the <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface objects</a> for <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface">interfaces</a> which <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-inherit">inherit</a> from <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-12">Credential</a></code> will use <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-13">Credential</a></code>'s implementation of these two internal methods. Since that
+    <p>Unless otherwise specified, the <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface objects</a> for <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface">interfaces</a> which <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-inherit">inherit</a> from <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-12">Credential</a></code> will alias <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-13">Credential</a></code>'s implementation of these three internal methods. Since that
   implementation isn’t particularly useful, derived interfaces MUST override one or the other.</p>
     <h3 class="heading settled" data-level="2.3" id="framework-credential-management"><span class="secno">2.3. </span><span class="content">Credential Management</span><a class="self-link" href="#framework-credential-management"></a></h3>
     <p>Developers interact with the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-7">credential store</a> via methods exposed on the <code class="idl"><a data-link-type="idl" href="#credentialscontainer" id="ref-for-credentialscontainer-1">CredentialsContainer</a></code> interface, which hangs off the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/webappapis.html#navigator">Navigator</a></code> object as <a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-1"><code>navigator.credentials</code></a>.</p>
@@ -1862,7 +1862,7 @@ store user credentials for future use.</p>
           <li data-md="">
            <p>If <var>interface</var>’s <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a>'s <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot-5">[[type]]</a></code> slot’s value is not <var>key</var>, <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#iteration-continue">continue</a>.</p>
           <li data-md="">
-           <p>Let <var>interface retriever</var> be <var>interface</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-retrieve-slot" id="ref-for-dom-credential-retrieve-slot-1">[[Retrieve]](options, allowMediation)</a></code> internal method.</p>
+           <p>Let <var>interface retriever</var> be <var>interface</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-retrieve-slot" id="ref-for-dom-credential-retrieve-slot-1">[[Retrieve]](options, mediation)</a></code> internal method.</p>
           <li data-md="">
            <p>If <var>retriever</var> is neither <code>null</code> nor <var>interface retriever</var>, return a new <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise">Promise</a></code> rejected with <code>TypeMismatchError</code>.</p>
           <li data-md="">
@@ -1878,14 +1878,14 @@ store user credentials for future use.</p>
       <li data-md="">
        <p>Return <var>p</var>, and execute the following steps asynchronously:</p>
       <li data-md="">
-       <p>Let <var>c</var> be the result of executing <var>retriever</var> on <var>options</var> and "<code>do not allow user mediation</code>".</p>
+       <p>Let <var>c</var> be the result of executing <var>retriever</var> on <var>options</var> and "<code>Without User Mediation</code>".</p>
       <li data-md="">
        <p>If <var>c</var> is not <code>null</code>, resolve <var>p</var> with <var>c</var>, and skip the remaining steps.</p>
       <li data-md="">
        <p>If <var>options</var>’ <code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-unmediated" id="ref-for-dom-credentialrequestoptions-unmediated-2">unmediated</a></code> is <code>true</code>, resolve <var>p</var> with <code>null</code> and
   skip the remaining steps.</p>
       <li data-md="">
-       <p>Resolve <var>p</var> with the result of executing <var>retriever</var> on <var>options</var> and "<code>allow user mediation</code>".</p>
+       <p>Resolve <var>p</var> with the result of executing <var>retriever</var> on <var>options</var> and "<code>With User Mediation</code>".</p>
      </ol>
     </ul>
     <h3 class="heading settled algorithm" data-algorithm="Store a Credential" data-level="4.2" id="algorithm-store"><span class="secno">4.2. </span><span class="content">Store a <code>Credential</code></span><a class="self-link" href="#algorithm-store"></a></h3>
@@ -2029,12 +2029,12 @@ interface ExampleCredential : Credential {
 </pre>
       </div>
      <li data-md="">
-      <p>Define <code class="idl"><a data-link-type="idl" href="#dom-credential-retrieve-slot" id="ref-for-dom-credential-retrieve-slot-4">[[Retrieve]](options, allowMediation)</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-credential-store-slot" id="ref-for-dom-credential-store-slot-2">[[Store]](credential)</a></code> internal
+      <p>Define <code class="idl"><a data-link-type="idl" href="#dom-credential-retrieve-slot" id="ref-for-dom-credential-retrieve-slot-4">[[Retrieve]](options, mediation)</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-credential-store-slot" id="ref-for-dom-credential-store-slot-2">[[Store]](credential)</a></code> internal
   methods on <code>ExampleCredential</code>'s <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a>:</p>
-      <div class="example" id="example-f7acd2d3">
-       <a class="self-link" href="#example-f7acd2d3"></a> <code>ExampleCredential</code>'s <code>[[Retrieve]](options, allowMediation)</code> internal method is called
-    with a CredentialRequestOptions object (<code>options</code>), and either "<code>allow user mediation</code>" or
-    "<code>do not allow user mediation</code>". It returns a <code>Credential</code> if one can be retrieved from the
+      <div class="example" id="example-66da7314">
+       <a class="self-link" href="#example-66da7314"></a> <code>ExampleCredential</code>'s <code>[[Retrieve]](options, mediation)</code> internal method is called
+    with a CredentialRequestOptions object (<code>options</code>), and either "<code>With User Mediation</code>" or
+    "<code>Without User Mediation</code>". It returns a <code>Credential</code> if one can be retrieved from the
     credential store, or <code>null</code> otherwise: 
        <ol>
         <li data-md="">
@@ -2134,7 +2134,7 @@ partial dictionary CredentialRequestOptions {
    <li><a href="#abstract-opdef-require-user-mediation">Require user mediation</a><span>, in §4.3</span>
    <li><a href="#abstract-opdef-credential-store-retrieve-a-list-of-credentials">Retrieve a list of credentials</a><span>, in §2.2</span>
    <li><a href="#abstract-opdef-credential-store-retrieve-an-origins-requires-user-mediation-flag">Retrieve an origin’s requires user mediation flag</a><span>, in §2.2</span>
-   <li><a href="#dom-credential-retrieve-slot">[[Retrieve]](options, allowMediation)</a><span>, in §2.2.1.1</span>
+   <li><a href="#dom-credential-retrieve-slot">[[Retrieve]](options, mediation)</a><span>, in §2.2.1.1</span>
    <li><a href="#abstract-opdef-credential-store-set-an-origins-requires-user-mediation-flag">Set an origin’s requires user mediation flag</a><span>, in §2.2</span>
    <li><a href="#dom-credentialscontainer-store">store()</a><span>, in §2.3</span>
    <li><a href="#abstract-opdef-credential-store-store-a-credential">Store a credential</a><span>, in §2.2</span>
