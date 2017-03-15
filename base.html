@@ -1176,7 +1176,7 @@ Possible extra rowspan handling
 		}
 	}
 </style>
-  <meta content="Bikeshed version 9260eac3642631ba07cbb9e9b2936efe928153e3" name="generator">
+  <meta content="Bikeshed version a65093ce3e69a8d01029b4650499d152cd9bd39a" name="generator">
 <style>/* style-md-lists */
 
             /* This is a weird hack for me not yet following the commonmark spec
@@ -1500,23 +1500,36 @@ store user credentials for future use.</p>
        </ol>
      </ol>
     <li>
-     <a href="#algorithms"><span class="secno">3</span> <span class="content">Algorithms</span></a>
+     <a href="#user-mediation"><span class="secno">3</span> <span class="content">User Mediation</span></a>
      <ol class="toc">
-      <li><a href="#algorithm-request"><span class="secno">3.1</span> <span class="content">Request a <code>Credential</code></span></a>
-      <li><a href="#algorithm-store"><span class="secno">3.2</span> <span class="content">Store a <code>Credential</code></span></a>
-      <li><a href="#algorithm-require-mediation"><span class="secno">3.3</span> <span class="content">Require User Mediation</span></a>
+      <li><a href="#user-mediated-storage"><span class="secno">3.1</span> <span class="content">Storing and Updating Credentials</span></a>
+      <li><a href="#user-mediation-requirement"><span class="secno">3.2</span> <span class="content">Requiring User Mediation</span></a>
+      <li><a href="#user-mediated-selection"><span class="secno">3.3</span> <span class="content">Credential Selection</span></a>
      </ol>
     <li>
-     <a href="#security-and-privacy"><span class="secno">4</span> <span class="content">Security and Privacy Considerations</span></a>
+     <a href="#algorithms"><span class="secno">4</span> <span class="content">Algorithms</span></a>
      <ol class="toc">
-      <li><a href="#insecure-sites"><span class="secno">4.1</span> <span class="content">Insecure Sites</span></a>
+      <li><a href="#algorithm-request"><span class="secno">4.1</span> <span class="content">Request a <code>Credential</code></span></a>
+      <li><a href="#algorithm-store"><span class="secno">4.2</span> <span class="content">Store a <code>Credential</code></span></a>
+      <li><a href="#algorithm-require-mediation"><span class="secno">4.3</span> <span class="content">Require User Mediation</span></a>
      </ol>
     <li>
-     <a href="#implementation"><span class="secno">5</span> <span class="content">Implementation Considerations</span></a>
+     <a href="#security-and-privacy"><span class="secno">5</span> <span class="content">Security and Privacy Considerations</span></a>
      <ol class="toc">
-      <li><a href="#implementation-authors"><span class="secno">5.1</span> <span class="content">Website Authors</span></a>
-      <li><a href="#implementation-extension"><span class="secno">5.2</span> <span class="content">Extension Points</span></a>
-      <li><a href="#implementation-browser-extensions"><span class="secno">5.3</span> <span class="content">Browser Extensions</span></a>
+      <li><a href="#security-leakage"><span class="secno">5.1</span> <span class="content">Credential Leakage</span></a>
+      <li><a href="#insecure-sites"><span class="secno">5.2</span> <span class="content">Insecure Sites</span></a>
+      <li><a href="#security-origin-confusion"><span class="secno">5.3</span> <span class="content">Origin Confusion</span></a>
+      <li><a href="#security-timing"><span class="secno">5.4</span> <span class="content">Timing Attacks</span></a>
+      <li><a href="#security-signout"><span class="secno">5.5</span> <span class="content">Signing-Out</span></a>
+      <li><a href="#security-chooser-leakage"><span class="secno">5.6</span> <span class="content">Chooser Leakage</span></a>
+      <li><a href="#security-local-data"><span class="secno">5.7</span> <span class="content">Locally Stored Data</span></a>
+     </ol>
+    <li>
+     <a href="#implementation"><span class="secno">6</span> <span class="content">Implementation Considerations</span></a>
+     <ol class="toc">
+      <li><a href="#implementation-authors"><span class="secno">6.1</span> <span class="content">Website Authors</span></a>
+      <li><a href="#implementation-extension"><span class="secno">6.2</span> <span class="content">Extension Points</span></a>
+      <li><a href="#browser-extensions"><span class="secno">6.3</span> <span class="content">Browser Extensions</span></a>
      </ol>
     <li>
      <a href="#conformance"><span class="secno"></span> <span class="content">Conformance</span></a>
@@ -1534,6 +1547,7 @@ store user credentials for future use.</p>
      <a href="#references"><span class="secno"></span> <span class="content">References</span></a>
      <ol class="toc">
       <li><a href="#normative"><span class="secno"></span> <span class="content">Normative References</span></a>
+      <li><a href="#informative"><span class="secno"></span> <span class="content">Informative References</span></a>
      </ol>
     <li><a href="#idl-index"><span class="secno"></span> <span class="content">IDL Index</span></a>
     <li><a href="#issues-index"><span class="secno"></span> <span class="content">Issues Index</span></a>
@@ -1557,42 +1571,45 @@ store user credentials for future use.</p>
   for <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential-1">credentials</a> defined in other documents.</p>
     <p>User agents MUST internally provide a <dfn class="dfn-paneled" data-dfn-type="dfn" data-export="" data-lt="credential store" id="concept-credential-store">credential
   store</dfn>, which is a vendor-specific, opaque storage mechanism that offers the following
-  capabilities:</p>
+  capabilities for <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential-2">credential</a> access and persistence:</p>
     <ol>
      <li data-md="">
       <p><dfn data-dfn-for="credential store" data-dfn-type="abstract-op" data-export="" id="abstract-opdef-credential-store-store-a-credential">Store a credential<a class="self-link" href="#abstract-opdef-credential-store-store-a-credential"></a></dfn> for later retrieval.
-  This accepts a <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential-2">credential</a>, and inserts it into the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-1">credential store</a>.</p>
+  This accepts a <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential-3">credential</a>, and inserts it into the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-1">credential store</a>.</p>
      <li data-md="">
       <p><dfn data-dfn-for="credential store" data-dfn-type="abstract-op" data-export="" id="abstract-opdef-credential-store-retrieve-a-list-of-credentials">Retrieve a list of credentials<a class="self-link" href="#abstract-opdef-credential-store-retrieve-a-list-of-credentials"></a></dfn>. This
-  accepts an arbitrary filter, and returns a <code>Sequence&lt;Credential></code> of those <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential-3">credentials</a> that match the filter.</p>
+  accepts an arbitrary filter, and returns a <code>Sequence&lt;Credential></code> of those <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential-4">credentials</a> that match the filter.</p>
      <li data-md="">
-      <p><dfn data-dfn-for="credential store" data-dfn-type="abstract-op" data-export="" id="abstract-opdef-credential-store-modify-a-credential">Modify a credential<a class="self-link" href="#abstract-opdef-credential-store-modify-a-credential"></a></dfn>. This accepts a <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential-4">credential</a>, and overwrites the state of an existing <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential-5">credential</a> in the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-2">credential store</a>.</p>
+      <p><dfn data-dfn-for="credential store" data-dfn-type="abstract-op" data-export="" id="abstract-opdef-credential-store-modify-a-credential">Modify a credential<a class="self-link" href="#abstract-opdef-credential-store-modify-a-credential"></a></dfn>. This accepts a <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential-5">credential</a>, and overwrites the state of an existing <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential-6">credential</a> in the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-2">credential store</a>.</p>
+    </ol>
+    <p>Additionally, the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-3">credential store</a> should maintain a <dfn data-dfn-for="origin" data-dfn-type="dfn" data-noexport="" id="origin-requires-user-mediation-flag"><code>requires user mediation</code> flag<a class="self-link" href="#origin-requires-user-mediation-flag"></a></dfn> for <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#concept-origin">origins</a> (which is set to <code>true</code> unless otherwise specified), and
+  offer the following capabilities:</p>
+    <ol>
      <li data-md="">
-      <p><dfn data-dfn-for="credential store" data-dfn-type="abstract-op" data-export="" id="abstract-opdef-credential-store-retrieve-an-origins-requires-user-mediation-flag">Retrieve an origin’s <code>requires user mediation</code> flag<a class="self-link" href="#abstract-opdef-credential-store-retrieve-an-origins-requires-user-mediation-flag"></a></dfn>.</p>
+      <p><dfn class="dfn-paneled" data-dfn-for="credential store" data-dfn-type="abstract-op" data-export="" id="abstract-opdef-credential-store-retrieve-an-origins-requires-user-mediation-flag">Retrieve an origin’s <code>requires user mediation</code> flag</dfn>.</p>
      <li data-md="">
       <p><dfn class="dfn-paneled" data-dfn-for="credential store" data-dfn-type="abstract-op" data-export="" data-lt="Set an origin’s requires user mediation flag" id="abstract-opdef-credential-store-set-an-origins-requires-user-mediation-flag">Set an origin’s <code>requires user mediation</code> flag</dfn>.</p>
     </ol>
-    <p class="note" role="note"><span>Note:</span> The <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-3">credential store</a> is an internal implementation detail of a user agent’s
+    <p class="note" role="note"><span>Note:</span> The importance of user mediation is discussed in more detail in <a href="#user-mediation">§3 User Mediation</a>.</p>
+    <p class="note" role="note"><span>Note:</span> The <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-4">credential store</a> is an internal implementation detail of a user agent’s
   implementation of the API specified in this document, and is not exposed to the web directly.
-  More capabilities may be specified by other documents in support of specific <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential-6">credential</a> types.</p>
+  More capabilities may be specified by other documents in support of specific <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential-7">credential</a> types.</p>
     <h4 class="heading settled" data-level="2.2.1" id="the-credential-interface"><span class="secno">2.2.1. </span><span class="content">The <code>Credential</code> Interface</span><a class="self-link" href="#the-credential-interface"></a></h4>
-<pre class="idl highlight def"><span class="kt">interface</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="credential">Credential</dfn> {
+<pre class="idl highlight def">[<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<span class="n">Window</span>, <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>]
+<span class="kt">interface</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="credential">Credential</dfn> {
   <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString"><span class="kt">USVString</span></a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="USVString" href="#dom-credential-id" id="ref-for-dom-credential-id-1">id</a>;
   <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString"><span class="kt">DOMString</span></a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="DOMString" href="#dom-credential-type" id="ref-for-dom-credential-type-1">type</a>;
 };
 </pre>
     <dl>
      <dt data-md=""><dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="attribute" data-export="" id="dom-credential-id">id</dfn>, <span> of type <a data-link-type="idl-name" href="https://heycam.github.io/webidl/#idl-USVString">USVString</a>, readonly</span>
-     <p></p>
      <dd data-md="">
       <p>The credential’s identifier. The requirements for the identifier are distinct for each type
-  of <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential-7">credential</a>. It might represent a username for username/password tuples, for example.</p>
+  of <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential-8">credential</a>. It might represent a username for username/password tuples, for example.</p>
      <dt data-md=""><dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="attribute" data-export="" id="dom-credential-type">type</dfn>, <span> of type <a data-link-type="idl-name" href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a>, readonly</span>
-     <p></p>
      <dd data-md="">
       <p>This attribute’s getter returns the value of the object’s <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a>'s <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot-1">[[type]]</a></code> slot, which specifies the kind of credential represented by this object.</p>
      <dt data-md=""><dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="attribute" data-export="" id="dom-credential-type-slot">[[type]]</dfn>
-     <p></p>
      <dd data-md="">
       <p>The <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-2">Credential</a></code> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a> has an internal slot named <code>[[type]]</code>, which
   unsurprisingly contains a string representing the type of the credential. The slot’s value
@@ -1601,7 +1618,7 @@ store user credentials for future use.</p>
   particular interface, which means that developers can rely on <code>obj.type</code> returning a string
   that unambigiously represents the specific kind of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-3">Credential</a></code> they’re dealing with.</p>
     </dl>
-    <p class="issue" id="issue-1bc838e3"><a class="self-link" href="#issue-1bc838e3"></a> Talk to Tobie/Dominic about the <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a> bits, here and in <a href="#algorithm-request">§3.1 Request a Credential</a>, etc. I’m not sure I’ve gotten the terminology right. <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-prototype-object">interface prototype
+    <p class="issue" id="issue-1bc838e3"><a class="self-link" href="#issue-1bc838e3"></a> Talk to Tobie/Dominic about the <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a> bits, here and in <a href="#algorithm-request">§4.1 Request a Credential</a>, etc. I’m not sure I’ve gotten the terminology right. <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-prototype-object">interface prototype
   object</a>, maybe?</p>
     <h5 class="heading settled" data-level="2.2.1.1" id="credential-internal-methods"><span class="secno">2.2.1.1. </span><span class="content"><code>Credential</code> Internal Methods</span><a class="self-link" href="#credential-internal-methods"></a></h5>
     <section class="algorithm" data-algorithm="&apos;[[Clone]]&apos; internal method">
@@ -1622,7 +1639,7 @@ store user credentials for future use.</p>
     <p>The <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a> for <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-7">Credential</a></code> defines two internal methods that allow retrieval and
   storage of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-8">Credential</a></code> objects:</p>
     <section class="algorithm" data-algorithm="&apos;retrieve a credential&apos; internal method">
-      <dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="method" data-export="" id="dom-credential-retrieve-slot">[[Retrieve]](options, allowMediation)</dfn> is called with a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-1">CredentialRequestOptions</a></code> object, and either "<code>allow user mediation</code>" or "<code>do not allow user mediation</code>". It returns a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-9">Credential</a></code> if one can be retrieved from the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-4">credential store</a>,
+      <dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="method" data-export="" id="dom-credential-retrieve-slot">[[Retrieve]](options, allowMediation)</dfn> is called with a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-1">CredentialRequestOptions</a></code> object, and either "<code>allow user mediation</code>" or "<code>do not allow user mediation</code>". It returns a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-9">Credential</a></code> if one can be retrieved from the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-5">credential store</a>,
     or <code>null</code> otherwise: 
      <ul class="algorithm">
       <ol>
@@ -1633,7 +1650,7 @@ store user credentials for future use.</p>
     </section>
     <section class="algorithm" data-algorithm="&apos;store a credential&apos; internal method">
       <dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="method" data-export="" id="dom-credential-store-slot">[[Store]](credential)</dfn> is called with a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-10">Credential</a></code>,
-    and returns once <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-11">Credential</a></code> is persisted to the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-5">credential store</a>: 
+    and returns once <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-11">Credential</a></code> is persisted to the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-6">credential store</a>: 
      <ul class="algorithm">
       <ol>
        <li data-md="">
@@ -1644,13 +1661,14 @@ store user credentials for future use.</p>
     <p>Unless otherwise specified, the <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface objects</a> for <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface">interfaces</a> which <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-inherit">inherit</a> from <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-12">Credential</a></code> will use <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-13">Credential</a></code>'s implementation of these two internal methods. Since that
   implementation isn’t particularly useful, derived interfaces MUST override one or the other.</p>
     <h3 class="heading settled" data-level="2.3" id="framework-credential-management"><span class="secno">2.3. </span><span class="content">Credential Management</span><a class="self-link" href="#framework-credential-management"></a></h3>
-    <p>Developers interact with the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-6">credential store</a> via methods exposed on the <code class="idl"><a data-link-type="idl" href="#credentialscontainer" id="ref-for-credentialscontainer-1">CredentialsContainer</a></code> interface, which hangs off the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/webappapis.html#navigator">Navigator</a></code> object as <a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-1"><code>navigator.credentials</code></a>.</p>
+    <p>Developers interact with the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-7">credential store</a> via methods exposed on the <code class="idl"><a data-link-type="idl" href="#credentialscontainer" id="ref-for-credentialscontainer-1">CredentialsContainer</a></code> interface, which hangs off the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/webappapis.html#navigator">Navigator</a></code> object as <a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-1"><code>navigator.credentials</code></a>.</p>
 <pre class="idl highlight def"><span class="kt">partial</span> <span class="kt">interface</span> <a class="nv idl-code" data-link-type="interface" href="https://html.spec.whatwg.org/multipage/webappapis.html#navigator">Navigator</a> {
   [<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>] <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n" data-link-type="idl-name" href="#credentialscontainer" id="ref-for-credentialscontainer-2">CredentialsContainer</a> <dfn class="nv dfn-paneled idl-code" data-dfn-for="Navigator" data-dfn-type="attribute" data-export="" data-readonly="" data-type="CredentialsContainer" id="dom-navigator-credentials">credentials</dfn>;
 };
 </pre>
-    <p class="note" role="note"><span>Note:</span> As discussed in <a href="#insecure-sites">§4.1 Insecure Sites</a>, the credential management API is exposed only in <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#secure-context">Secure Contexts</a>.</p>
-<pre class="idl highlight def"><span class="kt">interface</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="credentialscontainer">CredentialsContainer</dfn> {
+    <p class="note" role="note"><span>Note:</span> As discussed in <a href="#insecure-sites">§5.2 Insecure Sites</a>, the credential management API is exposed only in <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#secure-context">Secure Contexts</a>.</p>
+<pre class="idl highlight def">[<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<span class="n">Window</span>, <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>]
+<span class="kt">interface</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="credentialscontainer">CredentialsContainer</dfn> {
   <span class="kt">Promise</span>&lt;<a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential-14">Credential</a>?> <a class="nv idl-code" data-link-type="method" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-1">get</a>(<span class="kt">optional</span> <a class="n" data-link-type="idl-name" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-2">CredentialRequestOptions</a> <a class="nv idl-code" data-link-type="argument" href="#dom-credentialscontainer-get-options-options" id="ref-for-dom-credentialscontainer-get-options-options-1">options</a>);
   <span class="kt">Promise</span>&lt;<a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential-15">Credential</a>> <dfn class="nv dfn-paneled idl-code" data-dfn-for="CredentialsContainer" data-dfn-type="method" data-export="" data-lt="store(credential)" id="dom-credentialscontainer-store">store</dfn>(<a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential-16">Credential</a> <a class="nv idl-code" data-link-type="argument" href="#dom-credentialscontainer-store-credential-credential" id="ref-for-dom-credentialscontainer-store-credential-credential-1">credential</a>);
   <span class="kt">Promise</span>&lt;<span class="kt">void</span>> <a class="nv idl-code" data-link-type="method" href="#dom-credentialscontainer-requireusermediation" id="ref-for-dom-credentialscontainer-requireusermediation-1">requireUserMediation</a>();
@@ -1659,7 +1677,6 @@ store user credentials for future use.</p>
     <dl>
      <dl>
       <dt data-md=""><dfn class="dfn-paneled idl-code" data-dfn-for="CredentialsContainer" data-dfn-type="method" data-export="" data-lt="get(options)|get()" id="dom-credentialscontainer-get">get()</dfn>
-      <p></p>
       <dd data-md="">
        <p>When <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-2">get()</a></code> is called, the user agent MUST return the result of
   executing <a data-link-type="abstract-op" href="#abstract-opdef-request-a-credential" id="ref-for-abstract-opdef-request-a-credential-1">Request a <code>Credential</code></a> on <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get-options-options" id="ref-for-dom-credentialscontainer-get-options-options-2">options</a></code>.</p>
@@ -1683,7 +1700,6 @@ store user credentials for future use.</p>
      </table>
      <dl>
       <dt data-md=""><dfn class="dfn-paneled idl-code" data-dfn-for="CredentialsContainer" data-dfn-type="method" data-export="" id="dom-credentialscontainer-store">store()</dfn>
-      <p></p>
       <dd data-md="">
        <p>When <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-1">store()</a></code> is called, the user agent MUST return the result of
   executing <a data-link-type="abstract-op" href="#abstract-opdef-store-a-credential" id="ref-for-abstract-opdef-store-a-credential-1">Store a <code>Credential</code></a> on <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store-credential-credential" id="ref-for-dom-credentialscontainer-store-credential-credential-2">credential</a></code>.</p>
@@ -1707,7 +1723,6 @@ store user credentials for future use.</p>
      </table>
      <dl>
       <dt data-md=""><dfn class="dfn-paneled idl-code" data-dfn-for="CredentialsContainer" data-dfn-type="method" data-export="" id="dom-credentialscontainer-requireusermediation">requireUserMediation()</dfn>
-      <p></p>
       <dd data-md="">
        <p>When <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-requireusermediation" id="ref-for-dom-credentialscontainer-requireusermediation-2">requireUserMediation()</a></code> is called, the user agent MUST return
   the result of executing <a data-link-type="abstract-op" href="#abstract-opdef-require-user-mediation" id="ref-for-abstract-opdef-require-user-mediation-1">Require user mediation</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object">current settings
@@ -1719,25 +1734,105 @@ store user credentials for future use.</p>
   few parameters in a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-3">CredentialRequestOptions</a></code> object.</p>
     <p class="note" role="note"><span>Note:</span> The <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-4">CredentialRequestOptions</a></code> dictionary is an extension point. If and when new types of
   credentials are introduced that require options, their dictionary types will be added to the
-  dictionary so they can be passed into the request. See <a href="#implementation-extension">§5.2 Extension Points</a>.</p>
-<pre class="idl highlight def"><span class="kt">dictionary</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-credentialrequestoptions">CredentialRequestOptions</dfn> {
+  dictionary so they can be passed into the request. See <a href="#implementation-extension">§6.2 Extension Points</a>.</p>
+<pre class="idl highlight def">[<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<span class="n">Window</span>, <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>]
+<span class="kt">dictionary</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-credentialrequestoptions">CredentialRequestOptions</dfn> {
   <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-boolean"><span class="kt">boolean</span></a> <a class="nv idl-code" data-default="false" data-link-type="dict-member" data-type="boolean " href="#dom-credentialrequestoptions-unmediated" id="ref-for-dom-credentialrequestoptions-unmediated-1">unmediated</a> = <span class="kt">false</span>;
 };
 </pre>
     <dl>
      <dt data-md=""><dfn class="dfn-paneled idl-code" data-dfn-for="CredentialRequestOptions" data-dfn-type="dict-member" data-export="" id="dom-credentialrequestoptions-unmediated">unmediated</dfn>, <span> of type <a data-link-type="idl-name" href="https://heycam.github.io/webidl/#idl-boolean">boolean</a>, defaulting to <code>false</code></span>
-     <p></p>
      <dd data-md="">
       <p>If <code>true</code>, the user agent will only attempt to provide a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-18">Credential</a></code> without user
   interaction. It MUST NOT present the user with any visible prompt to grant access to a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-19">Credential</a></code>: if the user has opted-into always giving a particular site access to a
   particular set of credentials, they will be provided. If not, the promise will resolve
-  with <code>null</code>. For processing details, see the algorithm defined in <a href="#algorithm-request">§3.1 Request a Credential</a>.</p>
+  with <code>null</code>. For processing details, see the algorithm defined in <a href="#algorithm-request">§4.1 Request a Credential</a>.</p>
     </dl>
    </section>
    <section>
-    <h2 class="heading settled" data-level="3" id="algorithms"><span class="secno">3. </span><span class="content">Algorithms</span><a class="self-link" href="#algorithms"></a></h2>
-    <h3 class="heading settled algorithm" data-algorithm="Request a Credential" data-level="3.1" id="algorithm-request"><span class="secno">3.1. </span><span class="content">Request a <code>Credential</code></span><a class="self-link" href="#algorithm-request"></a></h3>
-    <p>The <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export="" id="abstract-opdef-request-a-credential">Request a <code>Credential</code></dfn> algorithm accepts a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-5">CredentialRequestOptions</a></code> (<var>options</var>), and returns a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise">Promise</a></code> which resolves with a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-20">Credential</a></code> if one can be
+    <h2 class="heading settled" data-level="3" id="user-mediation"><span class="secno">3. </span><span class="content">User Mediation</span><a class="self-link" href="#user-mediation"></a></h2>
+    <p>Exposing credential information to the web via an API has a number of potential impacts on user
+  privacy. The user agent, therefore, MUST involve the user in a number of cases in order to ensure
+  that they clearly understands what’s going on, and with whom their credentials are being shared.</p>
+    <p>We call a particular action <dfn class="dfn-paneled" data-dfn-type="dfn" data-export="" data-lt="user mediated|user mediation" id="user-mediated">user mediated</dfn> if
+  it takes place after gaining a user’s explicit consent. Consent might be expressed through a
+  user’s direct interaction with a <a data-link-type="dfn" href="#credential-chooser" id="ref-for-credential-chooser-1">credential chooser</a> interface, for example. In general, <a data-link-type="dfn" href="#user-mediated" id="ref-for-user-mediated-1">user
+  mediated</a> actions will involve presenting the user some sort of UI, and asking them to make a
+  decision.</p>
+    <p>An action is <dfn data-dfn-type="dfn" data-export="" id="unmediated">unmediated<a class="self-link" href="#unmediated"></a></dfn> if it takes place without explicit user consent. For
+  example, if a user configures their browser to grant persistent credential access to a particular
+  origin, credentials may be provided without presenting the user with a UI requesting a decision.</p>
+    <p>Here we’ll spell out a few requirements that hold for all credential types, but note that there’s
+  a good deal of latitude left up to the user agent (which is in a priviliged position to assist
+  the user). Moreover, specific credential types may have distinct requirements that exceed the
+  requirements laid out more generally here.</p>
+    <h3 class="heading settled" data-level="3.1" id="user-mediated-storage"><span class="secno">3.1. </span><span class="content">Storing and Updating Credentials</span><a class="self-link" href="#user-mediated-storage"></a></h3>
+    <p>Credential information is sensitive data, and users MUST remain in control of that information’s
+  storage. Inadvertent credential storage could, for instance, unexpectedly link a user’s local
+  profile on a particular device to a specific online persona. To mitigate the risk of surprise:</p>
+    <ol>
+     <li data-md="">
+      <p>Credential information SHOULD NOT be stored or updated without <a data-link-type="dfn" href="#user-mediated" id="ref-for-user-mediated-2">user mediation</a>. For
+  example, the user agent could display a "Save this credential?" dialog box to the user in
+  response to each call to <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-3">store()</a></code>.</p>
+      <p>User consent MAY be inferred if a user agent chooses to offer a persistant grant of consent
+  in the form of an "Always save passwords" option (though we’d suggest that user agents should
+  err on the side of something more narrowly scoped: perhaps "Always save _generated_
+  passwords.", or "Always save passwords for this site.").</p>
+     <li data-md="">
+      <p>User agents SHOULD notify users when credentials are stored. This might take the form of an
+  icon in the address bar, or some similar location.</p>
+     <li data-md="">
+      <p>User agents MUST allow users to manually remove stored credentials. This functionality might
+  be implemented as a settings page, or via interaction with a notification as described above.</p>
+    </ol>
+    <h3 class="heading settled" data-level="3.2" id="user-mediation-requirement"><span class="secno">3.2. </span><span class="content">Requiring User Mediation</span><a class="self-link" href="#user-mediation-requirement"></a></h3>
+    <p>By default, <a data-link-type="dfn" href="#user-mediated" id="ref-for-user-mediated-3">user mediation</a> is required for all <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#concept-origin">origins</a>, as the relevant [=<code>require user mediation</code> flag=] in the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-8">credential store</a> is set to <code>true</code>. Users MAY choose to grant an
+  origin persistent access to credentials (perhaps in the form of a "Stay signed into this site."
+  option), which would set this flag to <code>true</code>. In this case, the user would always be signed into
+  that site, which is desirable from the perspective of usability and convinience, but which
+  might nevertheless have surprising implications (consider a user agent which syncs this flag’s
+  state across devices, for instance).</p>
+    <p>To mitigate the risk of surprise:</p>
+    <ol>
+     <li data-md="">
+      <p>User agents MUST allow users to require <a data-link-type="dfn" href="#user-mediated" id="ref-for-user-mediated-4">user mediation</a> for a given origin or for all
+  origins. This functionality might be implemented as a global toggle that overrides the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-9">credential store</a>'s <a data-link-type="abstract-op" href="#abstract-opdef-credential-store-retrieve-an-origins-requires-user-mediation-flag" id="ref-for-abstract-opdef-credential-store-retrieve-an-origins-requires-user-mediation-flag-1">Retrieve an origin’s <code>requires user mediation</code> flag</a> algorithm to return <code>false</code>, or via more granular settings for specific origins
+  (or specific credentials on specific origins).</p>
+     <li data-md="">
+      <p>User agents MUST NOT <a data-link-type="abstract-op" href="#abstract-opdef-credential-store-set-an-origins-requires-user-mediation-flag" id="ref-for-abstract-opdef-credential-store-set-an-origins-requires-user-mediation-flag-1">Set an origin’s <code>requires user mediation</code> flag</a> to <code>false</code> without <a data-link-type="dfn" href="#user-mediated" id="ref-for-user-mediated-5">user mediation</a>. For example, the <a data-link-type="dfn" href="#credential-chooser" id="ref-for-credential-chooser-2">credential chooser</a> described in <a href="#user-mediated-selection">§3.3 Credential Selection</a> could have a checkbox which the user could toggle to mark a
+  credential as available without mediation for the origin, or the user agent could have an
+  onboarding process for its credential manager which asked a user for a default setting.</p>
+     <li data-md="">
+      <p>User agents MUST notify users when credentials are provided to an origin. This could take the
+  form of an icon in the address bar, or some similar location.</p>
+     <li data-md="">
+      <p>If a user clears her browsing data for an origin (cookies, localStorage, and so on), the user
+  agent MUST <a data-link-type="abstract-op" href="#abstract-opdef-credential-store-set-an-origins-requires-user-mediation-flag" id="ref-for-abstract-opdef-credential-store-set-an-origins-requires-user-mediation-flag-2">Set an origin’s <code>requires user mediation</code> flag</a> to <code>false</code> for
+  that <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#concept-origin">origin</a>.</p>
+    </ol>
+    <h3 class="heading settled" data-level="3.3" id="user-mediated-selection"><span class="secno">3.3. </span><span class="content">Credential Selection</span><a class="self-link" href="#user-mediated-selection"></a></h3>
+    <p>When responding to a call to <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-5">get()</a></code> on an origin which requires <a data-link-type="dfn" href="#user-mediated" id="ref-for-user-mediated-6">user mediation</a>, user agents MUST ask the user for permission to share credential information.
+  This SHOULD take the form of a <dfn class="dfn-paneled" data-dfn-type="dfn" data-export="" id="credential-chooser">credential chooser</dfn> which presents the user with a
+  list of credentials that are available for use on a site, allowing them to select one which should
+  be provided to the website, or to reject the request entirely.</p>
+    <p>The chooser interface SHOULD be implemented in such a way as to be distinguishable from UI which a
+  website could produce. For example, the chooser might overlap the user agent’s UI in some
+  unspoofable way.</p>
+    <p>The chooser interface MUST include an indication of the origin which is requesting credentials.</p>
+    <p>The chooser interface SHOULD include all <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-20">Credential</a></code> objects associated with the origin that
+  requested credentials.</p>
+    <p><em>The following image is an exceptionally non-normative mock:</em></p>
+    <p><img alt="A mockup of what a chooser might look like." src="./mock-chooser.png"></p>
+    <p>User agents MAY internally associate information with each <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-21">Credential</a></code> object beyond the
+  attributes specified in this document in order to enhance the utility of such a chooser. For
+  example, favicons could help disambiguate identity providers, etc. Any additional information
+  stored MUST not be exposed directly to the web.</p>
+   </section>
+   <section>
+    <h2 class="heading settled" data-level="4" id="algorithms"><span class="secno">4. </span><span class="content">Algorithms</span><a class="self-link" href="#algorithms"></a></h2>
+    <h3 class="heading settled algorithm" data-algorithm="Request a Credential" data-level="4.1" id="algorithm-request"><span class="secno">4.1. </span><span class="content">Request a <code>Credential</code></span><a class="self-link" href="#algorithm-request"></a></h3>
+    <p>The <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export="" id="abstract-opdef-request-a-credential">Request a <code>Credential</code></dfn> algorithm accepts a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-5">CredentialRequestOptions</a></code> (<var>options</var>), and returns a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise">Promise</a></code> which resolves with a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-22">Credential</a></code> if one can be
   obtained, or with <code>null</code> if not.</p>
     <ul class="algorithm">
      <ol>
@@ -1760,7 +1855,7 @@ store user credentials for future use.</p>
        <p>For each <var>key</var> in <var>options</var>’ <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-getting-the-keys">keys</a>:</p>
        <ol>
         <li data-md="">
-         <p>Let <var>credential interfaces</var> be the set of <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface">interfaces</a> whose <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-inherited-interfaces">inherited interfaces</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain">contain</a> <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-21">Credential</a></code>.</p>
+         <p>Let <var>credential interfaces</var> be the set of <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface">interfaces</a> whose <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-inherited-interfaces">inherited interfaces</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain">contain</a> <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-23">Credential</a></code>.</p>
         <li data-md="">
          <p>For each <var>interface</var> in <var>credential interfaces</var>:</p>
          <ol>
@@ -1776,7 +1871,7 @@ store user credentials for future use.</p>
        </ol>
        <p class="note" role="note"><span>Note:</span> The goal here is to walk through all the known types of credentials, comparing them
   to the keys in <var>options</var> to figure out which <code class="idl"><a data-link-type="idl" href="#dom-credential-retrieve-slot" id="ref-for-dom-credential-retrieve-slot-2">[[Retrieve]]()</a></code> method we’ll use to poke at
-  the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-7">credential store</a>. If the developer requests multiple types, we verify that they’re
+  the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-10">credential store</a>. If the developer requests multiple types, we verify that they’re
   implemented using the same <code class="idl"><a data-link-type="idl" href="#dom-credential-retrieve-slot" id="ref-for-dom-credential-retrieve-slot-3">[[Retrieve]]()</a></code> method. If so, great! If not, we error out.</p>
       <li data-md="">
        <p>Let <var>p</var> be a new <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise">Promise</a></code>.</p>
@@ -1793,8 +1888,8 @@ store user credentials for future use.</p>
        <p>Resolve <var>p</var> with the result of executing <var>retriever</var> on <var>options</var> and "<code>allow user mediation</code>".</p>
      </ol>
     </ul>
-    <h3 class="heading settled algorithm" data-algorithm="Store a Credential" data-level="3.2" id="algorithm-store"><span class="secno">3.2. </span><span class="content">Store a <code>Credential</code></span><a class="self-link" href="#algorithm-store"></a></h3>
-    <p>The <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export="" id="abstract-opdef-store-a-credential">Store a <code>Credential</code></dfn> algorithm accepts a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-22">Credential</a></code> (<var>credential</var>), and returns a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise">Promise</a></code> which resolves once the object is persisted to the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-8">credential store</a>.</p>
+    <h3 class="heading settled algorithm" data-algorithm="Store a Credential" data-level="4.2" id="algorithm-store"><span class="secno">4.2. </span><span class="content">Store a <code>Credential</code></span><a class="self-link" href="#algorithm-store"></a></h3>
+    <p>The <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export="" id="abstract-opdef-store-a-credential">Store a <code>Credential</code></dfn> algorithm accepts a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-24">Credential</a></code> (<var>credential</var>), and returns a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise">Promise</a></code> which resolves once the object is persisted to the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-11">credential store</a>.</p>
     <ul class="algorithm">
      <ol>
       <li data-md="">
@@ -1814,9 +1909,9 @@ store user credentials for future use.</p>
        <p>Return a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise">Promise</a></code> which resolves with the result of executing <var>credential</var>’s <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a>'s <code class="idl"><a data-link-type="idl" href="#dom-credential-store-slot" id="ref-for-dom-credential-store-slot-1">[[Store]](credential)</a></code> internal method on <var>credential</var>.</p>
      </ol>
     </ul>
-    <h3 class="heading settled algorithm" data-algorithm="Require User Mediation" data-level="3.3" id="algorithm-require-mediation"><span class="secno">3.3. </span><span class="content">Require User Mediation</span><a class="self-link" href="#algorithm-require-mediation"></a></h3>
+    <h3 class="heading settled algorithm" data-algorithm="Require User Mediation" data-level="4.3" id="algorithm-require-mediation"><span class="secno">4.3. </span><span class="content">Require User Mediation</span><a class="self-link" href="#algorithm-require-mediation"></a></h3>
     <p>The <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export="" id="abstract-opdef-require-user-mediation">Require user mediation</dfn> algorithm accepts an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object">environment settings
-  object</a> (<var>settings</var>), and returns a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise">Promise</a></code> which resolves once the <code>requires user mediation</code> flag is persisted to the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-9">credential store</a>.</p>
+  object</a> (<var>settings</var>), and returns a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise">Promise</a></code> which resolves once the <code>requires user mediation</code> flag is persisted to the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-12">credential store</a>.</p>
     <ul class="algorithm">
      <ol>
       <li data-md="">
@@ -1827,7 +1922,7 @@ store user credentials for future use.</p>
        <p>Return <var>p</var>, and execute the following steps asynchronously:</p>
        <ol>
         <li data-md="">
-         <p><a data-link-type="abstract-op" href="#abstract-opdef-credential-store-set-an-origins-requires-user-mediation-flag" id="ref-for-abstract-opdef-credential-store-set-an-origins-requires-user-mediation-flag-1">Set the <code>requires user mediation</code> flag</a> for <var>origin</var> in the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-10">credential store</a>.</p>
+         <p><a data-link-type="abstract-op" href="#abstract-opdef-credential-store-set-an-origins-requires-user-mediation-flag" id="ref-for-abstract-opdef-credential-store-set-an-origins-requires-user-mediation-flag-3">Set the <code>requires user mediation</code> flag</a> for <var>origin</var> in the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-13">credential store</a>.</p>
         <li data-md="">
          <p>Resolve <var>p</var>.</p>
        </ol>
@@ -1835,27 +1930,94 @@ store user credentials for future use.</p>
     </ul>
    </section>
    <section>
-    <h2 class="heading settled" data-level="4" id="security-and-privacy"><span class="secno">4. </span><span class="content">Security and Privacy Considerations</span><a class="self-link" href="#security-and-privacy"></a></h2>
-    <h3 class="heading settled" data-level="4.1" id="insecure-sites"><span class="secno">4.1. </span><span class="content">Insecure Sites</span><a class="self-link" href="#insecure-sites"></a></h3>
+    <h2 class="heading settled" data-level="5" id="security-and-privacy"><span class="secno">5. </span><span class="content">Security and Privacy Considerations</span><a class="self-link" href="#security-and-privacy"></a></h2>
+    <h3 class="heading settled" data-level="5.1" id="security-leakage"><span class="secno">5.1. </span><span class="content">Credential Leakage</span><a class="self-link" href="#security-leakage"></a></h3>
+    <p>Credentials are sensitive information, and user agents need to exercise caution in determining
+  when they can be safely shared with a website. Likewise, developers would be well-advised to take
+  some precautions to mitigate the risk that a cross-site scripting attack could turn into
+  persistent access to a user’s account by by setting a reasonable Content Security Policy <a data-link-type="biblio" href="#biblio-csp">[CSP]</a> which restricts the endpoints to which data can be sent. In particular, developers should ensure
+  that the following directives are set, explicitly or implicitly, in their pages' policies:</p>
+    <ul>
+     <li data-md="">
+      <p><a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#script-src"><code>script-src</code></a> and <a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#object-src"><code>object-src</code></a> both restrict script execution on a page, making
+  it less likely that a cross-site scripting attack will succeed in the first place.</p>
+     <li data-md="">
+      <p><a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#connect-src"><code>connect-src</code></a> restricts the origins to which <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a></code> may submit data (which
+  mitigates the risk that credentials could be exfiltrated to <code>evil.com</code>.</p>
+     <li data-md="">
+      <p><a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#child-src"><code>child-src</code></a> restricts the nested browsing contexts which may be embedded in a page,
+  making it more difficult to inject a malicious <code>postMessage()</code> target. <a data-link-type="biblio" href="#biblio-webmessaging">[WEBMESSAGING]</a></p>
+    </ul>
+    <p>Developers should, of course, also properly escape input and output, and consider using other
+  layers of defense, such as Subresource Integrity <a data-link-type="biblio" href="#biblio-sri">[SRI]</a> to further reduce risk.</p>
+    <p>When defining specific credential types, specific credential types SHOULD give due consideration
+  to the ways in which credential data can be transmitted over the wire. It might be reasonable,
+  for example, to define transmission mechanisms which are restricted to same-origin endpoints.</p>
+    <h3 class="heading settled" data-level="5.2" id="insecure-sites"><span class="secno">5.2. </span><span class="content">Insecure Sites</span><a class="self-link" href="#insecure-sites"></a></h3>
     <p>User agents MUST NOT expose the APIs defined here to environments which are not <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#secure-context">secure
   contexts</a>. User agents might implement autofill mechanisms which store user credentials and fill
   sign-in forms on non-<a data-link-type="dfn" href="https://w3c.github.io/webappsec-mixed-content/#a-priori-authenticated-url"><i lang="la">a priori</i> authenticated URLs</a>, but those sites cannot
   be trusted to interact directly with the credential manager in any meaningful way, and those sites
   MUST NOT have access to credentials saved in <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#secure-context">secure contexts</a>.</p>
+    <h3 class="heading settled" data-level="5.3" id="security-origin-confusion"><span class="secno">5.3. </span><span class="content">Origin Confusion</span><a class="self-link" href="#security-origin-confusion"></a></h3>
+    <p>If framed pages have access to the APIs defined here, it might be possible to confuse a user into
+  granting access to credentials for an origin other than the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context">top-level browsing context</a>,
+  which is the only security origin which users can reasonably be expected to understand.</p>
+    <p>Therefore, both <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-6">get()</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-4">store()</a></code> will result in a rejected <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise">Promise</a></code> when called from
+  a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context">nested browsing context</a>, and the API and related interfaces are not exposed inside <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#worker">Worker</a></code> contexts.</p>
+    <p>The algorithms in <a href="#algorithm-request">§4.1 Request a Credential</a> and <a href="#algorithm-store">§4.2 Store a Credential</a> contain more detail.</p>
+    <h3 class="heading settled" data-level="5.4" id="security-timing"><span class="secno">5.4. </span><span class="content">Timing Attacks</span><a class="self-link" href="#security-timing"></a></h3>
+    <p>If the user has no credentials for an origin, a call to <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-7">get()</a></code> will
+  resolve very quickly indeed. A malicious website could distinguish between a user with no
+  credentials and a user with credentials who chooses not to share them.</p>
+    <p>User agents SHOULD also rate-limit credential requests. It’s almost certainly abusive for a page
+  to request credentials more than a few times in a short period.</p>
+    <h3 class="heading settled" data-level="5.5" id="security-signout"><span class="secno">5.5. </span><span class="content">Signing-Out</span><a class="self-link" href="#security-signout"></a></h3>
+    <p>If a user has chosen to automatically sign-in to websites, as discussed in <a href="#user-mediation-requirement">§3.2 Requiring User Mediation</a>, then the user agent will provide credentials to an origin
+  whenever it asks for them. The website can instruct the user agent to suppress this behavior by
+  calling <code class="idl"><a data-link-type="idl" href="#credentialscontainer" id="ref-for-credentialscontainer-3">CredentialsContainer</a></code>'s <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-requireusermediation" id="ref-for-dom-credentialscontainer-requireusermediation-3">requireUserMediation()</a></code> method, which
+  will turn off automatic sign-in for a given origin.</p>
+    <p>The user agent relies on the website to do the right thing; an inattentive (or malicious) website
+  could simply neglect to call this method, causing the user agent to continue providing credentials
+  against the user’s apparent intention. This is marginally worse than the status-quo of a site that
+  doesn’t clear user credentials when they click "Sign-out", as the user agent becomes complicit in
+  the authentication.</p>
+    <p>The user MUST have some control over this behavior. As noted in <a href="#user-mediation-requirement">§3.2 Requiring User Mediation</a>,
+  clearing cookies for an origin will also reset that origin’s [=<code>requires user mediation</code> flag=] in
+  the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-14">credential store</a> to <code>true</code>. Additionally, the user agent SHOULD provide some UI affordance
+  for disabling automatic sign-in for a particular origin. This could be tied to the notification
+  that credentials have been provided to an origin, for example.</p>
+    <h3 class="heading settled" data-level="5.6" id="security-chooser-leakage"><span class="secno">5.6. </span><span class="content">Chooser Leakage</span><a class="self-link" href="#security-chooser-leakage"></a></h3>
+    <p>If a user agent’s <a data-link-type="dfn" href="#credential-chooser" id="ref-for-credential-chooser-3">credential chooser</a> displays images supplied by an origin (for example, if a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-25">Credential</a></code> displays a site’s favicon), then, requests for these images MUST NOT be directly
+  tied to instantiating the chooser in order to avoid leaking chooser usage. One option would be to
+  fetch the images in the background when saving or updating a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-26">Credential</a></code>, and to cache them for
+  the lifetime of the <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-27">Credential</a></code>.</p>
+    <p>These images MUST be fetched with the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-credentials-mode">credentials mode</a> set to "<code>omit</code>", the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#request-service-workers-mode">service-workers mode</a> set to "<code>none</code>", the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a> set to <code>null</code>, the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-initiator">initiator</a> set to the empty string, and the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-destination">destination</a> "<code>subresource</code>".</p>
+    <p>Moreover, if the user agent allows the user to change either the name or icon associated with the
+  credential, the alterations to the data SHOULD NOT be exposed to the website (consider a user who
+  names two credentials for an origin "My fake account" and "My real account", for instance).</p>
+    <h3 class="heading settled" data-level="5.7" id="security-local-data"><span class="secno">5.7. </span><span class="content">Locally Stored Data</span><a class="self-link" href="#security-local-data"></a></h3>
+    <p>This API offers an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#concept-origin">origin</a> the ability to store data persistently along with a user’s profile.
+  Since most user agents treat credential data differently than "browsing data" (cookies, etc.)
+  this might have the side effect of surprising a user who might believe that all traces of an
+  origin have been wiped out when they clear their cookies.</p>
+    <p>User agents SHOULD provide UI that makes it clear to a user that credential data is stored for an
+  origin, and SHOULD make it easy for users to remove such data when they’re no longer interested in
+  keeping it around.</p>
    </section>
    <section>
-    <h2 class="heading settled" data-level="5" id="implementation"><span class="secno">5. </span><span class="content">Implementation Considerations</span><a class="self-link" href="#implementation"></a></h2>
+    <h2 class="heading settled" data-level="6" id="implementation"><span class="secno">6. </span><span class="content">Implementation Considerations</span><a class="self-link" href="#implementation"></a></h2>
     <p><em>This section is non-normative.</em></p>
-    <h3 class="heading settled" data-level="5.1" id="implementation-authors"><span class="secno">5.1. </span><span class="content">Website Authors</span><a class="self-link" href="#implementation-authors"></a></h3>
+    <h3 class="heading settled" data-level="6.1" id="implementation-authors"><span class="secno">6.1. </span><span class="content">Website Authors</span><a class="self-link" href="#implementation-authors"></a></h3>
     <p class="issue" id="issue-8fc91b23"><a class="self-link" href="#issue-8fc91b23"></a> Add some thoughts here about when and how the API
   should be used, especially with regard to <code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-unmediated" id="ref-for-dom-credentialrequestoptions-unmediated-3">unmediated</a></code>. <a href="https://github.com/w3c/webappsec/issues/290">&lt;https://github.com/w3c/webappsec/issues/290></a></p>
-    <h3 class="heading settled" data-level="5.2" id="implementation-extension"><span class="secno">5.2. </span><span class="content">Extension Points</span><a class="self-link" href="#implementation-extension"></a></h3>
+    <h3 class="heading settled" data-level="6.2" id="implementation-extension"><span class="secno">6.2. </span><span class="content">Extension Points</span><a class="self-link" href="#implementation-extension"></a></h3>
     <p>This document provides a generic, high-level API that’s meant to be extended with specific types
-  of <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential-8">credentials</a> that serve specific authentication needs. Doing so is, hopefully,
+  of <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential-9">credentials</a> that serve specific authentication needs. Doing so is, hopefully,
   straightforward:</p>
     <ol>
      <li data-md="">
-      <p>Define a new interface that inherits from <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-23">Credential</a></code>:</p>
+      <p>Define a new interface that inherits from <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-28">Credential</a></code>:</p>
       <div class="example" id="example-c4fb2a06">
        <a class="self-link" href="#example-c4fb2a06"></a> 
 <pre>[Constructor(...),
@@ -1893,7 +2055,7 @@ interface ExampleCredential : Credential {
     value is the string "<code>example</code>". </div>
      <li data-md="">
       <p>Extend <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-6">CredentialRequestOptions</a></code> with the options the new credential type needs to respond
-  reasonably to <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-5">get()</a></code>:</p>
+  reasonably to <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-8">get()</a></code>:</p>
       <div class="example" id="example-980172a4">
        <a class="self-link" href="#example-980172a4"></a> 
 <pre>dictionary ExampleCredentialRequestOptions {
@@ -1907,17 +2069,17 @@ partial dictionary CredentialRequestOptions {
       </div>
     </ol>
     <p>You might also find that new primitives are necessary. For instance, you might want to return
-  many <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-24">Credential</a></code> objects rather than just one in some sort of complicated, multi-factor
-  sign-in process. That might be accomplished in a generic fashion by adding a <code>getAll()</code> method to <code class="idl"><a data-link-type="idl" href="#credentialscontainer" id="ref-for-credentialscontainer-3">CredentialsContainer</a></code> which returned a <code>sequence&lt;Credential></code>, and defining a reasonable
+  many <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-29">Credential</a></code> objects rather than just one in some sort of complicated, multi-factor
+  sign-in process. That might be accomplished in a generic fashion by adding a <code>getAll()</code> method to <code class="idl"><a data-link-type="idl" href="#credentialscontainer" id="ref-for-credentialscontainer-4">CredentialsContainer</a></code> which returned a <code>sequence&lt;Credential></code>, and defining a reasonable
   mechanism for dealing with requesting credentials of distinct types.</p>
     <p>For any such extension, we recommend getting in touch with <a href="mailto:public-webappsec@w3.org">public-webappsec@</a> for consultation and review.</p>
-    <h3 class="heading settled" data-level="5.3" id="implementation-browser-extensions"><span class="secno">5.3. </span><span class="content">Browser Extensions</span><a class="self-link" href="#implementation-browser-extensions"></a></h3>
+    <h3 class="heading settled" data-level="6.3" id="browser-extensions"><span class="secno">6.3. </span><span class="content">Browser Extensions</span><a class="self-link" href="#browser-extensions"></a></h3>
     <p>Ideally, user agents that implement an extension system of some sort will
   allow third-parties to hook into these API endpoints in order to improve
   the behavior of third party credential management software in the same way
   that user agents can improve their own via this imperative approach.</p>
     <p>This could range from a complex new API that the user agent mediates, or
-  simply by allowing extensions to overwrite the <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-6">get()</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-3">store()</a></code> endpoints for their own purposes.</p>
+  simply by allowing extensions to overwrite the <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-9">get()</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-5">store()</a></code> endpoints for their own purposes.</p>
    </section>
   </main>
   <h2 class="no-ref no-num heading settled" id="conformance"><span class="content">Conformance</span><a class="self-link" href="#conformance"></a></h2>
@@ -1957,6 +2119,7 @@ partial dictionary CredentialRequestOptions {
   <ul class="index">
    <li><a href="#credential">Credential</a><span>, in §2.2.1</span>
    <li><a href="#concept-credential">credential</a><span>, in §2.2</span>
+   <li><a href="#credential-chooser">credential chooser</a><span>, in §3.3</span>
    <li><a href="#dictdef-credentialrequestoptions">CredentialRequestOptions</a><span>, in §2.3.1</span>
    <li><a href="#dom-navigator-credentials">credentials</a><span>, in §2.3</span>
    <li><a href="#credentialscontainer">CredentialsContainer</a><span>, in §2.3</span>
@@ -1965,39 +2128,68 @@ partial dictionary CredentialRequestOptions {
    <li><a href="#dom-credentialscontainer-get">get(options)</a><span>, in §2.3</span>
    <li><a href="#dom-credential-id">id</a><span>, in §2.2.1</span>
    <li><a href="#abstract-opdef-credential-store-modify-a-credential">Modify a credential</a><span>, in §2.2</span>
-   <li><a href="#abstract-opdef-request-a-credential">Request a Credential</a><span>, in §3.1</span>
+   <li><a href="#abstract-opdef-request-a-credential">Request a Credential</a><span>, in §4.1</span>
+   <li><a href="#origin-requires-user-mediation-flag">requires user mediation flag</a><span>, in §2.2</span>
    <li><a href="#dom-credentialscontainer-requireusermediation">requireUserMediation()</a><span>, in §2.3</span>
-   <li><a href="#abstract-opdef-require-user-mediation">Require user mediation</a><span>, in §3.3</span>
+   <li><a href="#abstract-opdef-require-user-mediation">Require user mediation</a><span>, in §4.3</span>
    <li><a href="#abstract-opdef-credential-store-retrieve-a-list-of-credentials">Retrieve a list of credentials</a><span>, in §2.2</span>
    <li><a href="#abstract-opdef-credential-store-retrieve-an-origins-requires-user-mediation-flag">Retrieve an origin’s requires user mediation flag</a><span>, in §2.2</span>
    <li><a href="#dom-credential-retrieve-slot">[[Retrieve]](options, allowMediation)</a><span>, in §2.2.1.1</span>
    <li><a href="#abstract-opdef-credential-store-set-an-origins-requires-user-mediation-flag">Set an origin’s requires user mediation flag</a><span>, in §2.2</span>
    <li><a href="#dom-credentialscontainer-store">store()</a><span>, in §2.3</span>
    <li><a href="#abstract-opdef-credential-store-store-a-credential">Store a credential</a><span>, in §2.2</span>
-   <li><a href="#abstract-opdef-store-a-credential">Store a Credential</a><span>, in §3.2</span>
+   <li><a href="#abstract-opdef-store-a-credential">Store a Credential</a><span>, in §4.2</span>
    <li><a href="#dom-credentialscontainer-store">store(credential)</a><span>, in §2.3</span>
    <li><a href="#dom-credential-store-slot">[[Store]](credential)</a><span>, in §2.2.1.1</span>
    <li><a href="#dom-credential-type">type</a><span>, in §2.2.1</span>
    <li><a href="#dom-credential-type-slot">[[type]]</a><span>, in §2.2.1</span>
-   <li><a href="#dom-credentialrequestoptions-unmediated">unmediated</a><span>, in §2.3.1</span>
+   <li>
+    unmediated
+    <ul>
+     <li><a href="#dom-credentialrequestoptions-unmediated">dict-member for CredentialRequestOptions</a><span>, in §2.3.1</span>
+     <li><a href="#unmediated">definition of</a><span>, in §3</span>
+    </ul>
+   <li><a href="#user-mediated">user mediated</a><span>, in §3</span>
+   <li><a href="#user-mediated">user mediation</a><span>, in §3</span>
   </ul>
   <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
   <ul class="index">
+   <li>
+    <a data-link-type="biblio">[CSP]</a> defines the following terms:
+    <ul>
+     <li><a href="https://w3c.github.io/webappsec-csp/#child-src">child-src</a>
+     <li><a href="https://w3c.github.io/webappsec-csp/#connect-src">connect-src</a>
+     <li><a href="https://w3c.github.io/webappsec-csp/#object-src">object-src</a>
+     <li><a href="https://w3c.github.io/webappsec-csp/#script-src">script-src</a>
+    </ul>
    <li>
     <a data-link-type="biblio">[ecma262]</a> defines the following terms:
     <ul>
      <li><a href="https://tc39.github.io/ecma262/#sec-code-realms">javascript realm</a>
     </ul>
    <li>
+    <a data-link-type="biblio">[FETCH]</a> defines the following terms:
+    <ul>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-request-credentials-mode">credentials mode</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-request-destination">destination</a>
+     <li><a href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch(input)</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-request-initiator">initiator</a>
+     <li><a href="https://fetch.spec.whatwg.org/#request-service-workers-mode">service-workers mode</a>
+    </ul>
+   <li>
     <a data-link-type="biblio">[HTML]</a> defines the following terms:
     <ul>
      <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#navigator">Navigator</a>
+     <li><a href="https://html.spec.whatwg.org/multipage/workers.html#worker">Worker</a>
      <li><a href="https://html.spec.whatwg.org/multipage/infrastructure.html#clone-()">[[Clone]]()</a>
      <li><a href="https://html.spec.whatwg.org/multipage/browsers.html#active-document">active document</a>
      <li><a href="https://html.spec.whatwg.org/multipage/infrastructure.html#cloneable-objects">cloneable objects</a>
      <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object">current settings object</a>
      <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object">environment settings object</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin">origin</a>
+     <li><a href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context">nested browsing context</a>
+     <li><a href="https://html.spec.whatwg.org/multipage/browsers.html#concept-origin">origin</a>
+     <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin">origin <small>(for environment settings object)</small></a>
      <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-document">responsible document</a>
      <li><a href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context">top-level browsing context</a>
     </ul>
@@ -2022,6 +2214,7 @@ partial dictionary CredentialRequestOptions {
     <a data-link-type="biblio">[WebIDL]</a> defines the following terms:
     <ul>
      <li><a href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a>
+     <li><a href="https://heycam.github.io/webidl/#Exposed">Exposed</a>
      <li><a href="https://heycam.github.io/webidl/#idl-promise">Promise</a>
      <li><a href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>
      <li><a href="https://heycam.github.io/webidl/#idl-USVString">USVString</a>
@@ -2036,6 +2229,10 @@ partial dictionary CredentialRequestOptions {
   <h2 class="no-num no-ref heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
   <h3 class="no-num no-ref heading settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
   <dl>
+   <dt id="biblio-csp">[CSP]
+   <dd>Mike West. <a href="https://www.w3.org/TR/CSP3/">Content Security Policy Level 3</a>. URL: <a href="https://www.w3.org/TR/CSP3/">https://www.w3.org/TR/CSP3/</a>
+   <dt id="biblio-fetch">[FETCH]
+   <dd>Anne van Kesteren. <a href="https://fetch.spec.whatwg.org/">Fetch Standard</a>. Living Standard. URL: <a href="https://fetch.spec.whatwg.org/">https://fetch.spec.whatwg.org/</a>
    <dt id="biblio-html">[HTML]
    <dd>Anne van Kesteren; et al. <a href="https://html.spec.whatwg.org/multipage/">HTML Standard</a>. Living Standard. URL: <a href="https://html.spec.whatwg.org/multipage/">https://html.spec.whatwg.org/multipage/</a>
    <dt id="biblio-infra">[INFRA]
@@ -2049,8 +2246,16 @@ partial dictionary CredentialRequestOptions {
    <dt id="biblio-webidl">[WebIDL]
    <dd>Cameron McCormack; Boris Zbarsky; Tobie Langel. <a href="https://www.w3.org/TR/WebIDL-1/">Web IDL</a>. URL: <a href="https://www.w3.org/TR/WebIDL-1/">https://www.w3.org/TR/WebIDL-1/</a>
   </dl>
+  <h3 class="no-num no-ref heading settled" id="informative"><span class="content">Informative References</span><a class="self-link" href="#informative"></a></h3>
+  <dl>
+   <dt id="biblio-sri">[SRI]
+   <dd>Devdatta Akhawe; et al. <a href="https://www.w3.org/TR/SRI/">Subresource Integrity</a>. URL: <a href="https://www.w3.org/TR/SRI/">https://www.w3.org/TR/SRI/</a>
+   <dt id="biblio-webmessaging">[WEBMESSAGING]
+   <dd>Ian Hickson. <a href="https://www.w3.org/TR/webmessaging/">HTML5 Web Messaging</a>. URL: <a href="https://www.w3.org/TR/webmessaging/">https://www.w3.org/TR/webmessaging/</a>
+  </dl>
   <h2 class="no-num no-ref heading settled" id="idl-index"><span class="content">IDL Index</span><a class="self-link" href="#idl-index"></a></h2>
-<pre class="idl def"><span class="kt">interface</span> <a class="nv" href="#credential">Credential</a> {
+<pre class="idl def">[<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<span class="n">Window</span>, <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>]
+<span class="kt">interface</span> <a class="nv" href="#credential">Credential</a> {
   <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString"><span class="kt">USVString</span></a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="USVString" href="#dom-credential-id">id</a>;
   <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString"><span class="kt">DOMString</span></a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="DOMString" href="#dom-credential-type">type</a>;
 };
@@ -2059,12 +2264,14 @@ partial dictionary CredentialRequestOptions {
   [<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>] <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n" data-link-type="idl-name" href="#credentialscontainer">CredentialsContainer</a> <a class="nv" data-readonly="" data-type="CredentialsContainer" href="#dom-navigator-credentials">credentials</a>;
 };
 
+[<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<span class="n">Window</span>, <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>]
 <span class="kt">interface</span> <a class="nv" href="#credentialscontainer">CredentialsContainer</a> {
   <span class="kt">Promise</span>&lt;<a class="n" data-link-type="idl-name" href="#credential">Credential</a>?> <a class="nv idl-code" data-link-type="method" href="#dom-credentialscontainer-get">get</a>(<span class="kt">optional</span> <a class="n" data-link-type="idl-name" href="#dictdef-credentialrequestoptions">CredentialRequestOptions</a> <a class="nv idl-code" data-link-type="argument" href="#dom-credentialscontainer-get-options-options">options</a>);
   <span class="kt">Promise</span>&lt;<a class="n" data-link-type="idl-name" href="#credential">Credential</a>> <a class="nv" href="#dom-credentialscontainer-store">store</a>(<a class="n" data-link-type="idl-name" href="#credential">Credential</a> <a class="nv idl-code" data-link-type="argument" href="#dom-credentialscontainer-store-credential-credential">credential</a>);
   <span class="kt">Promise</span>&lt;<span class="kt">void</span>> <a class="nv idl-code" data-link-type="method" href="#dom-credentialscontainer-requireusermediation">requireUserMediation</a>();
 };
 
+[<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<span class="n">Window</span>, <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>]
 <span class="kt">dictionary</span> <a class="nv" href="#dictdef-credentialrequestoptions">CredentialRequestOptions</a> {
   <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-boolean"><span class="kt">boolean</span></a> <a class="nv idl-code" data-default="false" data-link-type="dict-member" data-type="boolean " href="#dom-credentialrequestoptions-unmediated">unmediated</a> = <span class="kt">false</span>;
 };
@@ -2073,7 +2280,7 @@ partial dictionary CredentialRequestOptions {
   <h2 class="no-num no-ref heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
   <div style="counter-reset:issue">
    <div class="issue"> Add an introduction.<a href="#issue-20576259"> ↵ </a></div>
-   <div class="issue"> Talk to Tobie/Dominic about the <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a> bits, here and in <a href="#algorithm-request">§3.1 Request a Credential</a>, etc. I’m not sure I’ve gotten the terminology right. <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-prototype-object">interface prototype
+   <div class="issue"> Talk to Tobie/Dominic about the <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a> bits, here and in <a href="#algorithm-request">§4.1 Request a Credential</a>, etc. I’m not sure I’ve gotten the terminology right. <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-prototype-object">interface prototype
   object</a>, maybe?<a href="#issue-1bc838e3"> ↵ </a></div>
    <div class="issue"> Add some thoughts here about when and how the API
   should be used, especially with regard to <code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-unmediated">unmediated</a></code>. <a href="https://github.com/w3c/webappsec/issues/290">&lt;https://github.com/w3c/webappsec/issues/290></a><a href="#issue-8fc91b23"> ↵ </a></div>
@@ -2081,26 +2288,35 @@ partial dictionary CredentialRequestOptions {
   <aside class="dfn-panel" data-for="concept-credential">
    <b><a href="#concept-credential">#concept-credential</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-credential-1">2.2. Credentials</a> <a href="#ref-for-concept-credential-2">(2)</a> <a href="#ref-for-concept-credential-3">(3)</a> <a href="#ref-for-concept-credential-4">(4)</a> <a href="#ref-for-concept-credential-5">(5)</a> <a href="#ref-for-concept-credential-6">(6)</a>
-    <li><a href="#ref-for-concept-credential-7">2.2.1. The Credential Interface</a>
-    <li><a href="#ref-for-concept-credential-8">5.2. Extension Points</a>
+    <li><a href="#ref-for-concept-credential-1">2.2. Credentials</a> <a href="#ref-for-concept-credential-2">(2)</a> <a href="#ref-for-concept-credential-3">(3)</a> <a href="#ref-for-concept-credential-4">(4)</a> <a href="#ref-for-concept-credential-5">(5)</a> <a href="#ref-for-concept-credential-6">(6)</a> <a href="#ref-for-concept-credential-7">(7)</a>
+    <li><a href="#ref-for-concept-credential-8">2.2.1. The Credential Interface</a>
+    <li><a href="#ref-for-concept-credential-9">6.2. Extension Points</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="concept-credential-store">
    <b><a href="#concept-credential-store">#concept-credential-store</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-concept-credential-store-1">2.2. Credentials</a> <a href="#ref-for-concept-credential-store-2">(2)</a> <a href="#ref-for-concept-credential-store-3">(3)</a>
-    <li><a href="#ref-for-concept-credential-store-4">2.2.1.1. Credential Internal Methods</a> <a href="#ref-for-concept-credential-store-5">(2)</a>
-    <li><a href="#ref-for-concept-credential-store-6">2.3. Credential Management</a>
-    <li><a href="#ref-for-concept-credential-store-7">3.1. Request a Credential</a>
-    <li><a href="#ref-for-concept-credential-store-8">3.2. Store a Credential</a>
-    <li><a href="#ref-for-concept-credential-store-9">3.3. Require User Mediation</a> <a href="#ref-for-concept-credential-store-10">(2)</a>
+    <li><a href="#ref-for-concept-credential-store-1">2.2. Credentials</a> <a href="#ref-for-concept-credential-store-2">(2)</a> <a href="#ref-for-concept-credential-store-3">(3)</a> <a href="#ref-for-concept-credential-store-4">(4)</a>
+    <li><a href="#ref-for-concept-credential-store-5">2.2.1.1. Credential Internal Methods</a> <a href="#ref-for-concept-credential-store-6">(2)</a>
+    <li><a href="#ref-for-concept-credential-store-7">2.3. Credential Management</a>
+    <li><a href="#ref-for-concept-credential-store-8">3.2. Requiring User Mediation</a> <a href="#ref-for-concept-credential-store-9">(2)</a>
+    <li><a href="#ref-for-concept-credential-store-10">4.1. Request a Credential</a>
+    <li><a href="#ref-for-concept-credential-store-11">4.2. Store a Credential</a>
+    <li><a href="#ref-for-concept-credential-store-12">4.3. Require User Mediation</a> <a href="#ref-for-concept-credential-store-13">(2)</a>
+    <li><a href="#ref-for-concept-credential-store-14">5.5. Signing-Out</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="abstract-opdef-credential-store-retrieve-an-origins-requires-user-mediation-flag">
+   <b><a href="#abstract-opdef-credential-store-retrieve-an-origins-requires-user-mediation-flag">#abstract-opdef-credential-store-retrieve-an-origins-requires-user-mediation-flag</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-abstract-opdef-credential-store-retrieve-an-origins-requires-user-mediation-flag-1">3.2. Requiring User Mediation</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="abstract-opdef-credential-store-set-an-origins-requires-user-mediation-flag">
    <b><a href="#abstract-opdef-credential-store-set-an-origins-requires-user-mediation-flag">#abstract-opdef-credential-store-set-an-origins-requires-user-mediation-flag</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-abstract-opdef-credential-store-set-an-origins-requires-user-mediation-flag-1">3.3. Require User Mediation</a>
+    <li><a href="#ref-for-abstract-opdef-credential-store-set-an-origins-requires-user-mediation-flag-1">3.2. Requiring User Mediation</a> <a href="#ref-for-abstract-opdef-credential-store-set-an-origins-requires-user-mediation-flag-2">(2)</a>
+    <li><a href="#ref-for-abstract-opdef-credential-store-set-an-origins-requires-user-mediation-flag-3">4.3. Require User Mediation</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="credential">
@@ -2111,9 +2327,11 @@ partial dictionary CredentialRequestOptions {
     <li><a href="#ref-for-credential-4">2.2.1.1. Credential Internal Methods</a> <a href="#ref-for-credential-5">(2)</a> <a href="#ref-for-credential-6">(3)</a> <a href="#ref-for-credential-7">(4)</a> <a href="#ref-for-credential-8">(5)</a> <a href="#ref-for-credential-9">(6)</a> <a href="#ref-for-credential-10">(7)</a> <a href="#ref-for-credential-11">(8)</a> <a href="#ref-for-credential-12">(9)</a> <a href="#ref-for-credential-13">(10)</a>
     <li><a href="#ref-for-credential-14">2.3. Credential Management</a> <a href="#ref-for-credential-15">(2)</a> <a href="#ref-for-credential-16">(3)</a>
     <li><a href="#ref-for-credential-17">2.3.1. The CredentialRequestOptions Dictionary</a> <a href="#ref-for-credential-18">(2)</a> <a href="#ref-for-credential-19">(3)</a>
-    <li><a href="#ref-for-credential-20">3.1. Request a Credential</a> <a href="#ref-for-credential-21">(2)</a>
-    <li><a href="#ref-for-credential-22">3.2. Store a Credential</a>
-    <li><a href="#ref-for-credential-23">5.2. Extension Points</a> <a href="#ref-for-credential-24">(2)</a>
+    <li><a href="#ref-for-credential-20">3.3. Credential Selection</a> <a href="#ref-for-credential-21">(2)</a>
+    <li><a href="#ref-for-credential-22">4.1. Request a Credential</a> <a href="#ref-for-credential-23">(2)</a>
+    <li><a href="#ref-for-credential-24">4.2. Store a Credential</a>
+    <li><a href="#ref-for-credential-25">5.6. Chooser Leakage</a> <a href="#ref-for-credential-26">(2)</a> <a href="#ref-for-credential-27">(3)</a>
+    <li><a href="#ref-for-credential-28">6.2. Extension Points</a> <a href="#ref-for-credential-29">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-credential-id">
@@ -2134,22 +2352,22 @@ partial dictionary CredentialRequestOptions {
    <ul>
     <li><a href="#ref-for-dom-credential-type-slot-1">2.2.1. The Credential Interface</a> <a href="#ref-for-dom-credential-type-slot-2">(2)</a>
     <li><a href="#ref-for-dom-credential-type-slot-3">2.2.1.1. Credential Internal Methods</a> <a href="#ref-for-dom-credential-type-slot-4">(2)</a>
-    <li><a href="#ref-for-dom-credential-type-slot-5">3.1. Request a Credential</a>
-    <li><a href="#ref-for-dom-credential-type-slot-6">5.2. Extension Points</a>
+    <li><a href="#ref-for-dom-credential-type-slot-5">4.1. Request a Credential</a>
+    <li><a href="#ref-for-dom-credential-type-slot-6">6.2. Extension Points</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-credential-retrieve-slot">
    <b><a href="#dom-credential-retrieve-slot">#dom-credential-retrieve-slot</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-credential-retrieve-slot-1">3.1. Request a Credential</a> <a href="#ref-for-dom-credential-retrieve-slot-2">(2)</a> <a href="#ref-for-dom-credential-retrieve-slot-3">(3)</a>
-    <li><a href="#ref-for-dom-credential-retrieve-slot-4">5.2. Extension Points</a>
+    <li><a href="#ref-for-dom-credential-retrieve-slot-1">4.1. Request a Credential</a> <a href="#ref-for-dom-credential-retrieve-slot-2">(2)</a> <a href="#ref-for-dom-credential-retrieve-slot-3">(3)</a>
+    <li><a href="#ref-for-dom-credential-retrieve-slot-4">6.2. Extension Points</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-credential-store-slot">
    <b><a href="#dom-credential-store-slot">#dom-credential-store-slot</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-credential-store-slot-1">3.2. Store a Credential</a>
-    <li><a href="#ref-for-dom-credential-store-slot-2">5.2. Extension Points</a>
+    <li><a href="#ref-for-dom-credential-store-slot-1">4.2. Store a Credential</a>
+    <li><a href="#ref-for-dom-credential-store-slot-2">6.2. Extension Points</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-navigator-credentials">
@@ -2162,14 +2380,17 @@ partial dictionary CredentialRequestOptions {
    <b><a href="#credentialscontainer">#credentialscontainer</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-credentialscontainer-1">2.3. Credential Management</a> <a href="#ref-for-credentialscontainer-2">(2)</a>
-    <li><a href="#ref-for-credentialscontainer-3">5.2. Extension Points</a>
+    <li><a href="#ref-for-credentialscontainer-3">5.5. Signing-Out</a>
+    <li><a href="#ref-for-credentialscontainer-4">6.2. Extension Points</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-credentialscontainer-store">
    <b><a href="#dom-credentialscontainer-store">#dom-credentialscontainer-store</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-credentialscontainer-store-1">2.3. Credential Management</a> <a href="#ref-for-dom-credentialscontainer-store-2">(2)</a>
-    <li><a href="#ref-for-dom-credentialscontainer-store-3">5.3. Browser Extensions</a>
+    <li><a href="#ref-for-dom-credentialscontainer-store-3">3.1. Storing and Updating Credentials</a>
+    <li><a href="#ref-for-dom-credentialscontainer-store-4">5.3. Origin Confusion</a>
+    <li><a href="#ref-for-dom-credentialscontainer-store-5">6.3. Browser Extensions</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-credentialscontainer-get">
@@ -2177,8 +2398,11 @@ partial dictionary CredentialRequestOptions {
    <ul>
     <li><a href="#ref-for-dom-credentialscontainer-get-1">2.3. Credential Management</a> <a href="#ref-for-dom-credentialscontainer-get-2">(2)</a> <a href="#ref-for-dom-credentialscontainer-get-3">(3)</a>
     <li><a href="#ref-for-dom-credentialscontainer-get-4">2.3.1. The CredentialRequestOptions Dictionary</a>
-    <li><a href="#ref-for-dom-credentialscontainer-get-5">5.2. Extension Points</a>
-    <li><a href="#ref-for-dom-credentialscontainer-get-6">5.3. Browser Extensions</a>
+    <li><a href="#ref-for-dom-credentialscontainer-get-5">3.3. Credential Selection</a>
+    <li><a href="#ref-for-dom-credentialscontainer-get-6">5.3. Origin Confusion</a>
+    <li><a href="#ref-for-dom-credentialscontainer-get-7">5.4. Timing Attacks</a>
+    <li><a href="#ref-for-dom-credentialscontainer-get-8">6.2. Extension Points</a>
+    <li><a href="#ref-for-dom-credentialscontainer-get-9">6.3. Browser Extensions</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-credentialscontainer-get-options-options">
@@ -2191,7 +2415,9 @@ partial dictionary CredentialRequestOptions {
    <b><a href="#dom-credentialscontainer-store">#dom-credentialscontainer-store</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-credentialscontainer-store-1">2.3. Credential Management</a> <a href="#ref-for-dom-credentialscontainer-store-2">(2)</a>
-    <li><a href="#ref-for-dom-credentialscontainer-store-3">5.3. Browser Extensions</a>
+    <li><a href="#ref-for-dom-credentialscontainer-store-3">3.1. Storing and Updating Credentials</a>
+    <li><a href="#ref-for-dom-credentialscontainer-store-4">5.3. Origin Confusion</a>
+    <li><a href="#ref-for-dom-credentialscontainer-store-5">6.3. Browser Extensions</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-credentialscontainer-store-credential-credential">
@@ -2204,6 +2430,7 @@ partial dictionary CredentialRequestOptions {
    <b><a href="#dom-credentialscontainer-requireusermediation">#dom-credentialscontainer-requireusermediation</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-credentialscontainer-requireusermediation-1">2.3. Credential Management</a> <a href="#ref-for-dom-credentialscontainer-requireusermediation-2">(2)</a>
+    <li><a href="#ref-for-dom-credentialscontainer-requireusermediation-3">5.5. Signing-Out</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dictdef-credentialrequestoptions">
@@ -2212,16 +2439,33 @@ partial dictionary CredentialRequestOptions {
     <li><a href="#ref-for-dictdef-credentialrequestoptions-1">2.2.1.1. Credential Internal Methods</a>
     <li><a href="#ref-for-dictdef-credentialrequestoptions-2">2.3. Credential Management</a>
     <li><a href="#ref-for-dictdef-credentialrequestoptions-3">2.3.1. The CredentialRequestOptions Dictionary</a> <a href="#ref-for-dictdef-credentialrequestoptions-4">(2)</a>
-    <li><a href="#ref-for-dictdef-credentialrequestoptions-5">3.1. Request a Credential</a>
-    <li><a href="#ref-for-dictdef-credentialrequestoptions-6">5.2. Extension Points</a>
+    <li><a href="#ref-for-dictdef-credentialrequestoptions-5">4.1. Request a Credential</a>
+    <li><a href="#ref-for-dictdef-credentialrequestoptions-6">6.2. Extension Points</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-credentialrequestoptions-unmediated">
    <b><a href="#dom-credentialrequestoptions-unmediated">#dom-credentialrequestoptions-unmediated</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-credentialrequestoptions-unmediated-1">2.3.1. The CredentialRequestOptions Dictionary</a>
-    <li><a href="#ref-for-dom-credentialrequestoptions-unmediated-2">3.1. Request a Credential</a>
-    <li><a href="#ref-for-dom-credentialrequestoptions-unmediated-3">5.1. Website Authors</a>
+    <li><a href="#ref-for-dom-credentialrequestoptions-unmediated-2">4.1. Request a Credential</a>
+    <li><a href="#ref-for-dom-credentialrequestoptions-unmediated-3">6.1. Website Authors</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="user-mediated">
+   <b><a href="#user-mediated">#user-mediated</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-user-mediated-1">3. User Mediation</a>
+    <li><a href="#ref-for-user-mediated-2">3.1. Storing and Updating Credentials</a>
+    <li><a href="#ref-for-user-mediated-3">3.2. Requiring User Mediation</a> <a href="#ref-for-user-mediated-4">(2)</a> <a href="#ref-for-user-mediated-5">(3)</a>
+    <li><a href="#ref-for-user-mediated-6">3.3. Credential Selection</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="credential-chooser">
+   <b><a href="#credential-chooser">#credential-chooser</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-credential-chooser-1">3. User Mediation</a>
+    <li><a href="#ref-for-credential-chooser-2">3.2. Requiring User Mediation</a>
+    <li><a href="#ref-for-credential-chooser-3">5.6. Chooser Leakage</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="abstract-opdef-request-a-credential">

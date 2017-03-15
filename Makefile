@@ -1,13 +1,12 @@
 all: index.html
 
+new: base.html sitebound.html
+
 force:
 	bikeshed -f spec ./index.src.html
 
-index.html: index.src.html
-	bikeshed -f spec ./index.src.html
-
-base.html: base.src.html
-	bikeshed -f spec base.src.html base.html
+%.html: %.src.html
+	bikeshed -f spec $^ $@
 
 WD:
 	bikeshed -f spec --md-status=WD ./index.src.html ./WD.html

@@ -33,6 +33,7 @@ spec:html; type:dfn; for:/; text:origin
 
   ISSUE: Add an introduction.
 </section>
+<!-- Big text: Framework -->
 <section>
   # Framework # {#framework}
 
@@ -50,7 +51,7 @@ spec:html; type:dfn; for:/; text:origin
 
   User agents MUST internally provide a <dfn export id="concept-credential-store">credential
   store</dfn>, which is a vendor-specific, opaque storage mechanism that offers the following
-  capabilities:
+  capabilities for [=credential=] access and persistence:
 
   1.  <dfn for="credential store" abstract-op export>Store a credential</dfn> for later retrieval.
       This accepts a [=credential=], and inserts it into the [=credential store=].
@@ -63,11 +64,17 @@ spec:html; type:dfn; for:/; text:origin
       [=credential=], and overwrites the state of an existing [=credential=] in the
       [=credential store=].
 
-  4.  <dfn for="credential store" abstract-op export>Retrieve an origin's `requires user
+  Additionally, the [=credential store=] should maintain a <dfn for="origin">`requires user
+  mediation` flag</dfn> for [=origins=] (which is set to `true` unless otherwise specified), and
+  offer the following capabilities:
+
+  1.  <dfn for="credential store" abstract-op export>Retrieve an origin's `requires user
       mediation` flag</dfn>.
 
-  5.  <dfn for="credential store" abstract-op export>Set an origin's `requires user mediation`
+  2.  <dfn for="credential store" abstract-op export>Set an origin's `requires user mediation`
       flag</dfn>.
+
+  Note: The importance of user mediation is discussed in more detail in [[#user-mediation]].
 
   Note: The [=credential store=] is an internal implementation detail of a user agent's
   implementation of the API specified in this document, and is not exposed to the web directly.
@@ -77,6 +84,7 @@ spec:html; type:dfn; for:/; text:origin
   ### The `Credential` Interface ### {#the-credential-interface}
 
   <pre class="idl">
+    [Exposed=Window, SecureContext]
     interface Credential {
       readonly attribute USVString id;
       readonly attribute DOMString type;
@@ -84,15 +92,15 @@ spec:html; type:dfn; for:/; text:origin
   </pre>
 
   <dl dfn-for="Credential">
-    :   <dfn attribute>id</dfn></dt>
+    :   <dfn attribute>id</dfn>
     ::  The credential's identifier. The requirements for the identifier are distinct for each type
         of [=credential=]. It might represent a username for username/password tuples, for example.
 
-    :   <dfn attribute>type</dfn></dt>
+    :   <dfn attribute>type</dfn>
     ::  This attribute's getter returns the value of the object's [=interface object=]'s
         {{[[type]]}} slot, which specifies the kind of credential represented by this object.
 
-    :   <dfn attribute>\[[type]]</dfn></dt>
+    :   <dfn attribute>\[[type]]</dfn>
     ::  The {{Credential}} [=interface object=] has an internal slot named `[[type]]`, which
         unsurprisingly contains a string representing the type of the credential. The slot's value
         is the empty string unless otherwise specified.
@@ -168,6 +176,7 @@ spec:html; type:dfn; for:/; text:origin
   [=Secure Contexts=].
 
   <pre class="idl">
+    [Exposed=Window, SecureContext]
     interface CredentialsContainer {
       Promise&lt;Credential?&gt; get(optional CredentialRequestOptions options);
       Promise&lt;Credential&gt; store(Credential credential);
@@ -176,7 +185,7 @@ spec:html; type:dfn; for:/; text:origin
   </pre>
 
   <dl dfn-for="CredentialsContainer">
-    :   <dfn method>get()</dfn></dt>
+    :   <dfn method>get()</dfn>
     ::  When {{CredentialsContainer/get()}} is called, the user agent MUST return the result of
         executing <a abstract-op>Request a `Credential`</a> on
         {{CredentialsContainer/get(options)/options}}.
@@ -185,7 +194,7 @@ spec:html; type:dfn; for:/; text:origin
           options: The set of properties governing the scope of the request.
         </pre>
 
-    :   <dfn method>store()</dfn></dt>
+    :   <dfn method>store()</dfn>
     ::  When {{CredentialsContainer/store()}} is called, the user agent MUST return the result of
         executing <a abstract-op>Store a `Credential`</a> on 
         {{CredentialsContainer/store(credential)/credential}}.
@@ -194,7 +203,7 @@ spec:html; type:dfn; for:/; text:origin
           credential: The credential to be stored.
         </pre>
     
-    :   <dfn method>requireUserMediation()</dfn></dt>
+    :   <dfn method>requireUserMediation()</dfn>
     ::  When {{CredentialsContainer/requireUserMediation()}} is called, the user agent MUST return
         the result of executing <a abstract-op>Require user mediation</a> on the <a>current settings
         object</a>.
@@ -210,12 +219,13 @@ spec:html; type:dfn; for:/; text:origin
   dictionary so they can be passed into the request. See [[#implementation-extension]].
 
   <pre class="idl">
+    [Exposed=Window, SecureContext]
     dictionary CredentialRequestOptions {
       boolean unmediated = false;
     };
   </pre>
   <dl dfn-for="CredentialRequestOptions">
-    :   <dfn dict-member>unmediated</dfn></dt>
+    :   <dfn dict-member>unmediated</dfn>
     ::  If `true`, the user agent will only attempt to provide a {{Credential}} without user
         interaction. It MUST NOT present the user with any visible prompt to grant access to a
         {{Credential}}: if the user has opted-into always giving a particular site access to a
@@ -224,6 +234,110 @@ spec:html; type:dfn; for:/; text:origin
         [[#algorithm-request]].
   </dl>
 </section>
+
+<!-- Big text: Mediation -->
+<section>
+  # User Mediation # {#user-mediation}
+
+  Exposing credential information to the web via an API has a number of potential impacts on user
+  privacy. The user agent, therefore, MUST involve the user in a number of cases in order to ensure
+  that they clearly understands what's going on, and with whom their credentials are being shared.
+
+  We call a particular action <dfn export lt="user mediated|user mediation">user mediated</dfn> if
+  it takes place after gaining a user's explicit consent. Consent might be expressed through a
+  user's direct interaction with a [=credential chooser=] interface, for example. In general, [=user
+  mediated=] actions will involve presenting the user some sort of UI, and asking them to make a
+  decision.
+
+  An action is <dfn export>unmediated</dfn> if it takes place without explicit user consent. For
+  example, if a user configures their browser to grant persistent credential access to a particular
+  origin, credentials may be provided without presenting the user with a UI requesting a decision.
+
+  Here we'll spell out a few requirements that hold for all credential types, but note that there's
+  a good deal of latitude left up to the user agent (which is in a priviliged position to assist
+  the user). Moreover, specific credential types may have distinct requirements that exceed the
+  requirements laid out more generally here.
+
+  ## Storing and Updating Credentials ## {#user-mediated-storage}
+
+  Credential information is sensitive data, and users MUST remain in control of that information's
+  storage. Inadvertent credential storage could, for instance, unexpectedly link a user's local
+  profile on a particular device to a specific online persona. To mitigate the risk of surprise:
+
+  1.  Credential information SHOULD NOT be stored or updated without [=user mediation=]. For
+      example, the user agent could display a "Save this credential?" dialog box to the user in
+      response to each call to {{store()}}. 
+
+      User consent MAY be inferred if a user agent chooses to offer a persistant grant of consent
+      in the form of an "Always save passwords" option (though we'd suggest that user agents should
+      err on the side of something more narrowly scoped: perhaps "Always save _generated_
+      passwords.", or "Always save passwords for this site.").
+
+  2.  User agents SHOULD notify users when credentials are stored. This might take the form of an
+      icon in the address bar, or some similar location.
+
+  3.  User agents MUST allow users to manually remove stored credentials. This functionality might
+      be implemented as a settings page, or via interaction with a notification as described above.
+
+  ## Requiring User Mediation ## {#user-mediation-requirement}
+
+  By default, [=user mediation=] is required for all [=origins=], as the relevant [=`require user
+  mediation` flag=] in the [=credential store=] is set to `true`. Users MAY choose to grant an
+  origin persistent access to credentials (perhaps in the form of a "Stay signed into this site."
+  option), which would set this flag to `true`. In this case, the user would always be signed into
+  that site, which is desirable from the perspective of usability and convinience, but which
+  might nevertheless have surprising implications (consider a user agent which syncs this flag's
+  state across devices, for instance).
+
+  To mitigate the risk of surprise:
+
+  1.  User agents MUST allow users to require [=user mediation=] for a given origin or for all
+      origins. This functionality might be implemented as a global toggle that overrides the
+      [=credential store=]'s <a abstract-op>Retrieve an origin's `requires user mediation`
+      flag</a> algorithm to return `false`, or via more granular settings for specific origins
+      (or specific credentials on specific origins).
+
+  2.  User agents MUST NOT <a abstract-op>Set an origin's `requires user mediation` flag</a> to
+      `false` without [=user mediation=]. For example, the [=credential chooser=] described in
+      [[#user-mediated-selection]] could have a checkbox which the user could toggle to mark a
+      credential as available without mediation for the origin, or the user agent could have an
+      onboarding process for its credential manager which asked a user for a default setting.
+
+  3.  User agents MUST notify users when credentials are provided to an origin. This could take the
+      form of an icon in the address bar, or some similar location.
+
+  4.  If a user clears her browsing data for an origin (cookies, localStorage, and so on), the user
+      agent MUST <a abstract-op>Set an origin's `requires user mediation` flag</a> to `false` for
+      that [=origin=].
+
+  ## Credential Selection ## {#user-mediated-selection}
+
+  When responding to a call to {{CredentialsContainer/get()}} on an origin which requires
+  [=user mediation=], user agents MUST ask the user for permission to share credential information.
+  This SHOULD take the form of a <dfn export>credential chooser</dfn> which presents the user with a
+  list of credentials that are available for use on a site, allowing them to select one which should
+  be provided to the website, or to reject the request entirely.
+
+  The chooser interface SHOULD be implemented in such a way as to be distinguishable from UI which a
+  website could produce. For example, the chooser might overlap the user agent's UI in some
+  unspoofable way.
+
+  The chooser interface MUST include an indication of the origin which is requesting credentials.
+
+  The chooser interface SHOULD include all {{Credential}} objects associated with the origin that
+  requested credentials.
+
+  <em>The following image is an exceptionally non-normative mock:</em>
+
+  <img src="./mock-chooser.png" alt="A mockup of what a chooser might look like.">
+
+  User agents MAY internally associate information with each {{Credential}} object beyond the
+  attributes specified in this document in order to enhance the utility of such a chooser. For
+  example, favicons could help disambiguate identity providers, etc. Any additional information
+  stored MUST not be exposed directly to the web.
+</section>
+
+<!-- Big text: Algorithms -->
 <section>
   # Algorithms # {#algorithms}
 
@@ -330,8 +444,42 @@ spec:html; type:dfn; for:/; text:origin
   </ul>
 </section>
 
+<!--
+ ██████  ████████  ██████  ██     ██ ████████  ████ ████████ ██    ██
+██    ██ ██       ██    ██ ██     ██ ██     ██  ██     ██     ██  ██
+██       ██       ██       ██     ██ ██     ██  ██     ██      ████
+ ██████  ██████   ██       ██     ██ ████████   ██     ██       ██
+      ██ ██       ██       ██     ██ ██   ██    ██     ██       ██
+██    ██ ██       ██    ██ ██     ██ ██    ██   ██     ██       ██
+ ██████  ████████  ██████   ███████  ██     ██ ████    ██       ██
+-->
 <section>
   # Security and Privacy Considerations # {#security-and-privacy}
+
+  ## Credential Leakage ## {#security-leakage}
+
+  Credentials are sensitive information, and user agents need to exercise caution in determining
+  when they can be safely shared with a website. Likewise, developers would be well-advised to take
+  some precautions to mitigate the risk that a cross-site scripting attack could turn into
+  persistent access to a user's account by by setting a reasonable Content Security Policy [[!CSP]]
+  which restricts the endpoints to which data can be sent. In particular, developers should ensure
+  that the following directives are set, explicitly or implicitly, in their pages' policies:
+
+  *   <a>`script-src`</a> and <a>`object-src`</a> both restrict script execution on a page, making
+      it less likely that a cross-site scripting attack will succeed in the first place.
+
+  *   <a>`connect-src`</a> restricts the origins to which {{fetch()}} may submit data (which
+      mitigates the risk that credentials could be exfiltrated to `evil.com`.
+
+  *   <a>`child-src`</a> restricts the nested browsing contexts which may be embedded in a page,
+      making it more difficult to inject a malicious `postMessage()` target. [[WEBMESSAGING]]
+
+  Developers should, of course, also properly escape input and output, and consider using other
+  layers of defense, such as Subresource Integrity [[SRI]] to further reduce risk.
+
+  When defining specific credential types, specific credential types SHOULD give due consideration
+  to the ways in which credential data can be transmitted over the wire. It might be reasonable,
+  for example, to define transmission mechanisms which are restricted to same-origin endpoints.
 
   ## Insecure Sites ## {#insecure-sites}
 
@@ -340,6 +488,74 @@ spec:html; type:dfn; for:/; text:origin
   sign-in forms on non-<a><i lang="la">a priori</i> authenticated URLs</a>, but those sites cannot
   be trusted to interact directly with the credential manager in any meaningful way, and those sites
   MUST NOT have access to credentials saved in [=secure contexts=].
+
+  ## Origin Confusion ## {#security-origin-confusion}
+
+  If framed pages have access to the APIs defined here, it might be possible to confuse a user into
+  granting access to credentials for an origin other than the <a>top-level browsing context</a>,
+  which is the only security origin which users can reasonably be expected to understand.
+
+  Therefore, both {{get()}} and {{store()}} will result in a rejected {{Promise}} when called from
+  a [=nested browsing context=], and the API and related interfaces are not exposed inside
+  {{Worker}} contexts.
+
+  The algorithms in [[#algorithm-request]] and [[#algorithm-store]] contain more detail.
+
+  ## Timing Attacks ## {#security-timing}
+
+  If the user has no credentials for an origin, a call to {{CredentialsContainer/get()}} will
+  resolve very quickly indeed. A malicious website could distinguish between a user with no
+  credentials and a user with credentials who chooses not to share them.
+
+  User agents SHOULD also rate-limit credential requests. It's almost certainly abusive for a page
+  to request credentials more than a few times in a short period.
+
+  ## Signing-Out ## {#security-signout}
+
+  If a user has chosen to automatically sign-in to websites, as discussed in
+  [[#user-mediation-requirement]], then the user agent will provide credentials to an origin
+  whenever it asks for them. The website can instruct the user agent to suppress this behavior by
+  calling {{CredentialsContainer}}'s {{CredentialsContainer/requireUserMediation()}} method, which
+  will turn off automatic sign-in for a given origin.
+
+  The user agent relies on the website to do the right thing; an inattentive (or malicious) website
+  could simply neglect to call this method, causing the user agent to continue providing credentials
+  against the user's apparent intention. This is marginally worse than the status-quo of a site that
+  doesn't clear user credentials when they click "Sign-out", as the user agent becomes complicit in
+  the authentication.
+
+  The user MUST have some control over this behavior. As noted in [[#user-mediation-requirement]],
+  clearing cookies for an origin will also reset that origin's [=`requires user mediation` flag=] in
+  the [=credential store=] to `true`. Additionally, the user agent SHOULD provide some UI affordance
+  for disabling automatic sign-in for a particular origin. This could be tied to the notification
+  that credentials have been provided to an origin, for example.
+
+  ## Chooser Leakage ## {#security-chooser-leakage}
+
+  If a user agent's [=credential chooser=] displays images supplied by an origin (for example, if a
+  {{Credential}} displays a site's favicon), then, requests for these images MUST NOT be directly
+  tied to instantiating the chooser in order to avoid leaking chooser usage. One option would be to
+  fetch the images in the background when saving or updating a {{Credential}}, and to cache them for
+  the lifetime of the {{Credential}}.
+
+  These images MUST be fetched with the [=request/credentials mode=] set to "`omit`", the
+  [=request/service-workers mode=] set to "`none`", the [=request/client=] set to `null`, the
+  [=request/initiator=] set to the empty string, and the [=request/destination=] "`subresource`".
+
+  Moreover, if the user agent allows the user to change either the name or icon associated with the
+  credential, the alterations to the data SHOULD NOT be exposed to the website (consider a user who
+  names two credentials for an origin "My fake account" and "My real account", for instance).
+
+  ## Locally Stored Data ## {#security-local-data}
+
+  This API offers an [=origin=] the ability to store data persistently along with a user's profile.
+  Since most user agents treat credential data differently than "browsing data" (cookies, etc.)
+  this might have the side effect of surprising a user who might believe that all traces of an
+  origin have been wiped out when they clear their cookies.
+
+  User agents SHOULD provide UI that makes it clear to a user that credential data is stored for an
+  origin, and SHOULD make it easy for users to remove such data when they're no longer interested in
+  keeping it around.
 </section>
 
 <section>
@@ -420,7 +636,7 @@ spec:html; type:dfn; for:/; text:origin
   For any such extension, we recommend getting in touch with
   <a href="mailto:public-webappsec@w3.org">public-webappsec@</a> for consultation and review.
 
-  <h3 id="implementation-browser-extensions">Browser Extensions</h3>
+  ## Browser Extensions ## {#browser-extensions}
 
   Ideally, user agents that implement an extension system of some sort will
   allow third-parties to hook into these API endpoints in order to improve
