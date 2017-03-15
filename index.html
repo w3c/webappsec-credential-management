@@ -1431,7 +1431,7 @@ pre.idl.highlight { color: #708090; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-03-14">14 March 2017</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-03-15">15 March 2017</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -2818,7 +2818,8 @@ var r = new Request("https://example.com/endpoint", init);
     <h4 class="heading settled" data-level="4.3.2" id="is-match"><span class="secno">4.3.2. </span><span class="content"> Does <var>credential</var> match <var>origin B</var>? </span><a class="self-link" href="#is-match"></a></h4>
     <ol>
      <li> Let <var>origin A</var> be the value of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-8">[[origin]]</a></code> slot. 
-     <li> If <var>origin A</var> is <a data-link-type="dfn">same-origin</a> as <var>origin B</var>, return <code>Exact Match</code>. 
+     <li> If <var>origin A</var> is the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#same-origin">same origin</a> as <var>origin B</var>, return <code>Exact
+      Match</code>. 
      <li> If <var>origin A</var>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#concept-url-scheme">scheme</a></code> is <var>origin B</var>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#concept-url-scheme">scheme</a></code>, and <var>origin A</var>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#concept-url-host">host</a></code>'s <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable
       domain</a> is <var>origin B</var>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#concept-url-host">host</a></code>'s <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable
       domain</a>, then return <code>Fuzzy Match</code>. 
@@ -3296,6 +3297,7 @@ partial dictionary CredentialRequestOptions {
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-nickname">nickname</a>
      <li><a href="https://html.spec.whatwg.org/multipage/browsers.html#concept-origin">origin</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-photo">photo</a>
+     <li><a href="https://html.spec.whatwg.org/multipage/browsers.html#same-origin">same origin</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-username">username</a>
     </ul>
    <li>
