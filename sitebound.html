@@ -1423,7 +1423,7 @@ pre.idl.highlight { color: #708090; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Site-Bound Credentials</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-03-15">15 March 2017</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-03-16">16 March 2017</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1500,28 +1500,39 @@ authentication via username/password pairs, and federations.</p>
       <li><a href="#credentialrequestoptions-extension"><span class="secno">2.4</span> <span class="content"><code>CredentialRequestOptions</code> Extension</span></a>
      </ol>
     <li>
-     <a href="#algorithms"><span class="secno">3</span> <span class="content">Algorithms</span></a>
+     <a href="#fetch-integration"><span class="secno">3</span> <span class="content">Integration with Fetch</span></a>
+     <ol class="toc">
+      <li><a href="#monkey-patching"><span class="secno">3.1</span> <span class="content">Monkey Patches to Fetch</span></a>
+      <li><a href="#body-extraction"><span class="secno">3.2</span> <span class="content"> Extract a <var>body</var> and <var>Content-Type</var> for <var>request</var>’s attached credential </span></a>
+     </ol>
+    <li>
+     <a href="#algorithms"><span class="secno">4</span> <span class="content">Algorithms</span></a>
      <ol class="toc">
       <li>
-       <a href="#siteboundcredential-algorithms"><span class="secno">3.1</span> <span class="content"><code>SiteBoundCredential</code> Algorithms</span></a>
+       <a href="#siteboundcredential-algorithms"><span class="secno">4.1</span> <span class="content"><code>SiteBoundCredential</code> Algorithms</span></a>
        <ol class="toc">
-        <li><a href="#request-credential"><span class="secno">3.1.1</span> <span class="content"> Request a <code>SiteBoundCredential</code> </span></a>
-        <li><a href="#store-credential"><span class="secno">3.1.2</span> <span class="content"> Store a <code>SiteBoundCredential</code> </span></a>
+        <li><a href="#request-credential"><span class="secno">4.1.1</span> <span class="content"> Request a <code>SiteBoundCredential</code> </span></a>
+        <li><a href="#store-credential"><span class="secno">4.1.2</span> <span class="content"> Store a <code>SiteBoundCredential</code> </span></a>
        </ol>
       <li>
-       <a href="#passwordcredential-algorithms"><span class="secno">3.2</span> <span class="content"><code>PasswordCredential</code> Algorithms</span></a>
+       <a href="#passwordcredential-algorithms"><span class="secno">4.2</span> <span class="content"><code>PasswordCredential</code> Algorithms</span></a>
        <ol class="toc">
-        <li><a href="#construct-passwordcredential-form"><span class="secno">3.2.1</span> <span class="content"> The <code>PasswordCredental(HTMLFormElement)</code> Constructor </span></a>
-        <li><a href="#construct-passwordcredential-data"><span class="secno">3.2.2</span> <span class="content"> The <code>PasswordCredental(PasswordCredentialData)</code> Constructor </span></a>
-        <li><a href="#passwordcredential-matching"><span class="secno">3.2.3</span> <span class="content"> <code>CredentialRequestOptions</code> Matching for <code>PasswordCredential</code> </span></a>
+        <li><a href="#construct-passwordcredential-form"><span class="secno">4.2.1</span> <span class="content"> The <code>PasswordCredental(HTMLFormElement)</code> Constructor </span></a>
+        <li><a href="#construct-passwordcredential-data"><span class="secno">4.2.2</span> <span class="content"> The <code>PasswordCredental(PasswordCredentialData)</code> Constructor </span></a>
+        <li><a href="#passwordcredential-matching"><span class="secno">4.2.3</span> <span class="content"> <code>CredentialRequestOptions</code> Matching for <code>PasswordCredential</code> </span></a>
        </ol>
       <li>
-       <a href="#federatedcredential-algorithms"><span class="secno">3.3</span> <span class="content"><code>FederatedCredential</code> Algorithms</span></a>
+       <a href="#federatedcredential-algorithms"><span class="secno">4.3</span> <span class="content"><code>FederatedCredential</code> Algorithms</span></a>
        <ol class="toc">
-        <li><a href="#construct-federatedcredential-data"><span class="secno">3.3.1</span> <span class="content"> The <code>PasswordCredental(FederatedCredentialData)</code> Constructor </span></a>
+        <li><a href="#construct-federatedcredential-data"><span class="secno">4.3.1</span> <span class="content"> The <code>PasswordCredental(FederatedCredentialData)</code> Constructor </span></a>
        </ol>
      </ol>
-    <li><a href="#future-work"><span class="secno">4</span> <span class="content">Future Work</span></a>
+    <li>
+     <a href="#security-and-privacy"><span class="secno">5</span> <span class="content">Security and Privacy Considerations</span></a>
+     <ol class="toc">
+      <li><a href="#security-cross-origin-leakage"><span class="secno">5.1</span> <span class="content">Cross-origin Credential Leakage</span></a>
+     </ol>
+    <li><a href="#future-work"><span class="secno">6</span> <span class="content">Future Work</span></a>
     <li>
      <a href="#conformance"><span class="secno"></span> <span class="content">Conformance</span></a>
      <ol class="toc">
@@ -1570,7 +1581,7 @@ authentication via username/password pairs, and federations.</p>
   authentication in and of itself, but is limited to providing an interface to the existing
   credential managers implemented by existing user agents. That functionality is valuable _right
   now_, without significant effort on the part of either vendors or authors. There’s certainly quite
-  a bit more which could be done, of course. See <a href="#future-work">§4 Future Work</a> for some thoughts we’ve punted for
+  a bit more which could be done, of course. See <a href="#future-work">§6 Future Work</a> for some thoughts we’ve punted for
   now, but which could be explored in future iterations of this API.</p>
     <h3 class="heading settled" data-level="1.1" id="examples"><span class="secno">1.1. </span><span class="content">Examples</span><a class="self-link" href="#examples"></a></h3>
     <h4 class="heading settled" data-level="1.1.1" id="examples-password-signin"><span class="secno">1.1.1. </span><span class="content">Password-based Sign-in</span><a class="self-link" href="#examples-password-signin"></a></h4>
@@ -1607,7 +1618,7 @@ authentication via username/password pairs, and federations.</p>
      <p class="note" role="note"><span>Note:</span> The <a data-link-type="dfn" href="https://w3c.github.io/webappsec-credential-management/#credential-chooser">credential chooser</a> presented by the user agent could allow the user to choose
     credentials that aren’t actually stored for the current origin. For instance, it might offer up
     redentials from <code>https://m.example.com</code> when signing into <code>https://www.example.com</code> (as
-    described in <a href="#security-cross-origin-leakage"></a>), or it might allow a user to create a new
+    described in <a href="#security-cross-origin-leakage">§5.1 Cross-origin Credential Leakage</a>), or it might allow a user to create a new
     credential on the fly. Developers can deal gracefully with this uncertainty by calling <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/webappsec-credential-management/#dom-credentialscontainer-store">store()</a></code> every time credentials are successfully used, even right after
     credentials have been retrieved from <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/webappsec-credential-management/#dom-credentialscontainer-get">get()</a></code>: if the credentials aren’t
     yet stored for the origin, the user will be given the opportunity to do so. If they are stored,
@@ -1658,7 +1669,7 @@ authentication via username/password pairs, and federations.</p>
 </pre>
      <p class="note" role="note"><span>Note:</span> This API does not go out to the identity provider to grab a token, or authenticate the
     user in any way. It provides a hint to the website as to which identity provider the user
-    prefers to use, and little more. See <a href="#future-work">§4 Future Work</a> for directions future versions of this
+    prefers to use, and little more. See <a href="#future-work">§6 Future Work</a> for directions future versions of this
     API could take.</p>
     </div>
     <h3 class="heading settled" data-level="1.3" id="examples-post-signin"><span class="secno">1.3. </span><span class="content">Post-sign-in Confirmation</span><a class="self-link" href="#examples-post-signin"></a></h3>
@@ -1827,8 +1838,8 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
   the web.</p>
     </dl>
     <p><code class="idl"><a data-link-type="idl" href="#siteboundcredential" id="ref-for-siteboundcredential-5">SiteBoundCredential</a></code>'s <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a> defines two internal methods that override <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/webappsec-credential-management/#credential">Credential</a></code>'s implementation:</p>
-    <p><dfn class="dfn-paneled idl-code" data-dfn-for="SiteBoundCredential" data-dfn-type="method" data-export="" id="dom-siteboundcredential-retrieve-slot">[[Retrieve]](options, mediation)</dfn> is defined in <a href="#request-credential">§3.1.1 Request a SiteBoundCredential</a>.</p>
-    <p><dfn class="idl-code" data-dfn-for="SiteBoundCredential" data-dfn-type="method" data-export="" id="dom-siteboundcredential-store-slot">[[Store]](credential)<a class="self-link" href="#dom-siteboundcredential-store-slot"></a></dfn> is defined in <a href="#store-credential">§3.1.2 Store a SiteBoundCredential</a>.</p>
+    <p><dfn class="dfn-paneled idl-code" data-dfn-for="SiteBoundCredential" data-dfn-type="method" data-export="" id="dom-siteboundcredential-retrieve-slot">[[Retrieve]](options, mediation)</dfn> is defined in <a href="#request-credential">§4.1.1 Request a SiteBoundCredential</a>.</p>
+    <p><dfn class="idl-code" data-dfn-for="SiteBoundCredential" data-dfn-type="method" data-export="" id="dom-siteboundcredential-store-slot">[[Store]](credential)<a class="self-link" href="#dom-siteboundcredential-store-slot"></a></dfn> is defined in <a href="#store-credential">§4.1.2 Store a SiteBoundCredential</a>.</p>
     <h3 class="heading settled" data-level="2.2" id="passwordcredential-interface"><span class="secno">2.2. </span><span class="content">The <code>PasswordCredential</code> Interface</span><a class="self-link" href="#passwordcredential-interface"></a></h3>
 <pre class="idl highlight def"><span class="kt">typedef</span> (<a class="n" data-link-type="idl-name" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a> <span class="kt">or</span> <a class="n" data-link-type="idl-name" href="https://url.spec.whatwg.org/#urlsearchparams">URLSearchParams</a>) <dfn class="nv dfn-paneled idl-code" data-dfn-type="typedef" data-export="" id="typedefdef-credentialbodytype">CredentialBodyType</dfn>;
 
@@ -1874,10 +1885,10 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
   construct a request body during <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a></code>.</p>
      <dt data-md=""><dfn class="dfn-paneled idl-code" data-dfn-for="PasswordCredential" data-dfn-type="constructor" data-export="" id="dom-passwordcredential-passwordcredential">PasswordCredential(form)</dfn>
      <dd data-md="">
-      <p>This constructor is defined in <a href="#construct-passwordcredential-form">§3.2.1 The PasswordCredental(HTMLFormElement) Constructor</a>.</p>
+      <p>This constructor is defined in <a href="#construct-passwordcredential-form">§4.2.1 The PasswordCredental(HTMLFormElement) Constructor</a>.</p>
      <dt data-md=""><dfn class="dfn-paneled idl-code" data-dfn-for="PasswordCredential" data-dfn-type="constructor" data-export="" id="dom-passwordcredential-passwordcredential-data">PasswordCredential(data)</dfn>
      <dd data-md="">
-      <p>This constructor is defined in <a href="#construct-passwordcredential-data">§3.2.2 The PasswordCredental(PasswordCredentialData) Constructor</a>.</p>
+      <p>This constructor is defined in <a href="#construct-passwordcredential-data">§4.2.2 The PasswordCredental(PasswordCredentialData) Constructor</a>.</p>
     </dl>
     <p><code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-15">PasswordCredential</a></code>'s <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a> contains two internal methods: <dfn class="idl-code" data-dfn-for="PasswordCredential" data-dfn-type="method" data-export="" id="dom-passwordcredential-retrieve-slot">[[Retrieve]](options, mediation)<a class="self-link" href="#dom-passwordcredential-retrieve-slot"></a></dfn> and <dfn class="idl-code" data-dfn-for="PasswordCredential" data-dfn-type="method" data-export="" id="dom-passwordcredential-store-slot">[[Store]](credential)<a class="self-link" href="#dom-passwordcredential-store-slot"></a></dfn>. Both are aliases to the <code class="idl"><a data-link-type="idl" href="#siteboundcredential" id="ref-for-siteboundcredential-7">SiteBoundCredential</a></code> internal methods of the same name.</p>
     <h3 class="heading settled" data-level="2.3" id="federatedcredential-interface"><span class="secno">2.3. </span><span class="content">The <code>FederatedCredential</code> Interface</span><a class="self-link" href="#federatedcredential-interface"></a></h3>
@@ -1910,7 +1921,7 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
   value is "<code>federated</code>".</p>
      <dt data-md=""><dfn class="dfn-paneled idl-code" data-dfn-for="FederatedCredential" data-dfn-type="constructor" data-export="" id="dom-federatedcredential-federatedcredential">FederatedCredential(data)</dfn>
      <dd data-md="">
-      <p>This constructor is defined in <a href="#construct-passwordcredential-data">§3.2.2 The PasswordCredental(PasswordCredentialData) Constructor</a>.</p>
+      <p>This constructor is defined in <a href="#construct-passwordcredential-data">§4.2.2 The PasswordCredental(PasswordCredentialData) Constructor</a>.</p>
     </dl>
     <p><code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential-6">FederatedCredential</a></code>'s <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a> contains two internal methods: <dfn class="idl-code" data-dfn-for="FederatedCredential" data-dfn-type="method" data-export="" id="dom-federatedcredential-retrieve-slot">[[Retrieve]](options, mediation)<a class="self-link" href="#dom-federatedcredential-retrieve-slot"></a></dfn> and <dfn class="idl-code" data-dfn-for="FederatedCredential" data-dfn-type="method" data-export="" id="dom-federatedcredential-store-slot">[[Store]](credential)<a class="self-link" href="#dom-federatedcredential-store-slot"></a></dfn>. Both are aliases to the <code class="idl"><a data-link-type="idl" href="#siteboundcredential" id="ref-for-siteboundcredential-9">SiteBoundCredential</a></code> internal methods of the same name.</p>
     <h4 class="heading settled" data-level="2.3.1" id="provider-identification"><span class="secno">2.3.1. </span><span class="content">Identifying Providers</span><a class="self-link" href="#provider-identification"></a></h4>
@@ -1938,9 +1949,171 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
 </pre>
    </section>
    <section>
-    <h2 class="heading settled" data-level="3" id="algorithms"><span class="secno">3. </span><span class="content">Algorithms</span><a class="self-link" href="#algorithms"></a></h2>
-    <h3 class="heading settled" data-level="3.1" id="siteboundcredential-algorithms"><span class="secno">3.1. </span><span class="content"><code>SiteBoundCredential</code> Algorithms</span><a class="self-link" href="#siteboundcredential-algorithms"></a></h3>
-    <h4 class="heading settled algorithm" data-algorithm="Request a SiteBoundCredential" data-level="3.1.1" id="request-credential"><span class="secno">3.1.1. </span><span class="content"> Request a <code>SiteBoundCredential</code> </span><a class="self-link" href="#request-credential"></a></h4>
+    <h2 class="heading settled" data-level="3" id="fetch-integration"><span class="secno">3. </span><span class="content">Integration with Fetch</span><a class="self-link" href="#fetch-integration"></a></h2>
+    <p>In order to actually authenticate a user, <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-18">PasswordCredential</a></code> objects may
+  be submitted to a server for evaluation. To prevent the risk that sensitive
+  credential information will be exposed directly to a page’s JavaScript (see <a href="#security-cross-origin-leakage">§5.1 Cross-origin Credential Leakage</a>), we hide the credential information in
+  non-web-exposed slots on the <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-19">PasswordCredential</a></code> object, and extract them
+  during <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a></code> in ways that will remain opaque to anything other than the
+  remote (same-origin) server.</p>
+    <p><code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-20">PasswordCredential</a></code> objects may be bound to a <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#request">Request</a></code> by passing them
+  into the <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#request">Request</a></code> constructor as the "<code>credentials</code>" member of a <code class="idl"><a data-link-type="idl" href="#dictdef-requestinit" id="ref-for-dictdef-requestinit-1">RequestInit</a></code> object:</p>
+<pre class="example" id="example-042d4649"><a class="self-link" href="#example-042d4649"></a>[ Given a <code>PasswordCredential</code> named 'c' ]
+var init = {
+  method: "POST",
+  credentials: c
+};
+var r = new Request("https://example.com/endpoint", init);
+</pre>
+    <p class="note" role="note"><span>Note:</span> The credential information will be transmitted as the request’s body,
+  just as it would be for a form submission. This means that the "<code>method</code>"
+  cannot be "<code>GET</code>".</p>
+    <p>Until the request hits the network, the credential object will be hidden from
+  JavaScript. Once the user agent determines that the <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#request">Request</a></code> is going to
+  hit the network (that is, once Fetch hits the
+  "<a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-network-or-cache-fetch">HTTP-network-or-cache fetch</a>" algorithm), the <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-21">PasswordCredential</a></code> will be serialized into a body and content type as defined in <a href="#body-extraction">§3.2 Extract a body and Content-Type for request’s attached credential</a>, and the request will proceed out to the server-side
+  authentication endpoint.</p>
+    <h3 class="heading settled" data-level="3.1" id="monkey-patching"><span class="secno">3.1. </span><span class="content">Monkey Patches to Fetch</span><a class="self-link" href="#monkey-patching"></a></h3>
+    <p>To accomplish the above, Fetch could be modified in the following ways:</p>
+    <ol>
+     <li data-md="">
+      <p>A <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request">request</a> has an associated <dfn class="dfn-paneled" data-dfn-for="request" data-dfn-type="dfn" data-lt="attached credential" data-noexport="" id="request-attached-credential">attached
+  credential</dfn> (null, or a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-22">PasswordCredential</a></code>). Unless stated
+  otherwise, it is null.</p>
+     <li data-md="">
+      <p>A <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request">request</a>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-credentials-mode">credentials mode</a> gains a new
+  "<code>password</code>" value, which implies the same behavior as "<code>include</code>", with
+  the additional assertion that the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request">request</a> has a non-null <a data-link-type="dfn" href="#request-attached-credential" id="ref-for-request-attached-credential-1">attached credential</a> which will be serialized into
+  its <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-body">body</a> when it hits the network.</p>
+     <li data-md="">
+      <p>The <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#requestcredentials">RequestCredentials</a></code> enum is renamed to "<code>RequestCredentialsMode</code>,
+  and likewise updated with the new "<code>password</code>" value:</p>
+<pre class="idl highlight def"><span class="kt">enum</span> <dfn class="nv idl-code" data-dfn-type="enum" data-export="" id="enumdef-requestcredentialsmode">RequestCredentialsMode<a class="self-link" href="#enumdef-requestcredentialsmode"></a></dfn> { <dfn class="s idl-code" data-dfn-for="RequestCredentialsMode" data-dfn-type="enum-value" data-export="" data-lt="&quot;omit&quot;|omit" id="dom-requestcredentialsmode-omit">"omit"<a class="self-link" href="#dom-requestcredentialsmode-omit"></a></dfn>, <dfn class="s idl-code" data-dfn-for="RequestCredentialsMode" data-dfn-type="enum-value" data-export="" data-lt="&quot;same-origin&quot;|same-origin" id="dom-requestcredentialsmode-same-origin">"same-origin"<a class="self-link" href="#dom-requestcredentialsmode-same-origin"></a></dfn>, <dfn class="s idl-code" data-dfn-for="RequestCredentialsMode" data-dfn-type="enum-value" data-export="" data-lt="&quot;include&quot;|include" id="dom-requestcredentialsmode-include">"include"<a class="self-link" href="#dom-requestcredentialsmode-include"></a></dfn>, <dfn class="s idl-code" data-dfn-for="RequestCredentialsMode" data-dfn-type="enum-value" data-export="" data-lt="&quot;password&quot;|password" id="dom-requestcredentialsmode-password">"password"<a class="self-link" href="#dom-requestcredentialsmode-password"></a></dfn> };
+</pre>
+     <li data-md="">
+      <p>The <code class="idl"><a data-link-type="idl" href="#dictdef-requestinit" id="ref-for-dictdef-requestinit-2">RequestInit</a></code> dictionary is updated to accept a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-23">PasswordCredential</a></code> as its <code>credentials</code> member:</p>
+<pre class="idl highlight def"><span class="kt">typedef</span> (<a class="n" data-link-type="idl-name" href="#passwordcredential" id="ref-for-passwordcredential-24">PasswordCredential</a> <span class="kt">or</span> <a class="n" data-link-type="idl-name" href="https://fetch.spec.whatwg.org/#requestcredentials">RequestCredentials</a>) <dfn class="nv dfn-paneled idl-code" data-dfn-type="typedef" data-export="" id="typedefdef-credentialinfo">CredentialInfo</dfn>;
+
+<span class="kt">partial</span> <span class="kt">dictionary</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-requestinit">RequestInit</dfn> {
+  <a class="n" data-link-type="idl-name" href="#typedefdef-credentialinfo" id="ref-for-typedefdef-credentialinfo-1">CredentialInfo</a> <dfn class="nv idl-code" data-dfn-for="RequestInit" data-dfn-type="dict-member" data-export="" data-type="CredentialInfo " id="dom-requestinit-credentials">credentials<a class="self-link" href="#dom-requestinit-credentials"></a></dfn>;
+};
+</pre>
+     <li data-md="">
+      <p>Replace step 20 of the current <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#request">Request</a></code> constructor with the following:</p>
+      <ol start="20">
+       <li data-md="">
+        <p>If <var>credentials</var> is non-null:</p>
+        <ol>
+         <li data-md="">
+          <p>If <var>credentials</var> is a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-25">PasswordCredential</a></code>, then set <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-credentials-mode">credentials mode</a> to "<code>password</code>", and <var>request</var>’s <a data-link-type="dfn" href="#request-attached-credential" id="ref-for-request-attached-credential-2">attached credential</a> to <var>credentials</var>.</p>
+          <p>Otherwise, set <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-credentials-mode">credentials mode</a> to <var>credentials</var>.</p>
+        </ol>
+      </ol>
+     <li data-md="">
+      <p>Replace step 32 of the current <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#request">Request</a></code> constructor with the following:</p>
+      <ol start="32">
+       <li data-md="">
+        <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-method">method</a> is <code>GET</code> or <code>HEAD</code>, then
+  throw a <code>TypeError</code> if any of the following are true:</p>
+        <ul>
+         <li data-md="">
+          <p><var>init</var>’s <code>body</code> member is present and non-null</p>
+         <li data-md="">
+          <p><var>inputBody</var> is non-null</p>
+         <li data-md="">
+          <p><var>request</var>’s <a data-link-type="dfn" href="#request-attached-credential" id="ref-for-request-attached-credential-3">attached credential</a> is non-null</p>
+        </ul>
+      </ol>
+     <li data-md="">
+      <p>The <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#http-network-or-cache-fetch">HTTP-network-or-cache fetch</a> algorithm is updated with the
+  following step after the existing step 2:</p>
+      <ol start="3">
+       <li data-md="">
+        <p>If <var>httpRequest</var>’s <a data-link-type="dfn" href="#request-attached-credential" id="ref-for-request-attached-credential-4">attached credential</a> is not
+  null, run these substeps:</p>
+        <ol>
+         <li data-md="">
+          <p class="assertion">Assert: <var>httpRequest</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-body">body</a> is null.</p>
+         <li data-md="">
+          <p>Let <var>body</var> and <var>type</var> be the result of running <a href="#body-extraction">§3.2 Extract a body and Content-Type for request’s attached credential</a> on <var>httpRequest</var>.</p>
+         <li data-md="">
+          <p>If <var>type</var> is the empty string, return a <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-network-error">network error</a>.</p>
+         <li data-md="">
+          <p>Let <var>httpRequest</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-body">body</a> be <var>body</var>, <var>Content-Type</var> be <var>type</var>, and <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-redirect-mode">redirect
+  mode</a> be "<code>manual</code>".</p>
+        </ol>
+      </ol>
+    </ol>
+    <p class="issue" id="issue-25d38e5c"><a class="self-link" href="#issue-25d38e5c"></a> These patches are combined into an outstanding
+  pull request against Fetch. <a href="https://github.com/whatwg/fetch/issues/237">&lt;https://github.com/whatwg/fetch/issues/237></a></p>
+    <h3 class="heading settled algorithm" data-algorithm="Extract a body and Content-Type for request’s attached credential" data-level="3.2" id="body-extraction"><span class="secno">3.2. </span><span class="content"> Extract a <var>body</var> and <var>Content-Type</var> for <var>request</var>’s attached credential </span><a class="self-link" href="#body-extraction"></a></h3>
+    <p>Given a <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#request">Request</a></code> (<var>request</var>), this algorithm returns a <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#body">Body</a></code> (<var>body</var>) and
+  a string (<var>Content-Type</var>):</p>
+    <ol>
+     <li data-md="">
+      <p>Let <var>credential</var> be <var>request</var>’s <a data-link-type="dfn" href="#request-attached-credential" id="ref-for-request-attached-credential-5">attached credential</a>.</p>
+     <li data-md="">
+      <p>Let <var>body</var> be a new <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-body">body</a>, and <var>Content-Type</var> be the empty string.</p>
+     <li data-md="">
+      <p>If <var>credential</var> is a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-26">PasswordCredential</a></code>, run these substeps.</p>
+      <ol>
+       <li data-md="">
+        <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url">url</a>’s scheme is not the same as <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#dom-url-origin">origin</a></code>'s scheme,
+  or <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-url">url</a>’s host’s <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable
+  domain</a> is not the same as <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>’s <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#dom-url-origin">origin</a></code>'s host’s <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable
+  domain</a>, then skip the remaining substeps.</p>
+       <li data-md="">
+        <p>Let <var>data</var> be a copy of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-additionaldata" id="ref-for-dom-passwordcredential-additionaldata-7">additionalData</a></code> attribute if it is not <code>undefined</code>, and a new <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> object otherwise.</p>
+       <li data-md="">
+        <p>Let <var>list</var> be an empty list.</p>
+       <li data-md="">
+        <p>If <var>data</var> is a <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> object, then:</p>
+        <ol>
+         <li data-md="">
+          <p>Set <var>list</var> to a copy of <var>data</var>’s <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entries</a>.</p>
+         <li data-md="">
+          <p>Remove all <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entry</a> objects from <var>list</var> whose <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-name">name</a> is either <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname" id="ref-for-dom-passwordcredential-idname-3">idName</a></code> or <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-3">passwordName</a></code>.</p>
+         <li data-md="">
+          <p>Let <var>entry</var> be a new <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entry</a> whose <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-name">name</a> is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname" id="ref-for-dom-passwordcredential-idname-4">idName</a></code> and whose <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-value">value</a> is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/webappsec-credential-management/#dom-credential-id">id</a></code>.</p>
+         <li data-md="">
+          <p>Append <var>entry</var> to <var>list</var>.</p>
+         <li data-md="">
+          <p>Let <var>entry</var> be a new <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entry</a> whose <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-name">name</a> is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-4">passwordName</a></code> and whose <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-value">value</a> is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-1">[[password]]</a></code>.</p>
+         <li data-md="">
+          <p>Append <var>entry</var> to <var>list</var>.</p>
+         <li data-md="">
+          <p>Push the result of running the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/forms.html#multipart/form-data-encoding-algorithm"><code>multipart/form-data</code> encoding
+  algorithm</a>, with <var>list</var> as the form data set and with "<code>utf-8</code>" as
+  the explicit character encoding, to <var>body</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-body-stream">stream</a>.</p>
+         <li data-md="">
+          <p>Set <var>Content-Type</var> to <code>multipart/form-data;boundary=</code>, followed by the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/forms.html#multipart/form-data-boundary-string"><code>multipart/form-data</code> boundary string</a> generated by the
+  multipart/form-data encoding algorithm.</p>
+        </ol>
+        <p>Otherwise <var>data</var> is a <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#urlsearchparams">URLSearchParams</a></code> object, so:</p>
+        <ol>
+         <li data-md="">
+          <p>Set <var>list</var> to a copy of <var>data</var>’s <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-urlsearchparams-list">list</a>.</p>
+         <li data-md="">
+          <p>Remove all name-value pairs from <var>list</var> whose name is either <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname" id="ref-for-dom-passwordcredential-idname-5">idName</a></code> or <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-5">passwordName</a></code>.</p>
+         <li data-md="">
+          <p>Append a new name-value pair to <var>list</var> whose name is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname" id="ref-for-dom-passwordcredential-idname-6">idName</a></code> and whose value is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/webappsec-credential-management/#dom-credential-id">id</a></code>.</p>
+         <li data-md="">
+          <p>Append a new name-value pair to <var>list</var> whose name is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-6">passwordName</a></code> and whose value
+  is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-2">[[password]]</a></code>.</p>
+         <li data-md="">
+          <p>Push the result of running the <a data-link-type="dfn" href="https://url.spec.whatwg.org/#concept-urlencoded-byte-serializer">urlencoded byte serializer</a> with <var>list</var>, to <var>body</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-body-stream">stream</a>.</p>
+         <li data-md="">
+          <p>Set <var>Content-Type</var> to <code>application/x-www-form-urlencoded;charset=UTF-8</code>.</p>
+        </ol>
+      </ol>
+     <li data-md="">
+      <p>Return <var>body</var> and <var>Content-Type</var>.</p>
+    </ol>
+   </section>
+   <section>
+    <h2 class="heading settled" data-level="4" id="algorithms"><span class="secno">4. </span><span class="content">Algorithms</span><a class="self-link" href="#algorithms"></a></h2>
+    <h3 class="heading settled" data-level="4.1" id="siteboundcredential-algorithms"><span class="secno">4.1. </span><span class="content"><code>SiteBoundCredential</code> Algorithms</span><a class="self-link" href="#siteboundcredential-algorithms"></a></h3>
+    <h4 class="heading settled algorithm" data-algorithm="Request a SiteBoundCredential" data-level="4.1.1" id="request-credential"><span class="secno">4.1.1. </span><span class="content"> Request a <code>SiteBoundCredential</code> </span><a class="self-link" href="#request-credential"></a></h4>
     <p><code class="idl"><a data-link-type="idl" href="#siteboundcredential" id="ref-for-siteboundcredential-10">SiteBoundCredential</a></code>'s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-retrieve-slot" id="ref-for-dom-siteboundcredential-retrieve-slot-1">[[Retrieve]](options, mediation)</a></code> internal
   method is called with a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-2">CredentialRequestOptions</a></code> object (<var>options</var>), and either
   "<code>With User Mediation</code>" or "<code>Without User Mediation</code>" (<var>mediation</var>). It returns a <code class="idl"><a data-link-type="idl" href="#siteboundcredential" id="ref-for-siteboundcredential-11">SiteBoundCredential</a></code> if one can be retrieved from the <a data-link-type="dfn" href="https://w3c.github.io/webappsec-credential-management/#credential-store">credential store</a>, or <code>null</code> otherwise:</p>
@@ -1958,7 +2131,7 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
       <p><a data-link-type="abstract-op" href="https://w3c.github.io/webappsec-credential-management/base.html#retrieve-a-list-of-credentials">Retrieve a list of credentials</a> from the <a data-link-type="dfn" href="https://w3c.github.io/webappsec-credential-management/#credential-store">credential store</a> which
   represent <code class="idl"><a data-link-type="idl" href="#siteboundcredential" id="ref-for-siteboundcredential-12">SiteBoundCredential</a></code> objects whose <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-1">[[origin]]</a></code> is the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#same-origin">same origin</a> as <var>origin</var>. Let <var>list</var> be the result.</p>
      <li data-md="">
-      <p>If <var>options</var> does not have a <code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password-3">password</a></code> member whose value is <code>true</code>, remove all <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-18">PasswordCredential</a></code> objects from <var>list</var>.</p>
+      <p>If <var>options</var> does not have a <code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password-3">password</a></code> member whose value is <code>true</code>, remove all <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-27">PasswordCredential</a></code> objects from <var>list</var>.</p>
      <li data-md="">
       <p>If <var>options</var> does not have a <code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-federated" id="ref-for-dom-credentialrequestoptions-federated-2">federated</a></code> member, remove all <code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential-8">FederatedCredential</a></code> objects from <var>list</var>.</p>
      <li data-md="">
@@ -1994,7 +2167,7 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
       <p>Return the <code class="idl"><a data-link-type="idl" href="#siteboundcredential" id="ref-for-siteboundcredential-13">SiteBoundCredential</a></code> the user chose, or <code>null</code> if the user
   declined to share a credential.</p>
     </ol>
-    <h4 class="heading settled algorithm" data-algorithm="Store a SiteBoundCredential" data-level="3.1.2" id="store-credential"><span class="secno">3.1.2. </span><span class="content"> Store a <code>SiteBoundCredential</code> </span><a class="self-link" href="#store-credential"></a></h4>
+    <h4 class="heading settled algorithm" data-algorithm="Store a SiteBoundCredential" data-level="4.1.2" id="store-credential"><span class="secno">4.1.2. </span><span class="content"> Store a <code>SiteBoundCredential</code> </span><a class="self-link" href="#store-credential"></a></h4>
     <p>Given a <code class="idl"><a data-link-type="idl" href="#siteboundcredential" id="ref-for-siteboundcredential-14">SiteBoundCredential</a></code> (<var>credential</var>), this algorithm persists it to the <a data-link-type="dfn" href="https://w3c.github.io/webappsec-credential-management/#credential-store">credential store</a>, and then returns.</p>
     <ol class="algorithm">
      <li data-md="">
@@ -2002,26 +2175,27 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
      <li data-md="">
       <p class="assertion">Assert: <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-iconurl" id="ref-for-dom-siteboundcredential-iconurl-2">iconURL</a></code> is an <a data-link-type="dfn" href="https://w3c.github.io/webappsec-mixed-content/#a-priori-authenticated-url"><i lang="la">a priori</i> authenticated URL</a>, or the empty string.</p>
      <li data-md="">
-      <p>If <var>credential</var> is a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-19">PasswordCredential</a></code>:</p>
+      <p>If <var>credential</var> is a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-28">PasswordCredential</a></code>:</p>
       <ol>
        <li data-md="">
-        <p>If the user agent’s <a data-link-type="dfn" href="https://w3c.github.io/webappsec-credential-management/#credential-store">credential store</a> contains a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-20">PasswordCredential</a></code> (<var>stored</var>)
+        <p>If the user agent’s <a data-link-type="dfn" href="https://w3c.github.io/webappsec-credential-management/#credential-store">credential store</a> contains a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-29">PasswordCredential</a></code> (<var>stored</var>)
   whose <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/webappsec-credential-management/#dom-credential-id">id</a></code> attribute is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/webappsec-credential-management/#dom-credential-id">id</a></code> and whose <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-3">[[origin]]</a></code> slot is the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#same-origin">same origin</a> as <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-4">[[origin]]</a></code>, then:</p>
         <ol>
          <li data-md="">
-          <p>If the user grants permission to update credentials (as discussed in <a href="#user-mediated-storage"></a>), then:</p>
+          <p>If the user grants permission to update credentials (as discussed when defining <a data-link-type="dfn" href="https://w3c.github.io/webappsec-credential-management/base.html#user-mediation">user mediation</a> in <a data-link-type="biblio" href="#biblio-credential-management-1">[CREDENTIAL-MANAGEMENT-1]</a>), then:</p>
           <ol>
            <li data-md="">
-            <p>Set <var>stored</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-1">[[password]]</a></code> slot’s value to the value of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-2">[[password]]</a></code> slot.</p>
+            <p>Set <var>stored</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-3">[[password]]</a></code> slot’s value to the value of <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-4">[[password]]</a></code> slot.</p>
            <li data-md="">
             <p>Set <var>stored</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-name" id="ref-for-dom-siteboundcredential-name-2">name</a></code> to <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-name" id="ref-for-dom-siteboundcredential-name-3">name</a></code>.</p>
            <li data-md="">
             <p>Set <var>stored</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-iconurl" id="ref-for-dom-siteboundcredential-iconurl-3">iconURL</a></code> to <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-iconurl" id="ref-for-dom-siteboundcredential-iconurl-4">iconURL</a></code>.</p>
           </ol>
-          <p>Otherwise, if the user grants permission to store credentials (as discussed in <a href="#user-mediated-storage"></a>), then:</p>
+          <p>Otherwise, if the user grants permission to store credentials (as discussed when
+  defining <a data-link-type="dfn" href="https://w3c.github.io/webappsec-credential-management/base.html#user-mediation">user mediation</a> in <a data-link-type="biblio" href="#biblio-credential-management-1">[CREDENTIAL-MANAGEMENT-1]</a>), then:</p>
           <ol>
            <li data-md="">
-            <p>Store a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-21">PasswordCredential</a></code> in the <a data-link-type="dfn" href="https://w3c.github.io/webappsec-credential-management/#credential-store">credential store</a> with the following
+            <p>Store a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-30">PasswordCredential</a></code> in the <a data-link-type="dfn" href="https://w3c.github.io/webappsec-credential-management/#credential-store">credential store</a> with the following
   properties:</p>
             <dl>
              <dt data-md=""><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/webappsec-credential-management/#dom-credential-id">id</a></code>
@@ -2036,11 +2210,11 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
              <dt data-md=""><code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-5">[[origin]]</a></code>
              <dd data-md="">
               <p><var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-6">[[origin]]</a></code></p>
-             <dt data-md=""><code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-3">[[password]]</a></code>
+             <dt data-md=""><code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-5">[[password]]</a></code>
              <dd data-md="">
-              <p><var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-4">[[password]]</a></code></p>
+              <p><var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-6">[[password]]</a></code></p>
             </dl>
-            <p class="note" role="note"><span>Note:</span> Ancillary properties like <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname" id="ref-for-dom-passwordcredential-idname-3">idName</a></code>, <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-3">passwordName</a></code>, and <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-additionaldata" id="ref-for-dom-passwordcredential-additionaldata-7">additionalData</a></code> are _not_ stored in the <a data-link-type="dfn" href="https://w3c.github.io/webappsec-credential-management/#credential-store">credential store</a>. They are used for a single
+            <p class="note" role="note"><span>Note:</span> Ancillary properties like <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname" id="ref-for-dom-passwordcredential-idname-7">idName</a></code>, <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-7">passwordName</a></code>, and <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-additionaldata" id="ref-for-dom-passwordcredential-additionaldata-8">additionalData</a></code> are _not_ stored in the <a data-link-type="dfn" href="https://w3c.github.io/webappsec-credential-management/#credential-store">credential store</a>. They are used for a single
   authentication event, and are expected to be populated at request time.</p>
           </ol>
         </ol>
@@ -2076,8 +2250,8 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
         </dl>
       </ol>
     </ol>
-    <h3 class="heading settled" data-level="3.2" id="passwordcredential-algorithms"><span class="secno">3.2. </span><span class="content"><code>PasswordCredential</code> Algorithms</span><a class="self-link" href="#passwordcredential-algorithms"></a></h3>
-    <h4 class="heading settled algorithm" data-algorithm="The PasswordCredental(HTMLFormElement) Constructor" data-level="3.2.1" id="construct-passwordcredential-form"><span class="secno">3.2.1. </span><span class="content"> The <code>PasswordCredental(HTMLFormElement)</code> Constructor </span><a class="self-link" href="#construct-passwordcredential-form"></a></h4>
+    <h3 class="heading settled" data-level="4.2" id="passwordcredential-algorithms"><span class="secno">4.2. </span><span class="content"><code>PasswordCredential</code> Algorithms</span><a class="self-link" href="#passwordcredential-algorithms"></a></h3>
+    <h4 class="heading settled algorithm" data-algorithm="The PasswordCredental(HTMLFormElement) Constructor" data-level="4.2.1" id="construct-passwordcredential-form"><span class="secno">4.2.1. </span><span class="content"> The <code>PasswordCredental(HTMLFormElement)</code> Constructor </span><a class="self-link" href="#construct-passwordcredential-form"></a></h4>
     <p>The <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordcredential" id="ref-for-dom-passwordcredential-passwordcredential-4">PasswordCredential(form)</a></code> constructor, when invoked with an <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">HTMLFormElement</a></code> (<var>form</var>),
   must run these steps.</p>
     <p class="note" role="note"><span>Note:</span> <a href="#examples-post-signin">§1.3 Post-sign-in Confirmation</a> and <a href="#examples-change-password">§1.4 Change Password</a> provide examples of the intended
@@ -2147,14 +2321,14 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
       <p>Let <var>c</var> be the result of executing the <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordcredential-data" id="ref-for-dom-passwordcredential-passwordcredential-data-2">PasswordCredential(data)</a></code> constructor on <var>data</var>.
   Rethrow any exception generated.</p>
      <li data-md="">
-      <p>Set <var>c</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname" id="ref-for-dom-passwordcredential-idname-4">idName</a></code> attribute to <var>idName</var>.</p>
+      <p>Set <var>c</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname" id="ref-for-dom-passwordcredential-idname-8">idName</a></code> attribute to <var>idName</var>.</p>
      <li data-md="">
-      <p>Set <var>c</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-4">passwordName</a></code> attribute to <var>passwordName</var>.</p>
+      <p>Set <var>c</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-8">passwordName</a></code> attribute to <var>passwordName</var>.</p>
      <li data-md="">
       <p>If <var>form</var>’s <code><a data-link-type="element-sub" href="https://html.spec.whatwg.org/multipage/forms.html#concept-fs-enctype">enctype</a></code> is "<code>multipart/form-data</code>", then:</p>
       <ol>
        <li data-md="">
-        <p>Set <var>c</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-additionaldata" id="ref-for-dom-passwordcredential-additionaldata-8">additionalData</a></code> attribute to <var>formData</var>.</p>
+        <p>Set <var>c</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-additionaldata" id="ref-for-dom-passwordcredential-additionaldata-9">additionalData</a></code> attribute to <var>formData</var>.</p>
       </ol>
       <p>Otherwise:</p>
       <ol>
@@ -2169,16 +2343,16 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
           <p>Execute <var>params</var> <code class="idl"><a data-link-type="idl" href="https://url.spec.whatwg.org/#dom-urlsearchparams-append">append()</a></code> method on <var>entry</var>’s <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-name">name</a> and <a data-link-type="dfn" href="https://xhr.spec.whatwg.org/#concept-formdata-entry-value">value</a>.</p>
         </ol>
        <li data-md="">
-        <p>Set <var>c</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-additionaldata" id="ref-for-dom-passwordcredential-additionaldata-9">additionalData</a></code> attribute to <var>params</var>.</p>
+        <p>Set <var>c</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-additionaldata" id="ref-for-dom-passwordcredential-additionaldata-10">additionalData</a></code> attribute to <var>params</var>.</p>
       </ol>
      <li data-md="">
       <p>Return <var>c</var>.</p>
     </ol>
-    <h4 class="heading settled algorithm" data-algorithm="The PasswordCredental(PasswordCredentialData) Constructor" data-level="3.2.2" id="construct-passwordcredential-data"><span class="secno">3.2.2. </span><span class="content"> The <code>PasswordCredental(PasswordCredentialData)</code> Constructor </span><a class="self-link" href="#construct-passwordcredential-data"></a></h4>
+    <h4 class="heading settled algorithm" data-algorithm="The PasswordCredental(PasswordCredentialData) Constructor" data-level="4.2.2" id="construct-passwordcredential-data"><span class="secno">4.2.2. </span><span class="content"> The <code>PasswordCredental(PasswordCredentialData)</code> Constructor </span><a class="self-link" href="#construct-passwordcredential-data"></a></h4>
     <p>The <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordcredential-data" id="ref-for-dom-passwordcredential-passwordcredential-data-3">PasswordCredential(data)</a></code> constructor, when invoked with a <code class="idl"><a data-link-type="idl" href="#dictdef-passwordcredentialdata" id="ref-for-dictdef-passwordcredentialdata-3">PasswordCredentialData</a></code> (<var>data</var>), must run the following steps:</p>
     <ol class="algorithm">
      <li data-md="">
-      <p>Let <var>c</var> be a new <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-22">PasswordCredential</a></code> object.</p>
+      <p>Let <var>c</var> be a new <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-31">PasswordCredential</a></code> object.</p>
      <li data-md="">
       <p>If any of the following are the empty string, <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-throw">throw</a> a <code>TypeError</code> exception:</p>
       <ul>
@@ -2190,13 +2364,13 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
      <li data-md="">
       <p>Set <var>c</var>’s properties as follows:</p>
       <dl>
-       <dt data-md=""><code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-5">[[password]]</a></code> slot
+       <dt data-md=""><code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-7">[[password]]</a></code> slot
        <dd data-md="">
         <p><var>data</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredentialdata-password" id="ref-for-dom-passwordcredentialdata-password-4">password</a></code> member’s value</p>
        <dt data-md=""><code class="idl"><a data-link-type="idl" href="https://w3c.github.io/webappsec-credential-management/#dom-credential-id">id</a></code>
        <dd data-md="">
         <p><var>data</var>’s <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/webappsec-credential-management/#dom-credentialdata-id">id</a></code> member’s value</p>
-       <dt data-md=""><code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname" id="ref-for-dom-passwordcredential-idname-5">idName</a></code>
+       <dt data-md=""><code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-idname" id="ref-for-dom-passwordcredential-idname-9">idName</a></code>
        <dd data-md="">
         <p>"<code>username</code>"</p>
        <dt data-md=""><code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-iconurl" id="ref-for-dom-siteboundcredential-iconurl-9">iconURL</a></code>
@@ -2205,7 +2379,7 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
        <dt data-md=""><code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-name" id="ref-for-dom-siteboundcredential-name-8">name</a></code>
        <dd data-md="">
         <p><var>data</var>’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredentialdata-name" id="ref-for-dom-siteboundcredentialdata-name-2">name</a></code> member’s value</p>
-       <dt data-md=""><code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-5">passwordName</a></code>
+       <dt data-md=""><code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-9">passwordName</a></code>
        <dd data-md="">
         <p>"<code>password</code>"</p>
        <dt data-md=""><code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-11">[[origin]]</a></code>
@@ -2215,9 +2389,9 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
      <li data-md="">
       <p>Return <var>c</var>.</p>
     </ol>
-    <h4 class="heading settled algorithm" data-algorithm="CredentialRequestOptions Matching for PasswordCredential" data-level="3.2.3" id="passwordcredential-matching"><span class="secno">3.2.3. </span><span class="content"> <code>CredentialRequestOptions</code> Matching for <code>PasswordCredential</code> </span><a class="self-link" href="#passwordcredential-matching"></a></h4>
+    <h4 class="heading settled algorithm" data-algorithm="CredentialRequestOptions Matching for PasswordCredential" data-level="4.2.3" id="passwordcredential-matching"><span class="secno">4.2.3. </span><span class="content"> <code>CredentialRequestOptions</code> Matching for <code>PasswordCredential</code> </span><a class="self-link" href="#passwordcredential-matching"></a></h4>
     <p>Given a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-3">CredentialRequestOptions</a></code> (<var>options</var>), the following algorithm returns "<code>Matches</code>" if
-  the <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-23">PasswordCredential</a></code> should be available as a response to a <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/webappsec-credential-management/#dom-credentialscontainer-get">get()</a></code> request, and "<code>Does Not Match</code>" otherwise.</p>
+  the <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-32">PasswordCredential</a></code> should be available as a response to a <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/webappsec-credential-management/#dom-credentialscontainer-get">get()</a></code> request, and "<code>Does Not Match</code>" otherwise.</p>
     <ol>
      <li data-md="">
       <p>If <var>options</var> has a <code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password-4">password</a></code> member whose value is <code>true</code>, then
@@ -2225,8 +2399,8 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
      <li data-md="">
       <p>Return "<code>Does Not Match</code>".</p>
     </ol>
-    <h3 class="heading settled" data-level="3.3" id="federatedcredential-algorithms"><span class="secno">3.3. </span><span class="content"><code>FederatedCredential</code> Algorithms</span><a class="self-link" href="#federatedcredential-algorithms"></a></h3>
-    <h4 class="heading settled algorithm" data-algorithm="The PasswordCredental(FederatedCredentialData) Constructor" data-level="3.3.1" id="construct-federatedcredential-data"><span class="secno">3.3.1. </span><span class="content"> The <code>PasswordCredental(FederatedCredentialData)</code> Constructor </span><a class="self-link" href="#construct-federatedcredential-data"></a></h4>
+    <h3 class="heading settled" data-level="4.3" id="federatedcredential-algorithms"><span class="secno">4.3. </span><span class="content"><code>FederatedCredential</code> Algorithms</span><a class="self-link" href="#federatedcredential-algorithms"></a></h3>
+    <h4 class="heading settled algorithm" data-algorithm="The PasswordCredental(FederatedCredentialData) Constructor" data-level="4.3.1" id="construct-federatedcredential-data"><span class="secno">4.3.1. </span><span class="content"> The <code>PasswordCredental(FederatedCredentialData)</code> Constructor </span><a class="self-link" href="#construct-federatedcredential-data"></a></h4>
     <p>The <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-federatedcredential" id="ref-for-dom-federatedcredential-federatedcredential-2">FederatedCredential(data)</a></code> constructor, when invoked with a <code class="idl"><a data-link-type="idl" href="#dictdef-federatedcredentialdata" id="ref-for-dictdef-federatedcredentialdata-2">FederatedCredentialData</a></code> (<var>data</var>), must run the following steps:</p>
     <ol class="algorithm">
      <li data-md="">
@@ -2263,7 +2437,32 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
     </ol>
    </section>
    <section>
-    <h2 class="heading settled" data-level="4" id="future-work"><span class="secno">4. </span><span class="content">Future Work</span><a class="self-link" href="#future-work"></a></h2>
+    <h2 class="heading settled" data-level="5" id="security-and-privacy"><span class="secno">5. </span><span class="content">Security and Privacy Considerations</span><a class="self-link" href="#security-and-privacy"></a></h2>
+    <h3 class="heading settled" data-level="5.1" id="security-cross-origin-leakage"><span class="secno">5.1. </span><span class="content">Cross-origin Credential Leakage</span><a class="self-link" href="#security-cross-origin-leakage"></a></h3>
+    <p>Credentials are sensitive information, and user agents need to exercise caution in determining
+  when they can be safely shared with a website. The safest option is to restrict credential
+  sharing to the exact origin on which they were saved. That is likely too restrictive for the
+  web, however: consider sites which divide functionality into subdomains like <code>example.com</code> vs <code>admin.example.com</code>.</p>
+    <p>As a compromise between annoying users, and securing their credentials, user agents:</p>
+    <ol>
+     <li data-md="">
+      <p>MUST NOT share credentials between origins whose scheme components represent a downgrade in
+  security. That is, it may make sense to allow credentials saved on <code>http://example.com/</code> to
+  be made available to <code>https://example.com/</code> (in order to encourage developers to migrate to
+  secure transport), but the inverse would be dangerous.</p>
+     <li data-md="">
+      <p>MAY use the Public Suffix List <a data-link-type="biblio" href="#biblio-psl">[PSL]</a> to determine the effective scope of a credential by
+  comparing the <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable domain</a> of the credential’s <code class="idl"><a data-link-type="idl" href="#dom-siteboundcredential-origin-slot" id="ref-for-dom-siteboundcredential-origin-slot-13">[[origin]]</a></code> with the origin in
+  which <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/webappsec-credential-management/#dom-credentialscontainer-get">get()</a></code> is called. That is: credentials saved on <code>https://admin.example.com/</code> and <code>https://example.com/</code> MAY be offered to users when <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/webappsec-credential-management/#dom-credentialscontainer-get">get()</a></code> is called from <code>https://www.example.com/</code>, and vice versa.</p>
+     <li data-md="">
+      <p>MUST NOT offer credentials to an origin in response to <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/webappsec-credential-management/#dom-credentialscontainer-get">get()</a></code> without <a data-link-type="dfn" href="https://w3c.github.io/webappsec-credential-management/base.html#user-mediation">user mediation</a> if the credential’s origin is not an exact match for the calling origin.
+  That is, <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/webappsec-credential-management/#credential">Credential</a></code> objects for <code>https://example.com</code> would not be returned directly to <code>https://www.example.com</code>, but could be offered to the user via the chooser.</p>
+    </ol>
+    <p><code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-33">PasswordCredential</a></code>s further mitigate the risk of data leakage by never exposing the <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-8">[[password]]</a></code> slot directly to a page’s JavaScript, but only allowing its submission to a
+  same-origin server-side endpoint via <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a></code>.</p>
+   </section>
+   <section>
+    <h2 class="heading settled" data-level="6" id="future-work"><span class="secno">6. </span><span class="content">Future Work</span><a class="self-link" href="#future-work"></a></h2>
     <p><em>This section is non-normative.</em></p>
     <p>The API defined here does the bare minimum to expose user agent’s credential managers to the web,
   and allows the web to help those credential managers understand when federated identity providers
@@ -2282,11 +2481,6 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
   contexts (e.g. mediated activity on <code>idp.com</code> might resolve a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise">Promise</a></code> handed back to <code>rp.com</code>)
   in the future without redesigning the API from the ground up.</p>
     <p>Baby steps.</p>
-    <div class="note" role="note"> Groups like the <a href="http://www.w3.org/Payments/IG/">Web Payments IG</a> and the <a href="https://www.w3.org/community/credentials/">Credentials CG</a> have expressed interest in extending the API defined in this document in
-    order to address use cases beyond those outlined in <a href="#use-cases"></a>. They’ve
-    documented these use cases in detail in <a href="http://www.w3.org/TR/web-payments-use-cases/">Web Payments Use Cases 1.0</a> and <a href="http://opencreds.org/specs/source/use-cases/">Credentials CG Use Cases</a>,
-    and anticipate extending the API in a separate document to solve a different
-    set of problems than WebAppSec is currently chartered to deal with. </div>
    </section>
   </main>
   <h2 class="no-ref no-num heading settled" id="conformance"><span class="content">Conformance</span><a class="self-link" href="#conformance"></a></h2>
@@ -2325,8 +2519,11 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
   <h3 class="no-num no-ref heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="index">
    <li><a href="#dom-passwordcredential-additionaldata">additionalData</a><span>, in §2.2</span>
+   <li><a href="#request-attached-credential">attached credential</a><span>, in §3.1</span>
    <li><a href="#typedefdef-credentialbodytype">CredentialBodyType</a><span>, in §2.2</span>
+   <li><a href="#typedefdef-credentialinfo">CredentialInfo</a><span>, in §3.1</span>
    <li><a href="#dictdef-credentialrequestoptions">CredentialRequestOptions</a><span>, in §2.4</span>
+   <li><a href="#dom-requestinit-credentials">credentials</a><span>, in §3.1</span>
    <li><a href="#dom-credentialrequestoptions-federated">federated</a><span>, in §2.4</span>
    <li><a href="#federatedcredential">FederatedCredential</a><span>, in §2.3</span>
    <li><a href="#dom-federatedcredential-federatedcredential">FederatedCredential(data)</a><span>, in §2.3</span>
@@ -2339,19 +2536,25 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
      <li><a href="#dom-siteboundcredential-iconurl">attribute for SiteBoundCredential</a><span>, in §2.1</span>
     </ul>
    <li><a href="#dom-passwordcredential-idname">idName</a><span>, in §2.2</span>
+   <li><a href="#dom-requestcredentialsmode-include">"include"</a><span>, in §3.1</span>
+   <li><a href="#dom-requestcredentialsmode-include">include</a><span>, in §3.1</span>
    <li>
     name
     <ul>
      <li><a href="#dom-siteboundcredentialdata-name">dict-member for SiteBoundCredentialData</a><span>, in §2.1</span>
      <li><a href="#dom-siteboundcredential-name">attribute for SiteBoundCredential</a><span>, in §2.1</span>
     </ul>
+   <li><a href="#dom-requestcredentialsmode-omit">"omit"</a><span>, in §3.1</span>
+   <li><a href="#dom-requestcredentialsmode-omit">omit</a><span>, in §3.1</span>
    <li><a href="#dom-siteboundcredential-origin-slot">[[origin]]</a><span>, in §2.1</span>
    <li><a href="#dom-passwordcredential-password-slot">[[password]]</a><span>, in §2.2</span>
+   <li><a href="#dom-requestcredentialsmode-password">"password"</a><span>, in §3.1</span>
    <li>
     password
     <ul>
      <li><a href="#dom-passwordcredentialdata-password">dict-member for PasswordCredentialData</a><span>, in §2.2</span>
      <li><a href="#dom-credentialrequestoptions-password">dict-member for CredentialRequestOptions</a><span>, in §2.4</span>
+     <li><a href="#dom-requestcredentialsmode-password">enum-value for RequestCredentialsMode</a><span>, in §3.1</span>
     </ul>
    <li><a href="#passwordcredential">PasswordCredential</a><span>, in §2.2</span>
    <li><a href="#dom-passwordcredential-passwordcredential-data">PasswordCredential(data)</a><span>, in §2.2</span>
@@ -2372,6 +2575,8 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
      <li><a href="#dom-federatedcredential-provider">attribute for FederatedCredential</a><span>, in §2.3</span>
     </ul>
    <li><a href="#dom-federatedcredentialrequestoptions-providers">providers</a><span>, in §2.4</span>
+   <li><a href="#enumdef-requestcredentialsmode">RequestCredentialsMode</a><span>, in §3.1</span>
+   <li><a href="#dictdef-requestinit">RequestInit</a><span>, in §3.1</span>
    <li>
     [[Retrieve]](options, mediation)
     <ul>
@@ -2379,6 +2584,8 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
      <li><a href="#dom-passwordcredential-retrieve-slot">method for PasswordCredential</a><span>, in §2.2</span>
      <li><a href="#dom-federatedcredential-retrieve-slot">method for FederatedCredential</a><span>, in §2.3</span>
     </ul>
+   <li><a href="#dom-requestcredentialsmode-same-origin">"same-origin"</a><span>, in §3.1</span>
+   <li><a href="#dom-requestcredentialsmode-same-origin">same-origin</a><span>, in §3.1</span>
    <li><a href="#siteboundcredential">SiteBoundCredential</a><span>, in §2.1</span>
    <li><a href="#dictdef-siteboundcredentialdata">SiteBoundCredentialData</a><span>, in §2.1</span>
    <li>
@@ -2406,8 +2613,21 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
    <li>
     <a data-link-type="biblio">[FETCH]</a> defines the following terms:
     <ul>
+     <li><a href="https://fetch.spec.whatwg.org/#body">Body</a>
+     <li><a href="https://fetch.spec.whatwg.org/#request">Request</a>
+     <li><a href="https://fetch.spec.whatwg.org/#requestcredentials">RequestCredentials</a>
      <li><a href="https://fetch.spec.whatwg.org/#response">Response</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-request-body">body</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-request-credentials-mode">credentials mode</a>
      <li><a href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch(input)</a>
+     <li><a href="https://fetch.spec.whatwg.org/#http-network-or-cache-fetch">http-network-or-cache fetch</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-request-method">method</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-network-error">network error</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-request-redirect-mode">redirect mode</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-request">request</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-body-stream">stream</a>
+     <li><a href="https://fetch.spec.whatwg.org/#concept-request-url">url</a>
     </ul>
    <li>
     <a data-link-type="biblio">[HTML]</a> defines the following terms:
@@ -2420,6 +2640,8 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-current-password">current-password</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#concept-fs-enctype">enctype</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#form-owner">form owner</a>
+     <li><a href="https://html.spec.whatwg.org/multipage/forms.html#multipart/form-data-boundary-string">multipart/form-data boundary string</a>
+     <li><a href="https://html.spec.whatwg.org/multipage/forms.html#multipart/form-data-encoding-algorithm">multipart/form-data encoding algorithm</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-name">name <small>(for autocomplete)</small></a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-name">name <small>(for input)</small></a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-new-password">new-password</a>
@@ -2445,10 +2667,18 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
      <li><a href="https://w3c.github.io/webappsec-mixed-content/#a-priori-authenticated-url">a priori authenticated url</a>
     </ul>
    <li>
+    <a data-link-type="biblio">[PSL]</a> defines the following terms:
+    <ul>
+     <li><a href="https://publicsuffix.org/list/#">registerable domain</a>
+    </ul>
+   <li>
     <a data-link-type="biblio">[URL]</a> defines the following terms:
     <ul>
      <li><a href="https://url.spec.whatwg.org/#urlsearchparams">URLSearchParams</a>
      <li><a href="https://url.spec.whatwg.org/#dom-urlsearchparams-append">append(name, value)</a>
+     <li><a href="https://url.spec.whatwg.org/#concept-urlsearchparams-list">list</a>
+     <li><a href="https://url.spec.whatwg.org/#dom-url-origin">origin</a>
+     <li><a href="https://url.spec.whatwg.org/#concept-urlencoded-byte-serializer">urlencoded byte serializer</a>
     </ul>
    <li>
     <a data-link-type="biblio">[webappsec-credential-management-1]</a> defines the following terms:
@@ -2485,6 +2715,7 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
      <li><a href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a>
      <li><a href="https://xhr.spec.whatwg.org/#xmlhttprequest">XMLHttpRequest</a>
      <li><a href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entries</a>
+     <li><a href="https://xhr.spec.whatwg.org/#concept-formdata-entry">entry</a>
      <li><a href="https://xhr.spec.whatwg.org/#dom-formdata-get">get(name)</a>
      <li><a href="https://xhr.spec.whatwg.org/#dom-formdata-has">has(name)</a>
      <li><a href="https://xhr.spec.whatwg.org/#concept-formdata-entry-name">name</a>
@@ -2505,6 +2736,8 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
    <dd>Anne van Kesteren; Domenic Denicola. <a href="https://infra.spec.whatwg.org/">Infra Standard</a>. Living Standard. URL: <a href="https://infra.spec.whatwg.org/">https://infra.spec.whatwg.org/</a>
    <dt id="biblio-mixed-content">[MIXED-CONTENT]
    <dd>Mike West. <a href="https://www.w3.org/TR/mixed-content/">Mixed Content</a>. URL: <a href="https://www.w3.org/TR/mixed-content/">https://www.w3.org/TR/mixed-content/</a>
+   <dt id="biblio-psl">[PSL]
+   <dd>Mozilla Foundation. <a href="https://publicsuffix.org/">Public Suffix List</a>. URL: <a href="https://publicsuffix.org/">https://publicsuffix.org/</a>
    <dt id="biblio-rfc2119">[RFC2119]
    <dd>S. Bradner. <a href="https://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119">https://tools.ietf.org/html/rfc2119</a>
    <dt id="biblio-url">[URL]
@@ -2584,10 +2817,20 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
   <a class="n" data-link-type="idl-name" href="#dictdef-federatedcredentialrequestoptions">FederatedCredentialRequestOptions</a>? <a class="nv" data-type="FederatedCredentialRequestOptions? " href="#dom-credentialrequestoptions-federated">federated</a>;
 };
 
+<span class="kt">enum</span> <a class="nv" href="#enumdef-requestcredentialsmode">RequestCredentialsMode</a> { <a class="s" href="#dom-requestcredentialsmode-omit">"omit"</a>, <a class="s" href="#dom-requestcredentialsmode-same-origin">"same-origin"</a>, <a class="s" href="#dom-requestcredentialsmode-include">"include"</a>, <a class="s" href="#dom-requestcredentialsmode-password">"password"</a> };
+
+<span class="kt">typedef</span> (<a class="n" data-link-type="idl-name" href="#passwordcredential">PasswordCredential</a> <span class="kt">or</span> <a class="n" data-link-type="idl-name" href="https://fetch.spec.whatwg.org/#requestcredentials">RequestCredentials</a>) <a class="nv" href="#typedefdef-credentialinfo">CredentialInfo</a>;
+
+<span class="kt">partial</span> <span class="kt">dictionary</span> <a class="nv" href="#dictdef-requestinit">RequestInit</a> {
+  <a class="n" data-link-type="idl-name" href="#typedefdef-credentialinfo">CredentialInfo</a> <a class="nv" data-type="CredentialInfo " href="#dom-requestinit-credentials">credentials</a>;
+};
+
 </pre>
   <h2 class="no-num no-ref heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
   <div style="counter-reset:issue">
    <div class="issue"> Anne suggests that this might be better modeled as an <code>ImageBitmap</code> or <code>blob:</code>. We also need to figure out responsiveness. Perhaps <a data-link-type="biblio" href="#biblio-appmanifest">[APPMANIFEST]</a>'s format? <a href="https://github.com/w3c/webappsec/issues/247">&lt;https://github.com/w3c/webappsec/issues/247></a><a href="#issue-e7ce36d0"> ↵ </a></div>
+   <div class="issue"> These patches are combined into an outstanding
+  pull request against Fetch. <a href="https://github.com/whatwg/fetch/issues/237">&lt;https://github.com/whatwg/fetch/issues/237></a><a href="#issue-25d38e5c"> ↵ </a></div>
   </div>
   <aside class="dfn-panel" data-for="siteboundcredential">
    <b><a href="#siteboundcredential">#siteboundcredential</a></b><b>Referenced in:</b>
@@ -2596,9 +2839,9 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
     <li><a href="#ref-for-siteboundcredential-2">2.1. The SiteBoundCredential Interface</a> <a href="#ref-for-siteboundcredential-3">(2)</a> <a href="#ref-for-siteboundcredential-4">(3)</a> <a href="#ref-for-siteboundcredential-5">(4)</a>
     <li><a href="#ref-for-siteboundcredential-6">2.2. The PasswordCredential Interface</a> <a href="#ref-for-siteboundcredential-7">(2)</a>
     <li><a href="#ref-for-siteboundcredential-8">2.3. The FederatedCredential Interface</a> <a href="#ref-for-siteboundcredential-9">(2)</a>
-    <li><a href="#ref-for-siteboundcredential-10">3.1.1. 
+    <li><a href="#ref-for-siteboundcredential-10">4.1.1. 
     Request a SiteBoundCredential </a> <a href="#ref-for-siteboundcredential-11">(2)</a> <a href="#ref-for-siteboundcredential-12">(3)</a> <a href="#ref-for-siteboundcredential-13">(4)</a>
-    <li><a href="#ref-for-siteboundcredential-14">3.1.2. 
+    <li><a href="#ref-for-siteboundcredential-14">4.1.2. 
     Store a SiteBoundCredential </a>
    </ul>
   </aside>
@@ -2612,22 +2855,22 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
   <aside class="dfn-panel" data-for="dom-siteboundcredentialdata-name">
    <b><a href="#dom-siteboundcredentialdata-name">#dom-siteboundcredentialdata-name</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-siteboundcredentialdata-name-1">3.2.1. 
+    <li><a href="#ref-for-dom-siteboundcredentialdata-name-1">4.2.1. 
     The PasswordCredental(HTMLFormElement) Constructor </a>
-    <li><a href="#ref-for-dom-siteboundcredentialdata-name-2">3.2.2. 
+    <li><a href="#ref-for-dom-siteboundcredentialdata-name-2">4.2.2. 
     The PasswordCredental(PasswordCredentialData) Constructor </a>
-    <li><a href="#ref-for-dom-siteboundcredentialdata-name-3">3.3.1. 
+    <li><a href="#ref-for-dom-siteboundcredentialdata-name-3">4.3.1. 
     The PasswordCredental(FederatedCredentialData) Constructor </a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-siteboundcredentialdata-iconurl">
    <b><a href="#dom-siteboundcredentialdata-iconurl">#dom-siteboundcredentialdata-iconurl</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-siteboundcredentialdata-iconurl-1">3.2.1. 
+    <li><a href="#ref-for-dom-siteboundcredentialdata-iconurl-1">4.2.1. 
     The PasswordCredental(HTMLFormElement) Constructor </a>
-    <li><a href="#ref-for-dom-siteboundcredentialdata-iconurl-2">3.2.2. 
+    <li><a href="#ref-for-dom-siteboundcredentialdata-iconurl-2">4.2.2. 
     The PasswordCredental(PasswordCredentialData) Constructor </a>
-    <li><a href="#ref-for-dom-siteboundcredentialdata-iconurl-3">3.3.1. 
+    <li><a href="#ref-for-dom-siteboundcredentialdata-iconurl-3">4.3.1. 
     The PasswordCredental(FederatedCredentialData) Constructor </a>
    </ul>
   </aside>
@@ -2635,11 +2878,11 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
    <b><a href="#dom-siteboundcredential-name">#dom-siteboundcredential-name</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-siteboundcredential-name-1">2.1. The SiteBoundCredential Interface</a>
-    <li><a href="#ref-for-dom-siteboundcredential-name-2">3.1.2. 
+    <li><a href="#ref-for-dom-siteboundcredential-name-2">4.1.2. 
     Store a SiteBoundCredential </a> <a href="#ref-for-dom-siteboundcredential-name-3">(2)</a> <a href="#ref-for-dom-siteboundcredential-name-4">(3)</a> <a href="#ref-for-dom-siteboundcredential-name-5">(4)</a> <a href="#ref-for-dom-siteboundcredential-name-6">(5)</a> <a href="#ref-for-dom-siteboundcredential-name-7">(6)</a>
-    <li><a href="#ref-for-dom-siteboundcredential-name-8">3.2.2. 
+    <li><a href="#ref-for-dom-siteboundcredential-name-8">4.2.2. 
     The PasswordCredental(PasswordCredentialData) Constructor </a>
-    <li><a href="#ref-for-dom-siteboundcredential-name-9">3.3.1. 
+    <li><a href="#ref-for-dom-siteboundcredential-name-9">4.3.1. 
     The PasswordCredental(FederatedCredentialData) Constructor </a>
    </ul>
   </aside>
@@ -2647,31 +2890,32 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
    <b><a href="#dom-siteboundcredential-iconurl">#dom-siteboundcredential-iconurl</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-siteboundcredential-iconurl-1">2.1. The SiteBoundCredential Interface</a>
-    <li><a href="#ref-for-dom-siteboundcredential-iconurl-2">3.1.2. 
+    <li><a href="#ref-for-dom-siteboundcredential-iconurl-2">4.1.2. 
     Store a SiteBoundCredential </a> <a href="#ref-for-dom-siteboundcredential-iconurl-3">(2)</a> <a href="#ref-for-dom-siteboundcredential-iconurl-4">(3)</a> <a href="#ref-for-dom-siteboundcredential-iconurl-5">(4)</a> <a href="#ref-for-dom-siteboundcredential-iconurl-6">(5)</a> <a href="#ref-for-dom-siteboundcredential-iconurl-7">(6)</a> <a href="#ref-for-dom-siteboundcredential-iconurl-8">(7)</a>
-    <li><a href="#ref-for-dom-siteboundcredential-iconurl-9">3.2.2. 
+    <li><a href="#ref-for-dom-siteboundcredential-iconurl-9">4.2.2. 
     The PasswordCredental(PasswordCredentialData) Constructor </a>
-    <li><a href="#ref-for-dom-siteboundcredential-iconurl-10">3.3.1. 
+    <li><a href="#ref-for-dom-siteboundcredential-iconurl-10">4.3.1. 
     The PasswordCredental(FederatedCredentialData) Constructor </a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-siteboundcredential-origin-slot">
    <b><a href="#dom-siteboundcredential-origin-slot">#dom-siteboundcredential-origin-slot</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-siteboundcredential-origin-slot-1">3.1.1. 
+    <li><a href="#ref-for-dom-siteboundcredential-origin-slot-1">4.1.1. 
     Request a SiteBoundCredential </a>
-    <li><a href="#ref-for-dom-siteboundcredential-origin-slot-2">3.1.2. 
+    <li><a href="#ref-for-dom-siteboundcredential-origin-slot-2">4.1.2. 
     Store a SiteBoundCredential </a> <a href="#ref-for-dom-siteboundcredential-origin-slot-3">(2)</a> <a href="#ref-for-dom-siteboundcredential-origin-slot-4">(3)</a> <a href="#ref-for-dom-siteboundcredential-origin-slot-5">(4)</a> <a href="#ref-for-dom-siteboundcredential-origin-slot-6">(5)</a> <a href="#ref-for-dom-siteboundcredential-origin-slot-7">(6)</a> <a href="#ref-for-dom-siteboundcredential-origin-slot-8">(7)</a> <a href="#ref-for-dom-siteboundcredential-origin-slot-9">(8)</a> <a href="#ref-for-dom-siteboundcredential-origin-slot-10">(9)</a>
-    <li><a href="#ref-for-dom-siteboundcredential-origin-slot-11">3.2.2. 
+    <li><a href="#ref-for-dom-siteboundcredential-origin-slot-11">4.2.2. 
     The PasswordCredental(PasswordCredentialData) Constructor </a>
-    <li><a href="#ref-for-dom-siteboundcredential-origin-slot-12">3.3.1. 
+    <li><a href="#ref-for-dom-siteboundcredential-origin-slot-12">4.3.1. 
     The PasswordCredental(FederatedCredentialData) Constructor </a>
+    <li><a href="#ref-for-dom-siteboundcredential-origin-slot-13">5.1. Cross-origin Credential Leakage</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-siteboundcredential-retrieve-slot">
    <b><a href="#dom-siteboundcredential-retrieve-slot">#dom-siteboundcredential-retrieve-slot</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-siteboundcredential-retrieve-slot-1">3.1.1. 
+    <li><a href="#ref-for-dom-siteboundcredential-retrieve-slot-1">4.1.1. 
     Request a SiteBoundCredential </a>
    </ul>
   </aside>
@@ -2692,32 +2936,37 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
     <li><a href="#ref-for-passwordcredential-10">2.1. The SiteBoundCredential Interface</a>
     <li><a href="#ref-for-passwordcredential-11">2.2. The PasswordCredential Interface</a> <a href="#ref-for-passwordcredential-12">(2)</a> <a href="#ref-for-passwordcredential-13">(3)</a> <a href="#ref-for-passwordcredential-14">(4)</a> <a href="#ref-for-passwordcredential-15">(5)</a>
     <li><a href="#ref-for-passwordcredential-16">2.3. The FederatedCredential Interface</a> <a href="#ref-for-passwordcredential-17">(2)</a>
-    <li><a href="#ref-for-passwordcredential-18">3.1.1. 
+    <li><a href="#ref-for-passwordcredential-18">3. Integration with Fetch</a> <a href="#ref-for-passwordcredential-19">(2)</a> <a href="#ref-for-passwordcredential-20">(3)</a> <a href="#ref-for-passwordcredential-21">(4)</a>
+    <li><a href="#ref-for-passwordcredential-22">3.1. Monkey Patches to Fetch</a> <a href="#ref-for-passwordcredential-23">(2)</a> <a href="#ref-for-passwordcredential-24">(3)</a> <a href="#ref-for-passwordcredential-25">(4)</a>
+    <li><a href="#ref-for-passwordcredential-26">3.2. 
+    Extract a body and Content-Type for request’s attached credential </a>
+    <li><a href="#ref-for-passwordcredential-27">4.1.1. 
     Request a SiteBoundCredential </a>
-    <li><a href="#ref-for-passwordcredential-19">3.1.2. 
-    Store a SiteBoundCredential </a> <a href="#ref-for-passwordcredential-20">(2)</a> <a href="#ref-for-passwordcredential-21">(3)</a>
-    <li><a href="#ref-for-passwordcredential-22">3.2.2. 
+    <li><a href="#ref-for-passwordcredential-28">4.1.2. 
+    Store a SiteBoundCredential </a> <a href="#ref-for-passwordcredential-29">(2)</a> <a href="#ref-for-passwordcredential-30">(3)</a>
+    <li><a href="#ref-for-passwordcredential-31">4.2.2. 
     The PasswordCredental(PasswordCredentialData) Constructor </a>
-    <li><a href="#ref-for-passwordcredential-23">3.2.3. 
+    <li><a href="#ref-for-passwordcredential-32">4.2.3. 
     CredentialRequestOptions Matching for PasswordCredential </a>
+    <li><a href="#ref-for-passwordcredential-33">5.1. Cross-origin Credential Leakage</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dictdef-passwordcredentialdata">
    <b><a href="#dictdef-passwordcredentialdata">#dictdef-passwordcredentialdata</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dictdef-passwordcredentialdata-1">2.2. The PasswordCredential Interface</a>
-    <li><a href="#ref-for-dictdef-passwordcredentialdata-2">3.2.1. 
+    <li><a href="#ref-for-dictdef-passwordcredentialdata-2">4.2.1. 
     The PasswordCredental(HTMLFormElement) Constructor </a>
-    <li><a href="#ref-for-dictdef-passwordcredentialdata-3">3.2.2. 
+    <li><a href="#ref-for-dictdef-passwordcredentialdata-3">4.2.2. 
     The PasswordCredental(PasswordCredentialData) Constructor </a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-passwordcredentialdata-password">
    <b><a href="#dom-passwordcredentialdata-password">#dom-passwordcredentialdata-password</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-passwordcredentialdata-password-1">3.2.1. 
+    <li><a href="#ref-for-dom-passwordcredentialdata-password-1">4.2.1. 
     The PasswordCredental(HTMLFormElement) Constructor </a> <a href="#ref-for-dom-passwordcredentialdata-password-2">(2)</a>
-    <li><a href="#ref-for-dom-passwordcredentialdata-password-3">3.2.2. 
+    <li><a href="#ref-for-dom-passwordcredentialdata-password-3">4.2.2. 
     The PasswordCredental(PasswordCredentialData) Constructor </a> <a href="#ref-for-dom-passwordcredentialdata-password-4">(2)</a>
    </ul>
   </aside>
@@ -2726,11 +2975,13 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
    <ul>
     <li><a href="#ref-for-dom-passwordcredential-idname-1">1.5. Layering on top of a legacy system</a>
     <li><a href="#ref-for-dom-passwordcredential-idname-2">2.2. The PasswordCredential Interface</a>
-    <li><a href="#ref-for-dom-passwordcredential-idname-3">3.1.2. 
+    <li><a href="#ref-for-dom-passwordcredential-idname-3">3.2. 
+    Extract a body and Content-Type for request’s attached credential </a> <a href="#ref-for-dom-passwordcredential-idname-4">(2)</a> <a href="#ref-for-dom-passwordcredential-idname-5">(3)</a> <a href="#ref-for-dom-passwordcredential-idname-6">(4)</a>
+    <li><a href="#ref-for-dom-passwordcredential-idname-7">4.1.2. 
     Store a SiteBoundCredential </a>
-    <li><a href="#ref-for-dom-passwordcredential-idname-4">3.2.1. 
+    <li><a href="#ref-for-dom-passwordcredential-idname-8">4.2.1. 
     The PasswordCredental(HTMLFormElement) Constructor </a>
-    <li><a href="#ref-for-dom-passwordcredential-idname-5">3.2.2. 
+    <li><a href="#ref-for-dom-passwordcredential-idname-9">4.2.2. 
     The PasswordCredental(PasswordCredentialData) Constructor </a>
    </ul>
   </aside>
@@ -2739,11 +2990,13 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
    <ul>
     <li><a href="#ref-for-dom-passwordcredential-passwordname-1">1.5. Layering on top of a legacy system</a>
     <li><a href="#ref-for-dom-passwordcredential-passwordname-2">2.2. The PasswordCredential Interface</a>
-    <li><a href="#ref-for-dom-passwordcredential-passwordname-3">3.1.2. 
+    <li><a href="#ref-for-dom-passwordcredential-passwordname-3">3.2. 
+    Extract a body and Content-Type for request’s attached credential </a> <a href="#ref-for-dom-passwordcredential-passwordname-4">(2)</a> <a href="#ref-for-dom-passwordcredential-passwordname-5">(3)</a> <a href="#ref-for-dom-passwordcredential-passwordname-6">(4)</a>
+    <li><a href="#ref-for-dom-passwordcredential-passwordname-7">4.1.2. 
     Store a SiteBoundCredential </a>
-    <li><a href="#ref-for-dom-passwordcredential-passwordname-4">3.2.1. 
+    <li><a href="#ref-for-dom-passwordcredential-passwordname-8">4.2.1. 
     The PasswordCredental(HTMLFormElement) Constructor </a>
-    <li><a href="#ref-for-dom-passwordcredential-passwordname-5">3.2.2. 
+    <li><a href="#ref-for-dom-passwordcredential-passwordname-9">4.2.2. 
     The PasswordCredental(PasswordCredentialData) Constructor </a>
    </ul>
   </aside>
@@ -2752,19 +3005,24 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
    <ul>
     <li><a href="#ref-for-dom-passwordcredential-additionaldata-1">1.5. Layering on top of a legacy system</a> <a href="#ref-for-dom-passwordcredential-additionaldata-2">(2)</a> <a href="#ref-for-dom-passwordcredential-additionaldata-3">(3)</a> <a href="#ref-for-dom-passwordcredential-additionaldata-4">(4)</a> <a href="#ref-for-dom-passwordcredential-additionaldata-5">(5)</a>
     <li><a href="#ref-for-dom-passwordcredential-additionaldata-6">2.2. The PasswordCredential Interface</a>
-    <li><a href="#ref-for-dom-passwordcredential-additionaldata-7">3.1.2. 
+    <li><a href="#ref-for-dom-passwordcredential-additionaldata-7">3.2. 
+    Extract a body and Content-Type for request’s attached credential </a>
+    <li><a href="#ref-for-dom-passwordcredential-additionaldata-8">4.1.2. 
     Store a SiteBoundCredential </a>
-    <li><a href="#ref-for-dom-passwordcredential-additionaldata-8">3.2.1. 
-    The PasswordCredental(HTMLFormElement) Constructor </a> <a href="#ref-for-dom-passwordcredential-additionaldata-9">(2)</a>
+    <li><a href="#ref-for-dom-passwordcredential-additionaldata-9">4.2.1. 
+    The PasswordCredental(HTMLFormElement) Constructor </a> <a href="#ref-for-dom-passwordcredential-additionaldata-10">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-passwordcredential-password-slot">
    <b><a href="#dom-passwordcredential-password-slot">#dom-passwordcredential-password-slot</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-passwordcredential-password-slot-1">3.1.2. 
-    Store a SiteBoundCredential </a> <a href="#ref-for-dom-passwordcredential-password-slot-2">(2)</a> <a href="#ref-for-dom-passwordcredential-password-slot-3">(3)</a> <a href="#ref-for-dom-passwordcredential-password-slot-4">(4)</a>
-    <li><a href="#ref-for-dom-passwordcredential-password-slot-5">3.2.2. 
+    <li><a href="#ref-for-dom-passwordcredential-password-slot-1">3.2. 
+    Extract a body and Content-Type for request’s attached credential </a> <a href="#ref-for-dom-passwordcredential-password-slot-2">(2)</a>
+    <li><a href="#ref-for-dom-passwordcredential-password-slot-3">4.1.2. 
+    Store a SiteBoundCredential </a> <a href="#ref-for-dom-passwordcredential-password-slot-4">(2)</a> <a href="#ref-for-dom-passwordcredential-password-slot-5">(3)</a> <a href="#ref-for-dom-passwordcredential-password-slot-6">(4)</a>
+    <li><a href="#ref-for-dom-passwordcredential-password-slot-7">4.2.2. 
     The PasswordCredental(PasswordCredentialData) Constructor </a>
+    <li><a href="#ref-for-dom-passwordcredential-password-slot-8">5.1. Cross-origin Credential Leakage</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-passwordcredential-passwordcredential">
@@ -2773,7 +3031,7 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
     <li><a href="#ref-for-dom-passwordcredential-passwordcredential-1">1.3. Post-sign-in Confirmation</a>
     <li><a href="#ref-for-dom-passwordcredential-passwordcredential-2">1.4. Change Password</a>
     <li><a href="#ref-for-dom-passwordcredential-passwordcredential-3">2.2. The PasswordCredential Interface</a>
-    <li><a href="#ref-for-dom-passwordcredential-passwordcredential-4">3.2.1. 
+    <li><a href="#ref-for-dom-passwordcredential-passwordcredential-4">4.2.1. 
     The PasswordCredental(HTMLFormElement) Constructor </a>
    </ul>
   </aside>
@@ -2781,9 +3039,9 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
    <b><a href="#dom-passwordcredential-passwordcredential-data">#dom-passwordcredential-passwordcredential-data</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-passwordcredential-passwordcredential-data-1">2.2. The PasswordCredential Interface</a>
-    <li><a href="#ref-for-dom-passwordcredential-passwordcredential-data-2">3.2.1. 
+    <li><a href="#ref-for-dom-passwordcredential-passwordcredential-data-2">4.2.1. 
     The PasswordCredental(HTMLFormElement) Constructor </a>
-    <li><a href="#ref-for-dom-passwordcredential-passwordcredential-data-3">3.2.2. 
+    <li><a href="#ref-for-dom-passwordcredential-passwordcredential-data-3">4.2.2. 
     The PasswordCredental(PasswordCredentialData) Constructor </a>
    </ul>
   </aside>
@@ -2796,20 +3054,20 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
     <li><a href="#ref-for-federatedcredential-4">2.1. The SiteBoundCredential Interface</a>
     <li><a href="#ref-for-federatedcredential-5">2.3. The FederatedCredential Interface</a> <a href="#ref-for-federatedcredential-6">(2)</a>
     <li><a href="#ref-for-federatedcredential-7">2.3.1. Identifying Providers</a>
-    <li><a href="#ref-for-federatedcredential-8">3.1.1. 
+    <li><a href="#ref-for-federatedcredential-8">4.1.1. 
     Request a SiteBoundCredential </a> <a href="#ref-for-federatedcredential-9">(2)</a>
-    <li><a href="#ref-for-federatedcredential-10">3.1.2. 
+    <li><a href="#ref-for-federatedcredential-10">4.1.2. 
     Store a SiteBoundCredential </a> <a href="#ref-for-federatedcredential-11">(2)</a> <a href="#ref-for-federatedcredential-12">(3)</a>
-    <li><a href="#ref-for-federatedcredential-13">3.3.1. 
+    <li><a href="#ref-for-federatedcredential-13">4.3.1. 
     The PasswordCredental(FederatedCredentialData) Constructor </a>
-    <li><a href="#ref-for-federatedcredential-14">4. Future Work</a>
+    <li><a href="#ref-for-federatedcredential-14">6. Future Work</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dictdef-federatedcredentialdata">
    <b><a href="#dictdef-federatedcredentialdata">#dictdef-federatedcredentialdata</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dictdef-federatedcredentialdata-1">2.3. The FederatedCredential Interface</a>
-    <li><a href="#ref-for-dictdef-federatedcredentialdata-2">3.3.1. 
+    <li><a href="#ref-for-dictdef-federatedcredentialdata-2">4.3.1. 
     The PasswordCredental(FederatedCredentialData) Constructor </a>
    </ul>
   </aside>
@@ -2817,7 +3075,7 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
    <b><a href="#dom-federatedcredentialdata-provider">#dom-federatedcredentialdata-provider</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-federatedcredentialdata-provider-1">1.3. Post-sign-in Confirmation</a>
-    <li><a href="#ref-for-dom-federatedcredentialdata-provider-2">3.3.1. 
+    <li><a href="#ref-for-dom-federatedcredentialdata-provider-2">4.3.1. 
     The PasswordCredental(FederatedCredentialData) Constructor </a> <a href="#ref-for-dom-federatedcredentialdata-provider-3">(2)</a>
    </ul>
   </aside>
@@ -2827,11 +3085,11 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
     <li><a href="#ref-for-dom-federatedcredential-provider-1">1.2. Federated Sign-in</a>
     <li><a href="#ref-for-dom-federatedcredential-provider-2">2.3. The FederatedCredential Interface</a>
     <li><a href="#ref-for-dom-federatedcredential-provider-3">2.3.1. Identifying Providers</a>
-    <li><a href="#ref-for-dom-federatedcredential-provider-4">3.1.1. 
+    <li><a href="#ref-for-dom-federatedcredential-provider-4">4.1.1. 
     Request a SiteBoundCredential </a>
-    <li><a href="#ref-for-dom-federatedcredential-provider-5">3.1.2. 
+    <li><a href="#ref-for-dom-federatedcredential-provider-5">4.1.2. 
     Store a SiteBoundCredential </a> <a href="#ref-for-dom-federatedcredential-provider-6">(2)</a> <a href="#ref-for-dom-federatedcredential-provider-7">(3)</a> <a href="#ref-for-dom-federatedcredential-provider-8">(4)</a>
-    <li><a href="#ref-for-dom-federatedcredential-provider-9">3.3.1. 
+    <li><a href="#ref-for-dom-federatedcredential-provider-9">4.3.1. 
     The PasswordCredental(FederatedCredentialData) Constructor </a>
    </ul>
   </aside>
@@ -2839,9 +3097,9 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
    <b><a href="#dom-federatedcredential-protocol">#dom-federatedcredential-protocol</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-federatedcredential-protocol-1">2.3. The FederatedCredential Interface</a>
-    <li><a href="#ref-for-dom-federatedcredential-protocol-2">3.1.1. 
+    <li><a href="#ref-for-dom-federatedcredential-protocol-2">4.1.1. 
     Request a SiteBoundCredential </a>
-    <li><a href="#ref-for-dom-federatedcredential-protocol-3">3.1.2. 
+    <li><a href="#ref-for-dom-federatedcredential-protocol-3">4.1.2. 
     Store a SiteBoundCredential </a> <a href="#ref-for-dom-federatedcredential-protocol-4">(2)</a>
    </ul>
   </aside>
@@ -2849,7 +3107,7 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
    <b><a href="#dom-federatedcredential-federatedcredential">#dom-federatedcredential-federatedcredential</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-federatedcredential-federatedcredential-1">2.3. The FederatedCredential Interface</a>
-    <li><a href="#ref-for-dom-federatedcredential-federatedcredential-2">3.3.1. 
+    <li><a href="#ref-for-dom-federatedcredential-federatedcredential-2">4.3.1. 
     The PasswordCredental(FederatedCredentialData) Constructor </a>
    </ul>
   </aside>
@@ -2865,14 +3123,14 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
    <ul>
     <li><a href="#ref-for-dom-federatedcredentialrequestoptions-providers-1">1.2. Federated Sign-in</a>
     <li><a href="#ref-for-dom-federatedcredentialrequestoptions-providers-2">2.3.1. Identifying Providers</a>
-    <li><a href="#ref-for-dom-federatedcredentialrequestoptions-providers-3">3.1.1. 
+    <li><a href="#ref-for-dom-federatedcredentialrequestoptions-providers-3">4.1.1. 
     Request a SiteBoundCredential </a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-federatedcredentialrequestoptions-protocols">
    <b><a href="#dom-federatedcredentialrequestoptions-protocols">#dom-federatedcredentialrequestoptions-protocols</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-federatedcredentialrequestoptions-protocols-1">3.1.1. 
+    <li><a href="#ref-for-dom-federatedcredentialrequestoptions-protocols-1">4.1.1. 
     Request a SiteBoundCredential </a>
    </ul>
   </aside>
@@ -2880,9 +3138,9 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
    <b><a href="#dictdef-credentialrequestoptions">#dictdef-credentialrequestoptions</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dictdef-credentialrequestoptions-1">2.4. CredentialRequestOptions Extension</a>
-    <li><a href="#ref-for-dictdef-credentialrequestoptions-2">3.1.1. 
+    <li><a href="#ref-for-dictdef-credentialrequestoptions-2">4.1.1. 
     Request a SiteBoundCredential </a>
-    <li><a href="#ref-for-dictdef-credentialrequestoptions-3">3.2.3. 
+    <li><a href="#ref-for-dictdef-credentialrequestoptions-3">4.2.3. 
     CredentialRequestOptions Matching for PasswordCredential </a>
    </ul>
   </aside>
@@ -2891,9 +3149,9 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
    <ul>
     <li><a href="#ref-for-dom-credentialrequestoptions-password-1">1.1.1. Password-based Sign-in</a>
     <li><a href="#ref-for-dom-credentialrequestoptions-password-2">1.2. Federated Sign-in</a>
-    <li><a href="#ref-for-dom-credentialrequestoptions-password-3">3.1.1. 
+    <li><a href="#ref-for-dom-credentialrequestoptions-password-3">4.1.1. 
     Request a SiteBoundCredential </a>
-    <li><a href="#ref-for-dom-credentialrequestoptions-password-4">3.2.3. 
+    <li><a href="#ref-for-dom-credentialrequestoptions-password-4">4.2.3. 
     CredentialRequestOptions Matching for PasswordCredential </a>
    </ul>
   </aside>
@@ -2901,8 +3159,29 @@ fetch("https://example.com/loginEndpoint", { credentials: credential, method: "P
    <b><a href="#dom-credentialrequestoptions-federated">#dom-credentialrequestoptions-federated</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-credentialrequestoptions-federated-1">1.2. Federated Sign-in</a>
-    <li><a href="#ref-for-dom-credentialrequestoptions-federated-2">3.1.1. 
+    <li><a href="#ref-for-dom-credentialrequestoptions-federated-2">4.1.1. 
     Request a SiteBoundCredential </a> <a href="#ref-for-dom-credentialrequestoptions-federated-3">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="request-attached-credential">
+   <b><a href="#request-attached-credential">#request-attached-credential</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-request-attached-credential-1">3.1. Monkey Patches to Fetch</a> <a href="#ref-for-request-attached-credential-2">(2)</a> <a href="#ref-for-request-attached-credential-3">(3)</a> <a href="#ref-for-request-attached-credential-4">(4)</a>
+    <li><a href="#ref-for-request-attached-credential-5">3.2. 
+    Extract a body and Content-Type for request’s attached credential </a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="typedefdef-credentialinfo">
+   <b><a href="#typedefdef-credentialinfo">#typedefdef-credentialinfo</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-typedefdef-credentialinfo-1">3.1. Monkey Patches to Fetch</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="dictdef-requestinit">
+   <b><a href="#dictdef-requestinit">#dictdef-requestinit</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dictdef-requestinit-1">3. Integration with Fetch</a>
+    <li><a href="#ref-for-dictdef-requestinit-2">3.1. Monkey Patches to Fetch</a>
    </ul>
   </aside>
 <script>/* script-dfn-panel */

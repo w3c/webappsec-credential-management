@@ -19,12 +19,14 @@ Markup Shorthands: css off, markdown on
 spec:html; type:dfn; for:/; text:origin
 spec:webappsec-credential-management-1; type:dfn; text:credentials
 spec:webappsec-credential-management-1; type:attribute; text:credentials
+spec:fetch; type:dfn; for:/; text:request
 
 <!-- These need to be exported -->
 spec:webappsec-credential-management-1; type:dfn; text:credential chooser
 spec:html; type:dfn; text:submittable element
 spec:html; type:dfn; text:form owner
 spec:html; type:dfn; text:autofill detail tokens
+spec:url; type:dfn; text:urlencoded byte serializer
 </pre>
 <pre class="anchors">
 spec: HTML; urlPrefix: https://html.spec.whatwg.org/multipage/
@@ -54,8 +56,13 @@ spec: PSL; urlPrefix: https://publicsuffix.org/list/
   type: dfn
     text: registerable domain; url: #
     text: public suffix; url: #
+spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
+  type: dfn
+    text: http-network-or-cache fetch; url: http-network-or-cache-fetch 
 
 urlPrefix: https://w3c.github.io/webappsec-credential-management/base.html
+  type: dfn
+    text: user mediation
   type: abstract-op
     text: Retrieve a list of credentials
     text: Store a credential
@@ -579,6 +586,198 @@ urlPrefix: https://w3c.github.io/webappsec-credential-management/base.html
   </pre>
 </section>
 
+<!-- Big Text: Fetch -->
+<section>
+  # Integration with Fetch # {#fetch-integration}
+  
+  In order to actually authenticate a user, {{PasswordCredential}} objects may
+  be submitted to a server for evaluation. To prevent the risk that sensitive
+  credential information will be exposed directly to a page's JavaScript (see
+  [[#security-cross-origin-leakage]]), we hide the credential information in
+  non-web-exposed slots on the {{PasswordCredential}} object, and extract them
+  during {{fetch()}} in ways that will remain opaque to anything other than the
+  remote (same-origin) server.
+
+  {{PasswordCredential}} objects may be bound to a {{Request}} by passing them
+  into the {{Request}} constructor as the "`credentials`" member of a
+  {{RequestInit}} object:
+ 
+  <pre class="example">
+    [ Given a `PasswordCredential` named 'c' ]
+    var init = {
+      method: "POST",
+      credentials: c
+    };
+    var r = new Request("https://example.com/endpoint", init);
+  </pre>
+
+  Note: The credential information will be transmitted as the request's body,
+  just as it would be for a form submission. This means that the "`method`"
+  cannot be "`GET`".
+
+  Until the request hits the network, the credential object will be hidden from
+  JavaScript. Once the user agent determines that the {{Request}} is going to
+  hit the network (that is, once Fetch hits the
+  "<a>HTTP-network-or-cache fetch</a>" algorithm), the {{PasswordCredential}}
+  will be serialized into a body and content type as defined in
+  [[#body-extraction]], and the request will proceed out to the server-side
+  authentication endpoint.
+
+  ## Monkey Patches to Fetch ## {#monkey-patching}
+
+  To accomplish the above, Fetch could be modified in the following ways:
+
+  1.  A <a>request</a> has an associated <dfn for="request">attached
+      credential</dfn> (null, or a {{PasswordCredential}}). Unless stated
+      otherwise, it is null.
+
+  2.  A <a>request</a>'s <a for="request">credentials mode</a> gains a new
+      "`password`" value, which implies the same behavior as "`include`", with
+      the additional assertion that the <a>request</a> has a non-null
+      <a for="request">attached credential</a> which will be serialized into
+      its <a for="request">body</a> when it hits the network.
+      
+  3.  The {{RequestCredentials}} enum is renamed to "`RequestCredentialsMode`,
+      and likewise updated with the new "`password`" value:
+
+      <pre class="idl">
+        enum RequestCredentialsMode { "omit", "same-origin", "include", "password" };
+      </pre>
+
+  4.  The {{RequestInit}} dictionary is updated to accept a
+      {{PasswordCredential}} as its `credentials` member:
+
+      <pre class="idl">
+        typedef (<a>PasswordCredential</a> or RequestCredentials) CredentialInfo;
+
+        partial dictionary RequestInit {
+          CredentialInfo credentials;
+        };
+      </pre>
+
+  5.  Replace step 20 of the current {{Request}} constructor with the following:
+
+      20. If |credentials| is non-null:
+
+          1.  If |credentials| is a {{PasswordCredential}}, then set |request|'s
+              <a for="request">credentials mode</a> to "`password`", and
+              |request|'s <a for="request">attached credential</a> to
+              |credentials|.
+
+              Otherwise, set |request|'s <a for="request">credentials mode</a>
+              to |credentials|.
+
+  6.  Replace step 32 of the current {{Request}} constructor with the following:
+
+      32. If |request|'s <a for="request">method</a> is `GET` or `HEAD`, then
+          throw a `TypeError` if any of the following are true:
+
+          *   <var ignore>init</var>'s `body` member is present and non-null
+          *   <var ignore>inputBody</var> is non-null
+          *   |request|'s <a for="request">attached credential</a> is non-null
+
+  7.  The <a>HTTP-network-or-cache fetch</a> algorithm is updated with the
+      following step after the existing step 2:
+
+      3.  If |httpRequest|'s <a for="request">attached credential</a> is not
+          null, run these substeps:
+
+          1.  Assert: |httpRequest|'s <a for="request">body</a> is null.
+
+          2.  Let |body| and |type| be the result of running
+              [[#body-extraction]] on |httpRequest|.
+
+          3.  If |type| is the empty string, return a <a>network error</a>.
+
+          4.  Let |httpRequest|'s <a for="request">body</a> be |body|,
+              <var ignore>Content-Type</var> be |type|, and <a for="request">redirect
+              mode</a> be "`manual`".
+
+  ISSUE(whatwg/fetch#237): These patches are combined into an outstanding
+  pull request against Fetch.
+
+  <h3 id="body-extraction" algorithm>
+    Extract a |body| and |Content-Type| for |request|'s attached credential
+  </h3>
+
+  Given a {{Request}} (|request|), this algorithm returns a {{Body}} (|body|) and
+  a string (|Content-Type|):
+
+  1.  Let |credential| be |request|'s <a>attached credential</a>.
+
+  2.  Let |body| be a new <a for="request">body</a>, and |Content-Type| be the empty string.
+
+  3.  If |credential| is a {{PasswordCredential}}, run these substeps.
+
+      1.  If |request|'s <a for="request">url</a>'s scheme is not the same as
+          |request|'s <a for="request">client</a>'s {{URL/origin}}'s scheme,
+          or |request|'s <a for="request">url</a>'s host's <a>registerable
+          domain</a> is not the same as |request|'s
+          <a for="request">client</a>'s {{URL/origin}}'s host's <a>registerable
+          domain</a>, then skip the remaining substeps.
+
+      2.  Let |data| be a copy of |credential|'s
+          {{PasswordCredential/additionalData}} attribute if it is not
+          `undefined`, and a new {{FormData}} object otherwise.
+
+      3.  Let |list| be an empty list.
+
+      4.  If |data| is a {{FormData}} object, then:
+
+          1.  Set |list| to a copy of |data|'s <a for="FormData">entries</a>.
+
+          2.  Remove all <a>entry</a> objects from |list| whose
+              <a for="entry">name</a> is either |credential|'s
+              {{PasswordCredential/idName}} or |credential|'s
+              {{PasswordCredential/passwordName}}.
+
+          3.  Let |entry| be a new <a>entry</a> whose <a for="entry">name</a>
+              is |credential|'s {{PasswordCredential/idName}} and whose
+              <a for="entry">value</a> is |credential|'s {{Credential/id}}.
+
+          4.  Append |entry| to |list|.
+
+          5.  Let |entry| be a new <a>entry</a> whose <a for="entry">name</a>
+              is |credential|'s {{PasswordCredential/passwordName}} and whose
+              <a for="entry">value</a> is |credential|'s {{[[password]]}}.
+
+          6.  Append |entry| to |list|.
+
+          7.  Push the result of running the <a>`multipart/form-data` encoding
+              algorithm</a>, with |list| as the form data set and with "`utf-8`" as
+              the explicit character encoding, to |body|'s
+              <a for="body">stream</a>.
+
+          8.  Set |Content-Type| to `multipart/form-data;boundary=`, followed by the
+              <a>`multipart/form-data` boundary string</a> generated by the
+              multipart/form-data encoding algorithm.
+
+          Otherwise |data| is a {{URLSearchParams}} object, so:
+
+          1.  Set |list| to a copy of |data|'s
+              <a for="URLSearchParams">list</a>.
+
+          2.  Remove all name-value pairs from |list| whose name is either
+              |credential|'s {{PasswordCredential/idName}} or |credential|'s
+              {{PasswordCredential/passwordName}}.
+
+          3.  Append a new name-value pair to |list| whose name is 
+              |credential|'s {{PasswordCredential/idName}} and whose value is
+              |credential|'s {{Credential/id}}.
+
+          4.  Append a new name-value pair to |list| whose name is 
+              |credential|'s {{PasswordCredential/passwordName}} and whose value
+              is |credential|'s {{[[password]]}}.
+
+          5.  Push the result of running the <a>urlencoded byte serializer</a> with |list|, to
+              |body|'s <a for="body">stream</a>.
+
+          6.  Set |Content-Type| to
+              `application/x-www-form-urlencoded;charset=UTF-8`.
+
+  4.  Return |body| and |Content-Type|. 
+</section>
+
 <section>
   # Algorithms # {#algorithms}
 
@@ -670,8 +869,8 @@ urlPrefix: https://w3c.github.io/webappsec-credential-management/base.html
             {{[[origin]]}} slot is the [=same origin=] as |credential|'s
             {{SiteBoundCredential/[[origin]]}}, then:
 
-            1.  If the user grants permission to update credentials (as discussed in
-                [[#user-mediated-storage]]), then:
+            1.  If the user grants permission to update credentials (as discussed when defining
+                [=user mediation=] in [[CREDENTIAL-MANAGEMENT-1]]), then:
 
                 1.  Set |stored|'s {{[[password]]}} slot's value to the value of |credential|'s
                     {{[[password]]}} slot.
@@ -682,8 +881,8 @@ urlPrefix: https://w3c.github.io/webappsec-credential-management/base.html
                 3.  Set |stored|'s {{SiteBoundCredential/iconURL}} to |credential|'s
                     {{SiteBoundCredential/iconURL}}.
 
-                Otherwise, if the user grants permission to store credentials (as discussed in
-                [[#user-mediated-storage]]), then:
+                Otherwise, if the user grants permission to store credentials (as discussed when
+                defining [=user mediation=] in [[CREDENTIAL-MANAGEMENT-1]]), then: 
 
                 1.  Store a {{PasswordCredential}} in the [=credential store=] with the following
                     properties:
@@ -974,19 +1173,4 @@ urlPrefix: https://w3c.github.io/webappsec-credential-management/base.html
   in the future without redesigning the API from the ground up.
 
   Baby steps.
-
-  <div class="note">
-    Groups like the
-    <a href="http://www.w3.org/Payments/IG/">Web Payments IG</a>
-    and the
-    <a href="https://www.w3.org/community/credentials/">Credentials CG</a>
-    have expressed interest in extending the API defined in this document in
-    order to address use cases beyond those outlined in [[#use-cases]]. They've
-    documented these use cases in detail in
-    <a href="http://www.w3.org/TR/web-payments-use-cases/">Web Payments Use Cases 1.0</a>
-    and
-    <a href="http://opencreds.org/specs/source/use-cases/">Credentials CG Use Cases</a>,
-    and anticipate extending the API in a separate document to solve a different
-    set of problems than WebAppSec is currently chartered to deal with.
-  </div>
 </section>
