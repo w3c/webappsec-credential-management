@@ -63,17 +63,108 @@ spec:html; type:dfn; text:form owner
 spec:html; type:dfn; text:autofill detail tokens
 spec:url; type:dfn; text:urlencoded byte serializer
 </pre>
+<pre class="biblio">
+{
+  "WEB-LOGIN": {
+    "authors": [ "Jason Denizac", "Robin Berjon", "Anne van Kesteren" ],
+    "href": "https://github.com/jden/web-login",
+    "title": "web-login"
+  }
+}
+</pre>
+
+<!--
+████ ██    ██ ████████ ████████   ███████ 
+ ██  ███   ██    ██    ██     ██ ██     ██
+ ██  ████  ██    ██    ██     ██ ██     ██
+ ██  ██ ██ ██    ██    ████████  ██     ██
+ ██  ██  ████    ██    ██   ██   ██     ██
+ ██  ██   ███    ██    ██    ██  ██     ██
+████ ██    ██    ██    ██     ██  ███████ 
+-->
 <section>
   # Introduction # {#introduction}
 
   <em>This section is not normative.</em>
 
-  ISSUE: Add an introduction.
+  Signing into websites is more difficult than it should be. The user agent is in a unique position
+  to improve the experience in a number of ways, and most modern user agents have recognized this by
+  providing some measure of  credential management natively in the browser. Users can save usernames
+  and passwords for websites, and those [=credentials=] are autofilled into sign-in forms with
+  varying degrees of success.
+
+  The <{input/autocomplete}> attribute offers a declarative mechanism by which websites can work
+  with user agents to improve the latter's ability to detect and fill sign-in forms by marking
+  specific fields as "username" or "password", and user agents implement a wide variety of detection
+  heuristics to work with websites which haven't taken the time to provide this detail in markup.
+
+  While this combination of heuristic and declarative detection works relatively well, the status
+  quo leaves some large gaps where detection is problematic. Sites with uncommon sign-in
+  mechanisms (submitting credentials via {{XMLHttpRequest}} [[XMLHTTPREQUEST]], for instance) are
+  difficult to reliably detect, as is the increasingly common case in which users wish to
+  authenticate themselves using a federated identity provider. Allowing websites to more directly
+  interact with the user agent's credential manager would allow the credential manager to be more
+  accurate on the one hand, and to assist users with federated sign-in on the other.
+
+  These use cases are explored in more detail in [[#use-cases]] and in
+  <a href="https://w3c.github.io/webappsec/usecases/credentialmanagement/">Credential Management:
+  Use Cases and Requirements</a>; this specification attempts to address many of the requirements
+  that document outlines by defining a Credential Manager API which a website can use to request
+  [=credentials=] for a user, and to ask the user agent to persist credentials when a user signs in
+  successfully.
+
+  Note: The API defined here is intentionally small and simple: it does not intend to provide
+  authentication in and of itself, but is limited to providing an interface to the existing
+  credential managers implemented by existing user agents. That functionality is valuable
+  <em>right now</em>, without significant effort on the part of either vendors or authors. There's
+  certainly quite a bit more which could be done, of course. See [[#teh-futur]] for some thoughts
+  we've punted for now, but which could be explored in future iterations of this API.
+
+  ## Use Cases ## {#use-cases}
+
+  Modern user agents generally offer users the capability to save passwords when signing into a
+  website, and likewise offer the capability to fill those passwords into sign-in forms fully- or
+  semi-automatically when users return to a website. From the perspective of a website, this
+  behavior is completely invisible: the website doesn't know that passwords have been stored, and
+  it isn't notified that passwords have been filled. This is both good and bad. On the one hand, a
+  user agent's password manager works regardless of whether or not a site cooperates, which is
+  excellent for users. On the other, the password managers' behaviors are a fragile and proprietary
+  hodgepodge of heuristics meant to detect and fill sign-in forms, password change forms, etc.
+
+  A few problems with the status quo stand out as being particularly noteworthy:
+
+  *   User agents have an incredibly difficult time helping users with
+      federated identity providers. While detecting a username/password
+      form submission is fairly straightforward, detecting sign-in via a
+      third-party is quite difficult to reliably do well. It would be nice
+      if a website could help the user agent understand the intent behind the
+      redirects associated with a typical federated sign-in action.
+
+  *   Likewise, user agents struggle to detect more esoteric sign-in
+      mechanisms than simple username/password forms. Authors increasingly
+      asynchronously sign users in via {{XMLHttpRequest}} or similar
+      mechanisms in order to improve the experience and take more control over
+      the presentation. This is good for users, but tough for user agents to
+      integrate into their password managers. It would be nice if a website
+      could help the user agent make sense of the sign-in mechanism they
+      choose to use.
+
+  *   Finally, changing passwords is less well-supported than it could be if
+      the website explicitly informed the user agent that credentials had
+      changed.
 </section>
 
-<!-- Big text: Framework -->
+<!--
+ ██████   ███████  ████████  ████████          ███    ████████  ████
+██    ██ ██     ██ ██     ██ ██               ██ ██   ██     ██  ██ 
+██       ██     ██ ██     ██ ██              ██   ██  ██     ██  ██ 
+██       ██     ██ ████████  ██████         ██     ██ ████████   ██ 
+██       ██     ██ ██   ██   ██             █████████ ██         ██ 
+██    ██ ██     ██ ██    ██  ██             ██     ██ ██         ██ 
+ ██████   ███████  ██     ██ ████████       ██     ██ ██        ████
+-->
 <section>
-  # Core API # {#framework}
+  # Core API # {#core}
 
   From a developer's perspective, a <dfn export id="concept-credential">credential</dfn> is an
   object which allows a developer to make an authentication decision for a particular action. This
@@ -82,8 +173,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
   hanging off of {{CredentialsContainer|navigator.credentials.*}} which enable developers to
   obtain them.
 
-  Each specific type of [=credential=] is represented to JavaScript as an interface which
-  [=interface/inherits=], either directly or indirectly, from the {{Credential}} interface.
+  Various types of [=credentials=] are represented to JavaScript as an interface which
+  [=interface/inherits=], either directly or indirectly, from the {{Credential}} interface. This
+  document defines two such interfaces, {{PasswordCredential}} and {{FederatedCredential}}.
 
   ## Infrastructure ## {#core-infrastructure}
 
@@ -95,8 +187,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
       This accepts a [=credential=], and inserts it into the [=credential store=].
 
   2.  <dfn for="credential store" abstract-op export>Retrieve a list of credentials</dfn>. This
-      accepts an arbitrary filter, and returns a `Sequence<Credential>` of those [=credentials=]
-      that match the filter.
+      accepts an arbitrary filter, and returns a set of [=credentials=] that match the filter.
 
   3.  <dfn for="credential store" abstract-op export>Modify a credential</dfn>. This accepts a
       [=credential=], and overwrites the state of an existing [=credential=] in the
@@ -125,7 +216,6 @@ spec:url; type:dfn; text:urlencoded byte serializer
       readonly attribute DOMString type;
     };
   </pre>
-
   <dl dfn-for="Credential">
     :   <dfn attribute>id</dfn>
     ::  The credential's identifier. The requirements for the identifier are distinct for each type
@@ -143,11 +233,26 @@ spec:url; type:dfn; text:urlencoded byte serializer
         Note: The {{[[type]]}} slot's value will be the same for all credentials implementing a
         particular interface, which means that developers can rely on `obj.type` returning a string
         that unambigiously represents the specific kind of {{Credential}} they're dealing with.
+
+    :   <dfn attribute>\[[discovery]]</dfn>
+    ::  The {{Credential}} [=interface object=] has an internal slot named `[[discovery]]`,
+        representing the mechanism by which the user agent can collect credentials of
+        a given type. Its value is either
+        "<dfn enum-value for="Credential/[[discovery]]">`credential store`</dfn>" or
+        "<dfn enum-value for="Credential/[[discovery]]">`remote`</dfn>". The former value means that
+        all available credential information is stored in the user agent's [=credential store=],
+        while the latter means that the user agent can discover credentials outside of those
+        explicitly represented in the [=credential store=] via interaction with some external device
+        or service.
   </dl>
 
   ISSUE: Talk to Tobie/Dominic about the [=interface object=] bits, here and in
   [[#algorithm-request]], etc. I'm not sure I've gotten the terminology right. [=interface prototype
   object=], maybe?
+
+  Some {{Credential}} objects are <dfn for="Credential">origin bound</dfn>: these contain an
+  internal slot named <dfn for="Credential" attribute>\[[origin]]</dfn>, which stores the [=origin=]
+  for which the {{Credential}} is valid.
 
   ### `Credential` Internal Methods ### {#credential-internal-methods}
 
@@ -165,10 +270,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
     </ul>
   </section>
 
-  <section algorithm="'select a credential' internal method">
-    <dfn for="Credential" method export>\[[Select]](options, credentials, mediation)</dfn> is called
-    with a {{CredentialRequestOptions}} object, a set of {{Credential}} objects, and either "`With
-    User Mediation`" or "`Without User Mediation`". It returns a {{Credential}} if one can be
+  <section algorithm="'discover credentials' internal method">
+    <dfn for="Credential" method export>\[[DiscoverFromExternalSource]](options)</dfn> is called
+    with a {{CredentialRequestOptions}} object. It returns a {{Credential}} if one can be
     returned given the options provided, or `null` otherwise:
 
     <ul class="algorithm">
@@ -188,6 +292,28 @@ spec:url; type:dfn; text:urlencoded byte serializer
   Unless otherwise specified, the [=interface objects=] for [=interfaces=] which [=interface/inherit=] from
   {{Credential}} will alias {{Credential}}'s implementation of these three internal methods. Since that
   implementation isn't particularly useful, derived interfaces MUST override one or the other.
+
+  ### `CredentialUserData` Mixin ### {#credentialuserdata-mixin}
+
+  Some {{Credential}} objects contain data which aims to give users a human-readable disambiguation
+  mechanism in the [=credential chooser=] by providing a friendly name and icon:
+
+  <pre class="idl">
+    [NoInterfaceObject, Exposed=Window, SecureContext]
+    interface CredentialUserData {
+      readonly attribute USVString name;
+      readonly attribute USVString iconURL;
+    };
+  </pre>
+  <dl dfn-for="CredentialUserData">
+    :   <dfn attribute>name</dfn>
+    ::  A name associated with the credential, intended as a human-understandable public name for
+        display in a [=credential chooser=].
+    :   <dfn attribute>iconURL</dfn>
+    ::  A URL pointing to an image for the credential, intended for display in a
+        [=credential chooser=]. This URL MUST be an <a><i lang="la">a priori</i> authenticated
+        URL</a>.
+  </dl>
 
   ## `navigator.credentials` ## {#framework-credential-management}
 
@@ -210,6 +336,10 @@ spec:url; type:dfn; text:urlencoded byte serializer
       Promise&lt;Credential?&gt; get(optional CredentialRequestOptions options);
       Promise&lt;Credential&gt; store(Credential credential);
       Promise&lt;void&gt; requireUserMediation();
+    };
+
+    dictionary CredentialData {
+      required USVString id;
     };
   </pre>
 
@@ -298,6 +428,27 @@ spec:url; type:dfn; text:urlencoded byte serializer
     argue about whether this is too much of a `COMEFROM` interface.
   </div>
 
+  <div algorithm="can collect locally">
+    A given {{CredentialRequestOptions}} |options| is
+    <dfn for="CredentialRequestOptions">matchable <i lang="la">a priori</i></dfn> if the following
+    steps return `true`:
+
+    <ol>
+      1.  For each |interface| in |options|' [=relevant credential interface objects=]:
+
+          1.  If |interface|'s {{Credential/[[discovery]]}} slot's value is not
+              "{{Credential/[[discovery]]/credential store}}", return `false`.
+
+      2.  Return `true`.
+    </ol>
+
+    Note: When executing {{get(options)}}, we only return credentials without [=user mediation=] if
+    the provided {{CredentialRequestOptions}} is <a>matchable <i lang="la">a priori</i></a>. If any
+    credential types are requested that could require discovery from some external service (OAuth
+    tokens, security key authenticators, etc.), then [=user mediation=] will be required in order
+    to guide the discovery process (by choosing a federated identity provider, BTLE device, etc).
+  </div>
+
   ## Algorithms ## {#algorithms}
 
   <h4 id="algorithm-request" algorithm>Request a `Credential`</h4>
@@ -326,30 +477,33 @@ spec:url; type:dfn; text:urlencoded byte serializer
         1.  Let |credentials| be the result of <a abstract-op lt="collect local">collecting
             `Credential`s from the credential store</a>, given |options|.
 
-        5.  If |credentials|' <a for="set">size</a> is 1, and |settings|'
-            [=environment settings object/origin=] does not
-            [=origin/requires user mediation|require user mediation=], resolve |p| with
-            |credentials|[0].
+        2.  If all of the following statements are true, resolve |p| with |credentials|[0] and
+            skip the remaining steps:
 
-        6.  If |credentials|' <a for="set">size</a> is greater than 1, and |options|'
-            {{CredentialRequestOptions/unmediated}} is `true`, r
+            1.  |credentials|' [=set/size=] is 1
 
-        5.  Let |p| be a new {{Promise}}.
-        
-        6.  Return |p|, and execute the following steps asynchronously:
+            2.  |settings|' [=environment settings object/origin=] does not
+                [=origin/requires user mediation|require user mediation=]
 
-            1.  If 
+            3.  |options| is <a>matchable <i lang="la">a priori</i></a>.
 
-            1.  Let |c| be the result of executing |retriever| on |options| and "`Without User
-                Mediation`".
+            ISSUE: This might be the wrong model. It would be nice to support a site that wished
+            to accept either username/passwords or webauthn-style credentials without forcing
+            a chooser for those users who use the former, and who wish to remain signed in.
 
-            2.  If |c| is not `null`, resolve |p| with |c|, and skip the remaining steps.
+        3.  If |options|' {{CredentialRequestOptions/unmediated}} is `true`, resolve |p| with `null`
+            and skip the remaining steps.
 
-            3.  If |options|' {{CredentialRequestOptions/unmediated}} is `true`, resolve |p| with `null`
-                and skip the remaining steps.
+        4.  Let |choice| be the result of <a abstract-op lt="ask to choose">asking the user to
+            choose a `Credential`</a>, given |options| and |credentials|.
 
-            4. Resolve |p| with the result of executing |retriever| on |options| and "`With User
-               Mediation`".
+        5.  If |choice| is `null` or a {{Credential}}, resolve |p| with |choice| and skip the
+            remaining steps.
+
+        6.  Assert: |choice| is an [=interface object=].
+
+        7.  Resolve |p| with the result of executing |choice|'s
+            {{[[DiscoverFromExternalSource]](options)}}, given |options|.
   </ol>
 
   <h4 id="algorithm-collect-known" algorithm>Collect `Credential`s from the credential store</h4>
@@ -365,7 +519,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     2.  For each |interface| in |options|' <a>relevant credential interface objects</a>:
 
         1.  Let |credentials| be the result of executing |interface|'s
-            {{[[CollectFromCredentialStore]](options)}} internal method on |options|.
+            {{Credential/[[CollectFromCredentialStore]](options)}} internal method on |options|.
 
         2.  For each |c| in |credentials|:
        
@@ -395,7 +549,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
             [=active document=] in a [=top-level browsing context=].
 
     4.  Return a {{Promise}} which resolves with the result of executing |credential|'s
-        [=interface object=]'s {{[[Store]](credential)}} internal method on |credential|.
+        [=interface object=]'s {{Credential/[[Store]](credential)}} internal method on |credential|.
   </ul>
 
   <h4 id="algorithm-require-mediation" algorithm>Require User Mediation</h4>
@@ -417,6 +571,15 @@ spec:url; type:dfn; text:urlencoded byte serializer
   </ul>
 </section>
 
+<!--
+████████     ███     ██████   ██████  ██      ██  ███████  ████████  ████████   ██████ 
+██     ██   ██ ██   ██    ██ ██    ██ ██  ██  ██ ██     ██ ██     ██ ██     ██ ██    ██
+██     ██  ██   ██  ██       ██       ██  ██  ██ ██     ██ ██     ██ ██     ██ ██      
+████████  ██     ██  ██████   ██████  ██  ██  ██ ██     ██ ████████  ██     ██  ██████ 
+██        █████████       ██       ██ ██  ██  ██ ██     ██ ██   ██   ██     ██       ██
+██        ██     ██ ██    ██ ██    ██ ██  ██  ██ ██     ██ ██    ██  ██     ██ ██    ██
+██        ██     ██  ██████   ██████   ███  ███   ███████  ██     ██ ████████   ██████ 
+-->
 <section>
   # Password Credentials # {#passwords}
 
@@ -580,10 +743,17 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
       attribute CredentialBodyType? additionalData;
     };
+    PasswordCredential implements CredentialUserData;
 
     [Exposed=Window, SecureContext]
-    dictionary PasswordCredentialData : SiteBoundCredentialData {
+    dictionary PasswordCredentialData : CredentialData {
+      USVString name;
+      USVString iconURL;
       required USVString password;
+    };
+
+    partial dictionary CredentialRequestOptions {
+      boolean password = false;
     };
   </pre>
   <dl dfn-for="PasswordCredential">
@@ -606,31 +776,110 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     :   {{Credential/[[type]]}}
     ::  The {{PasswordCredential}} [=interface object=] has an internal slot named `[[type]]` whose
-        value is "`password`".
+        value is "<dfn const>`password`</dfn>".
+
+    :   {{Credential/[[discovery]]}}
+    ::  The {{PasswordCredential}} [=interface object=] has an internal slot named `[[discovery]]`
+        whose value is "{{Credential/[[discovery]]/credential store}}".
 
     :   <dfn attribute>\[[password]]</dfn>
     ::  Each {{PasswordCredential}} object has an internal slot named `[[password]]` which stores
         the credential's password. This property is not directly exposed to the web, but used to
         construct a request body during {{fetch()}}.
 
-    :   <dfn constructor>PasswordCredential(form)</dfn>
+    :   {{PasswordCredential(form)}}
     ::  This constructor is defined in [[#construct-passwordcredential-form]].
 
-    :   <dfn constructor>PasswordCredential(data)</dfn>
+    :   {{PasswordCredential(data)}}
     ::  This constructor is defined in [[#construct-passwordcredential-data]].
   </dl>
 
-  {{PasswordCredential}}'s [=interface object=] contains two internal methods:
-  `[[Retrieve]](options, mediation)` and `[[Store]](credential)`.
+  {{PasswordCredential}} objects are [=Credential/origin bound=].
+
+  {{PasswordCredential}}'s [=interface object=] inherits {{Credential}}'s implementation of
+  {{Credential/[[DiscoverFromExternalSource]](options)}}, and defines its own implementation of
+  {{PasswordCredential/[[CollectFromCredentialStore]](options)}} and
+  {{PasswordCredential/[[Store]](credential)}}.
 
   ## Algorithms ## {#passwordcredential-algorithms}
+
+  <h4 algorithm id="collectfromcredentialstore-passwordcredential">
+    `PasswordCredential`'s `[[CollectFromCredentialStore]](options)`
+  </h4>
+
+  <dfn for="PasswordCredential" method>\[[CollectFromCredentialStore]](options)</dfn> is called
+  with a {{CredentialRequestOptions}} (|options|), and returns a set of {{Credential}} objects from
+  the [=credential store=]. If no matching {{Credential}} objects are available, the returned set
+  will be empty.
+
+  <ol class="algorithm">
+    1.  Assert: |options|["password"] [=map/exists=].
+
+    2.  If |options|["password"] is not `true`, return the empty set..
+
+    3.  Return the result of <a abstract-op lt="Retrieve a list of credentials">retrieving</a>
+        credentials from the [=credential store=] that match the following filter:
+
+        1.  The credential is a {{PasswordCredential}}
+        2.  The credential's {{Credential/[[origin]]}} is the [=same origin=] as the
+            [=current settings object=]'s [=environment settings object/origin=].
+  </ol>
+
+  <h4 algorithm id="store-passwordcredential">
+    `PasswordCredential`'s `[[Store]](credential)`
+  </h4>
+
+  <dfn for="PasswordCredential" method>\[[Store]](credential)</dfn> is called with a
+  {{PasswordCredential}} (|credential|), and returns once |credential| is persisted to the
+  [=credential store=].
+
+  <ol class="algorithm">
+    1.  If the user agent's [=credential store=] contains a {{PasswordCredential}} (|stored|)
+        whose {{Credential/id}} attribute is |credential|'s {{Credential/id}} and whose
+        {{[[origin]]}} slot is the [=same origin=] as |credential|'s {{Credential/[[origin]]}},
+        then:
+
+        1.  If the user grants permission to update credentials (as discussed when defining
+            [=user mediation=]), then:
+
+            1.  Set |stored|'s {{[[password]]}} slot's value to the value of |credential|'s
+                {{[[password]]}} slot.
+
+            2.  Set |stored|'s {{CredentialUserData/name}} to |credential|'s
+                {{CredentialUserData/name}}.
+
+            3.  Set |stored|'s {{CredentialUserData/iconURL}} to |credential|'s
+                {{CredentialUserData/iconURL}}.
+
+        Otherwise, if the user grants permission to store credentials (as discussed when
+        defining [=user mediation=], then: 
+
+        1.  Store a {{PasswordCredential}} in the [=credential store=] with the following
+            properties:
+            
+            :   {{Credential/id}}
+            ::  |credential|'s {{Credential/id}}
+            :   {{CredentialUserData/name}},
+            ::  |credential|'s {{CredentialUserData/name}}
+            :   {{CredentialUserData/iconURL}}
+            ::  |credential|'s {{CredentialUserData/iconURL}}
+            :   {{Credential/[[origin]]}}
+            ::  |credential|'s {{Credential/[[origin]]}}
+            :   {{PasswordCredential/[[password]]}}
+            ::  |credential|'s {{PasswordCredential/[[password]]}}
+
+            Note: Ancillary properties like {{PasswordCredential/idName}},
+            {{PasswordCredential/passwordName}}, and {{PasswordCredential/additionalData}}
+            are _not_ stored in the [=credential store=]. They are used for a single
+            authentication event, and are expected to be populated at request time.
+  </ol>
 
   <h4 algorithm id="construct-passwordcredential-form">
     The `PasswordCredental(HTMLFormElement)` Constructor
   </h4>
 
-  The {{PasswordCredential(form)}} constructor, when invoked with an {{HTMLFormElement}} (|form|),
-  must run these steps.
+  The <dfn for="PasswordCredential" constructor>`PasswordCredential(form)`</dfn> constructor, when
+  invoked with an {{HTMLFormElement}} (|form|), must run these steps.
   
   Note: [[#examples-post-signin]] and [[#examples-change-password]] provide examples of the intended
   usage.
@@ -683,13 +932,13 @@ spec:url; type:dfn; text:urlencoded byte serializer
                         `current-password` fields.
 
                     :   "<a attr-value>`photo`</a>"
-                    ::  Set |data|'s {{SiteBoundCredentialData/iconURL}} member's
+                    ::  Set |data|'s {{CredentialUserData/iconURL}} member's
                         value to the result of executing |formData|'s
                         {{FormData/get()}} method on |name|.
 
                     :   "<a attr-value>`name`</a>"
                     :   "<a attr-value>`nickname`</a>"
-                    ::  Set |data|'s {{SiteBoundCredentialData/name}} member's
+                    ::  Set |data|'s {{CredentialUserData/name}} member's
                         value to the result of executing |formData|'s
                         {{FormData/get()}} method on |name|.
 
@@ -729,8 +978,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
     The `PasswordCredental(PasswordCredentialData)` Constructor
   </h4>
 
-  The {{PasswordCredential(data)}} constructor, when invoked with a {{PasswordCredentialData}}
-  (|data|), must run the following steps:
+  The <dfn for="PasswordCredential" constructor>PasswordCredential(data)</dfn> constructor, when
+  invoked with a {{PasswordCredentialData}} (|data|), must run the following steps:
 
   <ol class="algorithm">
     1.  Let |c| be a new {{PasswordCredential}} object.
@@ -748,13 +997,13 @@ spec:url; type:dfn; text:urlencoded byte serializer
         ::  |data|'s {{CredentialData/id}} member's value
         :   {{PasswordCredential/idName}}
         ::  "`username`"
-        :   {{SiteBoundCredential/iconURL}}
-        ::  |data|'s {{SiteBoundCredentialData/iconURL}} member's value
-        :   {{SiteBoundCredential/name}}
-        ::  |data|'s {{SiteBoundCredentialData/name}} member's value
+        :   {{CredentialUserData/iconURL}}
+        ::  |data|'s {{PasswordCredentialData/iconURL}} member's value
+        :   {{CredentialUserData/name}}
+        ::  |data|'s {{PasswordCredentialData/name}} member's value
         :   {{PasswordCredential/passwordName}}
         ::  "`password`"
-        :   {{SiteBoundCredential/[[origin]]}}
+        :   {{Credential/[[origin]]}}
         ::  The [=environment settings object/origin=] of the [=current settings object=].
 
     4.  Return |c|.
@@ -878,8 +1127,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
               <var ignore>Content-Type</var> be |type|, and <a for="request">redirect
               mode</a> be "`manual`".
 
-  ISSUE(whatwg/fetch#237): These patches are combined into an outstanding
-  pull request against Fetch.
+  ISSUE(whatwg/fetch#237): These patches are combined into a pull request against Fetch.
 
   <h4 id="body-extraction" algorithm>
     Extract a |body| and |Content-Type| for |request|'s attached credential
@@ -980,8 +1228,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
       secure transport), but the inverse would be dangerous.
 
   2.  MAY use the Public Suffix List [[!PSL]] to determine the effective scope of a credential by
-      comparing the [=registerable domain=] of the credential's {{[[origin]]}} with the origin in
-      which {{CredentialsContainer/get()}} is called. That is: credentials saved on
+      comparing the [=registerable domain=] of the credential's {{Credential/[[origin]]}} with the
+      origin in which {{CredentialsContainer/get()}} is called. That is: credentials saved on
       `https://admin.example.com/` and `https://example.com/` MAY be offered to users when
       {{CredentialsContainer/get()}} is called from `https://www.example.com/`, and vice versa.
 
@@ -993,9 +1241,211 @@ spec:url; type:dfn; text:urlencoded byte serializer
   {{PasswordCredential}}s further mitigate the risk of data leakage by never exposing the
   {{[[password]]}} slot directly to a page's JavaScript, but only allowing its submission to a
   same-origin server-side endpoint via {{fetch()}}.
+
+  ### Same-origin Leakage ### {#passwords-same-origin-leakage}
+
+  Cross-site scripting attacks could make it possible to exploit {{PasswordCredential}}'s
+  integration with {{fetch()}} in order to leak credential information via a vulnerable
+  same-origin endpoint. To mitigate this kind of risk, authors SHOULD set a reasonable Content
+  Security Policy which restricts the kinds of content which can execute in their sites' context
+  [[CSP]]. Moreover, authors should ensure that both <a>`script-src`</a> and <a>`object-src`</a>
+  directives are set in any policy they specify in order to ensure that only trusted script is
+  executed on a page with access to a user's credentials.
 </section>
 
-<!-- Big text: Mediation -->
+<!--
+████████ ████████ ████████  ████████ ████████     ███    ████████ ████  ███████  ██    ██  ██████ 
+██       ██       ██     ██ ██       ██     ██   ██ ██      ██     ██  ██     ██ ███   ██ ██    ██
+██       ██       ██     ██ ██       ██     ██  ██   ██     ██     ██  ██     ██ ████  ██ ██      
+██████   ██████   ██     ██ ██████   ████████  ██     ██    ██     ██  ██     ██ ██ ██ ██  ██████ 
+██       ██       ██     ██ ██       ██   ██   █████████    ██     ██  ██     ██ ██  ████       ██
+██       ██       ██     ██ ██       ██    ██  ██     ██    ██     ██  ██     ██ ██   ███ ██    ██
+██       ████████ ████████  ████████ ██     ██ ██     ██    ██    ████  ███████  ██    ██  ██████ 
+-->
+<section>
+  # Federated Credentials # {#federated}
+
+  ## The `FederatedCredential` Interface ## {#federatedcredential-interface}
+
+  <pre class="idl">
+    [Constructor(FederatedCredentialData data),
+     Exposed=Window,
+     SecureContext]
+    interface FederatedCredential : Credential {
+      readonly attribute USVString provider;
+      readonly attribute DOMString? protocol;
+    };
+    FederatedCredential implements CredentialUserData;
+
+    [Exposed=Window, SecureContext]
+    dictionary FederatedCredentialData : CredentialData {
+      USVString name;
+      USVString iconURL;
+      required USVString provider;
+      DOMString protocol;
+    };
+
+    dictionary FederatedCredentialRequestOptions {
+      sequence&lt;USVString&gt; providers;
+      sequence&lt;DOMString&gt; protocols;
+    };
+
+    partial dictionary CredentialRequestOptions {
+      FederatedCredentialRequestOptions? federated;
+    };
+  </pre>
+  <dl dfn-for="FederatedCredential">
+    :   <dfn attribute>provider</dfn>
+    ::  The credential's federated identity provider. See [[#provider-identification]] for
+        details regarding valid formats.
+
+    :   <dfn attribute>protocol</dfn>
+    ::  The credential's federated identity provider's protocol (e.g. "`openidconnect`"). If the
+        value is `null`, then the protocol can be inferred from the
+        {{FederatedCredential/provider}}.
+
+    :   {{Credential/[[type]]}}
+    ::  The {{FederatedCredential}} [=interface object=] has an internal slot named `[[type]]` whose
+        value is "<dfn const>`federated`</dfn>".
+
+    :   {{Credential/[[discovery]]}}
+    ::  The {{FederatedCredential}} [=interface object=] has an internal slot named `[[discovery]]`
+        whose value is "{{Credential/[[discovery]]/credential store}}".
+
+    :   {{FederatedCredential(data)}}
+    ::  This constructor is defined in [[#construct-passwordcredential-data]].
+  </dl>
+
+  {{FederatedCredential}} objects are [=Credential/origin bound=].
+
+  {{FederatedCredential}}'s [=interface object=] inherits {{Credential}}'s implementation of
+  {{Credential/[[DiscoverFromExternalSource]](options)}}, and defines its own implementation of
+  {{FederatedCredential/[[CollectFromCredentialStore]](options)}} and
+  {{FederatedCredential/[[Store]](credential)}}.
+
+  Note: If, in the future, we teach the user agent to obtain authentication tokens on a user's
+  behalf, we could do so by building an implementation of `[[DiscoverFromExternalSource]](options)`.
+
+  ### Identifying Providers ### {#provider-identification}
+
+  Every site should use the same identifier when referring to a specific federated identity
+  provider. For example,
+  <a href="https://developers.facebook.com/docs/facebook-login/v2.0">Facebook Login</a>
+  shouldn't be referred to as "Facebook" and "Facebook Login" and "FB" and "FBL" and "Facebook.com"
+  and so on. It should have a canonical identifier which everyone can make use of, as consistent
+  identification makes it possible for user agents to be helpful.
+
+  For consistency, federations passed into the APIs defined in this document (e.g.
+  {{FederatedCredentialRequestOptions}}'s {{FederatedCredentialRequestOptions/providers}} array, or
+  {{FederatedCredential}}'s {{FederatedCredential/provider}} property) MUST be identified by the
+  <a lt="ASCII serialization of an origin">ASCII serialization</a> of the origin the provider uses
+  for sign in. That is, Facebook would be represented by `https://www.facebook.com` and Google by
+  `https://accounts.google.com`.
+
+  This serialization of an [=origin=] does _not_ include a trailing U+002F SOLIDUS ("`/`"), but
+  user agents SHOULD accept them silently: `https://accounts.google.com/` is clearly
+  intended to be the same as `https://accounts.google.com`.
+
+  ## Algorithms ## {#federatedcredential-algorithms}
+
+  <h4 algorithm id="collectfromcredentialstore-federatedcredential">
+    `FederatedCredential`'s `[[CollectFromCredentialStore]](options)`
+  </h4>
+
+  <dfn for="FederatedCredential" method>\[[CollectFromCredentialStore]](options)</dfn> is called
+  with a {{CredentialRequestOptions}} (|options|), and returns a set of {{Credential}} objects from
+  the [=credential store=]. If no matching {{Credential}} objects are available, the returned set
+  will be empty.
+
+  <ol class="algorithm">
+    1.  Assert: |options|["{{CredentialRequestOptions/federated}}"] [=map/exists=].
+
+    2.  Return the result of <a abstract-op lt="Retrieve a list of credentials">retrieving</a>
+        credentials from the [=credential store=] that match the following filter:
+
+        1.  The credential is a {{FederatedCredential}}
+        2.  The credential's {{Credential/[[origin]]}} is the [=same origin=] as the
+            [=current settings object=]'s [=environment settings object/origin=].
+        3.  If |options|["{{CredentialRequestOptions/federated}}"]["{{FederatedCredentialRequestOptions/providers}}"]
+            [=map/exists=], its value [=list/contains=] the credentials's {{FederatedCredential/provider}}.
+        4.  If |options|["{{CredentialRequestOptions/federated}}"]["{{FederatedCredentialRequestOptions/protocols}}"]
+            [=map/exists=], its value [=list/contains=] the credentials's {{FederatedCredential/protocol}}.
+  </ol>
+
+  <h4 algorithm id="store-federatedcredential">
+    `FederatedCredential`'s `[[Store]](credential)`
+  </h4>
+
+  <dfn for="FederatedCredential" method>\[[Store]](credential)</dfn> is called with a
+  {{FederatedCredential}} (|credential|), and returns once |credential| is persisted to the
+  [=credential store=].
+
+  <ol class="algorithm">
+    1.  If the user agent's [=credential store=] contains a {{FederatedCredential}} whose
+        {{Credential/id}} attribute is |credential|'s {{Credential/id}} and whose {{[[origin]]}}
+        slot is the [=same origin=] as |credential|'s {{Credential/[[origin]]}}, and
+        whose {{FederatedCredential/provider}} is |credential|'s
+        {{FederatedCredential/provider}}, then return.
+
+    2.  Store a {{FederatedCredential}} in the [=credential store=] with the following
+        properties:
+        
+        :   {{Credential/id}}
+        ::  |credential|'s {{Credential/id}}
+        :   {{CredentialUserData/name}},
+        ::  |credential|'s {{CredentialUserData/name}}
+        :   {{CredentialUserData/iconURL}}
+        ::  |credential|'s {{CredentialUserData/iconURL}}
+        :   {{Credential/[[origin]]}}
+        ::  |credential|'s {{Credential/[[origin]]}}
+        :   {{FederatedCredential/provider}}
+        ::  |credential|'s {{FederatedCredential/provider}}
+        :   {{FederatedCredential/protocol}}
+        ::  |credential|'s {{FederatedCredential/protocol}}
+  </ol>
+
+  <h4 algorithm id="construct-federatedcredential-data">
+    The `PasswordCredental(FederatedCredentialData)` Constructor
+  </h4>
+
+  The <dfn for="FederatedCredential" constructor>`FederatedCredential(data)`</dfn> constructor, when
+  invoked with a {{FederatedCredentialData}} (|data|), must run the following steps:
+
+  <ol class="algorithm">
+    1.  Let |c| be a new {{FederatedCredential}} object.
+    
+    2.  If any of the following are the empty string, <a>throw</a> a `TypeError` exception:
+
+        *   |data|'s {{CredentialData/id}} member's value
+        *   |data|'s {{FederatedCredentialData/provider}} member's value
+
+    3.  Set |c|'s properties as follows:
+    
+        :   {{Credential/id}}
+        ::  |data|'s {{CredentialData/id}} member's value
+        :   {{FederatedCredential/provider}}
+        ::  |data|'s {{FederatedCredentialData/provider}} member's value
+        :   {{CredentialUserData/iconURL}}
+        ::  |data|'s {{CredentialUserData/iconURL}} member's value
+        :   {{CredentialUserData/name}}
+        ::  |data|'s {{CredentialUserData/name}} member's value
+        :   {{Credential/[[origin]]}}
+        ::  The [=environment settings object/origin=] of the [=current settings object=].
+
+    4.  Return |c|.
+  </ol>
+
+</section>
+
+<!--
+██     ██ ████████ ████████  ████    ███    ████████ ████  ███████  ██    ██
+███   ███ ██       ██     ██  ██    ██ ██      ██     ██  ██     ██ ███   ██
+████ ████ ██       ██     ██  ██   ██   ██     ██     ██  ██     ██ ████  ██
+██ ███ ██ ██████   ██     ██  ██  ██     ██    ██     ██  ██     ██ ██ ██ ██
+██     ██ ██       ██     ██  ██  █████████    ██     ██  ██     ██ ██  ████
+██     ██ ██       ██     ██  ██  ██     ██    ██     ██  ██     ██ ██   ███
+██     ██ ████████ ████████  ████ ██     ██    ██    ████  ███████  ██    ██
+-->
 <section>
   # User Mediation # {#user-mediation}
 
@@ -1085,14 +1535,43 @@ spec:url; type:dfn; text:urlencoded byte serializer
   The chooser interface SHOULD include all {{Credential}} objects associated with the origin that
   requested credentials.
 
-  <em>The following image is an exceptionally non-normative mock:</em>
-
-  <img src="./mock-chooser.png" alt="A mockup of what a chooser might look like.">
-
   User agents MAY internally associate information with each {{Credential}} object beyond the
   attributes specified in this document in order to enhance the utility of such a chooser. For
   example, favicons could help disambiguate identity providers, etc. Any additional information
   stored MUST not be exposed directly to the web.
+
+  The chooser's behavior is not defined here: user agents are encouraged to experiment with UI
+  treatments that educate users about their authentication options, and guide them through the
+  process of choosing a credential to present. That said, the interface to the chooser is as
+  follows:
+
+  <section algorithm="ask the user to choose">
+    The user agent can <dfn export abstract-op local-lt="ask to choose">ask the user to choose a
+    `Credential`</dfn>, given a {{CredentialRequestOptions}} (|options|), and a set of
+    {{Credential}} objects from the [=credential store=] (|locally discovered credentials|).
+
+    This algorithm returns either `null` if the user chose not to share a credential with the site,
+    a {{Credential}} object if the user chose a specific credential, or a {{Credential}} [=interface
+    object=] if the user chose a type of credential.
+
+    <div class="note">
+      It seems reasonable for the chooser interface to display the list of |locally discovered
+      credentials| to the user, perhaps something like this exceptionally non-normative mock:
+  
+      <img src="./mock-chooser.png" alt="A mockup of what a chooser might look like.">
+
+      If the |options| provided is not <a>matchable <i lang="la">a priori</i></a>, then it might
+      also make sense for the chooser interface to list the [=relevant credential interface
+      objects=] for |options| that aren't covered by the list of explicit credentials. If, for
+      instance, a site accepts webauthn-style authenticators, then "Security Key" might show up
+      in the chooser list with an appropriate icon.
+
+      Also, note that in some cases the user agent may skip the chooser entirely. For example, if
+      the only [=relevant credential interface objects=] is one that itself requires user
+      interaction, the user agent may return that interface directly, and rely on its internal
+      mediation flow for user consent.
+    </div>
+  </section>
 </section>
 
 <!--
@@ -1209,6 +1688,15 @@ spec:url; type:dfn; text:urlencoded byte serializer
   keeping it around.
 </section>
 
+<!--
+████ ██     ██ ████████  ██       ████████ ██     ██ ████████ ██    ██ ████████    ███    ████████ ████  ███████  ██    ██
+ ██  ███   ███ ██     ██ ██       ██       ███   ███ ██       ███   ██    ██      ██ ██      ██     ██  ██     ██ ███   ██
+ ██  ████ ████ ██     ██ ██       ██       ████ ████ ██       ████  ██    ██     ██   ██     ██     ██  ██     ██ ████  ██
+ ██  ██ ███ ██ ████████  ██       ██████   ██ ███ ██ ██████   ██ ██ ██    ██    ██     ██    ██     ██  ██     ██ ██ ██ ██
+ ██  ██     ██ ██        ██       ██       ██     ██ ██       ██  ████    ██    █████████    ██     ██  ██     ██ ██  ████
+ ██  ██     ██ ██        ██       ██       ██     ██ ██       ██   ███    ██    ██     ██    ██     ██  ██     ██ ██   ███
+████ ██     ██ ██        ████████ ████████ ██     ██ ████████ ██    ██    ██    ██     ██    ██    ████  ███████  ██    ██
+-->
 <section>
   # Implementation Considerations # {#implementation}
 
@@ -1238,22 +1726,24 @@ spec:url; type:dfn; text:urlencoded byte serializer
         </pre>
       </div>
 
-  2.  Define {{[[Retrieve]](options, mediation)}} and {{[[Store]](credential)}} internal
-      methods on `ExampleCredential`'s [=interface object=]:
+  2.  Define appropriate {{Credential/[[CollectFromCredentialStore]](options)}},
+      {{Credential/[[DiscoverFromExternalSource]](options)}}, and
+      {{Credential/[[Store]](credential)}} methods on `ExampleCredential`'s
+      [=interface object=]:
 
       <div class="example">
-        `ExampleCredential`'s `[[Retrieve]](options, mediation)` internal method is called
-        with a CredentialRequestOptions object (`options`), and either "`With User Mediation`" or
-        "`Without User Mediation`". It returns a `Credential` if one can be retrieved from the
-        credential store, or `null` otherwise:
+        `ExampleCredential`'s `[[CollectFromCredentialStore]](options)` internal method is called
+        with a CredentialRequestOptions object (`options`), and returns a set of {{Credential}}
+        objects that match the options provided. If no matching {{Credential}} objects are
+        available, the returned set will be empty.
 
-        1.  Return a new `Promise` `p`, and execute the remaining steps asynchronously.
+        1.  Assert: `options`[`example`] exists.
 
-        2.  Let `c` be a new `ExampleCredential` with its properties set as follows:
-        
-            * ...
+        2.  If `options`[`example`] is not truthy, return the empty set.
 
-        3.  Resolve `p` with `c`.
+        3.  For each <i>credential</i> in the [=credential store=]:
+
+            1.  ...
       </div>
 
   3.  Define the value of the `ExampleCredential` [=interface object=]'s {{[[type]]}} slot:
@@ -1261,6 +1751,13 @@ spec:url; type:dfn; text:urlencoded byte serializer
       <div class="example">
         The `ExampleCredential` [=interface object=] has an internal slot named `[[type]]` whose
         value is the string "`example`".
+      </div>
+
+  4.  Define the value of the `ExampleCredential` [=interface object=]'s {{[[discovery]]}} slot:
+
+      <div class="example">
+        The `ExampleCredential` [=interface object=] has an internal slot named `[[type]]` whose
+        value is "{{Credential/[[discovery]]/credential store}}".
       </div>
 
   4.  Extend {{CredentialRequestOptions}} with the options the new credential type needs to respond
@@ -1298,3 +1795,43 @@ spec:url; type:dfn; text:urlencoded byte serializer
   simply by allowing extensions to overwrite the {{CredentialsContainer/get()}}
   and {{CredentialsContainer/store()}} endpoints for their own purposes.
 </section>
+
+<!--
+████████ ████████ ██     ██       ████████ ██     ██ ████████ ██     ██ ████████  ████
+   ██    ██       ██     ██       ██       ██     ██    ██    ██     ██ ██     ██ ████
+   ██    ██       ██     ██       ██       ██     ██    ██    ██     ██ ██     ██ ████
+   ██    ██████   █████████       ██████   ██     ██    ██    ██     ██ ████████   ██ 
+   ██    ██       ██     ██       ██       ██     ██    ██    ██     ██ ██   ██       
+   ██    ██       ██     ██       ██       ██     ██    ██    ██     ██ ██    ██  ████
+   ██    ████████ ██     ██       ██        ███████     ██     ███████  ██     ██ ████
+-->
+<section>
+  # Future Work # {#teh-futur}
+
+  <em>This section is non-normative.</em>
+
+  The API defined here does the bare minimum to expose user agent's credential managers to the web,
+  and allows the web to help those credential managers understand when federated identity providers
+  are in use. The next logical step will be along the lines sketched in documents like [[WEB-LOGIN]]
+  (and, to some extent, Mozilla's BrowserID [[BROWSERID]]).
+
+  The user agent is in the unique position of being able to effectively mediate the relationship
+  between users, identity providers, and websites. If the user agent can remove some of the risk and
+  confusion associated with the typical authentication flows, users will be in a significantly
+  better position than today.
+
+  A natural way to expose this information might be to extend the {{FederatedCredential}} interface
+  with properties like authentication tokens, and possibly to add some form of manifest format with
+  properties that declare the authentication type which the provider supports.
+
+  The API described here is designed to be extensible enough to support use cases that require user
+  interaction, perhaps with websites other than the one which requested credentials. We hope that
+  the Promise-based system we've settled on is extensible enough to support these kinds of
+  asynchronous flows which could require some level of interaction between multiple browsing
+  contexts (e.g. mediated activity on <code>idp.com</code> might resolve a Promise handed back to
+  <code>rp.com</code>) or between devices and user agents (e.g. [[WEBAUTHN]]) in the future without
+  redesigning the API from the ground up.
+
+  Baby steps.
+</section>
+
