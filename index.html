@@ -1752,7 +1752,8 @@ store user credentials for future use.</p>
     <section class="algorithm" data-algorithm="&apos;discover credentials&apos; internal method">
       <dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="method" data-export="" id="dom-credential-discoverfromexternalsource-slot">[[DiscoverFromExternalSource]](options)</dfn> is called
     with a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-2">CredentialRequestOptions</a></code> object. It returns a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-12">Credential</a></code> if one can be
-    returned given the options provided, or <code>null</code> otherwise: 
+    returned given the options provided, <code>null</code> if no credential is available, or an error if
+    discovery fails. 
      <ul class="algorithm">
       <ol>
        <li data-md="">
@@ -1981,13 +1982,16 @@ store user credentials for future use.</p>
        <li data-md="">
         <p class="assertion">Assert: <var>choice</var> is an <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a>.</p>
        <li data-md="">
-        <p>Resolve <var>p</var> with the result of executing <var>choice</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-discoverfromexternalsource-slot" id="ref-for-dom-credential-discoverfromexternalsource-slot-1">[[DiscoverFromExternalSource]](options)</a></code>, given <var>options</var>.</p>
+        <p>Let <var>result</var> be the result of executing <var>choice</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-discoverfromexternalsource-slot" id="ref-for-dom-credential-discoverfromexternalsource-slot-1">[[DiscoverFromExternalSource]](options)</a></code>, given <var>options</var>.</p>
+       <li data-md="">
+        <p>If <var>result</var> is a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-27">Credential</a></code> or <code>null</code>, resolve <var>p</var> with <var>result</var>.</p>
+        <p>Otherwise, reject <var>p</var> with <var>result</var>.</p>
       </ol>
     </ol>
     <h4 class="heading settled algorithm" data-algorithm="Collect Credentials from the credential store" data-level="2.5.2" id="algorithm-collect-known"><span class="secno">2.5.2. </span><span class="content">Collect <code>Credential</code>s from the credential store</span><a class="self-link" href="#algorithm-collect-known"></a></h4>
     <p>Given a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-10">CredentialRequestOptions</a></code> (<var>options</var>), the user agent may <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export="" data-local-lt="collect local" id="abstract-opdef-collect-credentials-from-the-credential-store">collect <code>Credential</code>s from the credential store</dfn>,
-  returning a set of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-27">Credential</a></code> objects stored by the user agent locally that match <var>options</var>’
-  filter. If no such <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-28">Credential</a></code> objects are known, the returned set will be empty:</p>
+  returning a set of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-28">Credential</a></code> objects stored by the user agent locally that match <var>options</var>’
+  filter. If no such <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-29">Credential</a></code> objects are known, the returned set will be empty:</p>
     <ul class="algorithm">
      <ol>
       <li data-md="">
@@ -2009,7 +2013,7 @@ store user credentials for future use.</p>
      </ol>
     </ul>
     <h4 class="heading settled algorithm" data-algorithm="Store a Credential" data-level="2.5.3" id="algorithm-store"><span class="secno">2.5.3. </span><span class="content">Store a <code>Credential</code></span><a class="self-link" href="#algorithm-store"></a></h4>
-    <p>The <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export="" id="abstract-opdef-store-a-credential">Store a <code>Credential</code></dfn> algorithm accepts a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-29">Credential</a></code> (<var>credential</var>), and returns a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise">Promise</a></code> which resolves once the object is persisted to the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-10">credential store</a>.</p>
+    <p>The <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export="" id="abstract-opdef-store-a-credential">Store a <code>Credential</code></dfn> algorithm accepts a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-30">Credential</a></code> (<var>credential</var>), and returns a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise">Promise</a></code> which resolves once the object is persisted to the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-10">credential store</a>.</p>
     <ul class="algorithm">
      <ol>
       <li data-md="">
@@ -2177,7 +2181,7 @@ store user credentials for future use.</p>
  <a class="nv idl-code" data-link-type="constructor" href="#dom-passwordcredential-passwordcredential" id="ref-for-dom-passwordcredential-passwordcredential-3">Constructor</a>(<a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">HTMLFormElement</a> <dfn class="nv idl-code" data-dfn-for="PasswordCredential/PasswordCredential(form)" data-dfn-type="argument" data-export="" id="dom-passwordcredential-passwordcredential-form-form">form<a class="self-link" href="#dom-passwordcredential-passwordcredential-form-form"></a></dfn>),
  <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<span class="n">Window</span>,
  <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>]
-<span class="kt">interface</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="passwordcredential">PasswordCredential</dfn> : <a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential-30">Credential</a> {
+<span class="kt">interface</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="passwordcredential">PasswordCredential</dfn> : <a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential-31">Credential</a> {
   <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString"><span class="kt">USVString</span></a> <a class="nv idl-code" data-link-type="attribute" data-type="USVString" href="#dom-passwordcredential-idname" id="ref-for-dom-passwordcredential-idname-1">idName</a>;
   <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString"><span class="kt">USVString</span></a> <a class="nv idl-code" data-link-type="attribute" data-type="USVString" href="#dom-passwordcredential-passwordname" id="ref-for-dom-passwordcredential-passwordname-1">passwordName</a>;
 
@@ -2231,12 +2235,12 @@ store user credentials for future use.</p>
       <p>This constructor is defined in <a href="#construct-passwordcredential-data">§3.3.4 The PasswordCredental(PasswordCredentialData) Constructor</a>.</p>
     </dl>
     <p><code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-12">PasswordCredential</a></code> objects are <a data-link-type="dfn" href="#credential-origin-bound" id="ref-for-credential-origin-bound-1">origin bound</a>.</p>
-    <p><code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-13">PasswordCredential</a></code>'s <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a> inherits <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-31">Credential</a></code>'s implementation of <code class="idl"><a data-link-type="idl" href="#dom-credential-discoverfromexternalsource-slot" id="ref-for-dom-credential-discoverfromexternalsource-slot-2">[[DiscoverFromExternalSource]](options)</a></code>, and defines its own implementation of <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-collectfromcredentialstore-slot" id="ref-for-dom-passwordcredential-collectfromcredentialstore-slot-1">[[CollectFromCredentialStore]](options)</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-store-slot" id="ref-for-dom-passwordcredential-store-slot-1">[[Store]](credential)</a></code>.</p>
+    <p><code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-13">PasswordCredential</a></code>'s <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a> inherits <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-32">Credential</a></code>'s implementation of <code class="idl"><a data-link-type="idl" href="#dom-credential-discoverfromexternalsource-slot" id="ref-for-dom-credential-discoverfromexternalsource-slot-2">[[DiscoverFromExternalSource]](options)</a></code>, and defines its own implementation of <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-collectfromcredentialstore-slot" id="ref-for-dom-passwordcredential-collectfromcredentialstore-slot-1">[[CollectFromCredentialStore]](options)</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-store-slot" id="ref-for-dom-passwordcredential-store-slot-1">[[Store]](credential)</a></code>.</p>
     <h3 class="heading settled" data-level="3.3" id="passwordcredential-algorithms"><span class="secno">3.3. </span><span class="content">Algorithms</span><a class="self-link" href="#passwordcredential-algorithms"></a></h3>
     <h4 class="heading settled algorithm" data-algorithm="PasswordCredential&apos;s [[CollectFromCredentialStore]](options)" data-level="3.3.1" id="collectfromcredentialstore-passwordcredential"><span class="secno">3.3.1. </span><span class="content"> <code>PasswordCredential</code>'s <code>[[CollectFromCredentialStore]](options)</code> </span><a class="self-link" href="#collectfromcredentialstore-passwordcredential"></a></h4>
     <p><dfn class="dfn-paneled idl-code" data-dfn-for="PasswordCredential" data-dfn-type="method" data-export="" id="dom-passwordcredential-collectfromcredentialstore-slot">[[CollectFromCredentialStore]](options)</dfn> is called
-  with a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-11">CredentialRequestOptions</a></code> (<var>options</var>), and returns a set of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-32">Credential</a></code> objects from
-  the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-14">credential store</a>. If no matching <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-33">Credential</a></code> objects are available, the returned set
+  with a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-11">CredentialRequestOptions</a></code> (<var>options</var>), and returns a set of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-33">Credential</a></code> objects from
+  the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-14">credential store</a>. If no matching <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-34">Credential</a></code> objects are available, the returned set
   will be empty.</p>
     <ol class="algorithm">
      <li data-md="">
@@ -2625,7 +2629,7 @@ var r = new Request("https://example.com/endpoint", init);
   origin in which <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-10">get()</a></code> is called. That is: credentials saved on <code>https://admin.example.com/</code> and <code>https://example.com/</code> MAY be offered to users when <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-11">get()</a></code> is called from <code>https://www.example.com/</code>, and vice versa.</p>
      <li data-md="">
       <p>MUST NOT offer credentials to an origin in response to <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-12">get()</a></code> without <a data-link-type="dfn" href="#user-mediated" id="ref-for-user-mediated-5">user mediation</a> if the credential’s origin is not an exact match for the calling origin.
-  That is, <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-34">Credential</a></code> objects for <code>https://example.com</code> would not be returned directly to <code>https://www.example.com</code>, but could be offered to the user via the chooser.</p>
+  That is, <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-35">Credential</a></code> objects for <code>https://example.com</code> would not be returned directly to <code>https://www.example.com</code>, but could be offered to the user via the chooser.</p>
     </ol>
     <p><code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-29">PasswordCredential</a></code>s further mitigate the risk of data leakage by never exposing the <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password-slot" id="ref-for-dom-passwordcredential-password-slot-8">[[password]]</a></code> slot directly to a page’s JavaScript, but only allowing its submission to a
   same-origin server-side endpoint via <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a></code>.</p>
@@ -2642,7 +2646,7 @@ var r = new Request("https://example.com/endpoint", init);
 <pre class="idl highlight def">[<a class="nv idl-code" data-link-type="constructor" href="#dom-federatedcredential-federatedcredential" id="ref-for-dom-federatedcredential-federatedcredential-1">Constructor</a>(<a class="n" data-link-type="idl-name" href="#dictdef-federatedcredentialdata" id="ref-for-dictdef-federatedcredentialdata-1">FederatedCredentialData</a> <dfn class="nv idl-code" data-dfn-for="FederatedCredential/FederatedCredential(data)" data-dfn-type="argument" data-export="" id="dom-federatedcredential-federatedcredential-data-data">data<a class="self-link" href="#dom-federatedcredential-federatedcredential-data-data"></a></dfn>),
  <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<span class="n">Window</span>,
  <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>]
-<span class="kt">interface</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="federatedcredential">FederatedCredential</dfn> : <a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential-35">Credential</a> {
+<span class="kt">interface</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="federatedcredential">FederatedCredential</dfn> : <a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential-36">Credential</a> {
   <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString"><span class="kt">USVString</span></a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="USVString" href="#dom-federatedcredential-provider" id="ref-for-dom-federatedcredential-provider-1">provider</a>;
   <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString"><span class="kt">DOMString</span></a>? <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="DOMString?" href="#dom-federatedcredential-protocol" id="ref-for-dom-federatedcredential-protocol-1">protocol</a>;
 };
@@ -2686,7 +2690,7 @@ var r = new Request("https://example.com/endpoint", init);
       <p>This constructor is defined in <a href="#construct-passwordcredential-data">§3.3.4 The PasswordCredental(PasswordCredentialData) Constructor</a>.</p>
     </dl>
     <p><code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential-5">FederatedCredential</a></code> objects are <a data-link-type="dfn" href="#credential-origin-bound" id="ref-for-credential-origin-bound-2">origin bound</a>.</p>
-    <p><code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential-6">FederatedCredential</a></code>'s <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a> inherits <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-36">Credential</a></code>'s implementation of <code class="idl"><a data-link-type="idl" href="#dom-credential-discoverfromexternalsource-slot" id="ref-for-dom-credential-discoverfromexternalsource-slot-3">[[DiscoverFromExternalSource]](options)</a></code>, and defines its own implementation of <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-collectfromcredentialstore-slot" id="ref-for-dom-federatedcredential-collectfromcredentialstore-slot-1">[[CollectFromCredentialStore]](options)</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-store-slot" id="ref-for-dom-federatedcredential-store-slot-1">[[Store]](credential)</a></code>.</p>
+    <p><code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential-6">FederatedCredential</a></code>'s <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a> inherits <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-37">Credential</a></code>'s implementation of <code class="idl"><a data-link-type="idl" href="#dom-credential-discoverfromexternalsource-slot" id="ref-for-dom-credential-discoverfromexternalsource-slot-3">[[DiscoverFromExternalSource]](options)</a></code>, and defines its own implementation of <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-collectfromcredentialstore-slot" id="ref-for-dom-federatedcredential-collectfromcredentialstore-slot-1">[[CollectFromCredentialStore]](options)</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-store-slot" id="ref-for-dom-federatedcredential-store-slot-1">[[Store]](credential)</a></code>.</p>
     <p class="note" role="note"><span>Note:</span> If, in the future, we teach the user agent to obtain authentication tokens on a user’s
   behalf, we could do so by building an implementation of <code>[[DiscoverFromExternalSource]](options)</code>.</p>
     <h4 class="heading settled" data-level="4.1.1" id="provider-identification"><span class="secno">4.1.1. </span><span class="content">Identifying Providers</span><a class="self-link" href="#provider-identification"></a></h4>
@@ -2702,8 +2706,8 @@ var r = new Request("https://example.com/endpoint", init);
     <h3 class="heading settled" data-level="4.2" id="federatedcredential-algorithms"><span class="secno">4.2. </span><span class="content">Algorithms</span><a class="self-link" href="#federatedcredential-algorithms"></a></h3>
     <h4 class="heading settled algorithm" data-algorithm="FederatedCredential&apos;s [[CollectFromCredentialStore]](options)" data-level="4.2.1" id="collectfromcredentialstore-federatedcredential"><span class="secno">4.2.1. </span><span class="content"> <code>FederatedCredential</code>'s <code>[[CollectFromCredentialStore]](options)</code> </span><a class="self-link" href="#collectfromcredentialstore-federatedcredential"></a></h4>
     <p><dfn class="dfn-paneled idl-code" data-dfn-for="FederatedCredential" data-dfn-type="method" data-export="" id="dom-federatedcredential-collectfromcredentialstore-slot">[[CollectFromCredentialStore]](options)</dfn> is called
-  with a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-13">CredentialRequestOptions</a></code> (<var>options</var>), and returns a set of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-37">Credential</a></code> objects from
-  the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-20">credential store</a>. If no matching <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-38">Credential</a></code> objects are available, the returned set
+  with a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-13">CredentialRequestOptions</a></code> (<var>options</var>), and returns a set of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-38">Credential</a></code> objects from
+  the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-20">credential store</a>. If no matching <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-39">Credential</a></code> objects are available, the returned set
   will be empty.</p>
     <ol class="algorithm">
      <li data-md="">
@@ -2859,9 +2863,9 @@ var r = new Request("https://example.com/endpoint", init);
   website could produce. For example, the chooser might overlap the user agent’s UI in some
   unspoofable way.</p>
     <p>The chooser interface MUST include an indication of the origin which is requesting credentials.</p>
-    <p>The chooser interface SHOULD include all <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-39">Credential</a></code> objects associated with the origin that
+    <p>The chooser interface SHOULD include all <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-40">Credential</a></code> objects associated with the origin that
   requested credentials.</p>
-    <p>User agents MAY internally associate information with each <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-40">Credential</a></code> object beyond the
+    <p>User agents MAY internally associate information with each <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-41">Credential</a></code> object beyond the
   attributes specified in this document in order to enhance the utility of such a chooser. For
   example, favicons could help disambiguate identity providers, etc. Any additional information
   stored MUST not be exposed directly to the web.</p>
@@ -2870,9 +2874,9 @@ var r = new Request("https://example.com/endpoint", init);
   process of choosing a credential to present. That said, the interface to the chooser is as
   follows:</p>
     <section class="algorithm" data-algorithm="ask the user to choose">
-      The user agent can <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export="" data-local-lt="ask to choose" data-lt="ask the user to choose a Credential" id="abstract-opdef-ask-the-user-to-choose-a-credential">ask the user to choose a <code>Credential</code></dfn>, given a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-14">CredentialRequestOptions</a></code> (<var>options</var>), and a set of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-41">Credential</a></code> objects from the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-26">credential store</a> (<var>locally discovered credentials</var>). 
+      The user agent can <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export="" data-local-lt="ask to choose" data-lt="ask the user to choose a Credential" id="abstract-opdef-ask-the-user-to-choose-a-credential">ask the user to choose a <code>Credential</code></dfn>, given a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-14">CredentialRequestOptions</a></code> (<var>options</var>), and a set of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-42">Credential</a></code> objects from the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-26">credential store</a> (<var>locally discovered credentials</var>). 
      <p>This algorithm returns either <code>null</code> if the user chose not to share a credential with the site,
-    a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-42">Credential</a></code> object if the user chose a specific credential, or a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-43">Credential</a></code> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface
+    a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-43">Credential</a></code> object if the user chose a specific credential, or a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-44">Credential</a></code> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface
     object</a> if the user chose a type of credential.</p>
      <div class="note" role="note">
        It seems reasonable for the chooser interface to display the list of <var>locally discovered
@@ -2948,10 +2952,10 @@ var r = new Request("https://example.com/endpoint", init);
   for disabling automatic sign-in for a particular origin. This could be tied to the notification
   that credentials have been provided to an origin, for example.</p>
     <h3 class="heading settled" data-level="6.6" id="security-chooser-leakage"><span class="secno">6.6. </span><span class="content">Chooser Leakage</span><a class="self-link" href="#security-chooser-leakage"></a></h3>
-    <p>If a user agent’s <a data-link-type="dfn" href="#credential-chooser" id="ref-for-credential-chooser-8">credential chooser</a> displays images supplied by an origin (for example, if a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-44">Credential</a></code> displays a site’s favicon), then, requests for these images MUST NOT be directly
+    <p>If a user agent’s <a data-link-type="dfn" href="#credential-chooser" id="ref-for-credential-chooser-8">credential chooser</a> displays images supplied by an origin (for example, if a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-45">Credential</a></code> displays a site’s favicon), then, requests for these images MUST NOT be directly
   tied to instantiating the chooser in order to avoid leaking chooser usage. One option would be to
-  fetch the images in the background when saving or updating a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-45">Credential</a></code>, and to cache them for
-  the lifetime of the <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-46">Credential</a></code>.</p>
+  fetch the images in the background when saving or updating a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-46">Credential</a></code>, and to cache them for
+  the lifetime of the <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-47">Credential</a></code>.</p>
     <p>These images MUST be fetched with the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-credentials-mode">credentials mode</a> set to "<code>omit</code>", the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#request-service-workers-mode">service-workers mode</a> set to "<code>none</code>", the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-client">client</a> set to <code>null</code>, the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-initiator">initiator</a> set to the empty string, and the <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-destination">destination</a> "<code>subresource</code>".</p>
     <p>Moreover, if the user agent allows the user to change either the name or icon associated with the
   credential, the alterations to the data SHOULD NOT be exposed to the website (consider a user who
@@ -2977,7 +2981,7 @@ var r = new Request("https://example.com/endpoint", init);
   straightforward:</p>
     <ol>
      <li data-md="">
-      <p>Define a new interface that inherits from <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-47">Credential</a></code>:</p>
+      <p>Define a new interface that inherits from <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-48">Credential</a></code>:</p>
       <div class="example" id="example-c4fb2a06">
        <a class="self-link" href="#example-c4fb2a06"></a> 
 <pre>[Constructor(...),
@@ -2992,7 +2996,7 @@ interface ExampleCredential : Credential {
       <p>Define appropriate <code class="idl"><a data-link-type="idl" href="#dom-credential-collectfromcredentialstore-slot" id="ref-for-dom-credential-collectfromcredentialstore-slot-2">[[CollectFromCredentialStore]](options)</a></code>, <code class="idl"><a data-link-type="idl" href="#dom-credential-discoverfromexternalsource-slot" id="ref-for-dom-credential-discoverfromexternalsource-slot-4">[[DiscoverFromExternalSource]](options)</a></code>, and <code class="idl"><a data-link-type="idl" href="#dom-credential-store-slot" id="ref-for-dom-credential-store-slot-2">[[Store]](credential)</a></code> methods on <code>ExampleCredential</code>'s <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a>:</p>
       <div class="example" id="example-b597dd69">
        <a class="self-link" href="#example-b597dd69"></a> <code>ExampleCredential</code>'s <code>[[CollectFromCredentialStore]](options)</code> internal method is called
-    with a CredentialRequestOptions object (<code>options</code>), and returns a set of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-48">Credential</a></code> objects that match the options provided. If no matching <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-49">Credential</a></code> objects are
+    with a CredentialRequestOptions object (<code>options</code>), and returns a set of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-49">Credential</a></code> objects that match the options provided. If no matching <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-50">Credential</a></code> objects are
     available, the returned set will be empty. 
        <ol>
         <li data-md="">
@@ -3031,7 +3035,7 @@ partial dictionary CredentialRequestOptions {
       </div>
     </ol>
     <p>You might also find that new primitives are necessary. For instance, you might want to return
-  many <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-50">Credential</a></code> objects rather than just one in some sort of complicated, multi-factor
+  many <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-51">Credential</a></code> objects rather than just one in some sort of complicated, multi-factor
   sign-in process. That might be accomplished in a generic fashion by adding a <code>getAll()</code> method to <code class="idl"><a data-link-type="idl" href="#credentialscontainer" id="ref-for-credentialscontainer-5">CredentialsContainer</a></code> which returned a <code>sequence&lt;Credential></code>, and defining a reasonable
   mechanism for dealing with requesting credentials of distinct types.</p>
     <p>For any such extension, we recommend getting in touch with <a href="mailto:public-webappsec@w3.org">public-webappsec@</a> for consultation and review.</p>
@@ -3598,19 +3602,19 @@ partial dictionary CredentialRequestOptions {
     <li><a href="#ref-for-credential-17">2.2.2. CredentialUserData Mixin</a>
     <li><a href="#ref-for-credential-18">2.3. navigator.credentials</a> <a href="#ref-for-credential-19">(2)</a> <a href="#ref-for-credential-20">(3)</a>
     <li><a href="#ref-for-credential-21">2.4. The CredentialRequestOptions Dictionary</a> <a href="#ref-for-credential-22">(2)</a> <a href="#ref-for-credential-23">(3)</a> <a href="#ref-for-credential-24">(4)</a>
-    <li><a href="#ref-for-credential-25">2.5.1. Request a Credential</a> <a href="#ref-for-credential-26">(2)</a>
-    <li><a href="#ref-for-credential-27">2.5.2. Collect Credentials from the credential store</a> <a href="#ref-for-credential-28">(2)</a>
-    <li><a href="#ref-for-credential-29">2.5.3. Store a Credential</a>
-    <li><a href="#ref-for-credential-30">3.2. The PasswordCredential Interface</a> <a href="#ref-for-credential-31">(2)</a>
-    <li><a href="#ref-for-credential-32">3.3.1. 
-    PasswordCredential's [[CollectFromCredentialStore]](options) </a> <a href="#ref-for-credential-33">(2)</a>
-    <li><a href="#ref-for-credential-34">3.5.1. Cross-origin Credential Leakage</a>
-    <li><a href="#ref-for-credential-35">4.1. The FederatedCredential Interface</a> <a href="#ref-for-credential-36">(2)</a>
-    <li><a href="#ref-for-credential-37">4.2.1. 
-    FederatedCredential's [[CollectFromCredentialStore]](options) </a> <a href="#ref-for-credential-38">(2)</a>
-    <li><a href="#ref-for-credential-39">5.3. Credential Selection</a> <a href="#ref-for-credential-40">(2)</a> <a href="#ref-for-credential-41">(3)</a> <a href="#ref-for-credential-42">(4)</a> <a href="#ref-for-credential-43">(5)</a>
-    <li><a href="#ref-for-credential-44">6.6. Chooser Leakage</a> <a href="#ref-for-credential-45">(2)</a> <a href="#ref-for-credential-46">(3)</a>
-    <li><a href="#ref-for-credential-47">7.2. Extension Points</a> <a href="#ref-for-credential-48">(2)</a> <a href="#ref-for-credential-49">(3)</a> <a href="#ref-for-credential-50">(4)</a>
+    <li><a href="#ref-for-credential-25">2.5.1. Request a Credential</a> <a href="#ref-for-credential-26">(2)</a> <a href="#ref-for-credential-27">(3)</a>
+    <li><a href="#ref-for-credential-28">2.5.2. Collect Credentials from the credential store</a> <a href="#ref-for-credential-29">(2)</a>
+    <li><a href="#ref-for-credential-30">2.5.3. Store a Credential</a>
+    <li><a href="#ref-for-credential-31">3.2. The PasswordCredential Interface</a> <a href="#ref-for-credential-32">(2)</a>
+    <li><a href="#ref-for-credential-33">3.3.1. 
+    PasswordCredential's [[CollectFromCredentialStore]](options) </a> <a href="#ref-for-credential-34">(2)</a>
+    <li><a href="#ref-for-credential-35">3.5.1. Cross-origin Credential Leakage</a>
+    <li><a href="#ref-for-credential-36">4.1. The FederatedCredential Interface</a> <a href="#ref-for-credential-37">(2)</a>
+    <li><a href="#ref-for-credential-38">4.2.1. 
+    FederatedCredential's [[CollectFromCredentialStore]](options) </a> <a href="#ref-for-credential-39">(2)</a>
+    <li><a href="#ref-for-credential-40">5.3. Credential Selection</a> <a href="#ref-for-credential-41">(2)</a> <a href="#ref-for-credential-42">(3)</a> <a href="#ref-for-credential-43">(4)</a> <a href="#ref-for-credential-44">(5)</a>
+    <li><a href="#ref-for-credential-45">6.6. Chooser Leakage</a> <a href="#ref-for-credential-46">(2)</a> <a href="#ref-for-credential-47">(3)</a>
+    <li><a href="#ref-for-credential-48">7.2. Extension Points</a> <a href="#ref-for-credential-49">(2)</a> <a href="#ref-for-credential-50">(3)</a> <a href="#ref-for-credential-51">(4)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-credential-id">

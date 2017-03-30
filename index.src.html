@@ -273,7 +273,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
   <section algorithm="'discover credentials' internal method">
     <dfn for="Credential" method export>\[[DiscoverFromExternalSource]](options)</dfn> is called
     with a {{CredentialRequestOptions}} object. It returns a {{Credential}} if one can be
-    returned given the options provided, or `null` otherwise:
+    returned given the options provided, `null` if no credential is available, or an error if
+    discovery fails.
 
     <ul class="algorithm">
       1.  Return `null`.
@@ -502,8 +503,12 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
         6.  Assert: |choice| is an [=interface object=].
 
-        7.  Resolve |p| with the result of executing |choice|'s
+        7.  Let |result| be the result of executing |choice|'s
             {{[[DiscoverFromExternalSource]](options)}}, given |options|.
+
+        8.  If |result| is a {{Credential}} or `null`, resolve |p| with |result|.
+
+            Otherwise, reject |p| with |result|.
   </ol>
 
   <h4 id="algorithm-collect-known" algorithm>Collect `Credential`s from the credential store</h4>
