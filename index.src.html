@@ -12,70 +12,23 @@ Abstract:
   This specification describes an imperative API enabling a website to request a
   user's credentials from a user agent, and to help the user agent correctly
   store user credentials for future use.
-!Use Cases: <a href="https://w3c.github.io/webappsec/usecases/credentialmanagement/">https://w3c.github.io/webappsec/usecases/credentialmanagement/</a>
 Indent: 2
 Version History: https://github.com/w3c/webappsec-credential-management/commits/master/index.src.html
 Boilerplate: omit conformance, omit feedback-header
 !Participate: <a href="https://github.com/w3c/webappsec-credential-management/issues/new">File an issue</a> (<a href="https://github.com/w3c/webappsec-credential-management/issues">open issues</a>)
 Markup Shorthands: css off, markdown on
 </pre>
-<style>
-  ul.toc ul ul ul {
-    margin: 0 0 0 2em;
-  }
-  ul.toc ul ul ul span.secno {
-    margin-left: -9em;
-  }
-</style>
-<pre class="link-defaults">
-spec:html; type:dfn; for:/; text:origin
-</pre>
 <pre class="anchors">
-spec: HTML5; urlPrefix: http://www.w3.org/TR/html5/
+spec: ECMA262; urlPrefix: https://tc39.github.io/ecma262/
   type: dfn
-    urlPrefix: webappapis.html
-      text: responsible document
-      text: responsible browsing context
-      text: incumbent settings object
-    urlPrefix: infrastructure.html
-      text: resolve a url
-      text: structured clone
-      text: internal structured cloning algorithm
-      text: tree order
-      text: ASCII case-insensitive
-    urlPrefix: forms.html
-      text: autocomplete
-      text: submittable elements; url: category-submit
-      text: form owner
-      text: multipart/form-data encoding algorithm; url: multipart/form-data-encoding-algorithm
-      text: multipart/form-data boundary string; url: multipart/form-data-boundary-string
-      text: enctype; for: form; url: concept-fs-enctype
-    urlPrefix: browsers.html
-      text: browsing context
-      text: top-level browsing context; url: top-level-browsing-context
-      text: nested browsing context
-      text: active document
-  type: element-attr
-    urlPrefix: forms.html
-      text: autocomplete; for: input; url: attr-fe-autocomplete
-      text: value; for: input; url: attr-input-value
-      text: name; for: input; url: attr-fe-name
-  type: element
-    urlPrefix: forms.html
-      text: input; url: the-input-element
-  type: interface
-    urlPrefix: browser.html
-      text: Window
-    urlPrefix: infrastructure.html
-      text: Transferable
-    urlPrefix: webappapis.html
-      text: Navigator
+    text: JavaScript realm; url: sec-code-realms
 spec: HTML; urlPrefix: https://html.spec.whatwg.org/multipage/
-  type: dfn
-    urlPrefix: forms.html
-      text: autofill detail tokens
-  type: attr-value
-    urlPrefix: forms.html
+  urlPrefix: forms.html
+    type: element-attr
+      text: autocomplete; for: input; url: #attr-fe-autocomplete
+      text: name; for: input; url: #attr-fe-name
+      text: enctype; for: form; url: #concept-fs-enctype
+    type: attr-value
       for: autocomplete
         text: current-password; url: attr-fe-autocomplete-current-password
         text: new-password; url: attr-fe-autocomplete-new-password
@@ -83,56 +36,6 @@ spec: HTML; urlPrefix: https://html.spec.whatwg.org/multipage/
         text: name; url: attr-fe-autocomplete-name
         text: photo; url: attr-fe-autocomplete-photo
         text: username; url: attr-fe-autocomplete-username
-spec: PSL; urlPrefix: https://publicsuffix.org/list/
-  type: dfn
-    text: registerable domain; url: #
-    text: public suffix; url: #
-spec: MIXED-CONTENT; urlPrefix: https://w3c.github.io/webappsec-mixed-content/
-  type: dfn
-    text: a priori authenticated URL
-spec: SECURE-CONTEXTS; urlPrefix: https://w3c.github.io/webappsec-secure-contexts/
-  type: dfn
-    text: secure context
-spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
-  type: dfn
-    text: fetching
-    text: response; url: concept-response
-    text: request; url: concept-request
-    text: network error; url: concept-network-error
-    text: extracting a MIME type; url: concept-header-extract-mime-type
-    text: extract; url: concept-bodyinit-extract
-    text: consume body; url: concept-request-consume-body
-    text: http-network-or-cache fetch; url: http-network-or-cache-fetch 
-    for: body
-      text: stream; url: concept-body-stream
-    for: request
-      text: body; url: concept-request-body
-      text: client; url: concept-request-client
-      text: url; url: concept-request-url
-      text: redirect mode; url: concept-request-redirect-mode
-      text: skip-service-worker flag; url: skip-service-worker-flag
-      text: credentials mode; url: concept-request-credentials-mode
-      text: method; url: concept-request-method
-  type: dictionary
-    text: RequestInit
-  type: interface
-    text: RequestInfo
-    text: Response
-    text: Request
-    text: Body
-    text: BodyInit
-  type: enum
-    text: RequestCredentials
-  type: method
-    text: fetch(); url: dom-global-fetch
-    text: arrayBuffer(); for: Body; url: dom-Body-arrayBuffer
-    text: blob(); for: Body; url: dom-Body-blob
-    text: formData(); for: Body; url: dom-Body-formData
-    text: json(); for: Body; url: dom-Body-json
-    text: text(); for: Body; url: dom-Body-text
-  type: constructor
-    text: Request(); url: dom-request
-    text: Response(); url: dom-response
 spec: XHR; urlPrefix: https://xhr.spec.whatwg.org/
   type: dfn
     text: entry; url: concept-formdata-entry
@@ -141,50 +44,27 @@ spec: XHR; urlPrefix: https://xhr.spec.whatwg.org/
     text: value; for: entry; url: concept-formdata-entry-value
     text: type; for: entry; url: concept-formdata-entry-type
   type: interface
-    text: XMLHttpRequest; url: interface-xmlhttprequest
     text: FormData; url: interface-formdata
-  type: method
-    text: get(); for: FormData; url: dom-formdata-get
-    text: has(); for: FormData; url: dom-formdata-has
-    text: set(); for: FormData; url: dom-formdata-set
-  type: constructor
-    text: FormData(); for: FormData; url: dom-formdata
-spec: WEBMESSAGING; urlPrefix: http://www.w3.org/TR/webmessaging/
-  type: method
-    text: postMessage(); for: window; url: dom-window-postmessage
-spec: URL; urlPrefix: https://url.spec.whatwg.org/
+spec: PSL; urlPrefix: https://publicsuffix.org/list/
   type: dfn
-    text: URL parser; url: concept-url-parser
-    text: list; for: URLSearchParams; url: concept-urlsearchparams-list
-    text: application/x-www-form-urlencoded serializer; url: concept-urlencoded-serializer
-  type: interface
-    text: URL; url: dom-url
-    text: URLSearchParams; url: dom-urlsearchparams
-  type: method; for: URLSearchParams
-    text: append(); url: dom-urlsearchparams-append
-    text: get(); url: dom-urlsearchparams-get
-    text: getAll(); url: dom-urlsearchparams-getall 
-  type: attribute
-    text: origin; for: URL; url: concept-url-origin
-    text: scheme; for: URL; url: concept-url-scheme
-    text: host; for: URL; url: concept-url-host
-    text: port; for: URL; url: concept-url-port
+    text: registerable domain; url: #
+    text: public suffix; url: #
+spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
+  type: dfn
+    text: http-network-or-cache fetch; url: http-network-or-cache-fetch 
+</pre>
+<pre class="link-defaults">
+spec:html; type:dfn; for:/; text:origin
+spec:fetch; type:dfn; for:/; text:request
+
+<!-- These need to be exported -->
+spec:html; type:dfn; text:submittable element
+spec:html; type:dfn; text:form owner
+spec:html; type:dfn; text:autofill detail tokens
+spec:url; type:dfn; text:urlencoded byte serializer
 </pre>
 <pre class="biblio">
 {
-  "MANIFEST": {
-    "authors": [ "Marcos Caceres", "Anssi Kostiainen", "Kenneth Rohde Christiansen" ],
-    "etAl": true,
-    "href": "http://w3c.github.io/manifest/",
-    "title": "Manifest for web application",
-    "status": "WD",
-    "publisher": "W3C"
-  },
-  "PSL": {
-    "authors": [ "Mozilla Foundation" ],
-    "href": "https://publicsuffix.org/",
-    "title": "Public Suffix List"
-  },
   "WEB-LOGIN": {
     "authors": [ "Jason Denizac", "Robin Berjon", "Anne van Kesteren" ],
     "href": "https://github.com/jden/web-login",
@@ -192,307 +72,597 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
   }
 }
 </pre>
+
 <!--
-████ ██    ██ ████████ ████████   ███████
+████ ██    ██ ████████ ████████   ███████ 
  ██  ███   ██    ██    ██     ██ ██     ██
  ██  ████  ██    ██    ██     ██ ██     ██
  ██  ██ ██ ██    ██    ████████  ██     ██
  ██  ██  ████    ██    ██   ██   ██     ██
  ██  ██   ███    ██    ██    ██  ██     ██
-████ ██    ██    ██    ██     ██  ███████
+████ ██    ██    ██    ██     ██  ███████ 
 -->
 <section>
-  <h2 id="introduction">Introduction</h2>
+  # Introduction # {#introduction}
 
   <em>This section is not normative.</em>
 
-  Signing into websites is more difficult than it should be. The user agent is
-  in a unique position to improve the experience in a number of ways, and most
-  modern user agents have recognized this by providing some measure of
-  credential management natively in the browser. Users can save usernames and
-  passwords for websites, and those <a>credentials</a> are autofilled into
-  sign-in forms with varying degrees of success.
+  Signing into websites is more difficult than it should be. The user agent is in a unique position
+  to improve the experience in a number of ways, and most modern user agents have recognized this by
+  providing some measure of  credential management natively in the browser. Users can save usernames
+  and passwords for websites, and those [=credentials=] are autofilled into sign-in forms with
+  varying degrees of success.
 
-  The <code><a element-attr for="input">autocomplete</a></code> attribute offers a
-  declarative mechanism by which websites can work with user agents to improve
-  the latter's ability to detect and fill sign-in forms by marking specific
-  fields as "username" or "password", and user agents implement a wide variety
-  of detection heuristics to work with websites which haven't taken the time to
-  provide this detail in markup.
+  The <{input/autocomplete}> attribute offers a declarative mechanism by which websites can work
+  with user agents to improve the latter's ability to detect and fill sign-in forms by marking
+  specific fields as "username" or "password", and user agents implement a wide variety of detection
+  heuristics to work with websites which haven't taken the time to provide this detail in markup.
 
-  While this combination of heuristic and declarative detection works relatively
-  well, the status quo leaves some large gaps where detection is problematic.
-  Sites with uncommon sign-in mechanisms (submitting credentials via
-  {{XMLHttpRequest}} [[XMLHTTPREQUEST]], for instance) are difficult to reliably
-  detect, as is the increasingly common case in which users wish to authenticate
-  themselves using a <a>federated identity provider</a>. Allowing websites to
-  more directly interact with the user agent's credential manager would allow
-  the credential manager to be more accurate on the one hand, and to assist
-  users with federated sign-in on the other.
+  While this combination of heuristic and declarative detection works relatively well, the status
+  quo leaves some large gaps where detection is problematic. Sites with uncommon sign-in
+  mechanisms (submitting credentials via {{XMLHttpRequest}} [[XMLHTTPREQUEST]], for instance) are
+  difficult to reliably detect, as is the increasingly common case in which users wish to
+  authenticate themselves using a federated identity provider. Allowing websites to more directly
+  interact with the user agent's credential manager would allow the credential manager to be more
+  accurate on the one hand, and to assist users with federated sign-in on the other.
 
   These use cases are explored in more detail in [[#use-cases]] and in
-  <a href="https://w3c.github.io/webappsec/usecases/credentialmanagement/">
-  Credential Management: Use Cases and Requirements</a>; this specification
-  attempts to address many of the requirements that document outlines by
-  defining a Credential Manager API which a website can use to request
-  <a>credentials</a> for a user, and to ask the user agent to persist
-  credentials when a user signs in successfully.
+  <a href="https://w3c.github.io/webappsec/usecases/credentialmanagement/">Credential Management:
+  Use Cases and Requirements</a>; this specification attempts to address many of the requirements
+  that document outlines by defining a Credential Manager API which a website can use to request
+  [=credentials=] for a user, and to ask the user agent to persist credentials when a user signs in
+  successfully.
 
-  Note: The API defined here is intentionally small and simple: it does not
-  intend to provide authentication in and of itself, but is limited to providing
-  an interface to the existing credential managers implemented by existing user
-  agents. That functionality is valuable <em>right now</em>, without significant
-  effort on the part of either vendors or authors. There's certainly quite a bit
-  more which could be done, of course. See [[#future-work]] for some thoughts
-  we've punted for now, but which could be explored in future iterations of this
-  API.
+  Note: The API defined here is intentionally small and simple: it does not intend to provide
+  authentication in and of itself, but is limited to providing an interface to the existing
+  credential managers implemented by existing user agents. That functionality is valuable
+  <em>right now</em>, without significant effort on the part of either vendors or authors. There's
+  certainly quite a bit more which could be done, of course. See [[#teh-futur]] for some thoughts
+  we've punted for now, but which could be explored in future iterations of this API.
 
-  <section>
-    <h3 id="use-cases">Use Cases</h3>
+  ## Use Cases ## {#use-cases}
 
-    Modern user agents generally offer users the capability to save passwords
-    when signing into a website, and likewise offer the capability to fill those
-    passwords into sign-in forms fully- or semi-automatically when users return
-    to a website. From the perspective of a website, this behavior is completely
-    invisible: the website doesn't know that passwords have been stored, and it
-    isn't notified that passwords have been filled. This is both good and bad.
-    On the one hand, a user agent's password manager works regardless of whether
-    or not a site cooperates, which is excellent for users. On the other, the
-    password managers' behaviors are a fragile and proprietary hodgepodge of
-    heuristics meant to detect and fill sign-in forms, password change forms,
-    etc.
+  Modern user agents generally offer users the capability to save passwords when signing into a
+  website, and likewise offer the capability to fill those passwords into sign-in forms fully- or
+  semi-automatically when users return to a website. From the perspective of a website, this
+  behavior is completely invisible: the website doesn't know that passwords have been stored, and
+  it isn't notified that passwords have been filled. This is both good and bad. On the one hand, a
+  user agent's password manager works regardless of whether or not a site cooperates, which is
+  excellent for users. On the other, the password managers' behaviors are a fragile and proprietary
+  hodgepodge of heuristics meant to detect and fill sign-in forms, password change forms, etc.
 
-    A few problems with the status quo stand out as being particularly
-    problematic:
+  A few problems with the status quo stand out as being particularly noteworthy:
 
-    <ul>
-      <li>
-        User agents have an incredibly difficult time helping users with
-        federated identity providers. While detecting a username/password
-        form submission is fairly straightforward, detecting sign-in via a
-        third-party is quite difficult to reliably do well. It would be nice
-        if a website could help the user agent understand the intent behind the
-        redirects associated with a typical federated sign-in action.
-      </li>
-      <li>
-        Likewise, user agents struggle to detect more esoteric sign-in
-        mechanisms than simple username/password forms. Authors increasingly
-        asynchronously sign users in via {{XMLHttpRequest}} or similar
-        mechanisms in order to improve the experience and take more control over
-        the presentation. This is good for users, but tough for user agents to
-        integrate into their password managers. It would be nice if a website
-        could help the user agent make sense of the sign-in mechanism they
-        choose to use.
-      </li>
-      <li>
-        Finally, changing passwords is less well-supported than it could be if
-        the website explicitly informed the user agent that credentials had
-        changed.
-      </li>
+  *   User agents have an incredibly difficult time helping users with
+      federated identity providers. While detecting a username/password
+      form submission is fairly straightforward, detecting sign-in via a
+      third-party is quite difficult to reliably do well. It would be nice
+      if a website could help the user agent understand the intent behind the
+      redirects associated with a typical federated sign-in action.
+
+  *   Likewise, user agents struggle to detect more esoteric sign-in
+      mechanisms than simple username/password forms. Authors increasingly
+      asynchronously sign users in via {{XMLHttpRequest}} or similar
+      mechanisms in order to improve the experience and take more control over
+      the presentation. This is good for users, but tough for user agents to
+      integrate into their password managers. It would be nice if a website
+      could help the user agent make sense of the sign-in mechanism they
+      choose to use.
+
+  *   Finally, changing passwords is less well-supported than it could be if
+      the website explicitly informed the user agent that credentials had
+      changed.
+</section>
+
+<!--
+ ██████   ███████  ████████  ████████          ███    ████████  ████
+██    ██ ██     ██ ██     ██ ██               ██ ██   ██     ██  ██ 
+██       ██     ██ ██     ██ ██              ██   ██  ██     ██  ██ 
+██       ██     ██ ████████  ██████         ██     ██ ████████   ██ 
+██       ██     ██ ██   ██   ██             █████████ ██         ██ 
+██    ██ ██     ██ ██    ██  ██             ██     ██ ██         ██ 
+ ██████   ███████  ██     ██ ████████       ██     ██ ██        ████
+-->
+<section>
+  # Core API # {#core}
+
+  From a developer's perspective, a <dfn export id="concept-credential">credential</dfn> is an
+  object which allows a developer to make an authentication decision for a particular action. This
+  section defines a generic and extensible {{Credential}} interface which serves as a base class
+  for [=credentials=] defined in this and other documents, along with a set of APIs
+  hanging off of {{CredentialsContainer|navigator.credentials.*}} which enable developers to
+  obtain them.
+
+  Various types of [=credentials=] are represented to JavaScript as an interface which
+  [=interface/inherits=], either directly or indirectly, from the {{Credential}} interface. This
+  document defines two such interfaces, {{PasswordCredential}} and {{FederatedCredential}}.
+
+  ## Infrastructure ## {#core-infrastructure}
+
+  User agents MUST internally provide a <dfn export id="concept-credential-store">credential
+  store</dfn>, which is a vendor-specific, opaque storage mechanism that offers the following
+  capabilities for [=credential=] access and persistence:
+
+  1.  <dfn for="credential store" abstract-op export>Store a credential</dfn> for later retrieval.
+      This accepts a [=credential=], and inserts it into the [=credential store=].
+
+  2.  <dfn for="credential store" abstract-op export>Retrieve a list of credentials</dfn>. This
+      accepts an arbitrary filter, and returns a set of [=credentials=] that match the filter.
+
+  3.  <dfn for="credential store" abstract-op export>Modify a credential</dfn>. This accepts a
+      [=credential=], and overwrites the state of an existing [=credential=] in the
+      [=credential store=].
+
+  Additionally, the [=credential store=] should maintain a <dfn for="origin">`requires user
+  mediation` flag</dfn> for [=origins=] (which is set to `true` unless otherwise specified).
+  An origin <dfn for="origin">requires user mediation</dfn> if its flag is set to `true`.
+
+  Note: The importance of user mediation is discussed in more detail in [[#user-mediation]].
+
+  Note: The [=credential store=] is an internal implementation detail of a user agent's
+  implementation of the API specified in this document, and is not exposed to the web directly.
+  More capabilities may be specified by other documents in support of specific [=credential=]
+  types.
+
+  This document depends on the Infra Standard for a number of foundational concepts used in its
+  algorithms and prose [[!INFRA]].
+
+  ## The `Credential` Interface ## {#the-credential-interface}
+
+  <pre class="idl">
+    [Exposed=Window, SecureContext]
+    interface Credential {
+      readonly attribute USVString id;
+      readonly attribute DOMString type;
+    };
+  </pre>
+  <dl dfn-for="Credential">
+    :   <dfn attribute>id</dfn>
+    ::  The credential's identifier. The requirements for the identifier are distinct for each type
+        of [=credential=]. It might represent a username for username/password tuples, for example.
+
+    :   <dfn attribute>type</dfn>
+    ::  This attribute's getter returns the value of the object's [=interface object=]'s
+        {{[[type]]}} slot, which specifies the kind of credential represented by this object.
+
+    :   <dfn attribute>\[[type]]</dfn>
+    ::  The {{Credential}} [=interface object=] has an internal slot named `[[type]]`, which
+        unsurprisingly contains a string representing the type of the credential. The slot's value
+        is the empty string unless otherwise specified.
+
+        Note: The {{[[type]]}} slot's value will be the same for all credentials implementing a
+        particular interface, which means that developers can rely on `obj.type` returning a string
+        that unambigiously represents the specific kind of {{Credential}} they're dealing with.
+
+    :   <dfn attribute>\[[discovery]]</dfn>
+    ::  The {{Credential}} [=interface object=] has an internal slot named `[[discovery]]`,
+        representing the mechanism by which the user agent can collect credentials of
+        a given type. Its value is either
+        "<dfn enum-value for="Credential/[[discovery]]">`credential store`</dfn>" or
+        "<dfn enum-value for="Credential/[[discovery]]">`remote`</dfn>". The former value means that
+        all available credential information is stored in the user agent's [=credential store=],
+        while the latter means that the user agent can discover credentials outside of those
+        explicitly represented in the [=credential store=] via interaction with some external device
+        or service.
+  </dl>
+
+  ISSUE: Talk to Tobie/Dominic about the [=interface object=] bits, here and in
+  [[#algorithm-request]], etc. I'm not sure I've gotten the terminology right. [=interface prototype
+  object=], maybe?
+
+  Some {{Credential}} objects are <dfn for="Credential">origin bound</dfn>: these contain an
+  internal slot named <dfn for="Credential" attribute>\[[origin]]</dfn>, which stores the [=origin=]
+  for which the {{Credential}} is valid.
+
+  ### `Credential` Internal Methods ### {#credential-internal-methods}
+
+  Each [=interface object=] created for interfaces which [=interface/inherit=] from {{Credential}}
+  define three internal methods that allow retrieval and storage of {{Credential}} objects:
+
+  <section algorithm="'collect credentials' internal method">
+    <dfn for="Credential" method export>\[[CollectFromCredentialStore]](options)</dfn> is called
+    with a {{CredentialRequestOptions}}, and returns a set of {{Credential}} objects from the user
+    agent's [=credential store=] that match the options provided. If no matching {{Credential}}
+    objects are available, the returned set will be empty.
+
+    <ul class="algorithm">
+      1.  Return an empty set.
     </ul>
   </section>
 
-  <section>
-    <h3 id="introduction-examples">Examples</h3>
+  <section algorithm="'discover credentials' internal method">
+    <dfn for="Credential" method export>\[[DiscoverFromExternalSource]](options)</dfn> is called
+    with a {{CredentialRequestOptions}} object. It returns a {{Credential}} if one can be
+    returned given the options provided, or `null` otherwise:
 
-    <h4 id="examples-password-signin">Password-based Sign-in</h4>
+    <ul class="algorithm">
+      1.  Return `null`.
+    </ul>
+  </section>
+  
+  <section algorithm="'store a credential' internal method">
+    <dfn for="Credential" method export>\[[Store]](credential)</dfn> is called with a {{Credential}},
+    and returns once {{Credential}} is persisted to the [=credential store=]:
 
-    A website that supports only username/password pairs can request
-    credentials, and use them in existing sign-in forms:
+    <ul class="algorithm">
+      1.  Return.
+    </ul>
+  </section>
 
-    <div class="example">
-      <pre>
-        navigator.<a attribute>credentials</a>.<a idl lt="get()" for="CredentialsContainer">get</a>({ "<a for="CredentialRequestOptions" dict-member>password</a>": true }).then(
-            function(credential) {
-              if (!credential) {
-                // The user either doesn't have credentials for this site, or
-                // refused to share them. Insert some code here to fall back to
-                // a basic login form (or, ideally, do nothing, since this API
-                // should really be progressive enhancement on top of an
-                // existing form).
-                return;
-              }
-              if (credential.type == "<a const>password</a>") {
-                fetch("https://example.com/loginEndpoint", { credentials: credential, method: "POST" })
-                  .then(function (response) {
-                    if (/* |response| indicates a successful login */) {
-                      // Store the credential again, see note below.
-                      navigator.<a attribute>credentials</a>.<a idl lt="store()" for="CredentialsContainer">store</a>(credential);
-                      // Notify the user that sign-in succeeded! Do amazing, signed-in things!
-                    } else {
-                      // Insert some code here to fall back to a basic login form.
-                    }
-                  });
-              } else {
-                // See <a href="#examples-federated-signin">the Federated Sign-in example</a>
-              }
-            });
-      </pre>
+  Unless otherwise specified, the [=interface objects=] for [=interfaces=] which [=interface/inherit=] from
+  {{Credential}} will alias {{Credential}}'s implementation of these three internal methods. Since that
+  implementation isn't particularly useful, derived interfaces MUST override one or the other.
 
-      Note: The <a>credential chooser</a> presented by the user agent could
-      allow the user to choose credentials that aren't actually stored for the
-      current origin. For instance, it might offer up credentials from
-      <code>https://m.example.com</code> when signing into
-      <code>https://www.example.com</code> (as described in
-      [[#security-cross-origin-leakage]]), or it might allow a user to create a
-      new credential on the fly. Developers can deal gracefully with this uncertainty by
-      calling {{CredentialsContainer/store()}} every time credentials are
-      successfully used, even right after credentials have been retrieved from
-      {{CredentialsContainer/get()}}: if the credentials aren't yet stored for
-      the origin, the user will be given the opportunity to do so. If they are
-      stored, the user won't be prompted.
-    </div>
+  ### `CredentialUserData` Mixin ### {#credentialuserdata-mixin}
 
-    <h4 id="examples-federated-signin">Federated Sign-in</h4>
+  Some {{Credential}} objects contain data which aims to give users a human-readable disambiguation
+  mechanism in the [=credential chooser=] by providing a friendly name and icon:
 
-    A website that supports <a>federated identity providers</a> as well as
-    passwords can request credentials, and use them to kick off the sign-in flow
-    for the user's chosen provider:
+  <pre class="idl">
+    [NoInterfaceObject, Exposed=Window, SecureContext]
+    interface CredentialUserData {
+      readonly attribute USVString name;
+      readonly attribute USVString iconURL;
+    };
+  </pre>
+  <dl dfn-for="CredentialUserData">
+    :   <dfn attribute>name</dfn>
+    ::  A name associated with the credential, intended as a human-understandable public name for
+        display in a [=credential chooser=].
+    :   <dfn attribute>iconURL</dfn>
+    ::  A URL pointing to an image for the credential, intended for display in a
+        [=credential chooser=]. This URL MUST be an <a><i lang="la">a priori</i> authenticated
+        URL</a>.
+  </dl>
 
-    <div class="example">
-      <pre>
-        navigator.<a attribute>credentials</a>.<a idl lt="get()" for="CredentialsContainer">get</a>({
-          "<a for="CredentialRequestOptions" dict-member>password</a>": true,
-          "<a dict-member>federated</a>": {
-            "<a idl>providers</a>": [ "https://www.facebook.com", "https://accounts.google.com" ]
+  ## `navigator.credentials` ## {#framework-credential-management}
+
+  Developers interact with the user agent's [=credential store=] via methods exposed on the
+  {{CredentialsContainer}} interface, which hangs off the {{Navigator}} object as
+  <a attribute for="Navigator" lt="credentials">`navigator.credentials`</a>.
+
+  <pre class="idl">
+    partial interface Navigator {
+      [SecureContext] readonly attribute CredentialsContainer credentials;
+    };
+  </pre>
+
+  Note: As discussed in [[#insecure-sites]], the credential management API is exposed only in
+  [=Secure Contexts=].
+
+  <pre class="idl">
+    [Exposed=Window, SecureContext]
+    interface CredentialsContainer {
+      Promise&lt;Credential?&gt; get(optional CredentialRequestOptions options);
+      Promise&lt;Credential&gt; store(Credential credential);
+      Promise&lt;void&gt; requireUserMediation();
+    };
+
+    dictionary CredentialData {
+      required USVString id;
+    };
+  </pre>
+
+  <dl dfn-for="CredentialsContainer">
+    :   <dfn method>get(options)</dfn>
+    ::  When {{CredentialsContainer/get()}} is called, the user agent MUST return the result of
+        executing <a abstract-op>Request a `Credential`</a> on
+        {{CredentialsContainer/get(options)/options}}.
+
+        <pre class="argumentdef" for="CredentialsContainer/get(options)">
+          options: The set of properties governing the scope of the request.
+        </pre>
+
+    :   <dfn method lt="store(credential)|store()">store(credential)</dfn>
+    ::  When {{CredentialsContainer/store()}} is called, the user agent MUST return the result of
+        executing <a abstract-op>Store a `Credential`</a> on 
+        {{CredentialsContainer/store(credential)/credential}}.
+
+        <pre class="argumentdef" for="CredentialsContainer/store(credential)">
+          credential: The credential to be stored.
+        </pre>
+    
+    :   <dfn method>requireUserMediation()</dfn>
+    ::  When {{CredentialsContainer/requireUserMediation()}} is called, the user agent MUST return
+        the result of executing <a abstract-op>Require user mediation</a> on the <a>current settings
+        object</a>.
+  
+        Note: The intent here is a signal from the origin that the user has signed out. That
+        is, after a click on a "Sign out" button, the site updates the user's session info, and
+        calls `navigator.credentials.requireUserMediation()`. This toggles the <a>`requires user
+        mediation` flag</a>, meaning that credentials will not be automagically handed back to the
+        page next time the user visits.
+  </dl>
+
+  ## The `CredentialRequestOptions` Dictionary ## {#credentialrequestoptions-dictionary}
+
+  In order to retrieve a {{Credential}} via {{CredentialsContainer/get()}}, the caller specifies a
+  few parameters in a {{CredentialRequestOptions}} object.
+
+  Note: The {{CredentialRequestOptions}} dictionary is an extension point. If and when new types of
+  credentials are introduced that require options, their dictionary types will be added to the
+  dictionary so they can be passed into the request. See [[#implementation-extension]].
+
+  <pre class="idl">
+    [Exposed=Window, SecureContext]
+    dictionary CredentialRequestOptions {
+      boolean unmediated = false;
+    };
+  </pre>
+  <dl dfn-for="CredentialRequestOptions">
+    :   <dfn dict-member>unmediated</dfn>
+    ::  If `true`, the user agent will only attempt to provide a {{Credential}} without user
+        interaction. It MUST NOT present the user with any visible prompt to grant access to a
+        {{Credential}}: if the user has opted-into always giving a particular site access to a
+        particular set of credentials, they will be provided. If not, the promise will resolve
+        with `null`. For processing details, see the algorithm defined in
+        [[#algorithm-request]].
+  </dl>
+
+
+  <div algorithm="relevant credential interfaces">
+    The <dfn for="CredentialRequestOptions">relevant credential interface objects</dfn> for a given
+    {{CredentialRequestOptions}} (|options|) is a set of [=interface objects=], collected as follows:
+
+    <ol>
+      1.  Let |settings| be the <a>current settings object</a>
+
+      2.  Let |interface objects| be the set of [=interface objects=] on |settings|'
+          [=environment settings object/global object=].
+         
+      3.  Let |relevant interface objects| be an empty set.
+      
+      4.  For each |object| in |interface objects|:
+
+          1.  If |object|'s [=inherited interfaces=] do not <a for="set">contain</a> {{Credential}},
+              <a for="iteration">continue</a>.
+
+          2.  Let |key| be |object|'s {{Credential/[[type]]}} slot's value.
+
+          3.  If |options|[|key|] <a for="map">exists</a>, <a for="set">append</a> |object| to
+              |relevant interface objects|.
+    </ol>
+
+    ISSUE: jyasskin@ suggests replacing the iteration through the interface objects with a registry.
+    I'm not sure which is less clear, honestly. I'll leave it like this for the moment, and we can
+    argue about whether this is too much of a `COMEFROM` interface.
+  </div>
+
+  <div algorithm="can collect locally">
+    A given {{CredentialRequestOptions}} |options| is
+    <dfn for="CredentialRequestOptions">matchable <i lang="la">a priori</i></dfn> if the following
+    steps return `true`:
+
+    <ol>
+      1.  For each |interface| in |options|' [=relevant credential interface objects=]:
+
+          1.  If |interface|'s {{Credential/[[discovery]]}} slot's value is not
+              "{{Credential/[[discovery]]/credential store}}", return `false`.
+
+      2.  Return `true`.
+    </ol>
+
+    Note: When executing {{get(options)}}, we only return credentials without [=user mediation=] if
+    the provided {{CredentialRequestOptions}} is <a>matchable <i lang="la">a priori</i></a>. If any
+    credential types are requested that could require discovery from some external service (OAuth
+    tokens, security key authenticators, etc.), then [=user mediation=] will be required in order
+    to guide the discovery process (by choosing a federated identity provider, BTLE device, etc).
+  </div>
+
+  ## Algorithms ## {#algorithms}
+
+  <h4 id="algorithm-request" algorithm>Request a `Credential`</h4>
+
+  The <dfn abstract-op>Request a `Credential`</dfn> algorithm accepts a {{CredentialRequestOptions}}
+  (|options|), and returns a {{Promise}} which resolves with a {{Credential}} if one can be
+  unambigiously obtained, or with `null` if not.
+
+  <ol class="algorithm">
+    1.  Let |settings| be the <a>current settings object</a>
+
+    2.  Assert: |settings| is a [=secure context=].
+
+    3.  Return a {{Promise}} rejected with `NotSupportedError` if any of the following statements
+        are true:
+
+        1.  |settings| does not have a [=environment settings object/responsible document=].
+
+        2.  |settings|' [=environment settings object/responsible document=] is not the
+            [=active document=] in a [=top-level browsing context=].
+
+    4.  Let |p| be a new {{Promise}}.
+    
+    5.  Return |p|, and execute the following steps asynchronously:
+
+        1.  Let |credentials| be the result of <a abstract-op lt="collect local">collecting
+            `Credential`s from the credential store</a>, given |options|.
+
+        2.  If all of the following statements are true, resolve |p| with |credentials|[0] and
+            skip the remaining steps:
+
+            1.  |credentials|' [=set/size=] is 1
+
+            2.  |settings|' [=environment settings object/origin=] does not
+                [=origin/requires user mediation|require user mediation=]
+
+            3.  |options| is <a>matchable <i lang="la">a priori</i></a>.
+
+            ISSUE: This might be the wrong model. It would be nice to support a site that wished
+            to accept either username/passwords or webauthn-style credentials without forcing
+            a chooser for those users who use the former, and who wish to remain signed in.
+
+        3.  If |options|' {{CredentialRequestOptions/unmediated}} is `true`, resolve |p| with `null`
+            and skip the remaining steps.
+
+        4.  Let |choice| be the result of <a abstract-op lt="ask to choose">asking the user to
+            choose a `Credential`</a>, given |options| and |credentials|.
+
+        5.  If |choice| is `null` or a {{Credential}}, resolve |p| with |choice| and skip the
+            remaining steps.
+
+        6.  Assert: |choice| is an [=interface object=].
+
+        7.  Resolve |p| with the result of executing |choice|'s
+            {{[[DiscoverFromExternalSource]](options)}}, given |options|.
+  </ol>
+
+  <h4 id="algorithm-collect-known" algorithm>Collect `Credential`s from the credential store</h4>
+
+  Given a {{CredentialRequestOptions}} (|options|), the user agent may
+  <dfn abstract-op local-lt="collect local">collect `Credential`s from the credential store</dfn>,
+  returning a set of {{Credential}} objects stored by the user agent locally that match |options|'
+  filter. If no such {{Credential}} objects are known, the returned set will be empty:
+
+  <ul class="algorithm">
+    1.  Let |possible matches| be an empty set.
+
+    2.  For each |interface| in |options|' <a>relevant credential interface objects</a>:
+
+        1.  Let |credentials| be the result of executing |interface|'s
+            {{Credential/[[CollectFromCredentialStore]](options)}} internal method on |options|.
+
+        2.  For each |c| in |credentials|:
+       
+            1.  <a for="set">Append</a> |c| to |possible matches|.
+
+    3.  Return |possible matches|.
+  </ul>
+
+
+  <h4 id="algorithm-store" algorithm>Store a `Credential`</h4>
+
+  The <dfn abstract-op>Store a `Credential`</dfn> algorithm accepts a {{Credential}}
+  (|credential|), and returns a {{Promise}} which resolves once the object is persisted to the
+  [=credential store=].
+
+  <ul class="algorithm">
+    1.  Let |settings| be the <a>current settings object</a>
+
+    2.  Assert: |settings| is a [=secure context=].
+
+    3.  Return a {{Promise}} rejected with `NotSupportedError` if any of the following statements
+        are true:
+
+        1.  |settings| does not have a [=environment settings object/responsible document=].
+
+        2.  |settings|' [=environment settings object/responsible document=] is not the
+            [=active document=] in a [=top-level browsing context=].
+
+    4.  Return a {{Promise}} which resolves with the result of executing |credential|'s
+        [=interface object=]'s {{Credential/[[Store]](credential)}} internal method on |credential|.
+  </ul>
+
+  <h4 id="algorithm-require-mediation" algorithm>Require User Mediation</h4>
+
+  The <dfn abstract-op>Require user mediation</dfn> algorithm accepts an [=environment settings
+  object=] (|settings|), and returns a {{Promise}} which resolves once the `requires user mediation`
+  flag is persisted to the [=credential store=].
+
+  <ul class="algorithm">
+    1.  Let |origin| be |settings|' [=environment settings object/origin=].
+
+    2.  Let |p| be a new {{Promise}}.
+
+    3.  Return |p|, and execute the following steps asynchronously:
+
+        1.  Set |origin|'s <a>`requires user mediation` flag</a> in the [=credential store=].
+
+        2.  Resolve |p|.
+  </ul>
+</section>
+
+<!--
+████████     ███     ██████   ██████  ██      ██  ███████  ████████  ████████   ██████ 
+██     ██   ██ ██   ██    ██ ██    ██ ██  ██  ██ ██     ██ ██     ██ ██     ██ ██    ██
+██     ██  ██   ██  ██       ██       ██  ██  ██ ██     ██ ██     ██ ██     ██ ██      
+████████  ██     ██  ██████   ██████  ██  ██  ██ ██     ██ ████████  ██     ██  ██████ 
+██        █████████       ██       ██ ██  ██  ██ ██     ██ ██   ██   ██     ██       ██
+██        ██     ██ ██    ██ ██    ██ ██  ██  ██ ██     ██ ██    ██  ██     ██ ██    ██
+██        ██     ██  ██████   ██████   ███  ███   ███████  ██     ██ ████████   ██████ 
+-->
+<section>
+  # Password Credentials # {#passwords}
+
+  For good or for ill, many websites rely on username/password pairs as an authentication mechanism.
+  The {{PasswordCredential}} interface is a [=credential=] meant to enable this use case, storing
+  both a username and password, as well as metadata that can help a user choose the right account
+  from within a [=credential chooser=].
+
+  ## Examples ##  {#password-examples}
+
+  ### Password-based Sign-in ### {#examples-password-signin}
+  
+  <div class="example">
+    MegaCorp, Inc. supports passwords, and can use {{get()|navigator.credentials.get()}} to obtain
+    username/password pairs from a user's [=credential store=]:
+
+    <pre>
+      navigator.<a attribute>credentials</a>
+        .<a idl lt="get()" for="CredentialsContainer">get</a>({ "<a for="CredentialRequestOptions" dict-member>password</a>": true })
+        .then(credential =&gt; {
+          if (!credential) {
+            // The user either doesn't have credentials for this site, or
+            // refused to share them. Insert some code here to fall back to
+            // a basic login form.
+            return;
           }
-        }).then(
-            function(credential) {
-              if (!credential)
-                return;
-
-              if (credential.type == "<a const>federated</a>") {
-                switch (credential.<a idl for="FederatedCredential">provider</a>) {
-                case "https://www.facebook.com/":
-                  // Use Facebook's SDK, a la
-                  // <a href="https://developers.facebook.com/docs/facebook-login/login-flow-for-web/#logindialog">https://developers.facebook.com/docs/facebook-login/login-flow-for-web/#logindialog</a>
-                  FB.login(function (response) {
-                    if (response.status === "authorized") {
-                      // Can now use FB.api() calls
-                    } else {
-                      // Explain to the user that we would really like them to
-                      // click "Log me in".
-                    }
-                  });
-                  break;
-
-                case "https://accounts.google.com/":
-                  // Ditto
-                  break;
-
-                // ...
+          if (credential.<a attribute for="Credential">type</a> == "<a const>password</a>") {
+            fetch("https://example.com/loginEndpoint", { credentials: credential, method: "POST" })
+              .then(function (response) {
+                if (/* |response| indicates a successful login */) {
+                  // Store the credential again, see note below.
+                  navigator.<a attribute>credentials</a>.<a idl lt="store()" for="CredentialsContainer">store</a>(credential);
+                  // Notify the user that sign-in succeeded! Do amazing, signed-in things!
+                } else {
+                  // Insert some code here to fall back to a basic login form.
                 }
-              } else {
-                fetch("https://example.com/loginEndpoint", { credentials: credential, method: "POST" })
-                  .then(function (response) { ... })
-                  .catch(function (response) { ... });
-              }
-            });
-      </pre>
-
-      Note: This API does not go out to the identity provider to grab a token,
-      or authenticate the user in any way. It provides a hint to the website as
-      to which identity provider the user prefers to use, and little more. See
-      [[#future-work]] for directions future versions of this API could take.
-    </div>
-
-    <h4 id="examples-post-signin">Post-sign-in Confirmation</h4>
-
-    To ensure that users are offered to store new credentials after a successful
-    sign-in, they need to be passed to {{CredentialsContainer/store()}}.
-
-    <div class="example">
-      If a user is signed in by calling {{fetch()}} on a {{PasswordCredential}}
-      object, submitting that data to a sign-in endpoint, then we can check the
-      response to determine whether the user was signed in successfully, and
-      notify the user agent accordingly. Given a sign-in form like the following:
-
-      <pre>
-        &lt;form action="https://example.com/login" method="POST" id="theForm"&gt;
-          &lt;label for="username"&gt;Username&lt;/label&gt;
-          &lt;input type="text" id="username" name="username" <a element-attr for="input">autocomplete</a>="<a attr-value>username</a>"&gt;
-          &lt;label for="password"&gt;Password&lt;/label&gt;
-          &lt;input type="password" id="password" name="password" <a element-attr for="input">autocomplete</a>="<a attr-value>current-password</a>"&gt;
-          &lt;input type="submit"&gt;
-        &lt;/form&gt;
-      </pre>
-
-      Then the developer can handle the form submission with something like the
-      following handler:
-
-      <pre>
-        document.querySelector('#theForm').addEventListener("submit", e =&gt; {
-            if (<a attribute lt="credentials">navigator.credentials</a>) {
-              e.preventDefault();
-
-              // Construct a new <a idl>PasswordCredential</a> from the <a idl>HTMLFormElement</a>
-              // that fired the "submit" event: this will suck up the values of the fields
-              // labeled with "username" and "current-password" <a element-attr for="input">autocomplete</a>
-              // attributes:
-              var c = new <a idl lt="PasswordCredential(form)">PasswordCredential</a>(e.target);
-
-              // Fetch the form's action URL, passing that new credential object in
-              // as the fetch's credentials. If the response indicates success, ask
-              // the user agent to ask the user to store the credential for future use:
-              var init = { method: "POST", credentials: c };
-              fetch(e.target.action, init).then(r =&gt; {
-                if (/* |r| is a "successful" <a idl>Response</a> */)
-                  <a idl lt="store()">navigator.credentials.store</a>(c);
               });
-            }
+          }
         });
-      </pre>
-    </div>
+    </pre>
+  </div>
 
-    <div class="example">
-      If we're using a <a>federated identity provider</a>:
+  Note: The [=credential chooser=] presented by the user agent could allow the user to choose
+  credentials that aren't actually stored for the current origin. For instance, it might offer up
+  redentials from `https://m.example.com` when signing into `https://www.example.com` (as
+  described in [[#passwords-cross-origin-leakage]]), or it might allow a user to create a new
+  credential on the fly. Developers can deal gracefully with this uncertainty by calling
+  {{CredentialsContainer/store()}} every time credentials are successfully used, even right after
+  credentials have been retrieved from {{CredentialsContainer/get()}}: if the credentials aren't
+  yet stored for the origin, the user will be given the opportunity to do so. If they are stored,
+  the user won't be prompted.
 
-      <pre>
-        if (<a attribute lt="credentials">navigator.credentials</a>) {
-          navigator.<a attribute>credentials</a>.<a idl lt="store()">store</a>(
-            new <a idl>FederatedCredential</a>({
-              "<a idl for="CredentialData">id</a>": "username",
-              "<a idl for="FederatedCredentialData">provider</a>": "https://federation.com"
-            })
-          );
-        }
-      </pre>
-    </div>
+  ### Post-sign-in Confirmation ### {#examples-post-signin}
 
-    <h4 id="examples-change-password">Change Password</h4>
+  To ensure that users are offered to store new credentials after a successful sign-in, they can
+  to be passed to {{CredentialsContainer/store()}}.
 
-    This same storage mechanism can be reused for "password change" with no
-    modifications: if the user changes her credentials, the website can notify
-    the user agent that she's successfully signed in with new credentials. The
-    user agent can then update the credentials it stores:
+  <div class="example">
+    If a user is signed in by calling {{fetch()}} on a {{PasswordCredential}} object, submitting
+    that data to a sign-in endpoint, then we can check the response to determine whether the user
+    was signed in successfully, and notify the user agent accordingly. Given a sign-in form like the
+    following:
 
-    <div class="example">
-      MegaCorp Inc. allows users to change their passwords by POSTing data to
-      a backend server asynchronously. After doing so successfully, they can
-      update the user's credentials by calling {{CredentialsContainer/store()}}
-      with the new information.
+    <pre>
+      &lt;form action="https://example.com/login" method="POST" id="theForm"&gt;
+        &lt;label for="username"&gt;Username&lt;/label&gt;
+        &lt;input type="text" id="username" name="username" <a element-attr for="input">autocomplete</a>="<a attr-value>username</a>"&gt;
+        &lt;label for="password"&gt;Password&lt;/label&gt;
+        &lt;input type="password" id="password" name="password" <a element-attr for="input">autocomplete</a>="<a attr-value>current-password</a>"&gt;
+        &lt;input type="submit"&gt;
+      &lt;/form&gt;
+    </pre>
 
-      Given a password change form like the following:
+    Then the developer can handle the form submission with something like the following handler:
 
-      <pre>
-        &lt;form action="https://example.com/changePassword" method="POST" id="theForm"&gt;
-          &lt;input type="hidden" name="username" <a element-attr for="input">autocomplete</a>="<a attr-value>username</a>" value="user"&gt;
-          &lt;label for="password"&gt;New Password&lt;/label&gt;
-          &lt;input type="password" id="password" name="password" <a element-attr for="input">autocomplete</a>="<a attr-value>new-password</a>"&gt;
-          &lt;input type="submit"&gt;
-        &lt;/form&gt;
-      </pre>
-
-      The developer can handle the form submission with something like the following:
-
-      <pre>
-        document.querySelector('#theForm').addEventListener("submit", e =&gt; {
+    <pre>
+      document.querySelector('#theForm').addEventListener("submit", e =&gt; {
           if (<a attribute lt="credentials">navigator.credentials</a>) {
             e.preventDefault();
 
             // Construct a new <a idl>PasswordCredential</a> from the <a idl>HTMLFormElement</a>
             // that fired the "submit" event: this will suck up the values of the fields
-            // labeled with "username" and "new-password" <a element-attr for="input">autocomplete</a>
+            // labeled with "username" and "current-password" <a element-attr for="input">autocomplete</a>
             // attributes:
             var c = new <a idl lt="PasswordCredential(form)">PasswordCredential</a>(e.target);
 
@@ -505,736 +675,359 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
                 <a idl lt="store()">navigator.credentials.store</a>(c);
             });
           }
-        });
-      </pre>
-    </div>
+      });
+    </pre>
+  </div>
 
-    <h4 id="examples-legacy">Layering on top of a legacy system</h4>
+  ### Change Password ### {#examples-change-password}
 
-    The API is designed in such a way as to cleanly sit on top of an existing
-    password-based sign-in system's backend. For instance, the username and
-    password parameters can be renamed by adjusting the {{PasswordCredential}}'s
-    {{PasswordCredential/idName}} and {{PasswordCredential/passwordName}}
-    attributes, and additional data can be added to a request by setting the
-    {{PasswordCredential/additionalData}} attribute.
+  This same storage mechanism can be reused for "password change" with no modifications: if the
+  user changes their credentials, the website can notify the user agent that they've successfully
+  signed in with new credentials. The user agent can then update the credentials it stores:
 
-    <div class="example">
-      MegaCorp Inc. has an existing sign-in system that expects the username
-      to be submitted as a parameter named "`u`" and a the password as a
-      parameter named "`p`". The following code accomplishes this:
+  <div class="example">
+    MegaCorp Inc. allows users to change their passwords by POSTing data to
+    a backend server asynchronously. After doing so successfully, they can
+    update the user's credentials by calling {{CredentialsContainer/store()}}
+    with the new information.
 
-      <pre>
-        // Given a <a idl>PasswordCredential</a> |credential|:
-        credential.idName = "u";
-        credential.passwordName = "p";
-        fetch("https://example.com/loginEndpoint", { credentials: credential, method: "POST" });
-      </pre>
-    </div>
+    Given a password change form like the following:
 
-    <div class="example">
-      Further, MegaCorp Inc. protects itself against attack by appending a CSRF
-      token to the request. The following code accomplishes this:
+    <pre>
+      &lt;form action="https://example.com/changePassword" method="POST" id="theForm"&gt;
+        &lt;input type="hidden" name="username" <a element-attr for="input">autocomplete</a>="<a attr-value>username</a>" value="user"&gt;
+        &lt;label for="password"&gt;New Password&lt;/label&gt;
+        &lt;input type="password" id="password" name="password" <a element-attr for="input">autocomplete</a>="<a attr-value>new-password</a>"&gt;
+        &lt;input type="submit"&gt;
+      &lt;/form&gt;
+    </pre>
 
-      <pre>
-        // Given a <a idl>PasswordCredential</a> |credential|:
-        credential.<a idl>additionalData</a> = new FormData();
-        credential.<a idl>additionalData</a>.append("csrf", "[random token value goes here]");
-        
-        fetch("https://example.com/loginEndpoint", { credentials: credential, method: "POST" });
-      </pre>
-    </div>
+    The developer can handle the form submission with something like the following:
 
-    <div class="example">
-      MegaCorp Inc.'s backend servers cannot accept POST requests submitted as
-      `multipart/form-data`. They need to submit the credential information as
-      `application/x-www-form-urlencoded` instead. They can accomplish this by
-      setting the {{PasswordCredential/additionalData}} attribute to a
-      {{URLSearchParams}} object (which serializes as a urlencoded submission):
+    <pre>
+      document.querySelector('#theForm').addEventListener("submit", e =&gt; {
+        if (<a attribute lt="credentials">navigator.credentials</a>) {
+          e.preventDefault();
 
-      <pre>
-        // Given a <a idl>PasswordCredential</a> |credential|:
-        credential.<a idl>additionalData</a> = new URLSearchParams();
-        
-        // Note that MegaCorp Inc. doesn't need to append any data to the
-        // object. Setting `additionalData` to an empty `URLSearchParams` object
-        // is enough to change the content type of the submission.
-        
-        fetch("https://example.com/loginEndpoint", { credentials: credential, method: "POST" });
-      </pre>
-    </div>
-  </section>
-</section>
+          // Construct a new <a idl>PasswordCredential</a> from the <a idl>HTMLFormElement</a>
+          // that fired the "submit" event: this will suck up the values of the fields
+          // labeled with "username" and "new-password" <a element-attr for="input">autocomplete</a>
+          // attributes:
+          var c = new <a idl lt="PasswordCredential(form)">PasswordCredential</a>(e.target);
 
-<!--
-████████  ████████ ████████ ████ ██    ██ ████ ████████ ████  ███████  ██    ██  ██████
-██     ██ ██       ██        ██  ███   ██  ██     ██     ██  ██     ██ ███   ██ ██    ██
-██     ██ ██       ██        ██  ████  ██  ██     ██     ██  ██     ██ ████  ██ ██
-██     ██ ██████   ██████    ██  ██ ██ ██  ██     ██     ██  ██     ██ ██ ██ ██  ██████
-██     ██ ██       ██        ██  ██  ████  ██     ██     ██  ██     ██ ██  ████       ██
-██     ██ ██       ██        ██  ██   ███  ██     ██     ██  ██     ██ ██   ███ ██    ██
-████████  ████████ ██       ████ ██    ██ ████    ██    ████  ███████  ██    ██  ██████
--->
-<section>
-  <h2 id="terms">Key Concepts and Terminology</h2>
+          // Fetch the form's action URL, passing that new credential object in
+          // as the fetch's credentials. If the response indicates success, ask
+          // the user agent to ask the user to store the credential for future use:
+          var init = { method: "POST", credentials: c };
+          fetch(e.target.action, init).then(r =&gt; {
+            if (/* |r| is a "successful" <a idl>Response</a> */)
+              <a idl lt="store()">navigator.credentials.store</a>(c);
+          });
+        }
+      });
+    </pre>
+  </div>
 
-  <dl>
-    <dt><dfn export>Credentials</dfn></dt>
-    <dt><dfn export>Password Credentials</dfn></dt>
-    <dt><dfn export>Federated Credentials</dfn></dt>
-    <dd>
-      Broadly speaking, <strong>credential</strong> is an assertion about an
-      entity which enables a trust decision. This specification defines two
-      specific types of credentials which are useful for authentication:
-      "password" credentials, which consist of a username/password
-      pair, and "federated" credentials, which point out to a <a>federated
-      identity provider</a> which is trusted to correctly assert a user's
-      authentication.
-
-      Note: These two types are, of course, not exhaustive. Future versions of
-      this and other documents will likely define other types of credentials.
-    </dd>
-
-    <dt>
-      <dfn export>Credential Store</dfn>
-    </dt>
-    <dd>
-      A <strong>credential store</strong> is an opaque storage mechanism which
-      offers a user agent the ability to:
-     
-      1. Store, retrieve, and modify {{Credential}} objects.
-      2. To mark an <a>origin</a> with a <dfn>requires user mediation</dfn> flag.
-      3. To associate an <a>origin</a> with a <dfn>protocol set</dfn>.
-      
-      The implementation is vendor-specific, and the interface provided is not
-      exposed to the web.
-
-      Note: The types of credentials defined in this document are stored locally
-      in a user agent's credential store, but future versions of this and other
-      documents will likely define credential types which are external to the
-      user agent.
-    </dd>
-
-    <dt>
-      <dfn export local-lt="IDP|identity provider">
-        Federated Identity Provider
-      </dfn>
-    </dt>
-    <dd>
-      A <strong>federated identity provider</strong> is an entity which a
-      website trusts to correctly authenticate a user, and which provides an
-      API for that purpose. <a href="http://openid.net/developers/specs/">OpenID
-      Connect</a> is an example of such a framework, used by a number of
-      providers.
-    </dd>
-  </dl>
-</section>
-
-<!--
-████ ██    ██ ████████ ████████ ████████  ████████    ███     ██████  ████████  ██████
- ██  ███   ██    ██    ██       ██     ██ ██         ██ ██   ██    ██ ██       ██    ██
- ██  ████  ██    ██    ██       ██     ██ ██        ██   ██  ██       ██       ██
- ██  ██ ██ ██    ██    ██████   ████████  ██████   ██     ██ ██       ██████    ██████
- ██  ██  ████    ██    ██       ██   ██   ██       █████████ ██       ██             ██
- ██  ██   ███    ██    ██       ██    ██  ██       ██     ██ ██    ██ ██       ██    ██
-████ ██    ██    ██    ████████ ██     ██ ██       ██     ██  ██████  ████████  ██████
--->
-<section>
-  <h2 id="interfaces">Interfaces</h2>
-
-  <h3 id="interfaces-credential-types">Credential Types</h3>
-
-  This document defines a generic and extensible {{Credential}} interface from
-  which all <a>credentials</a> will inherit, and a slightly less generic
-  {{SiteBoundCredential}}, which defines the specific attributes shared
-  by any <a>Credential</a> persisted in user agent's <a>credential store</a>.
-
-  {{PasswordCredential}} and {{FederatedCredential}} both inherit from
-  {{SiteBoundCredential}}, and, as you might expect, are the concrete types
-  mapped to <a>password credentials</a> and <a>federated credentials</a>,
-  respectively.
-
-  <h4 id="interfaces-credential-types-credential"><code>Credential</code></h4>
-  <pre class="idl">
-    dictionary CredentialData {
-      required USVString id;
-    };
-
-    [SecureContext] interface Credential {
-      readonly attribute USVString id;
-      readonly attribute DOMString type;
-    };
-    Credential implements Transferable;
-  </pre>
-  <dl dfn-for="Credential">
-    <dt><dfn attribute>id</dfn></dt>
-    <dd>
-      The credential's identifier. This might be a GUID, username, or email
-      address, for instance.
-    </dd>
-    <dt><dfn attribute>type</dfn></dt>
-    <dd>
-      The credential's type. This attribute's getter returns the value of the
-      credential's {{[[type]]}} slot.
-
-      Note: The {{[[type]]}} slot's value will be the same for all
-      credentials implementing a particular interface. Currently,
-      {{PasswordCredential}} objects have a {{[[type]]}} of
-      <code>password</code>, and {{FederatedCredential}} objects have a
-      {{[[type]]}} of <code>federated</code>.
-    </dd>
-    <dt><dfn attribute>\[[type]]</dfn></dt>
-    <dd>
-      All {{Credential}} objects have an internal slot named
-      {{[[type]]}}, which unsurprisingly contains a string representing
-      the type of the credential. This property is exposed to the web via the
-      {{Credential/type}} attribute.
-    </dd>
-  </dl>
-
-  {{Credential}} objects implement {{Transferable}}, and MUST support the
-  the <a>structured clone</a> algorithm. Unless otherwise specified, the cloning
-  mechanism for all objects which implement {{Credential}} is defined in
-  [[#clone-credential]].
+  ## The `PasswordCredential` Interface ## {#passwordcredential-interface}
 
   <pre class="idl">
-    dictionary SiteBoundCredentialData : CredentialData {
-      USVString name;
-      USVString iconURL;
-    };
-
-    [SecureContext] interface SiteBoundCredential : Credential {
-      readonly attribute USVString name;
-      readonly attribute USVString iconURL;
-    };
-  </pre>
-
-  <h4 id="interfaces-credential-types-siteboundcredential">
-    <code>SiteBoundCredential</code>
-  </h4>
-
-  <dl dfn-for="SiteBoundCredential">
-    <dt><dfn attribute>name</dfn></dt>
-    <dd>
-      A name associated with the credential, intended as a human-understandable
-      public name.
-    </dd>
-
-    <dt><dfn attribute>iconURL</dfn></dt>
-    <dd>
-      A URL pointing to an image for the credential. This URL MUST be an
-      <a><i lang="la">a priori</i> authenticated URL</a>.
-
-      ISSUE(w3c/webappsec#247): Anne suggests that this might be better modeled
-      as an <code>ImageBitmap</code> or <code>blob:</code>. We also need to
-      figure out responsiveness. Perhaps [[MANIFEST]]'s format?
-    </dd>
-    <dt><dfn attribute>\[[origin]]</dfn></dt>
-    <dd>
-      All {{SiteBoundCredential}} objects have an internal slot named
-      {{[[origin]]}}, which stores the <a>origin</a> to which the credential is
-      bound. This property is not directly exposed to the web.
-    </dd>
-  </dl>
-
-  All {{SiteBoundCredential}} objects MUST define an <dfn>options matching
-  algorithm</dfn> which returns <dfn><code>Match</code></dfn> if the object
-  matches a {{CredentialRequestOptions}} object, and <dfn><code>Does Not
-  Match</code></dfn> otherwise.
-
-  <h4 id="interfaces-credential-types-passwordcredential"><code>PasswordCredential</code></h4>
-  <pre class="idl">
-    dictionary PasswordCredentialData : SiteBoundCredentialData {
-      required USVString password;
-    };
-
     typedef (FormData or URLSearchParams) CredentialBodyType;
 
     [Constructor(PasswordCredentialData data),
      Constructor(HTMLFormElement form),
      Exposed=Window,
      SecureContext]
-    interface PasswordCredential : SiteBoundCredential {
+    interface PasswordCredential : Credential {
       attribute USVString idName;
       attribute USVString passwordName;
 
       attribute CredentialBodyType? additionalData;
     };
-  </pre>
-  
-  :   <dfn attribute for="PasswordCredential">idName</dfn>
-  ::  This attribute represents the name which will be used for the ID field
-      when submitting the {{PasswordCredential}} to a remote endpoint via
-      {{fetch()}}. It defaults to "`username`", but can be overridden by a
-      developer to match whatever the backend service expects.
+    PasswordCredential implements CredentialUserData;
 
-  :   <dfn attribute for="PasswordCredential">passwordName</dfn>
-  ::  This attribute represents the name which will be used for the ID field
-      when submitting the {{PasswordCredential}} to a remote endpoint via
-      {{fetch()}}. It defaults to "`password`", but can be overridden by a
-      developer to match whatever the backend service expects.
-
-  :   <dfn attribute for="PasswordCredential">additionalData</dfn>
-  ::  If the developer wishes to specify additional data to insert into the
-      request body when submitting the credential information to a remote
-      endpoint, they can do so by assigning a {{FormData}} or
-      {{URLSearchParams}} object to this attribute. The credential information
-      will be mixed into the object to produce the body. The value is `null`
-      unless otherwise specified.
-
-  : {{[[type]]}}
-  ::  All {{PasswordCredential}} objects have their {{[[type]]}} slot's
-      value set to the string 
-      "<dfn const for="PasswordCredential">`password`</dfn>".
-
-  All {{PasswordCredential}} objects have an internal slot named
-  <dfn attribute for="PasswordCredential">\[[password]]</dfn> which stores the
-  credential's password. This property is not directly exposed to the web, but
-  used to construct the request body during {{fetch()}}.
-
-  <h5 id="passwordcredential-form-constructor" algorithm>
-    `PasswordCredential(HTMLFormElement form)` Constructor
-  </h5>
-
-  The <dfn constructor for="PasswordCredential">`PasswordCredential(form)`</dfn>
-  constructor, when invoked with an {{HTMLFormElement}} (|form|), must run these
-  steps.
-  
-  Note: [[#examples-post-signin]] and [[#examples-change-password]] provide 
-  examples of the intended usage.
-
-  1.  Let |data| be a new {{PasswordCredentialData}} dictionary.
-
-  2.  Let |formData| be the result of executing the {{FormData}} constructor
-      on |form|.
-
-  3.  Let |elements| be a list of all the <a>submittable elements</a> whose
-      <a>form owner</a> is |form|, in <a>tree order</a>.
-
-  4.  Let |idName| and |passwordName| be empty strings.
-
-  5.  Let |newPasswordObserved| be `false`.
-
-  6.  For each |field| in |elements|, run the following steps:
-
-      1.  If |field| does not have an <{input/autocomplete}> attribute, then
-          skip to the next |field|.
-
-      2.  Let |name| be the value of |field|'s <{input/name}> attribute.
-
-      3.  If |formData|'s {{FormData/has()}} method returns `false` when executed
-          on |name|, then skip to the next |field|.
-
-      4.  If |field|'s <{input/autocomplete}> attribute's value contains one or
-          more <a>autofill detail tokens</a> (|tokens|), then:
-          
-          1.  For each |token| in |tokens|:
-          
-              1.  If |token| is an <a>ASCII case-insensitive</a> match for one
-                  of the following strings, run the associated steps:
-
-                  :   "<a attr-value>`new-password`</a>"
-                  ::  Set |data|'s {{PasswordCredentialData/password}} member's
-                      value to the result of executing |formData|'s
-                      {{FormData/get()}} method on |name|, |passwordName| to
-                      |name|, and |newPasswordObserved| to `true`.
-                  :   "<a attr-value>`current-password`</a>"
-                  ::  If |newPasswordObserved| is `false`,
-                      set |data|'s {{PasswordCredentialData/password}} member's
-                      value to the result of executing |formData|'s
-                      {{FormData/get()}} method on |name|, and |passwordName| to
-                      |name|.
-
-                      Note: By checking that |newPasswordObserved| is `false`,
-                      `new-password` fields take precedence over
-                      `current-password` fields.
-                  :   "<a attr-value>`photo`</a>"
-                  ::  Set |data|'s {{SiteBoundCredentialData/iconURL}} member's
-                      value to the result of executing |formData|'s
-                      {{FormData/get()}} method on |name|.
-                  :   "<a attr-value>`name`</a>"
-                  :   "<a attr-value>`nickname`</a>"
-                  ::  Set |data|'s {{SiteBoundCredentialData/name}} member's
-                      value to the result of executing |formData|'s
-                      {{FormData/get()}} method on |name|.
-                  :   "<a attr-value>`username`</a>"
-                  ::  Set |data|'s {{CredentialData/id}} member's value to the
-                      result of executing |formData|'s {{FormData/get()}} method
-                      on |name|, and |idName| to |name|.
-
-  7.  Let |c| be the result of executing the {{PasswordCredential(data)}}
-      constructor on |data|. Rethrow any exception generated.
-
-  8.  Set |c|'s {{PasswordCredential/idName}} attribute to |idName|.
-
-  9.  Set |c|'s {{PasswordCredential/passwordName}} attribute to |passwordName|.
-
-  10. If |form|'s <a for="form">enctype</a> is "`multipart/form-data`",
-      then:
-     
-      1.  Set |c|'s {{PasswordCredential/additionalData}} attribute
-          to |formData|.
-
-      Otherwise:
-
-      1.  Let |params| be a new {{URLSearchParams}} object.
-
-      2.  For each |entry| in |formData|'s <a for="FormData">entries</a>:
-
-          1.  If |entry|'s <a for="entry">type</a> is "file", skip to the
-              next |entry|.
-
-          2.  Execute |params| {{URLSearchParams/append()}} method on
-              |entry|'s <a for="entry">name</a> and <a for="entry">value</a>.
-
-      3.  Set |c|'s {{PasswordCredential/additionalData}} attribute
-          to |params|.
-
-  11. Return |c|.
-
-  <h5 id="passwordcredential-data-constructor" algorithm>
-    `PasswordCredential(PasswordCredentialData data)` Constructor
-  </h5>
-
-  The <dfn constructor for="PasswordCredential">`PasswordCredential(data)`</dfn>
-  constructor, when invoked with a {{PasswordCredentialData}} (|data|), must run
-  these steps:
-
-  1.  Let |c| be a new {{PasswordCredential}} object.
-  
-  2.  If any of the following are the empty string, <a>throw</a> a `TypeError`
-      exception:
-
-      *   |data|'s {{CredentialData/id}} member's value
-      *   |data|'s {{PasswordCredentialData/password}} member's value
-
-  3.  Set |c|'s properties as follows:
-  
-      :   {{Credential/[[type]]}} slot
-      ::  "`password`"
-      :   {{PasswordCredential/[[password]]}} slot
-      ::  |data|'s {{PasswordCredentialData/password}} member's value
-      :   {{Credential/id}}
-      ::  |data|'s {{CredentialData/id}} member's value
-      :   {{PasswordCredential/idName}}
-      ::  "`username`"
-      :   {{SiteBoundCredential/iconURL}}
-      ::  |data|'s {{SiteBoundCredentialData/iconURL}} member's value
-      :   {{SiteBoundCredential/name}}
-      ::  |data|'s {{SiteBoundCredentialData/name}} member's value
-      :   {{PasswordCredential/passwordName}}
-      ::  "`password`"
-
-  4.  Return |c|.
-  
-  <h5 id="passwordcredential-matching">
-    Matching Algorithm
-  </h5>
-
-  {{PasswordCredential}} objects' <a>options matching algorithm</a> always
-  returns <a><code>Match</code></a>.
-
-  <h4 id="interfaces-credential-types-federatedcredential"><code>FederatedCredential</code></h4>
-  <pre class="idl">
-    dictionary FederatedCredentialData : SiteBoundCredentialData {
-      required USVString provider;
-      DOMString protocol;
+    [Exposed=Window, SecureContext]
+    dictionary PasswordCredentialData : CredentialData {
+      USVString name;
+      USVString iconURL;
+      required USVString password;
     };
 
-    [Constructor(FederatedCredentialData data), Exposed=Window, SecureContext]
-    interface FederatedCredential : SiteBoundCredential {
-      readonly attribute USVString provider;
-      readonly attribute DOMString? protocol;
+    partial dictionary CredentialRequestOptions {
+      boolean password = false;
     };
   </pre>
-  <dl dfn-for="FederatedCredential">
-    <dt><dfn attribute>provider</dfn></dt>
-    <dd>
-      The credential's <a>federated identity provider</a>. For details regarding
-      valid formats, see [[#identifying-federations]].
-    </dd>
-    <dt><dfn attribute>protocol</dfn></dt>
-    <dd>
-      The credential's <a>federated identity provider</a>'s protocol (e.g.
-      "openidconnect"). If this value is <code>null</code>, then the protocol
-      can be inferred from the {{FederatedCredential/provider}}.
-    </dd>
-    <dt>{{[[type]]}}</dt>
-    <dd>
-      All {{FederatedCredential}} objects have their {{[[type]]}}
-      slot's value set to the string "<dfn const><code>federated</code></dfn>".
-    </dd>
+  <dl dfn-for="PasswordCredential">
+    :   <dfn attribute>idName</dfn>
+    ::  This attribute represents the name which will be used for the ID field when submitting the
+        {{PasswordCredential}} to a remote endpoint via {{fetch()}}. It defaults to "`username`",
+        but can be overridden by a developer to match whatever the backend service expects.
+
+    :   <dfn attribute>passwordName</dfn>
+    ::  This attribute represents the name which will be used for the ID field when submitting the
+        {{PasswordCredential}} to a remote endpoint via {{fetch()}}. It defaults to "`password`",
+        but can be overridden by a developer to match whatever the backend service expects.
+
+    :   <dfn attribute>additionalData</dfn>
+    ::  If the developer wishes to specify additional data to insert into the request body when
+        submitting the credential information to a remote endpoint, they can do so by assigning a
+        {{FormData}} or {{URLSearchParams}} object to this attribute. The credential information
+        will be mixed into the object to produce the body. The value is `null` unless otherwise
+        specified.
+
+    :   {{Credential/[[type]]}}
+    ::  The {{PasswordCredential}} [=interface object=] has an internal slot named `[[type]]` whose
+        value is "<dfn const>`password`</dfn>".
+
+    :   {{Credential/[[discovery]]}}
+    ::  The {{PasswordCredential}} [=interface object=] has an internal slot named `[[discovery]]`
+        whose value is "{{Credential/[[discovery]]/credential store}}".
+
+    :   <dfn attribute>\[[password]]</dfn>
+    ::  Each {{PasswordCredential}} object has an internal slot named `[[password]]` which stores
+        the credential's password. This property is not directly exposed to the web, but used to
+        construct a request body during {{fetch()}}.
+
+    :   {{PasswordCredential(form)}}
+    ::  This constructor is defined in [[#construct-passwordcredential-form]].
+
+    :   {{PasswordCredential(data)}}
+    ::  This constructor is defined in [[#construct-passwordcredential-data]].
   </dl>
 
-  <h5 id="federatedcredential-matching">
-    Matching Algorithm
-  </h5>
+  {{PasswordCredential}} objects are [=Credential/origin bound=].
 
-  {{FederatedCredential}} objects' <a>options matching algorithm</a> is as
-  follows. Given a {{FederatedCredential}} (<var>credential</var>) and a
-  {{CredentialRequestOptions}} (<var>options</var>):
+  {{PasswordCredential}}'s [=interface object=] inherits {{Credential}}'s implementation of
+  {{Credential/[[DiscoverFromExternalSource]](options)}}, and defines its own implementation of
+  {{PasswordCredential/[[CollectFromCredentialStore]](options)}} and
+  {{PasswordCredential/[[Store]](credential)}}.
 
-  <ol>
-    <li>
-      Let <var>federated</var> be the value of <var>options</var>'s
-      {{CredentialRequestOptions/federated}} property.
-    </li>
-    <li>
-      If the {{FederatedCredentialRequestOptions/providers}} property is
-      present in <var>federated</var>:
+  ## Algorithms ## {#passwordcredential-algorithms}
 
-      <ol>
-        <li>
-          For each <var>provider</var> in <var>federated</var>'
-          <code>providers</code> list:
-
-          <ol>
-            <li>
-              Return <a><code>Matches</code></a> if <var>credential</var>'s
-              {{FederatedCredential/provider}} is a case-sensitive match for
-              <var>provider</var>.
-            </li>
-          </ol>
-        </li>
-      </ol>
-    </li>
-    <li>
-      If the {{FederatedCredentialRequestOptions/protocols}} property is
-      present in <var>federated</var>:
-
-      <ol>
-        <li>
-          For each <var>protocol</var> in <var>federated</var>'
-          {{FederatedCredentialRequestOptions/protocols}} list:
-
-          <ol>
-            <li>
-              Return <a><code>Matches</code></a> if <var>credential</var>'s
-              {{FederatedCredential/protocol}} is a case-insensitive match for
-              <var>protocol</var>.
-            </li>
-          </ol>
-        </li>
-      </ol>
-    </li>
-    <li>
-      Return <a><code>Does Not Match</code></a>.
-    </li>
-  </ol>
-
-  <h3 id="interfaces-credential-manager">Credential Manager</h3>
-
-  The credential manager hangs off of the {{Navigator}} object, and exposes
-  methods to request credentials, and to notify the user agent when interesting
-  events occur: successful sign in and sign out.
-
-  <pre class="idl">
-    partial interface Navigator {
-      [SecureContext] readonly attribute CredentialsContainer credentials;
-    };
-  </pre>
-  <pre class="idl">
-    [SecureContext] interface CredentialsContainer {
-      Promise&lt;Credential?&gt; get(optional CredentialRequestOptions options);
-      Promise&lt;Credential&gt; store(Credential credential);
-      Promise&lt;void&gt; requireUserMediation();
-    };
-  </pre>
-  <dl dfn-for="CredentialsContainer">
-    <dt><dfn method>get()</dfn></dt>
-    <dd>
-      Request a credential from the credential manager.
-
-      The {{CredentialsContainer/get(options)/options}} argument contains an object
-      filled with type-specific sets of parameters which will be used to select
-      a particular {{Credential}} to return. This process is described in each
-      {{Credential}} type's <a>options matching algorithm</a>.
-      
-      When {{CredentialsContainer/get()}} is called, the user agent MUST execute the
-      algorithm defined in [[#request-credential]] on <var>types</var> and
-      <var>options</var>.
-
-      Note: If and when we need to support returning more than a single
-      credential in response to a single call, we will likely introduce a
-      <code>getAll()</code> method which would return
-      <code>Promise&lt;sequence&lt;Credential&gt;&gt;</code>.
-
-      <pre class="argumentdef" for="CredentialsContainer/get(options)">
-        options: The set of properties governing the scope of the request.
-      </pre>
-    </dd>
-    <dt><dfn method>store()</dfn></dt>
-    <dd>
-      Ask the credential manager to store a {{Credential}} for the user. Authors
-      could call this method after a user successfully signs in, or after a
-      successful password change operation.
-
-      When {{store()}} is called, the user agent MUST execute the algorithm
-      defined in [[#store-credential]] with <var>credential</var> as an
-      argument.
-
-      <pre class="argumentdef" for="CredentialsContainer/store(credential)">
-        credential: The credential to be stored.
-      </pre>
-    </dd>
-    <dt><dfn method>requireUserMediation()</dfn></dt>
-    <dd>
-      Ask the credential manager to require user mediation before returning
-      credentials for the origin in which the method is called. This might be
-      called after a user signs out of a website, for instance, in order to
-      ensure that she isn't automatically signed back in next time she visits.
-
-      When {{requireUserMediation()}} is called, the user agent MUST execute the
-      algorithm defined in [[#require-user-mediation-for-origin]] with the
-      <a>origin</a> of the <a>incumbent settings object</a> in which this method
-      is called.
-    </dd>
-  </dl>
-
-  <h4 id="interfaces-request-options">
-    <code>get()</code> Parameters
+  <h4 algorithm id="collectfromcredentialstore-passwordcredential">
+    `PasswordCredential`'s `[[CollectFromCredentialStore]](options)`
   </h4>
 
-  In order to obtain the desired {{Credential}} via
-  {{CredentialsContainer/get()}}, the caller specifies a few parameters in a
-  {{CredentialRequestOptions}} object.
+  <dfn for="PasswordCredential" method>\[[CollectFromCredentialStore]](options)</dfn> is called
+  with a {{CredentialRequestOptions}} (|options|), and returns a set of {{Credential}} objects from
+  the [=credential store=]. If no matching {{Credential}} objects are available, the returned set
+  will be empty.
 
-  Note: The {{CredentialRequestOptions}} dictionary is an extension point. If and
-  when new types of credentials are introduced that require options, their
-  dictionary types will be added to the dictionary so they can be passed into the
-  request. See [[#implementation-extension]].
+  <ol class="algorithm">
+    1.  Assert: |options|["password"] [=map/exists=].
 
-  <h5 id="interfaces-credentialrequestoptions">
-    <code>CredentialRequestOptions</code> dictionary
-  </h5>
+    2.  If |options|["password"] is not `true`, return the empty set..
 
-  <pre class="idl">
-    dictionary CredentialRequestOptions {
-      boolean password = false;
-      FederatedCredentialRequestOptions federated;
+    3.  Return the result of <a abstract-op lt="Retrieve a list of credentials">retrieving</a>
+        credentials from the [=credential store=] that match the following filter:
 
-      boolean unmediated = false;
-    };
-  </pre>
-  <dl dfn-for="CredentialRequestOptions">
-    <dt><dfn dict-member>password</dfn></dt>
-    <dd>
-      If set, the user agent will request {{PasswordCredential}} objects, as
-      outlined in [[#request-credential]].
-    </dd>
-    <dt><dfn dict-member>federated</dfn></dt>
-    <dd>
-      If set, the user agent will request {{FederatedCredential}} objects, as
-      outlined in [[#request-credential]].
-    </dd>
-    <dt><dfn dict-member>unmediated</dfn></dt>
-    <dd>
-      If <code>true</code>, the user agent will only attempt to provide
-      a {{Credential}} without user interaction. It MUST NOT present the user
-      with any visible prompt to grant access to a {{Credential}} or to select
-      a {{Credential}}: if the user has opted-into always giving a particular
-      site access to a particular credential, it will be provided. If not, the
-      promise will resolve with <code>undefined</code>.
+        1.  The credential is a {{PasswordCredential}}
+        2.  The credential's {{Credential/[[origin]]}} is the [=same origin=] as the
+            [=current settings object=]'s [=environment settings object/origin=].
+  </ol>
 
-      If <code>false</code>, the user agent MAY ask the user to grant access to
-      or select a {{Credential}}. See [[#user-mediated-selection]] for
-      guidelines. If the user has opted-into always giving a particular site
-      access to a particular credential, it will be provided without user
-      interaction until the opt-in is revoked, for example, via
-      {{requireUserMediation()}}.
+  <h4 algorithm id="store-passwordcredential">
+    `PasswordCredential`'s `[[Store]](credential)`
+  </h4>
 
-      For processing details, see the algorithm defined in
-      [[#request-credential]].
-    </dd>
-  </dl>
+  <dfn for="PasswordCredential" method>\[[Store]](credential)</dfn> is called with a
+  {{PasswordCredential}} (|credential|), and returns once |credential| is persisted to the
+  [=credential store=].
 
-  <h5 id="interfaces-federatedcredentialrequestoptions">
-    <code>FederatedCredentialRequestOptions</code> dictionary
-  </h5>
+  <ol class="algorithm">
+    1.  If the user agent's [=credential store=] contains a {{PasswordCredential}} (|stored|)
+        whose {{Credential/id}} attribute is |credential|'s {{Credential/id}} and whose
+        {{[[origin]]}} slot is the [=same origin=] as |credential|'s {{Credential/[[origin]]}},
+        then:
 
-  <pre class="idl">
-    dictionary FederatedCredentialRequestOptions {
-      sequence&lt;USVString&gt; providers;
-      sequence&lt;DOMString&gt; protocols;
-    };
-  </pre>
-  <dl dfn-for="FederatedCredentialRequestOptions">
-    <dt><dfn dict-member>providers</dfn></dt>
-    <dd>
-      An array of federation identifiers. For details regarding valid formats
-      see [[#identifying-federations]].
-    </dd>
-    <dt><dfn dict-member>protocols</dfn></dt>
-    <dd>
-      A sequence of protocol identifiers. 
-    </dd>
-  </dl>
+        1.  If the user grants permission to update credentials (as discussed when defining
+            [=user mediation=]), then:
 
-  <div class="example">
-    Suppose <code>https://example.com/</code> only supports federated sign-in
-    via <code>https://identity.example.com/</code>. It could request credentials
-    via the following call:
+            1.  Set |stored|'s {{[[password]]}} slot's value to the value of |credential|'s
+                {{[[password]]}} slot.
 
-    <pre>
-      navigator.<a attribute>credentials</a>.<a idl lt="get()" for="CredentialsContainer">get</a>({
-        "<a dict-member>federated</a>": {
-          "<a idl>providers</a>": [ "https://identity.example.com/" ]
-        }
-      }).then(function (credential) {
-        // ...
-      });
-    </pre>
+            2.  Set |stored|'s {{CredentialUserData/name}} to |credential|'s
+                {{CredentialUserData/name}}.
 
-    If it wanted to ensure that the user agent didn't bother the user with
-    questions, it could ask only for unmediated credentials (and, therefore,
-    to receive {{Credential}}s if and only if the user had chosen to
-    automatically sign into the origin):
+            3.  Set |stored|'s {{CredentialUserData/iconURL}} to |credential|'s
+                {{CredentialUserData/iconURL}}.
 
-    <pre>
-      navigator.<a attribute>credentials</a>.<a idl lt="get()" for="CredentialsContainer">get</a>(
-        "<a dict-member>federated</a>": {
-          "<a idl>providers</a>": [ "https://identity.example.com/" ]
-        },
-        "<a idl>unmediated</a>": true
-      ).then(function (credential) {
-        // ...
-      });
-    </pre>
-  </div>
+        Otherwise, if the user grants permission to store credentials (as discussed when
+        defining [=user mediation=], then: 
 
-  <h4 id="identifying-federations">Identifying providers</h4>
+        1.  Store a {{PasswordCredential}} in the [=credential store=] with the following
+            properties:
+            
+            :   {{Credential/id}}
+            ::  |credential|'s {{Credential/id}}
+            :   {{CredentialUserData/name}},
+            ::  |credential|'s {{CredentialUserData/name}}
+            :   {{CredentialUserData/iconURL}}
+            ::  |credential|'s {{CredentialUserData/iconURL}}
+            :   {{Credential/[[origin]]}}
+            ::  |credential|'s {{Credential/[[origin]]}}
+            :   {{PasswordCredential/[[password]]}}
+            ::  |credential|'s {{PasswordCredential/[[password]]}}
 
-  Every site should use the same identifier when referring to a specific
-  <a>federated identity provider</a>. For example,
-  <a href="https://developers.facebook.com/docs/facebook-login/v2.0">Facebook Login</a>
-  shouldn't be "Facebook" and "Facebook Login" and "FB" and "FBL" and
-  "Facebook.com" and so on. It should have a canonical identifier which everyone
-  can make use of, as consistent identification makes it possible for user
-  agents to be helpful.
+            Note: Ancillary properties like {{PasswordCredential/idName}},
+            {{PasswordCredential/passwordName}}, and {{PasswordCredential/additionalData}}
+            are _not_ stored in the [=credential store=]. They are used for a single
+            authentication event, and are expected to be populated at request time.
+  </ol>
 
-  For consistency, federations passed into the APIs defined in this document
-  (e.g. {{FederatedCredentialRequestOptions}}'s
-  {{FederatedCredentialRequestOptions/providers}} array, or
-  {{FederatedCredential}}'s {{FederatedCredential/provider}} property)
-  MUST be identified by the
-  <a lt="ASCII serialization of an origin">ASCII serialization</a> of the origin the
-  provider uses for sign in. That is, Facebook would be represented by
-  <code>https://www.facebook.com</code> and Google by
-  <code>https://accounts.google.com</code>.
+  <h4 algorithm id="construct-passwordcredential-form">
+    The `PasswordCredental(HTMLFormElement)` Constructor
+  </h4>
 
-  The ASCII serialization of an origin does <em>not</em> include a trailing
-  U+002F SOLIDUS ("<code>/</code>"), but user agents SHOULD accept them
-  silently: <code>https://accounts.google.com/</code> is clearly intended to
-  be the same as <code>https://accounts.google.com</code>.
-</section>
+  The <dfn for="PasswordCredential" constructor>`PasswordCredential(form)`</dfn> constructor, when
+  invoked with an {{HTMLFormElement}} (|form|), must run these steps.
+  
+  Note: [[#examples-post-signin]] and [[#examples-change-password]] provide examples of the intended
+  usage.
 
-<!-- Big Text: Fetch -->
-<section>
-  <h3 id="fetch-integration">Integration with Fetch</h3>
+  <ol class="algorithm">
+    1.  Let |data| be a new {{PasswordCredentialData}} dictionary.
+
+    2.  Let |formData| be the result of executing the {{FormData}} constructor
+        on |form|.
+
+    3.  Let |elements| be a list of all the [=submittable elements=] whose [=form owner=] is |form|, in [=tree order=].
+
+    4.  Let |idName| and |passwordName| be empty strings.
+
+    5.  Let |newPasswordObserved| be `false`.
+
+    6.  For each |field| in |elements|, run the following steps:
+
+        1.  If |field| does not have an <{input/autocomplete}> attribute, then skip to the next
+            |field|.
+
+        2.  Let |name| be the value of |field|'s <{input/name}> attribute.
+
+        3.  If |formData|'s {{FormData/has()}} method returns `false` when executed on |name|, then
+            skip to the next |field|.
+
+        4.  If |field|'s <{input/autocomplete}> attribute's value contains one or more [=autofill
+            detail tokens=] (|tokens|), then:
+            
+            1.  For each |token| in |tokens|:
+            
+                1.  If |token| is an <a>ASCII case-insensitive</a> match for one
+                    of the following strings, run the associated steps:
+
+                    :   "<a attr-value>`new-password`</a>"
+                    ::  Set |data|'s {{PasswordCredentialData/password}} member's
+                        value to the result of executing |formData|'s
+                        {{FormData/get()}} method on |name|, |passwordName| to
+                        |name|, and |newPasswordObserved| to `true`.
+
+                    :   "<a attr-value>`current-password`</a>"
+                    ::  If |newPasswordObserved| is `false`,
+                        set |data|'s {{PasswordCredentialData/password}} member's
+                        value to the result of executing |formData|'s
+                        {{FormData/get()}} method on |name|, and |passwordName| to
+                        |name|.
+
+                        Note: By checking that |newPasswordObserved| is `false`,
+                        `new-password` fields take precedence over
+                        `current-password` fields.
+
+                    :   "<a attr-value>`photo`</a>"
+                    ::  Set |data|'s {{CredentialUserData/iconURL}} member's
+                        value to the result of executing |formData|'s
+                        {{FormData/get()}} method on |name|.
+
+                    :   "<a attr-value>`name`</a>"
+                    :   "<a attr-value>`nickname`</a>"
+                    ::  Set |data|'s {{CredentialUserData/name}} member's
+                        value to the result of executing |formData|'s
+                        {{FormData/get()}} method on |name|.
+
+                    :   "<a attr-value>`username`</a>"
+                    ::  Set |data|'s {{CredentialData/id}} member's value to the
+                        result of executing |formData|'s {{FormData/get()}} method
+                        on |name|, and |idName| to |name|.
+
+    7.  Let |c| be the result of executing the {{PasswordCredential(data)}} constructor on |data|.
+        Rethrow any exception generated.
+
+    8.  Set |c|'s {{PasswordCredential/idName}} attribute to |idName|.
+
+    9.  Set |c|'s {{PasswordCredential/passwordName}} attribute to |passwordName|.
+
+    10. If |form|'s <{form/enctype}> is "`multipart/form-data`", then:
+       
+        1.  Set |c|'s {{PasswordCredential/additionalData}} attribute to |formData|.
+
+        Otherwise:
+
+        1.  Let |params| be a new {{URLSearchParams}} object.
+
+        2.  For each |entry| in |formData|'s <a for="FormData">entries</a>:
+
+            1.  If |entry|'s <a for="entry">type</a> is "file", <a for="iteration">continue</a>.
+
+            2.  Execute |params| {{URLSearchParams/append()}} method on |entry|'s [=entry/name=] and
+                [=entry/value=].
+
+        3.  Set |c|'s {{PasswordCredential/additionalData}} attribute to |params|.
+
+    11. Return |c|.
+  </ol>
+
+  <h4 algorithm id="construct-passwordcredential-data">
+    The `PasswordCredental(PasswordCredentialData)` Constructor
+  </h4>
+
+  The <dfn for="PasswordCredential" constructor>PasswordCredential(data)</dfn> constructor, when
+  invoked with a {{PasswordCredentialData}} (|data|), must run the following steps:
+
+  <ol class="algorithm">
+    1.  Let |c| be a new {{PasswordCredential}} object.
+    
+    2.  If any of the following are the empty string, <a>throw</a> a `TypeError` exception:
+
+        *   |data|'s {{CredentialData/id}} member's value
+        *   |data|'s {{PasswordCredentialData/password}} member's value
+
+    3.  Set |c|'s properties as follows:
+    
+        :   {{PasswordCredential/[[password]]}} slot
+        ::  |data|'s {{PasswordCredentialData/password}} member's value
+        :   {{Credential/id}}
+        ::  |data|'s {{CredentialData/id}} member's value
+        :   {{PasswordCredential/idName}}
+        ::  "`username`"
+        :   {{CredentialUserData/iconURL}}
+        ::  |data|'s {{PasswordCredentialData/iconURL}} member's value
+        :   {{CredentialUserData/name}}
+        ::  |data|'s {{PasswordCredentialData/name}} member's value
+        :   {{PasswordCredential/passwordName}}
+        ::  "`password`"
+        :   {{Credential/[[origin]]}}
+        ::  The [=environment settings object/origin=] of the [=current settings object=].
+
+    4.  Return |c|.
+  </ol>
+
+  <h4 algorithm id="passwordcredential-matching">
+    `CredentialRequestOptions` Matching for `PasswordCredential`
+  </h4>
+
+  Given a {{CredentialRequestOptions}} (|options|), the following algorithm returns "`Matches`" if
+  the {{PasswordCredential}} should be available as a response to a {{CredentialsContainer/get()}}
+  request, and "`Does Not Match`" otherwise.
+
+  1.  If |options| has a {{CredentialRequestOptions/password}} member whose value is `true`, then
+      return "`Matches`".
+
+  2.  Return "`Does Not Match`".
+
+  ## Integration with Fetch ## {#fetch-integration}
   
   In order to actually authenticate a user, {{PasswordCredential}} objects may
   be submitted to a server for evaluation. To prevent the risk that sensitive
   credential information will be exposed directly to a page's JavaScript (see
-  [[#security-cross-origin-leakage]]), we hide the credential information in
+  [[#passwords-cross-origin-leakage]]), we hide the credential information in
   non-web-exposed slots on the {{PasswordCredential}} object, and extract them
   during {{fetch()}} in ways that will remain opaque to anything other than the
   remote (same-origin) server.
@@ -1264,7 +1057,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
   [[#body-extraction]], and the request will proceed out to the server-side
   authentication endpoint.
 
-  <h4 id="monkey-patching">Monkey Patches to Fetch</h4>
+  ### Monkey Patches to Fetch ### {#monkey-patching}
 
   To accomplish the above, Fetch could be modified in the following ways:
 
@@ -1334,8 +1127,7 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
               <var ignore>Content-Type</var> be |type|, and <a for="request">redirect
               mode</a> be "`manual`".
 
-  ISSUE(whatwg/fetch#237): These patches are combined into an outstanding
-  pull request against Fetch.
+  ISSUE(whatwg/fetch#237): These patches are combined into a pull request against Fetch.
 
   <h4 id="body-extraction" algorithm>
     Extract a |body| and |Content-Type| for |request|'s attached credential
@@ -1410,550 +1202,239 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
               |credential|'s {{PasswordCredential/passwordName}} and whose value
               is |credential|'s {{[[password]]}}.
 
-          5.  Push the result of running the
-              <a>`application/x-www-form-urlencoded` serializer</a>, with
-              |list|, to |body|'s <a for="body">stream</a>.
+          5.  Push the result of running the <a>urlencoded byte serializer</a> with |list|, to
+              |body|'s <a for="body">stream</a>.
 
           6.  Set |Content-Type| to
               `application/x-www-form-urlencoded;charset=UTF-8`.
 
   4.  Return |body| and |Content-Type|. 
+
+  ## Security Considerations ## {#passwords-security}
+
+  ### Cross-origin Credential Leakage ### {#passwords-cross-origin-leakage}
+
+  Credentials are sensitive information, and user agents need to exercise caution in determining
+  when they can be safely shared with a website. The safest option is to restrict credential
+  sharing to the exact origin on which they were saved. That is likely too restrictive for the
+  web, however: consider sites which divide functionality into subdomains like `example.com` vs
+  `admin.example.com`.
+
+  As a compromise between annoying users, and securing their credentials, user agents:
+
+  1.  MUST NOT share credentials between origins whose scheme components represent a downgrade in
+      security. That is, it may make sense to allow credentials saved on `http://example.com/` to
+      be made available to `https://example.com/` (in order to encourage developers to migrate to
+      secure transport), but the inverse would be dangerous.
+
+  2.  MAY use the Public Suffix List [[!PSL]] to determine the effective scope of a credential by
+      comparing the [=registerable domain=] of the credential's {{Credential/[[origin]]}} with the
+      origin in which {{CredentialsContainer/get()}} is called. That is: credentials saved on
+      `https://admin.example.com/` and `https://example.com/` MAY be offered to users when
+      {{CredentialsContainer/get()}} is called from `https://www.example.com/`, and vice versa.
+
+  3.  MUST NOT offer credentials to an origin in response to {{CredentialsContainer/get()}} without
+      [=user mediation=] if the credential's origin is not an exact match for the calling origin.
+      That is, {{Credential}} objects for `https://example.com` would not be returned directly to
+      `https://www.example.com`, but could be offered to the user via the chooser.
+
+  {{PasswordCredential}}s further mitigate the risk of data leakage by never exposing the
+  {{[[password]]}} slot directly to a page's JavaScript, but only allowing its submission to a
+  same-origin server-side endpoint via {{fetch()}}.
+
+  ### Same-origin Leakage ### {#passwords-same-origin-leakage}
+
+  Cross-site scripting attacks could make it possible to exploit {{PasswordCredential}}'s
+  integration with {{fetch()}} in order to leak credential information via a vulnerable
+  same-origin endpoint. To mitigate this kind of risk, authors SHOULD set a reasonable Content
+  Security Policy which restricts the kinds of content which can execute in their sites' context
+  [[CSP]]. Moreover, authors should ensure that both <a>`script-src`</a> and <a>`object-src`</a>
+  directives are set in any policy they specify in order to ensure that only trusted script is
+  executed on a page with access to a user's credentials.
 </section>
 
 <!--
-   ███    ██        ██████    ███████  ████████  ████ ████████ ██     ██ ██     ██  ██████
-  ██ ██   ██       ██    ██  ██     ██ ██     ██  ██     ██    ██     ██ ███   ███ ██    ██
- ██   ██  ██       ██        ██     ██ ██     ██  ██     ██    ██     ██ ████ ████ ██
-██     ██ ██       ██   ████ ██     ██ ████████   ██     ██    █████████ ██ ███ ██  ██████
-█████████ ██       ██    ██  ██     ██ ██   ██    ██     ██    ██     ██ ██     ██       ██
-██     ██ ██       ██    ██  ██     ██ ██    ██   ██     ██    ██     ██ ██     ██ ██    ██
-██     ██ ████████  ██████    ███████  ██     ██ ████    ██    ██     ██ ██     ██  ██████
+████████ ████████ ████████  ████████ ████████     ███    ████████ ████  ███████  ██    ██  ██████ 
+██       ██       ██     ██ ██       ██     ██   ██ ██      ██     ██  ██     ██ ███   ██ ██    ██
+██       ██       ██     ██ ██       ██     ██  ██   ██     ██     ██  ██     ██ ████  ██ ██      
+██████   ██████   ██     ██ ██████   ████████  ██     ██    ██     ██  ██     ██ ██ ██ ██  ██████ 
+██       ██       ██     ██ ██       ██   ██   █████████    ██     ██  ██     ██ ██  ████       ██
+██       ██       ██     ██ ██       ██    ██  ██     ██    ██     ██  ██     ██ ██   ███ ██    ██
+██       ████████ ████████  ████████ ██     ██ ██     ██    ██    ████  ███████  ██    ██  ██████ 
 -->
 <section>
-  <h2 id="algorithms">Algorithms</h2>
+  # Federated Credentials # {#federated}
 
-  <h3 id="processing">
-    Processing <code>Credential</code>s
-  </h3>
+  ## The `FederatedCredential` Interface ## {#federatedcredential-interface}
 
-  <h4 id="request-credential">
-    Request a <code>Credential</code>
+  <pre class="idl">
+    [Constructor(FederatedCredentialData data),
+     Exposed=Window,
+     SecureContext]
+    interface FederatedCredential : Credential {
+      readonly attribute USVString provider;
+      readonly attribute DOMString? protocol;
+    };
+    FederatedCredential implements CredentialUserData;
+
+    [Exposed=Window, SecureContext]
+    dictionary FederatedCredentialData : CredentialData {
+      USVString name;
+      USVString iconURL;
+      required USVString provider;
+      DOMString protocol;
+    };
+
+    dictionary FederatedCredentialRequestOptions {
+      sequence&lt;USVString&gt; providers;
+      sequence&lt;DOMString&gt; protocols;
+    };
+
+    partial dictionary CredentialRequestOptions {
+      FederatedCredentialRequestOptions? federated;
+    };
+  </pre>
+  <dl dfn-for="FederatedCredential">
+    :   <dfn attribute>provider</dfn>
+    ::  The credential's federated identity provider. See [[#provider-identification]] for
+        details regarding valid formats.
+
+    :   <dfn attribute>protocol</dfn>
+    ::  The credential's federated identity provider's protocol (e.g. "`openidconnect`"). If the
+        value is `null`, then the protocol can be inferred from the
+        {{FederatedCredential/provider}}.
+
+    :   {{Credential/[[type]]}}
+    ::  The {{FederatedCredential}} [=interface object=] has an internal slot named `[[type]]` whose
+        value is "<dfn const>`federated`</dfn>".
+
+    :   {{Credential/[[discovery]]}}
+    ::  The {{FederatedCredential}} [=interface object=] has an internal slot named `[[discovery]]`
+        whose value is "{{Credential/[[discovery]]/credential store}}".
+
+    :   {{FederatedCredential(data)}}
+    ::  This constructor is defined in [[#construct-passwordcredential-data]].
+  </dl>
+
+  {{FederatedCredential}} objects are [=Credential/origin bound=].
+
+  {{FederatedCredential}}'s [=interface object=] inherits {{Credential}}'s implementation of
+  {{Credential/[[DiscoverFromExternalSource]](options)}}, and defines its own implementation of
+  {{FederatedCredential/[[CollectFromCredentialStore]](options)}} and
+  {{FederatedCredential/[[Store]](credential)}}.
+
+  Note: If, in the future, we teach the user agent to obtain authentication tokens on a user's
+  behalf, we could do so by building an implementation of `[[DiscoverFromExternalSource]](options)`.
+
+  ### Identifying Providers ### {#provider-identification}
+
+  Every site should use the same identifier when referring to a specific federated identity
+  provider. For example,
+  <a href="https://developers.facebook.com/docs/facebook-login/v2.0">Facebook Login</a>
+  shouldn't be referred to as "Facebook" and "Facebook Login" and "FB" and "FBL" and "Facebook.com"
+  and so on. It should have a canonical identifier which everyone can make use of, as consistent
+  identification makes it possible for user agents to be helpful.
+
+  For consistency, federations passed into the APIs defined in this document (e.g.
+  {{FederatedCredentialRequestOptions}}'s {{FederatedCredentialRequestOptions/providers}} array, or
+  {{FederatedCredential}}'s {{FederatedCredential/provider}} property) MUST be identified by the
+  <a lt="ASCII serialization of an origin">ASCII serialization</a> of the origin the provider uses
+  for sign in. That is, Facebook would be represented by `https://www.facebook.com` and Google by
+  `https://accounts.google.com`.
+
+  This serialization of an [=origin=] does _not_ include a trailing U+002F SOLIDUS ("`/`"), but
+  user agents SHOULD accept them silently: `https://accounts.google.com/` is clearly
+  intended to be the same as `https://accounts.google.com`.
+
+  ## Algorithms ## {#federatedcredential-algorithms}
+
+  <h4 algorithm id="collectfromcredentialstore-federatedcredential">
+    `FederatedCredential`'s `[[CollectFromCredentialStore]](options)`
   </h4>
 
-  Given a {{CredentialRequestOptions}} object (<var>options</var>), this
-  algorithm returns a <code>Promise</code> which resolves with either a single
-  {{Credential}} object if one can be obtained, or <code>undefined</code> if
-  not.
+  <dfn for="FederatedCredential" method>\[[CollectFromCredentialStore]](options)</dfn> is called
+  with a {{CredentialRequestOptions}} (|options|), and returns a set of {{Credential}} objects from
+  the [=credential store=]. If no matching {{Credential}} objects are available, the returned set
+  will be empty.
 
-  If called from an environment which is not a <a>secure context</a>, or
-  from somewhere other than a <a>top-level browsing context</a>, the
-  <code>Promise</code> will be rejected with a <code>NotSupportedError</code>.
+  <ol class="algorithm">
+    1.  Assert: |options|["{{CredentialRequestOptions/federated}}"] [=map/exists=].
 
-  <ol>
-    <li>
-      Let <var>settings</var> be the <a>incumbent settings object</a>.
-    </li>
-    <li>
-      Let <var>origin</var> be <var>settings</var>' <a>origin</a>.
-    </li>
-    <li>
-      Return a <code>Promise</code> rejected with <code>NotSupportedError</code>
-      if any of the following statements are true:
+    2.  Return the result of <a abstract-op lt="Retrieve a list of credentials">retrieving</a>
+        credentials from the [=credential store=] that match the following filter:
 
-      <ol>
-        <li>
-          <var>settings</var> does not have a <a>responsible document</a>
-        </li>
-        <li>
-          <var>settings</var>' <a>responsible document</a> is not the
-          <a>active document</a> in the <a>top-level browsing context</a>
-        </li>
-        <li>
-          <var>settings</var> is not a <a>secure context</a>
-        </li>
-      </ol>
-    </li>
-    <li>
-      Let <var>types</var> be an empty set.
-    </li>
-    <li>
-      For each <var>key</var> in <var>options</var>:
-
-      <ol>
-        <li>
-          Let <var>interface</var> be the interface such that {{[[type]]}}
-          across all objects implementing that interface is <var>key</var>, or
-          <code>null</code> if no interface's name matches.
-        </li>
-        <li>
-          If <var>interface</var> is not <code>null</code>, insert
-          <var>interface</var> into <var>types</var>.
-        </li>
-      </ol>
-    </li>
-    <li>
-      Let <var>type</var> be the lowest common ancestor interface of the
-      interfaces contained in <var>types</var>.
-
-      Note: That is, given a set containing {{PasswordCredential}} and
-      {{FederatedCredential}}, <var>type</var> will be
-      {{SiteBoundCredential}}.
-    </li>
-    <li>
-      Return a <code>Promise</code> rejected with <code>TypeMismatchError</code>
-      if <var>type</var> is {{Credential}}.
-    </li>
-    <li>
-      Let <var>promise</var> be a newly created <code>Promise</code> object.
-    </li>
-    <li>
-      Return <var>promise</var>, and execute the remaining steps asynchronously.
-    </li>
-    <li>
-      Switch on <var>type</var>, and execute the associated steps:
-
-      <dl>
-        <dt>{{FederatedCredential}}</dt>
-        <dt>{{SiteBoundCredential}}</dt>
-        <dt>{{PasswordCredential}}</dt>
-        <dd>
-          <ol>
-            <li>
-              Let <var>result</var> be the result of executing
-              [[#request-siteboundcredential-without-mediation]],
-              passing in <var>origin</var>, <var>types</var> and
-              <var>options</var>.
-            </li>
-            <li>
-              If <var>result</var> is not <code>null</code>, resolve
-              <var>promise</var> with <var>result</var>, and terminate this
-              algorithm.
-            </li>
-            <li>
-              If <var>options</var>'s {{CredentialRequestOptions/unmediated}}
-              is <code>true</code>, resolve <var>promise</var> with
-              <code>undefined</code>, and terminate this algorithm.
-            </li>
-            <li>
-              Resolve <var>promise</var> with the result of executing
-              [[#request-siteboundcredential-with-mediation]],
-              passing in <var>origin</var>, <var>types</var>, and
-              <var>options</var>.
-            </li>
-          </ol>
-        </dd>
-
-        <dt><em>This is an extension point.</em></dt>
-        <dd>
-          When new credential types are defined in the future, they'll go here.
-        </dd>
-      </dl>
-    </li>
+        1.  The credential is a {{FederatedCredential}}
+        2.  The credential's {{Credential/[[origin]]}} is the [=same origin=] as the
+            [=current settings object=]'s [=environment settings object/origin=].
+        3.  If |options|["{{CredentialRequestOptions/federated}}"]["{{FederatedCredentialRequestOptions/providers}}"]
+            [=map/exists=], its value [=list/contains=] the credentials's {{FederatedCredential/provider}}.
+        4.  If |options|["{{CredentialRequestOptions/federated}}"]["{{FederatedCredentialRequestOptions/protocols}}"]
+            [=map/exists=], its value [=list/contains=] the credentials's {{FederatedCredential/protocol}}.
   </ol>
 
-  Note: Currently, we reject a call to {{CredentialsContainer/get()}} if the
-  <var>options</var> provided specify a set of {{Credential}} types that don't
-  play well together (e.g. some future "NeedsLotsOfUserInteractionCredential"
-  type in the same request as an {{PasswordCredential}}). We may wish to define
-  a more graceful fallback mechanism if/when new credential types are defined.
-
-  <h4 id="store-credential">
-    Store a <code>Credential</code>
+  <h4 algorithm id="store-federatedcredential">
+    `FederatedCredential`'s `[[Store]](credential)`
   </h4>
 
-  Given a {{Credential}} object (<var>credential</var>), this algorithm executes
-  a type-specific storage algorithm. {{SiteBoundCredential}} objects will
-  be persisted to the user agent's <a>credential store</a>. Future object types
-  could, for instance, be persisted to some other (potentially remote) storage
-  mechanism.
+  <dfn for="FederatedCredential" method>\[[Store]](credential)</dfn> is called with a
+  {{FederatedCredential}} (|credential|), and returns once |credential| is persisted to the
+  [=credential store=].
 
-  If called from an environment which is not a <a>secure context</a>, or
-  from somewhere other than a <a>top-level browsing context</a>, the
-  <code>Promise</code> will be rejected with a <code>NotSupportedError</code>.
+  <ol class="algorithm">
+    1.  If the user agent's [=credential store=] contains a {{FederatedCredential}} whose
+        {{Credential/id}} attribute is |credential|'s {{Credential/id}} and whose {{[[origin]]}}
+        slot is the [=same origin=] as |credential|'s {{Credential/[[origin]]}}, and
+        whose {{FederatedCredential/provider}} is |credential|'s
+        {{FederatedCredential/provider}}, then return.
 
-  <ol>
-    <li>
-      Let <var>settings</var> be the <a>incumbent settings object</a>.
-    </li>
-    <li>
-      Let <var>origin</var> be <var>settings</var>' <a>origin</a>.
-    </li>
-    <li>
-      Return a <code>Promise</code> rejected with <code>NotSupportedError</code>
-      if any of the following statements are true:
-
-      <ol>
-        <li>
-          <var>settings</var> does not have a <a>responsible document</a>
-        </li>
-        <li>
-          <var>settings</var>' <a>responsible document</a> is not the
-          <a>active document</a> in the <a>top-level browsing context</a>
-        </li>
-        <li>
-          <var>settings</var> is not a <a>secure context</a>
-        </li>
-      </ol>
-    </li>
-    <li>
-      Let <var>promise</var> be a newly created <code>Promise</code> object.
-    </li>
-    <li>
-      Return <var>promise</var>, and execute the remaining steps asynchronously.
-    </li>
-    <li>
-      Switch on <var>type</var>, and execute the associated steps:
-
-      <dl>
-        <dt>{{FederatedCredential}}</dt>
-        <dt>{{SiteBoundCredential}}</dt>
-        <dt>{{PasswordCredential}}</dt>
-        <dd>
-          <ol>
-            <li>
-              Resolve <var>promise</var> with the result of executing
-              [[#store-siteboundcredential]],
-              passing in <var>credential</var> and <var>origin</var>.
-            </li>
-          </ol>
-        </dd>
-
-        <dt><em>This is an extension point.</em></dt>
-        <dd>
-          When new credential types are defined in the future, they'll go here.
-        </dd>
-      </dl>
-    </li>
+    2.  Store a {{FederatedCredential}} in the [=credential store=] with the following
+        properties:
+        
+        :   {{Credential/id}}
+        ::  |credential|'s {{Credential/id}}
+        :   {{CredentialUserData/name}},
+        ::  |credential|'s {{CredentialUserData/name}}
+        :   {{CredentialUserData/iconURL}}
+        ::  |credential|'s {{CredentialUserData/iconURL}}
+        :   {{Credential/[[origin]]}}
+        ::  |credential|'s {{Credential/[[origin]]}}
+        :   {{FederatedCredential/provider}}
+        ::  |credential|'s {{FederatedCredential/provider}}
+        :   {{FederatedCredential/protocol}}
+        ::  |credential|'s {{FederatedCredential/protocol}}
   </ol>
 
-  <h4 id="clone-credential">
-    Clone <var>credential</var>
+  <h4 algorithm id="construct-federatedcredential-data">
+    The `PasswordCredental(FederatedCredentialData)` Constructor
   </h4>
 
-  Given a {{Credential}} (<var>input</var>), the following algorithm
-  defines the way in which a <a>structured clone</a> will be produced. This
-  algorithm plugs into the <a>internal structured cloning algorithm</a>
-  defined in [[HTML]]:
+  The <dfn for="FederatedCredential" constructor>`FederatedCredential(data)`</dfn> constructor, when
+  invoked with a {{FederatedCredentialData}} (|data|), must run the following steps:
 
-  <ol>
-    <li>
-      Let <var>output</var> be a {{Credential}} object of the same type as
-      <var>input</var>'s <code>constructor</code>.
-    </li>
-    <li>
-      For each internal slot on <var>input</var>:
+  <ol class="algorithm">
+    1.  Let |c| be a new {{FederatedCredential}} object.
+    
+    2.  If any of the following are the empty string, <a>throw</a> a `TypeError` exception:
 
-      <ol>
-        <li>
-          Let <var>name</var> be the name of the slot.
-        </li>
-        <li>
-          Let <var>source value</var> be the slot's value.
-        </li>
-        <li>
-          Let <var>cloned value</var> be the result of invoking the <a>internal
-          structured cloning algorithm</a> with <var>source value</var> as the
-          "<code>input</code>" argument, and <var ignore>memory</var> as the
-          "<code>memory</code>" argument.
-        </li>
-        <li>
-          If an exception results from the previous step, abort the overall
-          <a>structured clone</a> algorithm, and pass that exception through
-          to the caller.
-        </li>
-        <li>
-          Add a new slot to <var>output</var> having name <var>name</var> and
-          value <var>cloned value</var>.
-        </li>
-      </ol>
-    </li>
-    <li>
-      Set <var ignore>deep clone</var> to <code>own</code>.
-    </li>
+        *   |data|'s {{CredentialData/id}} member's value
+        *   |data|'s {{FederatedCredentialData/provider}} member's value
+
+    3.  Set |c|'s properties as follows:
+    
+        :   {{Credential/id}}
+        ::  |data|'s {{CredentialData/id}} member's value
+        :   {{FederatedCredential/provider}}
+        ::  |data|'s {{FederatedCredentialData/provider}} member's value
+        :   {{CredentialUserData/iconURL}}
+        ::  |data|'s {{CredentialUserData/iconURL}} member's value
+        :   {{CredentialUserData/name}}
+        ::  |data|'s {{CredentialUserData/name}} member's value
+        :   {{Credential/[[origin]]}}
+        ::  The [=environment settings object/origin=] of the [=current settings object=].
+
+    4.  Return |c|.
   </ol>
 
-  <h3 id="processing-sitebound">
-    Processing <code>SiteBoundCredential</code>s
-  </h3>
-
-  <h4 id="gather-siteboundcredentials">
-    Gather <code>SiteBoundCredential</code>s
-  </h4>
-
-  Given an <a>origin</a> (<var>origin</var>), and a set of <a>interfaces</a>
-  (<var>types</var>), and an {{CredentialRequestOptions}} dictionary
-  (<var>options</var>), this algorithm returns a sequence of
-  {{SiteBoundCredential}} from the user agent's <a>credential store</a>
-  which are potential candidates:
-
-  <ol>
-    <li>
-      Let <var>credentials</var> be the set of {{Credential}} objects in the
-      <a>credential store</a> whose {{[[origin]]}} slot is equal to the
-      <a lt="ASCII serialization of an origin">ASCII serialization</a> of
-      <var>origin</var>.
-
-      Note: This is an exact match, not a <a>registerable domain</a> match.
-      See [[#security-cross-origin-leakage]] for details as to why.
-    </li>
-    <li>
-      Remove any items from <var>credentials</var> whose <a>interface</a> is
-      not present in <var>types</var>.
-    </li>
-    <li>
-      Remove any items from <var>credentials</var> whose <a>options matching
-      algorithm</a> returns <a><code>Does Not Match</code></a> when executed on
-      <var>options</var>.
-    </li>
-    <li>
-      Return <var>credentials</var>.
-    </li>
-  </ol>
-
-  <h4 id="request-siteboundcredential-without-mediation">
-    Request an <code>SiteBoundCredential</code> <em>without</em> user mediation
-  </h4>
-
-  This algorithm accepts an <a>origin</a> (<var>origin</var>), a set of
-  <a>interfaces</a> (<var>types</var>) and an {{CredentialRequestOptions}}
-  dictionary (<var>options</var>), and returns either a single
-  {{SiteBoundCredential}} object <strong>if and only if</strong> one can be
-  provided without user mediation, or <code>null</code> if not.
-
-  <ol>
-    <li>
-      If the user agent has disabled sharing credentials without user
-      mediation, or <var>origin</var>'s <a>requires user mediation</a> flag
-      in the user agent's <a>credential store</a> is <code>true</code>, return
-      <code>null</code>.
-
-      Note: See [[#user-mediation-requirements]] for details.
-    </li>
-    <li>
-      Let <var>credentials</var> be the result of executing
-      [[#gather-siteboundcredentials]] on <var>origin</var>,
-      <var>types</var>, and <var>options</var>.
-    </li>
-    <li>
-      If <var>credentials</var> is empty, or contains more than one
-      {{Credential}} object, return <code>null</code>.
-
-      Note: In the future, we may wish to allow multiple {{Credential}} objects
-      to be returned; for the moment, we're erring on the cautious side to avoid
-      accidentally revealing explicit relationships between user accounts.
-    </li>
-    <li>
-      Otherwise, let <var>credential</var> be the single {{Credential}} object
-      in <var>credentials</var>.
-    </li>
-    <li>
-      Return <var>credential</var>.
-    </li>
-  </ol>
-
-  Note: If a user agent implements some sort of "private browsing" mode, we
-  recommend that this algorithm always return <code>null</code> when the user
-  has enabled private browsing.
-
-  <h4 id="request-siteboundcredential-with-mediation">
-    Request a <code>SiteBoundCredential</code> with user mediation
-  </h4>
-
-  This algorithm accepts an <a>origin</a> (<var>origin</var>), a set of
-  <a>interfaces</a> (<var>types</var>) and an {{CredentialRequestOptions}}
-  dictionary (<var>options</var>), and returns either a single
-  {{SiteBoundCredential}} object, or <code>null</code> if none can be
-  provided.
-
-  <ol>
-    <li>
-      Let <var>credentials</var> be the result of executing
-      [[#gather-siteboundcredentials]] on <var>origin</var>,
-      <var>types</var>, and <var>options</var>.
-    </li>
-    <li>
-      Ask the user which {{Credential}} to share.
-
-      Note: This behavior is vendor-specific. Guidelines for user agent
-      behavior are presented in [[#user-mediation]].
-    </li>
-    <li>
-      Let <var>credential</var> be the {{Credential}} the user chose, or
-      <code>null</code> if the user chose not to share a credential with
-      <var>origin</var>.
-    </li>
-    <li>
-      Return <var>credential</var>.
-    </li>
-  </ol>
-
-  <h4 id="store-siteboundcredential">
-    Store <code>SiteBoundCredential</code>
-  </h4>
-
-  This algorithm accepts a {{SiteBoundCredential}} (<var>credential</var>),
-  and an <a>origin</a> (<var>origin</var>), and hands it to the internal
-  credential manager for processing. It returns <var>credential</var> regardless
-  of whether the user allows or disallows the credential to be persisted to the
-  <a>credential store</a>:
-
-  <ol>
-    <li>
-      Set <var>credential</var>'s {{[[origin]]}} slot to the
-      <a lt="ASCII serialization of an origin">ASCII serialization</a> of <var>origin</var>.
-    </li>
-    <li>
-      If <var>credential</var>'s {{SiteBoundCredential/iconURL}} is not an
-      <a><i lang="la">a priori</i> authenticated URL</a>, set <var>credential</var>'s
-      {{SiteBoundCredential/iconURL}} to the empty string.
-    </li>
-    <li>
-      Switch on <var>credential</var>'s primary interface, and execute the
-      associated steps:
-
-      <dl>
-        <dt>{{PasswordCredential}}</dt>
-        <dd>
-          <ol>
-            <li>
-              If the user agent's credential manager contains a
-              {{PasswordCredential}} <var>storedCredential</var> whose
-              {{Credential/id}} attribute is <var>credential</var>'s
-              {{Credential/id}} and whose {{[[origin]]}} slot is
-              <var>origin</var>, then:
-
-              <ol>
-                <li>
-                  If the user grants <var>origin</var> permission to update
-                  credentials (as discussed in [[#user-mediated-storage]]),
-                  then:
-
-                  <ol>
-                    <li>
-                      Set <var>storedCredential</var>'s {{[[password]]}} to the
-                      value of <var>credential</var>'s {{[[password]]}}
-                      slot.
-                    </li>
-                    <li>
-                      Set <var>storedCredential</var>'s
-                      {{SiteBoundCredential/name}} to the
-                      value of <var>credential</var>'s
-                      {{SiteBoundCredential/name}}.
-                    </li>
-                    <li>
-                      Set <var>storedCredential</var>'s
-                      {{SiteBoundCredential/iconURL}} to
-                      the value of <var>credential</var>'s
-                      {{SiteBoundCredential/iconURL}}.
-                    </li>
-                  </ol>
-                </li>
-              </ol>
-            </li>
-            <li>
-              Otherwise:
-
-              <ol>
-                <li>
-                  If the user grants <var>origin</var> permission to store
-                  credentials (as discussed in [[#user-mediated-storage]]), then
-                  store {{Credential/id}}, {{[[type]]}},
-                  {{SiteBoundCredential/name}},
-                  {{SiteBoundCredential/iconURL}}, {{[[origin]]}} and
-                  {{[[password]]}} of <var>credential</var> in the
-                  <a>credential store</a>.
-                </li>
-              </ol>
-            </li>
-          </ol>
-        </dd>
-
-        <dt>{{FederatedCredential}}</dt>
-        <dd>
-          <ol>
-            <li>
-              If the user agent's credential manager does not contain a
-              {{FederatedCredential}} <var>storedCredential</var> whose
-              {{Credential/id}} attribute is <var>credential</var>'s
-              {{Credential/id}} and whose {{FederatedCredential/provider}}
-              attribute is <var>credential</var>'s
-              {{FederatedCredential/provider}} and whose {{[[origin]]}} slot is
-              <var>origin</var>, then:
-
-              <ol>
-                <li>
-                  If the user grants <var>origin</var> permission to store
-                  credentials (as discussed in [[#user-mediated-storage]]),
-                  store {{Credential/id}}, {{[[type]]}},
-                  {{SiteBoundCredential/name}},
-                  {{SiteBoundCredential/iconURL}}, {{[[origin]]}},
-                  {{FederatedCredential/provider}} and
-                  {{FederatedCredential/protocol}} of <var>credential</var>
-                  in the <a>credential store</a>.
-                </li>
-              </ol>
-            </li>
-          </ol>
-        </dd>
-
-        <dt><em>This is an extension point.</em></dt>
-        <dd>
-          When new credential types are defined in the future, they'll go here.
-        </dd>
-      </dl>
-    </li>
-    <li>
-      Return <var>credential</var>.
-    </li>
-  </ol>
-
-  <h3 id="helpers">
-    Helpful Algorithms
-  </h3>
-
-  <h4 id="require-user-mediation-for-origin">
-    Require user mediation for <var>origin</var>
-  </h4>
-
-  <ol>
-    <li>
-      Let <var>promise</var> be a newly created <code>Promise</code> object.
-    </li>
-    <li>
-      Return <var>promise</var>, and execute the remaining steps asynchronously.
-    </li>
-    <li>
-      Set <var>origin</var>'s <a>requires user mediation</a> flag to
-      <code>true</code> in the user agent's <a>credential store</a>.
-    </li>
-    <li>
-      Resolve <var>promise</var> with <code>undefined</code>.
-    </li>
-  </ol>
-
-  <h4 id="is-match">
-    Does <var>credential</var> match <var>origin B</var>?
-  </h4>
-
-  <ol>
-    <li>
-      Let <var>origin A</var> be the value of <var>credential</var>'s
-      {{SiteBoundCredential/[[origin]]}} slot.
-    </li>
-    <li>
-      If <var>origin A</var> is the <a>same origin</a> as <var>origin B</var>, return <code>Exact
-      Match</code>.
-    </li>
-    <li>
-      If <var>origin A</var>'s {{URL/scheme}} is <var>origin B</var>'s
-      {{URL/scheme}}, and <var>origin A</var>'s {{URL/host}}'s <a>registerable
-      domain</a> is <var>origin B</var>'s {{URL/host}}'s <a>registerable
-      domain</a>, then return <code>Fuzzy Match</code>.
-    </li>
-    <li>
-      Return <code>No Match</code>
-    </li>
-  </ol>
 </section>
 
 <!--
@@ -1966,120 +1447,131 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
 ██     ██ ████████ ████████  ████ ██     ██    ██    ████  ███████  ██    ██
 -->
 <section>
-  <h2 id="user-mediation">User Mediation</h2>
+  # User Mediation # {#user-mediation}
 
-  Exposing credential information to the web via an API has a number of
-  potential impacts on user privacy. The user agent, therefore, MUST
-  involve the user in a number of cases in order to ensure that she clearly
-  understands what's going on, and with whom her credentials are being shared.
+  Exposing credential information to the web via an API has a number of potential impacts on user
+  privacy. The user agent, therefore, MUST involve the user in a number of cases in order to ensure
+  that they clearly understands what's going on, and with whom their credentials are being shared.
 
-  <h3 id="user-mediated-storage">Storing and Updating Credentials</h3>
+  We call a particular action <dfn export lt="user mediated|user mediation">user mediated</dfn> if
+  it takes place after gaining a user's explicit consent. Consent might be expressed through a
+  user's direct interaction with a [=credential chooser=] interface, for example. In general, [=user
+  mediated=] actions will involve presenting the user some sort of UI, and asking them to make a
+  decision.
 
-  Credential information is sensitive data, and users MUST remain in control
-  of that information's storage. Inadvertent credential storage could, for
-  instance, unexpectedly link a user's local profile on a particular device to
-  a specific online persona. To mitigate the risk of surprise:
+  An action is <dfn export>unmediated</dfn> if it takes place without explicit user consent. For
+  example, if a user configures their browser to grant persistent credential access to a particular
+  origin, credentials may be provided without presenting the user with a UI requesting a decision.
 
-  <ol>
-    <li>
-      Credential information MUST NOT be stored or updated without explicit
-      user consent. For example, the user agent could display a "Save this
-      password?" dialog box to the user in response to each call to
-      {{store()}}.
-    </li>
-    <li>
-      User consent MAY be requested every time a credential is stored or
-      updated, <strong>or</strong> the user agent MAY request a more persistent
-      grant of consent which would apply to some or all subsequent API
-      operations.
+  Here we'll spell out a few requirements that hold for all credential types, but note that there's
+  a good deal of latitude left up to the user agent (which is in a priviliged position to assist
+  the user). Moreover, specific credential types may have distinct requirements that exceed the
+  requirements laid out more generally here.
 
-      For example, a user agent may offer an option to "Always save passwords",
-      or "Always save password on this site".
-    </li>
-    <li>
-      User agents SHOULD notify users when credentials are stored. This might
-      take the form of an icon in the address bar, or some similar location.
-    </li>
-    <li>
-      User agents MUST allow users to manually remove stored credentials. This
-      functionality might be implemented as a settings page, or via interaction
-      with a notification as described above.
-    </li>
-  </ol>
+  ## Storing and Updating Credentials ## {#user-mediated-storage}
 
-  <h3 id="user-mediation-requirements">Requiring User Mediation</h3>
+  Credential information is sensitive data, and users MUST remain in control of that information's
+  storage. Inadvertent credential storage could, for instance, unexpectedly link a user's local
+  profile on a particular device to a specific online persona. To mitigate the risk of surprise:
 
-  If a an <a>origin</a>'s <a>requires user mediation</a> flag is set to
-  <code>false</code> in the user agent's <a>credential store</a>, then
-  {{Credential}} objects from that origin MAY be provided to pages from that
-  origin without user interaction. The user will be signed-in to that origin
-  persistently, which, on the one hand, is desirable from the perspective of
-  usability and convenience, but which might nevertheless surprise the user.
+  1.  Credential information SHOULD NOT be stored or updated without [=user mediation=]. For
+      example, the user agent could display a "Save this credential?" dialog box to the user in
+      response to each call to {{store()}}. 
 
-  If the user agent syncs the state of a {{Credential}} between devices, an
-  origin could explicitly tie the devices together in a way which might surprise
-  their owner.
+      User consent MAY be inferred if a user agent chooses to offer a persistant grant of consent
+      in the form of an "Always save passwords" option (though we'd suggest that user agents should
+      err on the side of something more narrowly scoped: perhaps "Always save _generated_
+      passwords.", or "Always save passwords for this site.").
+
+  2.  User agents SHOULD notify users when credentials are stored. This might take the form of an
+      icon in the address bar, or some similar location.
+
+  3.  User agents MUST allow users to manually remove stored credentials. This functionality might
+      be implemented as a settings page, or via interaction with a notification as described above.
+
+  ## Requiring User Mediation ## {#user-mediation-requirement}
+
+  By default, [=user mediation=] is required for all [=origins=], as the relevant [=`require user
+  mediation` flag=] in the [=credential store=] is set to `true`. Users MAY choose to grant an
+  origin persistent access to credentials (perhaps in the form of a "Stay signed into this site."
+  option), which would set this flag to `true`. In this case, the user would always be signed into
+  that site, which is desirable from the perspective of usability and convinience, but which
+  might nevertheless have surprising implications (consider a user agent which syncs this flag's
+  state across devices, for instance).
 
   To mitigate the risk of surprise:
 
-  <ol>
-    <li>
-      User agents MUST allow users to require user mediation for {{Credential}}
-      objects. This functionality might be implemented as a global toggle that
-      requires user mediation for all origins, or via more granular settings
-      for specific origins (or specific credentials on specific origins).
-    </li>
-    <li>
-      User agents MUST NOT set an origin's <a>requires user mediation</a> slot's
-      value to <code>false</code> without user consent. For example, the
-      <a>credential chooser</a> described in [[#user-mediated-selection]] could
-      have a checkbox which the user could toggle to mark the selected
-      credential as available without mediation for the origin, or the user
-      agent could have an onboarding process for its credential manager which
-      asked a user for a default setting.
-    </li>
-    <li>
-      User agents MUST notify users when credentials are provided to an
-      origin. This could take the form of an icon in the address bar, or some
-      similar location.
-    </li>
-    <li>
-      If a user clears her browsing data for an origin (cookies, localStorage,
-      and so on), the user agent MUST require user mediation for that origin
-      by executing the algorithm defined in
-      [[#require-user-mediation-for-origin]].
-    </li>
-  </ol>
+  1.  User agents MUST allow users to require [=user mediation=] for a given origin or for all
+      origins. This functionality might be implemented as a global toggle that overrides each
+      origin's <a>`requires user mediation` flag</a> to return `false`, or via more granular
+      settings for specific origins (or specific credentials on specific origins).
 
-  <h3 id="user-mediated-selection">Credential Selection</h3>
+  2.  User agents MUST NOT set an [=origin=]'s <a>`requires user mediation` flag</a> to
+      `false` without [=user mediation=]. For example, the [=credential chooser=] described in
+      [[#user-mediated-selection]] could have a checkbox which the user could toggle to mark a
+      credential as available without mediation for the origin, or the user agent could have an
+      onboarding process for its credential manager which asked a user for a default setting.
 
-  When responding to a call to {{CredentialsContainer/get()}} on an origin
-  without credentials that are available without user mediation, user agents
-  MUST ask the user for permission to share credential information. This SHOULD
-  take the form of a <dfn local-lt="chooser" export>credential chooser</dfn> which
-  presents the user with a list of credentials that are available for use on a
-  site, allowing her to select one which should be provided to the website, or
-  to reject the request entirely.
+  3.  User agents MUST notify users when credentials are provided to an origin. This could take the
+      form of an icon in the address bar, or some similar location.
 
-  The chooser interface SHOULD be implemented in such a way as to be
-  distinguishable from UI which a website could produce. For example, the
-  chooser might overlap the user agent's UI in some unspoofable way.
+  4.  If a user clears her browsing data for an origin (cookies, localStorage, and so on), the user
+      agent MUST set the <a>`requires user mediation` flag</a> to `false` for that origin.
 
-  The chooser interface SHOULD include an indication of the origin which is
-  requesting credentials.
+  ## Credential Selection ## {#user-mediated-selection}
 
-  The chooser interface SHOULD include all {{Credential}} objects associated
-  with the origin that requested credentials.
+  When responding to a call to {{CredentialsContainer/get()}} on an origin which requires
+  [=user mediation=], user agents MUST ask the user for permission to share credential information.
+  This SHOULD take the form of a <dfn export>credential chooser</dfn> which presents the user with a
+  list of credentials that are available for use on a site, allowing them to select one which should
+  be provided to the website, or to reject the request entirely.
 
-  <em>The following image is an exceptionally non-normative mock:</em>
+  The chooser interface SHOULD be implemented in such a way as to be distinguishable from UI which a
+  website could produce. For example, the chooser might overlap the user agent's UI in some
+  unspoofable way.
 
-  <img src="./mock-chooser.png" alt="A mockup of what a chooser might look like.">
+  The chooser interface MUST include an indication of the origin which is requesting credentials.
 
-  User agents MAY internally associate information with each {{Credential}}
-  object beyond the attributes specified in this document in order to enhance
-  the utility of such a chooser. For example, favicons could help disambiguate
-  identity providers, etc. Any additional information stored MUST not be
-  exposed directly to the web.
+  The chooser interface SHOULD include all {{Credential}} objects associated with the origin that
+  requested credentials.
+
+  User agents MAY internally associate information with each {{Credential}} object beyond the
+  attributes specified in this document in order to enhance the utility of such a chooser. For
+  example, favicons could help disambiguate identity providers, etc. Any additional information
+  stored MUST not be exposed directly to the web.
+
+  The chooser's behavior is not defined here: user agents are encouraged to experiment with UI
+  treatments that educate users about their authentication options, and guide them through the
+  process of choosing a credential to present. That said, the interface to the chooser is as
+  follows:
+
+  <section algorithm="ask the user to choose">
+    The user agent can <dfn export abstract-op local-lt="ask to choose">ask the user to choose a
+    `Credential`</dfn>, given a {{CredentialRequestOptions}} (|options|), and a set of
+    {{Credential}} objects from the [=credential store=] (|locally discovered credentials|).
+
+    This algorithm returns either `null` if the user chose not to share a credential with the site,
+    a {{Credential}} object if the user chose a specific credential, or a {{Credential}} [=interface
+    object=] if the user chose a type of credential.
+
+    <div class="note">
+      It seems reasonable for the chooser interface to display the list of |locally discovered
+      credentials| to the user, perhaps something like this exceptionally non-normative mock:
+  
+      <img src="./mock-chooser.png" alt="A mockup of what a chooser might look like.">
+
+      If the |options| provided is not <a>matchable <i lang="la">a priori</i></a>, then it might
+      also make sense for the chooser interface to list the [=relevant credential interface
+      objects=] for |options| that aren't covered by the list of explicit credentials. If, for
+      instance, a site accepts webauthn-style authenticators, then "Security Key" might show up
+      in the chooser list with an appropriate icon.
+
+      Also, note that in some cases the user agent may skip the chooser entirely. For example, if
+      the only [=relevant credential interface objects=] is one that itself requires user
+      interaction, the user agent may return that interface directly, and rely on its internal
+      mediation flow for user consent.
+    </div>
+  </section>
 </section>
 
 <!--
@@ -2092,200 +1584,108 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
  ██████  ████████  ██████   ███████  ██     ██ ████    ██       ██
 -->
 <section>
-  <h2 id="security-considerations">Security Considerations</h2>
+  # Security and Privacy Considerations # {#security-and-privacy}
 
-  <h3 id="security-cross-origin-leakage">Cross-origin Credential Leakage</h3>
+  ## Credential Leakage ## {#security-leakage}
 
-  Credentials are sensitive information, and user agents need to exercise
-  caution in determining when they can be safely shared with a website. The
-  safest option is to restrict credential sharing to the exact origin on
-  which they were saved. That is likely too restrictive for the web, however:
-  consider sites which divide functionality into subdomains:
-  <code>example.com</code> vs <code>admin.example.com</code>.
+  Credentials are sensitive information, and user agents need to exercise caution in determining
+  when they can be safely shared with a website. Likewise, developers would be well-advised to take
+  some precautions to mitigate the risk that a cross-site scripting attack could turn into
+  persistent access to a user's account by by setting a reasonable Content Security Policy [[!CSP]]
+  which restricts the endpoints to which data can be sent. In particular, developers should ensure
+  that the following directives are set, explicitly or implicitly, in their pages' policies:
 
-  As a compromise between annoying users, and securing their credentials, user
-  agents:
+  *   <a>`script-src`</a> and <a>`object-src`</a> both restrict script execution on a page, making
+      it less likely that a cross-site scripting attack will succeed in the first place.
 
-  <ol>
-    <li>
-      MUST NOT share credentials between origins whose scheme components are
-      not the same. That is: credentials saved on
-      <code>https://example.com/</code> will never be available to
-      <code>http://example.com/</code> via a user agent's autofill mechanism.
-    </li>
-    <li>
-      MAY use the Public Suffix List [[!PSL]] to determine the effective scope
-      of a credential by comparing the <a>registerable domains</a> of the
-      credential's {{[[origin]]}} with the origin in which
-      {{CredentialsContainer/get()}} is called. That is: credentials saved on
-      <code>https://admin.example.com/</code> and
-      <code>https://example.com/</code> MAY be offered to users when
-      {{CredentialsContainer/get()}} is called from
-      <code>https://www.example.com/</code>.
-    </li>
-    <li>
-      MUST NOT offer credentials to an origin in response to
-      {{CredentialsContainer/get()}} without user mediation if the credential's
-      origin is not an exact match for the calling origin. That is,
-      {{Credential}} objects for <code>https://example.com</code> would not be
-      returned directly to <code>https://www.example.com</code>, but could be
-      offered to the user via the chooser.
-    </li>
-  </ol>
+  *   <a>`connect-src`</a> restricts the origins to which {{fetch()}} may submit data (which
+      mitigates the risk that credentials could be exfiltrated to `evil.com`.
 
-  {{PasswordCredential}}s further mitigate the risk of data leakage by never
-  exposing the {{[[password]]}} slot directly to a page's JavaScript, but only
-  allowing its submission to a same-origin server-side endpoint via {{fetch()}}.
+  *   <a>`child-src`</a> restricts the nested browsing contexts which may be embedded in a page,
+      making it more difficult to inject a malicious `postMessage()` target. [[WEBMESSAGING]]
 
-  Additionally, authors SHOULD mitigate the risk of leakage by setting a
-  reasonable Content Security Policy [[!CSP]] which restricts the origins to
-  which data can be sent. In particular, authors should ensure that the
-  following directives are set, explicitly or implicitly, in
-  their pages' policies:
+  Developers should, of course, also properly escape input and output, and consider using other
+  layers of defense, such as Subresource Integrity [[SRI]] to further reduce risk.
 
-  <ol>
-    <li>
-      <code><a>connect-src</a></code> further restricts the origins to which
-      {{fetch()}} may submit data (which mitigates the risk of redirect-based
-      attacks).
-    </li>
-    <li>
-      <code><a>child-src</a></code> restricts the nested browsing
-      contexts which may be embedded in a page, making it more difficult to
-      inject a malicious {{postMessage()}} target. [[WEBMESSAGING]]
-    </li>
-  </ol>
+  When defining specific credential types, specific credential types SHOULD give due consideration
+  to the ways in which credential data can be transmitted over the wire. It might be reasonable,
+  for example, to define transmission mechanisms which are restricted to same-origin endpoints.
 
-  <h3 id="security-same-origin-leakage">Same-origin Leakage</h3>
+  ## Insecure Sites ## {#insecure-sites}
 
-  Cross-site scripting attacks could make it possible to exploit
-  {{PasswordCredential}}'s integration with {{fetch()}} in order to leak
-  credential information via a vulnerable same-origin endpoint. To mitigate
-  this kind of risk, authors SHOULD set a reasonable Content Security Policy
-  which restricts the kinds of content which can execute in their sites'
-  context. [[!CSP]] Moreover, authors should ensure that both
-  <code><a>script-src</a></code> and <code><a>object-src</a></code> directives
-  are set in any policy they specify in order to ensure that only trusted
-  script is executed on a page with access to a user's credentials.
+  User agents MUST NOT expose the APIs defined here to environments which are not [=secure
+  contexts=]. User agents might implement autofill mechanisms which store user credentials and fill
+  sign-in forms on non-<a><i lang="la">a priori</i> authenticated URLs</a>, but those sites cannot
+  be trusted to interact directly with the credential manager in any meaningful way, and those sites
+  MUST NOT have access to credentials saved in [=secure contexts=].
 
-  <h3 id="security-origin-confusion">Origin Confusion</h3>
+  ## Origin Confusion ## {#security-origin-confusion}
 
-  If framed pages have access to the APIs defined here, it might be possible
-  to confuse a user into granting access to credentials for an origin other
-  than the <a>top-level browsing context</a>, which is the only security origin
-  which users can reasonably be expected to understand.
+  If framed pages have access to the APIs defined here, it might be possible to confuse a user into
+  granting access to credentials for an origin other than the <a>top-level browsing context</a>,
+  which is the only security origin which users can reasonably be expected to understand.
 
-  Therefore, <a>Nested browsing contexts</a> and other environments like
-  Workers [[WORKERS]] cannot receive or store {{Credential}} objects; the user
-  agent MUST reject promises generated by calls to {{CredentialsContainer/get()}}
-  and {{CredentialsContainer/store()}} with a <code>SecurityError</code> when
-  called from a context which is not a <a>top-level browsing context</a>.
+  Therefore, both {{get()}} and {{store()}} will result in a rejected {{Promise}} when called from
+  a [=nested browsing context=], and the API and related interfaces are not exposed inside
+  {{Worker}} contexts.
 
-  See the algorithms defined in [[#request-credential]] and [[#store-credential]]
-  for details.
+  The algorithms in [[#algorithm-request]] and [[#algorithm-store]] contain more detail.
 
-  <h3 id="security-insecure-origins">Insecure Sites</h3>
+  ## Timing Attacks ## {#security-timing}
 
-  User agents MUST NOT expose the APIs defined here to environments which are
-  not <a>secure contexts</a>. User agents MAY implement autofill mechanisms
-  which store user credentials and fill sign-in forms on
-  non-<a><i lang="la">a priori</i> authenticated URLs</a>, but those sites cannot
-  be trusted to interact directly with the credential manager in any meaningful
-  way, and those sites MUST NOT have access to credentials saved in <a>secure
-  contexts</a> (as discussed in [[#security-cross-origin-leakage]].
+  If the user has no credentials for an origin, a call to {{CredentialsContainer/get()}} will
+  resolve very quickly indeed. A malicious website could distinguish between a user with no
+  credentials and a user with credentials who chooses not to share them.
 
-  <h3 id="security-xss">Script Injection</h3>
+  User agents SHOULD also rate-limit credential requests. It's almost certainly abusive for a page
+  to request credentials more than a few times in a short period.
 
-  If a malicious party is able to inject script into an origin, they could
-  (among many other things you wouldn't like) overwrite the behavior of
-  {{store()}} to steal a user's credentials as they're written into the
-  <a>credential store</a>.
+  ## Signing-Out ## {#security-signout}
 
-  Authors SHOULD mitigate the risk of such attacks by properly escaping input
-  and output, and add layers of defense in depth by setting a reasonably
-  strong Content Security Policy [[CSP]] which restricts the origins from
-  which script can be injected, and by using Subresource Integrity checks
-  [[SRI]] to ensure that only trusted JavaScript is executed.
-</section>
+  If a user has chosen to automatically sign-in to websites, as discussed in
+  [[#user-mediation-requirement]], then the user agent will provide credentials to an origin
+  whenever it asks for them. The website can instruct the user agent to suppress this behavior by
+  calling {{CredentialsContainer}}'s {{CredentialsContainer/requireUserMediation()}} method, which
+  will turn off automatic sign-in for a given origin.
 
-<section>
-  <h2 id="privacy-considerations">Privacy Considerations</h2>
+  The user agent relies on the website to do the right thing; an inattentive (or malicious) website
+  could simply neglect to call this method, causing the user agent to continue providing credentials
+  against the user's apparent intention. This is marginally worse than the status-quo of a site that
+  doesn't clear user credentials when they click "Sign-out", as the user agent becomes complicit in
+  the authentication.
 
-  <h3 id="privacy-timing-attacks">Timing Attacks</h3>
+  The user MUST have some control over this behavior. As noted in [[#user-mediation-requirement]],
+  clearing cookies for an origin will also reset that origin's <a>`requires user mediation` flag</a>
+  the [=credential store=] to `true`. Additionally, the user agent SHOULD provide some UI affordance
+  for disabling automatic sign-in for a particular origin. This could be tied to the notification
+  that credentials have been provided to an origin, for example.
 
-  If the user has no credentials for an origin, a call to
-  {{CredentialsContainer/get()}} will resolve very quickly indeed. A malicious
-  website could distinguish between a user with no credentials and a user with
-  credentials who chooses not to share them.
+  ## Chooser Leakage ## {#security-chooser-leakage}
 
-  This could allow a malicious website to determine if a user has credentials
-  saved for particular federated identity providers by repeatedly calling
-  {{CredentialsContainer/get()}} with a single item in the
-  {{FederatedCredentialRequestOptions/providers}} array. The risk is mitigated
-  by the fact that the user would, sooner or later, be prompted to provide
-  credentials to the site which would certainly raise her suspicions as to its
-  behavior.
+  If a user agent's [=credential chooser=] displays images supplied by an origin (for example, if a
+  {{Credential}} displays a site's favicon), then, requests for these images MUST NOT be directly
+  tied to instantiating the chooser in order to avoid leaking chooser usage. One option would be to
+  fetch the images in the background when saving or updating a {{Credential}}, and to cache them for
+  the lifetime of the {{Credential}}.
 
-  User agents SHOULD also rate-limit credential requests. It's almost certainly
-  abusive for a page to request credentials more than a few times in a short
-  period.
+  These images MUST be fetched with the [=request/credentials mode=] set to "`omit`", the
+  [=request/service-workers mode=] set to "`none`", the [=request/client=] set to `null`, the
+  [=request/initiator=] set to the empty string, and the [=request/destination=] "`subresource`".
 
-  <h3 id="privacy-signout">Signing-Out</h3>
+  Moreover, if the user agent allows the user to change either the name or icon associated with the
+  credential, the alterations to the data SHOULD NOT be exposed to the website (consider a user who
+  names two credentials for an origin "My fake account" and "My real account", for instance).
 
-  If a user has chosen to automatically sign-in to websites, as discussed
-  in [[#user-mediation-requirements]], then the user agent will provide
-  credentials to an origin whenever it asks for them. The website can instruct
-  the user agent to suppress this behavior by calling {{CredentialsContainer}}'s
-  {{CredentialsContainer/requireUserMediation()}} method, which will turn off
-  automatic sign-in for a given origin.
+  ## Locally Stored Data ## {#security-local-data}
 
-  The user agent relies on the website to do the right thing; an inattentive (or
-  malicious) website could simply neglect to call this method, causing the user
-  agent to continue providing credentials against the user's apparent intention.
+  This API offers an [=origin=] the ability to store data persistently along with a user's profile.
+  Since most user agents treat credential data differently than "browsing data" (cookies, etc.)
+  this might have the side effect of surprising a user who might believe that all traces of an
+  origin have been wiped out when they clear their cookies.
 
-  The user MUST have some control over this behavior. As noted in
-  [[#user-mediation-requirements]], clearing cookies for an origin will also
-  reset that origin's <a>requires user mediation</a> flag in the <a>credential
-  store</a> to `true`. Additionally, we recommend that the user agent provide
-  some UI affordance for disabling automatic sign-in for a particular origin.
-  This could be tied to the notification that credentials have been provided to
-  an origin, for example.
-
-  <h3 id="privacy-chooser-leakage">Chooser Leakage</h3>
-
-  If a user agent displays images supplied by a website or federation (for
-  example, if a {{Credential}}'s {{SiteBoundCredential/iconURL}} is displayed),
-  requests for these images MUST NOT be directly tied to instantiating the
-  chooser in order to avoid leaking chooser usage. One option would be to fetch
-  the images in the background when saving or updating a {{Credential}}, and to
-  cache them for the lifetime of the {{Credential}}.
-
-  These images MUST be fetched with the <code>credentials</code> mode set to
-  "<code>omit</code>", the <code>skip-service-worker flag</code> set, the
-  <code>client</code> set to <code>null</code>, the <code>initiator</code> set
-  to the empty string, and the <code>destination</code> set to
-  <code>subresource</code>.
-
-  Moreover, if the user agent allows the user to change either the name or icon
-  associated with the credential, the alterations to the data SHOULD NOT be
-  exposed to the website (consider a user who names two credentials for an
-  origin "My fake account" and "My real account", for instance).
-
-  <h3 id="locally-stored-data">Locally Stored Data</h3>
-
-  This API offers an <a>origin</a> the ability to store data persistently along
-  with a user's profile. Since most user agents treat credential data
-  differently than "browsing data" (cookies, etc.) this might have the side
-  effect of surprising a user who might believe that all traces of an origin
-  have been wiped out when they clear their cookies.
-
-  User agents SHOULD provide UI that makes it clear to a user that credential
-  data is stored for an origin, and SHOULD make it easy for users to remove
-  such data when they're no longer interested in keeping it around.
-
-  Moreover, the <a>credential store</a>'s association between <a>origins</a>
-  and <a>protocol sets</a> SHOULD be cleared along with "browsing data" if
-  no {{Credential}} has been stored for the origin.
+  User agents SHOULD provide UI that makes it clear to a user that credential data is stored for an
+  origin, and SHOULD make it easy for users to remove such data when they're no longer interested in
+  keeping it around.
 </section>
 
 <!--
@@ -2298,45 +1698,72 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
 ████ ██     ██ ██        ████████ ████████ ██     ██ ████████ ██    ██    ██    ██     ██    ██    ████  ███████  ██    ██
 -->
 <section>
-  <h2 id="implementation-considerations">Implementation Considerations</h2>
+  # Implementation Considerations # {#implementation}
 
   <em>This section is non-normative.</em>
 
-  <h3 id="implementation-for-authors">Website Authors</h3>
+  ## Website Authors ## {#implementation-authors}
 
   ISSUE(w3c/webappsec#290): Add some thoughts here about when and how the API
   should be used, especially with regard to {{unmediated}}.
 
-  <h3 id="implementation-extension">Extension Points</h3>
+  ## Extension Points ## {#implementation-extension}
 
-  As noted in [[#future-work]], there is known interest in extending the API
-  defined here to serve use cases beyond those this document addresses. To
-  that end, the API is fairly generic, with several explicit extension points.
+  This document provides a generic, high-level API that's meant to be extended with specific types
+  of [=credentials=] that serve specific authentication needs. Doing so is, hopefully,
+  straightforward:
 
-  <div class="example">
-    If we wished to add a new credential type, how would we spell it out?
-
-    <ol>
-      <li>
-        Define a new <code>ExampleCredential</code> that inherits from
-        {{Credential}}, and define the value of its {{[[type]]}} slot:
-
+  1.  Define a new interface that inherits from {{Credential}}:
+ 
+      <div class="example"> 
         <pre>
+          [Constructor(...),
+           Exposed=Window,
+           SecureContext]
           interface ExampleCredential : Credential {
             // Definition goes here.
           };
-
-          ...
-
-          All `ExampleCredential` objects have their <a idl>[[type]]</a> slot's
-          value set to the string "example".
         </pre>
-      </li>
-      <li>
-        Define the options that the new credential type requires, and add them
-        to the {{CredentialRequestOptions}} dictionary with a property name that
-        matches the {{[[type]]}} slot's value.
+      </div>
 
+  2.  Define appropriate {{Credential/[[CollectFromCredentialStore]](options)}},
+      {{Credential/[[DiscoverFromExternalSource]](options)}}, and
+      {{Credential/[[Store]](credential)}} methods on `ExampleCredential`'s
+      [=interface object=]:
+
+      <div class="example">
+        `ExampleCredential`'s `[[CollectFromCredentialStore]](options)` internal method is called
+        with a CredentialRequestOptions object (`options`), and returns a set of {{Credential}}
+        objects that match the options provided. If no matching {{Credential}} objects are
+        available, the returned set will be empty.
+
+        1.  Assert: `options`[`example`] exists.
+
+        2.  If `options`[`example`] is not truthy, return the empty set.
+
+        3.  For each <i>credential</i> in the [=credential store=]:
+
+            1.  ...
+      </div>
+
+  3.  Define the value of the `ExampleCredential` [=interface object=]'s {{[[type]]}} slot:
+
+      <div class="example">
+        The `ExampleCredential` [=interface object=] has an internal slot named `[[type]]` whose
+        value is the string "`example`".
+      </div>
+
+  4.  Define the value of the `ExampleCredential` [=interface object=]'s {{[[discovery]]}} slot:
+
+      <div class="example">
+        The `ExampleCredential` [=interface object=] has an internal slot named `[[type]]` whose
+        value is "{{Credential/[[discovery]]/credential store}}".
+      </div>
+
+  4.  Extend {{CredentialRequestOptions}} with the options the new credential type needs to respond
+      reasonably to {{get()}}:
+
+      <div class="example">
         <pre>
           dictionary ExampleCredentialRequestOptions {
             // Definition goes here.
@@ -2346,32 +1773,18 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
             ExampleCredentialRequestOptions? example;
           };
         </pre>
-      </li>
-      <li>
-        Add <code>ExampleCredential</code> to the switch in step 8 of
-        [[#request-credential]], and define the request behavior necessary to
-        grab and return the new type.
-      </li>
-      <li>
-        Add <code>ExampleCredential</code> to the switch in step 6 of
-        [[#store-credential]], and define the persistance behavior necessary to
-        store the new type.
-      </li>
-    </ol>
-  </div>
+      </div>
 
-  You might also need new primitives. For instance, you might want to return
-  many {{Credential}} objects rather than just one. That might be accomplished
-  in a generic fashion by adding a <code>getAll()</code> method to
-  {{CredentialsContainer}}, and defining a <code>CredentialSet</code> object that
-  contained a <code>sequence&lt;Credential&gt;</code>, and could be easily
-  extended to meet some use case.
+  You might also find that new primitives are necessary. For instance, you might want to return
+  many {{Credential}} objects rather than just one in some sort of complicated, multi-factor
+  sign-in process. That might be accomplished in a generic fashion by adding a `getAll()` method to
+  {{CredentialsContainer}} which returned a `sequence<Credential>`, and defining a reasonable
+  mechanism for dealing with requesting credentials of distinct types.
 
   For any such extension, we recommend getting in touch with
-  <a href="mailto:public-webappsec@w3.org">public-webappsec@</a> for
-  consultation and review.
+  <a href="mailto:public-webappsec@w3.org">public-webappsec@</a> for consultation and review.
 
-  <h3 id="implementation-browser-extensions">Browser Extensions</h3>
+  ## Browser Extensions ## {#browser-extensions}
 
   Ideally, user agents that implement an extension system of some sort will
   allow third-parties to hook into these API endpoints in order to improve
@@ -2384,59 +1797,41 @@ spec: URL; urlPrefix: https://url.spec.whatwg.org/
 </section>
 
 <!--
-████████ ██     ██ ████████ ██     ██ ████████  ████████
-██       ██     ██    ██    ██     ██ ██     ██ ██
-██       ██     ██    ██    ██     ██ ██     ██ ██
-██████   ██     ██    ██    ██     ██ ████████  ██████
-██       ██     ██    ██    ██     ██ ██   ██   ██
-██       ██     ██    ██    ██     ██ ██    ██  ██
-██        ███████     ██     ███████  ██     ██ ████████
+████████ ████████ ██     ██       ████████ ██     ██ ████████ ██     ██ ████████  ████
+   ██    ██       ██     ██       ██       ██     ██    ██    ██     ██ ██     ██ ████
+   ██    ██       ██     ██       ██       ██     ██    ██    ██     ██ ██     ██ ████
+   ██    ██████   █████████       ██████   ██     ██    ██    ██     ██ ████████   ██ 
+   ██    ██       ██     ██       ██       ██     ██    ██    ██     ██ ██   ██       
+   ██    ██       ██     ██       ██       ██     ██    ██    ██     ██ ██    ██  ████
+   ██    ████████ ██     ██       ██        ███████     ██     ███████  ██     ██ ████
 -->
 <section>
-  <h2 id="future-work">Future Work</h2>
+  # Future Work # {#teh-futur}
 
   <em>This section is non-normative.</em>
 
-  The API defined here does the bare minimum to expose user agent's credential
-  managers to the web, and allows the web to help those credential managers
-  understand when <a>federated identity providers</a> are in use. The next
-  logical step will be along the lines sketched in documents like [[WEB-LOGIN]]
+  The API defined here does the bare minimum to expose user agent's credential managers to the web,
+  and allows the web to help those credential managers understand when federated identity providers
+  are in use. The next logical step will be along the lines sketched in documents like [[WEB-LOGIN]]
   (and, to some extent, Mozilla's BrowserID [[BROWSERID]]).
 
-  The user agent is in the unique position of being able to effectively mediate
-  the relationship between users, identity providers, and websites. If the user
-  agent can remove some of the risk and confusion associated with the typical
-  authentication flows, users will be in a significantly better position than
-  today.
+  The user agent is in the unique position of being able to effectively mediate the relationship
+  between users, identity providers, and websites. If the user agent can remove some of the risk and
+  confusion associated with the typical authentication flows, users will be in a significantly
+  better position than today.
 
-  A natural way to expose this information might be to extend the
-  {{FederatedCredential}} interface with properties like authentication tokens,
-  and possibly to add some form of manifest format with properties that declare
-  the authentication type which the provider supports.
+  A natural way to expose this information might be to extend the {{FederatedCredential}} interface
+  with properties like authentication tokens, and possibly to add some form of manifest format with
+  properties that declare the authentication type which the provider supports.
 
-  The API described here is designed to be extensible enough to support use
-  cases that require user interaction, perhaps with websites other than the one
-  which requested credentials. We hope that the Promise-based system we've
-  settled on is extensible enough to support these kinds of asynchronous flows
-  which could require some level of interaction between multiple browsing
-  contexts (e.g. mediated activity on <code>idp.com</code> might resolve a
-  Promise handed back to <code>rp.com</code>) in the future without redesigning
-  the API from the ground up.
+  The API described here is designed to be extensible enough to support use cases that require user
+  interaction, perhaps with websites other than the one which requested credentials. We hope that
+  the Promise-based system we've settled on is extensible enough to support these kinds of
+  asynchronous flows which could require some level of interaction between multiple browsing
+  contexts (e.g. mediated activity on <code>idp.com</code> might resolve a Promise handed back to
+  <code>rp.com</code>) or between devices and user agents (e.g. [[WEBAUTHN]]) in the future without
+  redesigning the API from the ground up.
 
   Baby steps.
-
-  <div class="note">
-    Groups like the
-    <a href="http://www.w3.org/Payments/IG/">Web Payments IG</a>
-    and the
-    <a href="https://www.w3.org/community/credentials/">Credentials CG</a>
-    have expressed interest in extending the API defined in this document in
-    order to address use cases beyond those outlined in [[#use-cases]]. They've
-    documented these use cases in detail in
-    <a href="http://www.w3.org/TR/web-payments-use-cases/">Web Payments Use Cases 1.0</a>
-    and
-    <a href="http://opencreds.org/specs/source/use-cases/">Credentials CG Use Cases</a>,
-    and anticipate extending the API in a separate document to solve a different
-    set of problems than WebAppSec is currently chartered to deal with.
-  </div>
 </section>
+
