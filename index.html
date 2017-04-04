@@ -1552,7 +1552,7 @@ store user credentials for future use.</p>
        <ol class="toc">
         <li><a href="#collectfromcredentialstore-federatedcredential"><span class="secno">4.2.1</span> <span class="content"> <code>FederatedCredential</code>'s <code>[[CollectFromCredentialStore]](options)</code> </span></a>
         <li><a href="#store-federatedcredential"><span class="secno">4.2.2</span> <span class="content"> <code>FederatedCredential</code>'s <code>[[Store]](credential)</code> </span></a>
-        <li><a href="#construct-federatedcredential-data"><span class="secno">4.2.3</span> <span class="content"> The <code>PasswordCredental(FederatedCredentialData)</code> Constructor </span></a>
+        <li><a href="#construct-federatedcredential-data"><span class="secno">4.2.3</span> <span class="content"> The <code>FederatedCredental(FederatedCredentialData)</code> Constructor </span></a>
        </ol>
      </ol>
     <li>
@@ -2755,7 +2755,7 @@ var r = new Request("https://example.com/endpoint", init);
         <p><var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-protocol" id="ref-for-dom-federatedcredential-protocol-4">protocol</a></code></p>
       </dl>
     </ol>
-    <h4 class="heading settled algorithm" data-algorithm="The PasswordCredental(FederatedCredentialData) Constructor" data-level="4.2.3" id="construct-federatedcredential-data"><span class="secno">4.2.3. </span><span class="content"> The <code>PasswordCredental(FederatedCredentialData)</code> Constructor </span><a class="self-link" href="#construct-federatedcredential-data"></a></h4>
+    <h4 class="heading settled algorithm" data-algorithm="The FederatedCredental(FederatedCredentialData) Constructor" data-level="4.2.3" id="construct-federatedcredential-data"><span class="secno">4.2.3. </span><span class="content"> The <code>FederatedCredental(FederatedCredentialData)</code> Constructor </span><a class="self-link" href="#construct-federatedcredential-data"></a></h4>
     <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="FederatedCredential" data-dfn-type="constructor" data-export="" id="dom-federatedcredential-federatedcredential"><code>FederatedCredential(data)</code></dfn> constructor, when
   invoked with a <code class="idl"><a data-link-type="idl" href="#dictdef-federatedcredentialdata" id="ref-for-dictdef-federatedcredentialdata-2">FederatedCredentialData</a></code> (<var>data</var>), must run the following steps:</p>
     <ol class="algorithm">
@@ -3630,7 +3630,7 @@ partial dictionary CredentialRequestOptions {
     <li><a href="#ref-for-dom-credential-id-9">4.2.2. 
     FederatedCredential's [[Store]](credential) </a> <a href="#ref-for-dom-credential-id-10">(2)</a> <a href="#ref-for-dom-credential-id-11">(3)</a> <a href="#ref-for-dom-credential-id-12">(4)</a>
     <li><a href="#ref-for-dom-credential-id-13">4.2.3. 
-    The PasswordCredental(FederatedCredentialData) Constructor </a>
+    The FederatedCredental(FederatedCredentialData) Constructor </a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-credential-type">
@@ -3690,7 +3690,7 @@ partial dictionary CredentialRequestOptions {
     <li><a href="#ref-for-dom-credential-origin-slot-9">4.2.2. 
     FederatedCredential's [[Store]](credential) </a> <a href="#ref-for-dom-credential-origin-slot-10">(2)</a> <a href="#ref-for-dom-credential-origin-slot-11">(3)</a> <a href="#ref-for-dom-credential-origin-slot-12">(4)</a>
     <li><a href="#ref-for-dom-credential-origin-slot-13">4.2.3. 
-    The PasswordCredental(FederatedCredentialData) Constructor </a>
+    The FederatedCredental(FederatedCredentialData) Constructor </a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-credential-collectfromcredentialstore-slot">
@@ -3736,7 +3736,7 @@ partial dictionary CredentialRequestOptions {
     <li><a href="#ref-for-dom-credentialuserdata-name-8">4.2.2. 
     FederatedCredential's [[Store]](credential) </a> <a href="#ref-for-dom-credentialuserdata-name-9">(2)</a>
     <li><a href="#ref-for-dom-credentialuserdata-name-10">4.2.3. 
-    The PasswordCredental(FederatedCredentialData) Constructor </a> <a href="#ref-for-dom-credentialuserdata-name-11">(2)</a>
+    The FederatedCredental(FederatedCredentialData) Constructor </a> <a href="#ref-for-dom-credentialuserdata-name-11">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-credentialuserdata-iconurl">
@@ -3752,7 +3752,7 @@ partial dictionary CredentialRequestOptions {
     <li><a href="#ref-for-dom-credentialuserdata-iconurl-8">4.2.2. 
     FederatedCredential's [[Store]](credential) </a> <a href="#ref-for-dom-credentialuserdata-iconurl-9">(2)</a>
     <li><a href="#ref-for-dom-credentialuserdata-iconurl-10">4.2.3. 
-    The PasswordCredental(FederatedCredentialData) Constructor </a> <a href="#ref-for-dom-credentialuserdata-iconurl-11">(2)</a>
+    The FederatedCredental(FederatedCredentialData) Constructor </a> <a href="#ref-for-dom-credentialuserdata-iconurl-11">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-navigator-credentials">
@@ -3788,7 +3788,7 @@ partial dictionary CredentialRequestOptions {
     <li><a href="#ref-for-dom-credentialdata-id-2">3.3.4. 
     The PasswordCredental(PasswordCredentialData) Constructor </a> <a href="#ref-for-dom-credentialdata-id-3">(2)</a>
     <li><a href="#ref-for-dom-credentialdata-id-4">4.2.3. 
-    The PasswordCredental(FederatedCredentialData) Constructor </a> <a href="#ref-for-dom-credentialdata-id-5">(2)</a>
+    The FederatedCredental(FederatedCredentialData) Constructor </a> <a href="#ref-for-dom-credentialdata-id-5">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-credentialscontainer-get">
@@ -4093,7 +4093,7 @@ partial dictionary CredentialRequestOptions {
     <li><a href="#ref-for-federatedcredential-9">4.2.2. 
     FederatedCredential's [[Store]](credential) </a> <a href="#ref-for-federatedcredential-10">(2)</a> <a href="#ref-for-federatedcredential-11">(3)</a>
     <li><a href="#ref-for-federatedcredential-12">4.2.3. 
-    The PasswordCredental(FederatedCredentialData) Constructor </a>
+    The FederatedCredental(FederatedCredentialData) Constructor </a>
     <li><a href="#ref-for-federatedcredential-13">8. Future Work</a>
    </ul>
   </aside>
@@ -4102,14 +4102,14 @@ partial dictionary CredentialRequestOptions {
    <ul>
     <li><a href="#ref-for-dictdef-federatedcredentialdata-1">4.1. The FederatedCredential Interface</a>
     <li><a href="#ref-for-dictdef-federatedcredentialdata-2">4.2.3. 
-    The PasswordCredental(FederatedCredentialData) Constructor </a>
+    The FederatedCredental(FederatedCredentialData) Constructor </a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-federatedcredentialdata-provider">
    <b><a href="#dom-federatedcredentialdata-provider">#dom-federatedcredentialdata-provider</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-federatedcredentialdata-provider-1">4.2.3. 
-    The PasswordCredental(FederatedCredentialData) Constructor </a> <a href="#ref-for-dom-federatedcredentialdata-provider-2">(2)</a>
+    The FederatedCredental(FederatedCredentialData) Constructor </a> <a href="#ref-for-dom-federatedcredentialdata-provider-2">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dictdef-federatedcredentialrequestoptions">
@@ -4151,7 +4151,7 @@ partial dictionary CredentialRequestOptions {
     <li><a href="#ref-for-dom-federatedcredential-provider-5">4.2.2. 
     FederatedCredential's [[Store]](credential) </a> <a href="#ref-for-dom-federatedcredential-provider-6">(2)</a> <a href="#ref-for-dom-federatedcredential-provider-7">(3)</a> <a href="#ref-for-dom-federatedcredential-provider-8">(4)</a>
     <li><a href="#ref-for-dom-federatedcredential-provider-9">4.2.3. 
-    The PasswordCredental(FederatedCredentialData) Constructor </a>
+    The FederatedCredental(FederatedCredentialData) Constructor </a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-federatedcredential-protocol">
