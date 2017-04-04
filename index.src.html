@@ -300,7 +300,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   mechanism in the [=credential chooser=] by providing a friendly name and icon:
 
   <pre class="idl">
-    [NoInterfaceObject, Exposed=Window, SecureContext]
+    [NoInterfaceObject, SecureContext]
     interface CredentialUserData {
       readonly attribute USVString name;
       readonly attribute USVString iconURL;
