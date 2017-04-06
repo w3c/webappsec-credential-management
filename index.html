@@ -1424,7 +1424,7 @@ pre.idl.highlight { color: #708090; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-04-04">4 April 2017</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-04-06">6 April 2017</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1795,9 +1795,10 @@ store user credentials for future use.</p>
     <h3 class="heading settled" data-level="2.3" id="framework-credential-management"><span class="secno">2.3. </span><span class="content"><code>navigator.credentials</code></span><a class="self-link" href="#framework-credential-management"></a></h3>
     <p>Developers interact with the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-9">credential store</a> via methods exposed on the <code class="idl"><a data-link-type="idl" href="#credentialscontainer" id="ref-for-credentialscontainer-2">CredentialsContainer</a></code> interface, which hangs off the <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/webappapis.html#navigator">Navigator</a></code> object as <a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-1"><code>navigator.credentials</code></a>.</p>
 <pre class="idl highlight def"><span class="kt">partial</span> <span class="kt">interface</span> <a class="nv idl-code" data-link-type="interface" href="https://html.spec.whatwg.org/multipage/webappapis.html#navigator">Navigator</a> {
-  [<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>] <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n" data-link-type="idl-name" href="#credentialscontainer" id="ref-for-credentialscontainer-3">CredentialsContainer</a> <dfn class="nv dfn-paneled idl-code" data-dfn-for="Navigator" data-dfn-type="attribute" data-export="" data-readonly="" data-type="CredentialsContainer" id="dom-navigator-credentials">credentials</dfn>;
+  [<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>, <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n" data-link-type="idl-name" href="#credentialscontainer" id="ref-for-credentialscontainer-3">CredentialsContainer</a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="CredentialsContainer" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-2">credentials</a>;
 };
 </pre>
+    <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Navigator" data-dfn-type="attribute" data-export="" id="dom-navigator-credentials"><code>credentials</code></dfn> attribute MUST return the <code class="idl"><a data-link-type="idl" href="#credentialscontainer" id="ref-for-credentialscontainer-4">CredentialsContainer</a></code> associated with the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#context-object">context object</a>.</p>
     <p class="note" role="note"><span>Note:</span> As discussed in <a href="#insecure-sites">§6.2 Insecure Sites</a>, the credential management API is exposed only in <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#secure-context">Secure Contexts</a>.</p>
 <pre class="idl highlight def">[<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<span class="n">Window</span>, <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>]
 <span class="kt">interface</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="credentialscontainer">CredentialsContainer</dfn> {
@@ -1869,6 +1870,9 @@ store user credentials for future use.</p>
   page next time the user visits.</p>
      </dl>
     </dl>
+    <div class="algorithm" data-algorithm="create credentialscontainer"> When a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/webappapis.html#navigator">Navigator</a></code> object (<var>navigator</var>) is created, the user agent MUST create a
+    new <code class="idl"><a data-link-type="idl" href="#credentialscontainer" id="ref-for-credentialscontainer-5">CredentialsContainer</a></code> object, using <var>navigator</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-realm">relevant Realm</a>, and associate it
+    with <var>navigator</var>. </div>
     <h3 class="heading settled" data-level="2.4" id="credentialrequestoptions-dictionary"><span class="secno">2.4. </span><span class="content">The <code>CredentialRequestOptions</code> Dictionary</span><a class="self-link" href="#credentialrequestoptions-dictionary"></a></h3>
     <p>In order to retrieve a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-21">Credential</a></code> via <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-4">get()</a></code>, the caller specifies a
   few parameters in a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-4">CredentialRequestOptions</a></code> object.</p>
@@ -2064,7 +2068,7 @@ store user credentials for future use.</p>
     <div class="example" id="example-a2b52c23">
      <a class="self-link" href="#example-a2b52c23"></a> MegaCorp, Inc. supports passwords, and can use <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-6">navigator.credentials.get()</a></code> to obtain
     username/password pairs from a user’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-13">credential store</a>: 
-<pre>navigator.<a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-2">credentials</a>
+<pre>navigator.<a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-3">credentials</a>
   .<a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-7">get</a>({ "<a class="idl-code" data-link-type="dict-member" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password-1">password</a>": true })
   .then(credential => {
     if (!credential) {
@@ -2078,7 +2082,7 @@ store user credentials for future use.</p>
         .then(function (response) {
           if (/* |response| indicates a successful login */) {
             // Store the credential again, see note below.
-            navigator.<a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-3">credentials</a>.<a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-4">store</a>(credential);
+            navigator.<a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-4">credentials</a>.<a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-4">store</a>(credential);
             // Notify the user that sign-in succeeded! Do amazing, signed-in things!
           } else {
             // Insert some code here to fall back to a basic login form.
@@ -2114,7 +2118,7 @@ store user credentials for future use.</p>
 </pre>
      <p>Then the developer can handle the form submission with something like the following handler:</p>
 <pre>document.querySelector('#theForm').addEventListener("submit", e => {
-    if (<a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-4">navigator.credentials</a>) {
+    if (<a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-5">navigator.credentials</a>) {
       e.preventDefault();
 
       // Construct a new <a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-4">PasswordCredential</a> from the <a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">HTMLFormElement</a>
@@ -2153,7 +2157,7 @@ store user credentials for future use.</p>
 </pre>
      <p>The developer can handle the form submission with something like the following:</p>
 <pre>document.querySelector('#theForm').addEventListener("submit", e => {
-  if (<a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-5">navigator.credentials</a>) {
+  if (<a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-6">navigator.credentials</a>) {
     e.preventDefault();
 
     // Construct a new <a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-5">PasswordCredential</a> from the <a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">HTMLFormElement</a>
@@ -2940,7 +2944,7 @@ var r = new Request("https://example.com/endpoint", init);
     <h3 class="heading settled" data-level="6.5" id="security-signout"><span class="secno">6.5. </span><span class="content">Signing-Out</span><a class="self-link" href="#security-signout"></a></h3>
     <p>If a user has chosen to automatically sign-in to websites, as discussed in <a href="#user-mediation-requirement">§5.2 Requiring User Mediation</a>, then the user agent will provide credentials to an origin
   whenever it asks for them. The website can instruct the user agent to suppress this behavior by
-  calling <code class="idl"><a data-link-type="idl" href="#credentialscontainer" id="ref-for-credentialscontainer-4">CredentialsContainer</a></code>'s <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-requireusermediation" id="ref-for-dom-credentialscontainer-requireusermediation-3">requireUserMediation()</a></code> method, which
+  calling <code class="idl"><a data-link-type="idl" href="#credentialscontainer" id="ref-for-credentialscontainer-6">CredentialsContainer</a></code>'s <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-requireusermediation" id="ref-for-dom-credentialscontainer-requireusermediation-3">requireUserMediation()</a></code> method, which
   will turn off automatic sign-in for a given origin.</p>
     <p>The user agent relies on the website to do the right thing; an inattentive (or malicious) website
   could simply neglect to call this method, causing the user agent to continue providing credentials
@@ -3036,7 +3040,7 @@ partial dictionary CredentialRequestOptions {
     </ol>
     <p>You might also find that new primitives are necessary. For instance, you might want to return
   many <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-51">Credential</a></code> objects rather than just one in some sort of complicated, multi-factor
-  sign-in process. That might be accomplished in a generic fashion by adding a <code>getAll()</code> method to <code class="idl"><a data-link-type="idl" href="#credentialscontainer" id="ref-for-credentialscontainer-5">CredentialsContainer</a></code> which returned a <code>sequence&lt;Credential></code>, and defining a reasonable
+  sign-in process. That might be accomplished in a generic fashion by adding a <code>getAll()</code> method to <code class="idl"><a data-link-type="idl" href="#credentialscontainer" id="ref-for-credentialscontainer-7">CredentialsContainer</a></code> which returned a <code>sequence&lt;Credential></code>, and defining a reasonable
   mechanism for dealing with requesting credentials of distinct types.</p>
     <p>For any such extension, we recommend getting in touch with <a href="mailto:public-webappsec@w3.org">public-webappsec@</a> for consultation and review.</p>
     <h3 class="heading settled" data-level="7.3" id="browser-extensions"><span class="secno">7.3. </span><span class="content">Browser Extensions</span><a class="self-link" href="#browser-extensions"></a></h3>
@@ -3263,6 +3267,7 @@ partial dictionary CredentialRequestOptions {
    <li>
     <a data-link-type="biblio">[DOM]</a> defines the following terms:
     <ul>
+     <li><a href="https://dom.spec.whatwg.org/#context-object">context object</a>
      <li><a href="https://dom.spec.whatwg.org/#concept-tree-order">tree order</a>
     </ul>
    <li>
@@ -3313,6 +3318,7 @@ partial dictionary CredentialRequestOptions {
      <li><a href="https://html.spec.whatwg.org/multipage/browsers.html#concept-origin">origin</a>
      <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin">origin <small>(for environment settings object)</small></a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-photo">photo</a>
+     <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-realm">relevant realm</a>
      <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-document">responsible document</a>
      <li><a href="https://html.spec.whatwg.org/multipage/browsers.html#same-origin">same origin</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#category-submit">submittable elements</a>
@@ -3360,6 +3366,7 @@ partial dictionary CredentialRequestOptions {
      <li><a href="https://heycam.github.io/webidl/#Exposed">Exposed</a>
      <li><a href="https://heycam.github.io/webidl/#NoInterfaceObject">NoInterfaceObject</a>
      <li><a href="https://heycam.github.io/webidl/#idl-promise">Promise</a>
+     <li><a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>
      <li><a href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>
      <li><a href="https://heycam.github.io/webidl/#idl-USVString">USVString</a>
      <li><a href="https://heycam.github.io/webidl/#idl-boolean">boolean</a>
@@ -3441,7 +3448,7 @@ partial dictionary CredentialRequestOptions {
 };
 
 <span class="kt">partial</span> <span class="kt">interface</span> <a class="nv idl-code" data-link-type="interface" href="https://html.spec.whatwg.org/multipage/webappapis.html#navigator">Navigator</a> {
-  [<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>] <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n" data-link-type="idl-name" href="#credentialscontainer">CredentialsContainer</a> <a class="nv" data-readonly="" data-type="CredentialsContainer" href="#dom-navigator-credentials">credentials</a>;
+  [<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>, <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SameObject">SameObject</a>] <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n" data-link-type="idl-name" href="#credentialscontainer">CredentialsContainer</a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="CredentialsContainer" href="#dom-navigator-credentials">credentials</a>;
 };
 
 [<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<span class="n">Window</span>, <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>]
@@ -3758,19 +3765,19 @@ partial dictionary CredentialRequestOptions {
   <aside class="dfn-panel" data-for="dom-navigator-credentials">
    <b><a href="#dom-navigator-credentials">#dom-navigator-credentials</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-navigator-credentials-1">2.3. navigator.credentials</a>
-    <li><a href="#ref-for-dom-navigator-credentials-2">3.1.1. Password-based Sign-in</a> <a href="#ref-for-dom-navigator-credentials-3">(2)</a>
-    <li><a href="#ref-for-dom-navigator-credentials-4">3.1.2. Post-sign-in Confirmation</a>
-    <li><a href="#ref-for-dom-navigator-credentials-5">3.1.3. Change Password</a>
+    <li><a href="#ref-for-dom-navigator-credentials-1">2.3. navigator.credentials</a> <a href="#ref-for-dom-navigator-credentials-2">(2)</a>
+    <li><a href="#ref-for-dom-navigator-credentials-3">3.1.1. Password-based Sign-in</a> <a href="#ref-for-dom-navigator-credentials-4">(2)</a>
+    <li><a href="#ref-for-dom-navigator-credentials-5">3.1.2. Post-sign-in Confirmation</a>
+    <li><a href="#ref-for-dom-navigator-credentials-6">3.1.3. Change Password</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="credentialscontainer">
    <b><a href="#credentialscontainer">#credentialscontainer</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-credentialscontainer-1">2. Core API</a>
-    <li><a href="#ref-for-credentialscontainer-2">2.3. navigator.credentials</a> <a href="#ref-for-credentialscontainer-3">(2)</a>
-    <li><a href="#ref-for-credentialscontainer-4">6.5. Signing-Out</a>
-    <li><a href="#ref-for-credentialscontainer-5">7.2. Extension Points</a>
+    <li><a href="#ref-for-credentialscontainer-2">2.3. navigator.credentials</a> <a href="#ref-for-credentialscontainer-3">(2)</a> <a href="#ref-for-credentialscontainer-4">(3)</a> <a href="#ref-for-credentialscontainer-5">(4)</a>
+    <li><a href="#ref-for-credentialscontainer-6">6.5. Signing-Out</a>
+    <li><a href="#ref-for-credentialscontainer-7">7.2. Extension Points</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dictdef-credentialdata">

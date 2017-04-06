@@ -324,9 +324,12 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
   <pre class="idl">
     partial interface Navigator {
-      [SecureContext] readonly attribute CredentialsContainer credentials;
+      [SecureContext, SameObject] readonly attribute CredentialsContainer credentials;
     };
   </pre>
+
+  The <dfn for="Navigator" attribute>`credentials`</dfn> attribute MUST return the
+  {{CredentialsContainer}} associated with the [=context object=].
 
   Note: As discussed in [[#insecure-sites]], the credential management API is exposed only in
   [=Secure Contexts=].
@@ -374,6 +377,12 @@ spec:url; type:dfn; text:urlencoded byte serializer
         mediation` flag</a>, meaning that credentials will not be automagically handed back to the
         page next time the user visits.
   </dl>
+
+  <div algorithm="create credentialscontainer">
+    When a {{Navigator}} object (|navigator|) is created, the user agent MUST create a
+    new {{CredentialsContainer}} object, using |navigator|'s [=relevant Realm=], and associate it
+    with |navigator|.
+  </div>
 
   ## The `CredentialRequestOptions` Dictionary ## {#credentialrequestoptions-dictionary}
 
