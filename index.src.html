@@ -257,7 +257,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   ### `Credential` Internal Methods ### {#credential-internal-methods}
 
   Each [=interface object=] created for interfaces which [=interface/inherit=] from {{Credential}}
-  define three internal methods that allow retrieval and storage of {{Credential}} objects:
+  define several internal methods that allow retrieval and storage of {{Credential}} objects:
 
   <section algorithm="'collect credentials' internal method">
     <dfn for="Credential" method export>\[[CollectFromCredentialStore]](options)</dfn> is called
@@ -287,6 +287,16 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     <ul class="algorithm">
       1.  Return.
+    </ul>
+  </section>
+
+  <section algorithm="'create a credential' internal method">
+    <dfn for="Credential" method export>\[[Create]](data)</dfn> is called with a
+    {{CredentialCreationData}}, and returns either a {{Credential}}, if one can be created, or
+    `null`:
+
+    <ul class="algorithm">
+      1.  Return `null`.
     </ul>
   </section>
 
@@ -339,6 +349,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     interface CredentialsContainer {
       Promise&lt;Credential?&gt; get(optional CredentialRequestOptions options);
       Promise&lt;Credential&gt; store(Credential credential);
+      Promise&lt;Credential&gt; create(optional CredentialCreationData data);
       Promise&lt;void&gt; requireUserMediation();
     };
 
@@ -364,6 +375,15 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
         <pre class="argumentdef" for="CredentialsContainer/store(credential)">
           credential: The credential to be stored.
+        </pre>
+
+    :   <dfn method lt="create(data)|create()">create(data)</dfn>
+    ::  When {{CredentialsContainer/create()}} is called, the user agent MUST return the result of
+        executing <a abstract-op>Create a `Credential`</a> on
+        {{CredentialsContainer/create(data)/data}}.
+
+        <pre class="argumentdef" for="CredentialsContainer/create(data)">
+          data: The set of data used to create a `Credential`.
         </pre>
     
     :   <dfn method>requireUserMediation()</dfn>
@@ -459,6 +479,28 @@ spec:url; type:dfn; text:urlencoded byte serializer
     to guide the discovery process (by choosing a federated identity provider, BTLE device, etc).
   </div>
 
+  ## The `CredentialCreationData` Dictionary ## {#credentialcreationdata-dictionary}
+
+  In order to create a {{Credential}} via {{CredentialsContainer/create()}}, the caller specifies a
+  few parameters in a {{CredentialCreationData}} object.
+
+  Note: The {{CredentialCreationData}} dictionary is an extension point. If and when new types of
+  credentials are introduced, they will add to the dictionary so they can be passed into the
+  creation method. See [[#implementation-extension]].
+
+  <pre class="idl">
+    [Exposed=Window, SecureContext]
+    dictionary CredentialCreationData {
+      boolean unmediated = false;
+    };
+  </pre>
+  <dl dfn-for="CredentialCreationData">
+    :   <dfn dict-member>unmediated</dfn>
+    ::  If `true`, the user agent will only attempt to create a {{Credential}} if it can be done
+        without user interaction. For processing details, see the <a abstract-op>Create a
+        `Credential`</a> algorithm.
+  </dl>
+
   ## Algorithms ## {#algorithms}
 
   <h4 id="algorithm-request" algorithm>Request a `Credential`</h4>
@@ -527,7 +569,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   returning a set of {{Credential}} objects stored by the user agent locally that match |options|'
   filter. If no such {{Credential}} objects are known, the returned set will be empty:
 
-  <ul class="algorithm">
+  <ol class="algorithm">
     1.  Let |possible matches| be an empty set.
 
     2.  For each |interface| in |options|' <a>relevant credential interface objects</a>:
@@ -540,7 +582,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
             1.  <a for="set">Append</a> |c| to |possible matches|.
 
     3.  Return |possible matches|.
-  </ul>
+  </ol>
 
 
   <h4 id="algorithm-store" algorithm>Store a `Credential`</h4>
@@ -549,7 +591,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   (|credential|), and returns a {{Promise}} which resolves once the object is persisted to the
   [=credential store=].
 
-  <ul class="algorithm">
+  <ol class="algorithm">
     1.  Let |settings| be the <a>current settings object</a>
 
     2.  Assert: |settings| is a [=secure context=].
@@ -564,7 +606,39 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     4.  Return a {{Promise}} which resolves with the result of executing |credential|'s
         [=interface object=]'s {{Credential/[[Store]](credential)}} internal method on |credential|.
-  </ul>
+  </ol>
+
+  <h4 id="algorithm-create" algorithm>Create a `Credential`</h4>
+
+  The <dfn abstract-op>Create a `Credential`</dfn> algorithm accepts a {{CredentialCreationData}}
+  (|data|), and returns a {{Promise}} which resolves with a {{Credential}} if one can be created
+  using the options provided, or with `null` if not.
+
+  <ol class="algorithm">
+    1.  Let |settings| be the <a>current settings object</a>
+
+    2.  Assert: |settings| is a [=secure context=].
+
+    3.  Let |interfaces| be the set of |data|' <a>relevant credential interface objects</a>.
+
+    4.  Return a {{Promise}} rejected with `NotSupportedError` if any of the following statements
+        are true:
+
+        1.  |settings| does not have a [=environment settings object/responsible document=].
+
+        2.  |settings|' [=environment settings object/responsible document=] is not the
+            [=active document=] in a [=top-level browsing context=].
+
+        3.  |interfaces|' [=list/size=] is greater than 1.
+
+            Note: It may be reasonable at some point in the future to loosen this restriction, and
+            allow the user agent to help the user choose among one of many potential credential
+            types in order to support a "sign-up" use case. For the moment, though, we're punting
+            on that by restricting the dictionary to a single entry.
+
+    5.  Return a {{Promise}} which resolves with the result of executing |interfaces|[0]'s
+        {{Credential/[[Create]](data)}} internal method on |data|.
+  </ol>
 
   <h4 id="algorithm-require-mediation" algorithm>Require User Mediation</h4>
 
@@ -572,7 +646,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   object=] (|settings|), and returns a {{Promise}} which resolves once the `requires user mediation`
   flag is persisted to the [=credential store=].
 
-  <ul class="algorithm">
+  <ol class="algorithm">
     1.  Let |origin| be |settings|' [=environment settings object/origin=].
 
     2.  Let |p| be a new {{Promise}}.
@@ -582,7 +656,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
         1.  Set |origin|'s <a>`requires user mediation` flag</a> in the [=credential store=].
 
         2.  Resolve |p|.
-  </ul>
+  </ol>
 </section>
 
 <!--
@@ -812,7 +886,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
   {{PasswordCredential}}'s [=interface object=] inherits {{Credential}}'s implementation of
   {{Credential/[[DiscoverFromExternalSource]](options)}}, and defines its own implementation of
-  {{PasswordCredential/[[CollectFromCredentialStore]](options)}} and
+  {{PasswordCredential/[[CollectFromCredentialStore]](options)}},
+  {{PasswordCredential/[[Create]](data)}}, and
   {{PasswordCredential/[[Store]](credential)}}.
 
   ## Algorithms ## {#passwordcredential-algorithms}
@@ -829,7 +904,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   <ol class="algorithm">
     1.  Assert: |options|["password"] [=map/exists=].
 
-    2.  If |options|["password"] is not `true`, return the empty set..
+    2.  If |options|["password"] is not `true`, return the empty set.
 
     3.  Return the result of <a abstract-op lt="Retrieve a list of credentials">retrieving</a>
         credentials from the [=credential store=] that match the following filter:
@@ -837,6 +912,26 @@ spec:url; type:dfn; text:urlencoded byte serializer
         1.  The credential is a {{PasswordCredential}}
         2.  The credential's {{Credential/[[origin]]}} is the [=same origin=] as the
             [=current settings object=]'s [=environment settings object/origin=].
+  </ol>
+
+  <h4 algorithm id="create-passwordcredential">
+    `PasswordCredential`'s `[[Create]](data)`
+  </h4>
+
+  <dfn for="PasswordCredential" method>\[[Create]](data)</dfn> is called with a
+  {{CredentialCreationData}} (|data|), and returns a {{PasswordCredential}} if one can be created,
+  or `null` otherwise:
+
+  <ol class="algorithm">
+    1.  Assert: |data|["password"] [=map/exists=].
+
+    2.  If |data|["password"] is an {{HTMLFormElement}}, return the result of executing the
+        {{PasswordCredential(form)}} constructor on |data|["password"].
+
+    3.  If |data|["password"] is a {{PasswordCredentialData}}, return the result of executing the
+        {{PasswordCredential(data)}} constructor on |data|["password"].
+
+    4.  Return `null`.
   </ol>
 
   <h4 algorithm id="store-passwordcredential">
@@ -1334,7 +1429,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
   {{FederatedCredential}}'s [=interface object=] inherits {{Credential}}'s implementation of
   {{Credential/[[DiscoverFromExternalSource]](options)}}, and defines its own implementation of
-  {{FederatedCredential/[[CollectFromCredentialStore]](options)}} and
+  {{FederatedCredential/[[CollectFromCredentialStore]](options)}},
+  {{FederatedCredential/[[Create]](data)}}, and
   {{FederatedCredential/[[Store]](credential)}}.
 
   Note: If, in the future, we teach the user agent to obtain authentication tokens on a user's
@@ -1384,6 +1480,23 @@ spec:url; type:dfn; text:urlencoded byte serializer
             [=map/exists=], its value [=list/contains=] the credentials's {{FederatedCredential/provider}}.
         4.  If |options|["{{CredentialRequestOptions/federated}}"]["{{FederatedCredentialRequestOptions/protocols}}"]
             [=map/exists=], its value [=list/contains=] the credentials's {{FederatedCredential/protocol}}.
+  </ol>
+
+  <h4 algorithm id="create-federatedcredential">
+    `FederatedCredential`'s `[[Create]](data)`
+  </h4>
+
+  <dfn for="FederatedCredential" method>\[[Create]](data)</dfn> is called with a
+  {{CredentialCreationData}} (|data|), and returns a {{FederatedCredential}} if one can be created,
+  or `null` otherwise:
+
+  <ol class="algorithm">
+    1.  Assert: |data|["federated"] [=map/exists=].
+
+    2.  If |data|["federated"] is a {{FederatedCredentialData}}, return the result of executing the
+        {{FederatedCredential(data)}} constructor on |data|["federated"].
+
+    3.  Return `null`.
   </ol>
 
   <h4 algorithm id="store-federatedcredential">
@@ -1719,7 +1832,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   ## Website Authors ## {#implementation-authors}
 
   ISSUE(w3c/webappsec#290): Add some thoughts here about when and how the API
-  should be used, especially with regard to {{unmediated}}.
+  should be used, especially with regard to `unmediated`.
 
   ## Extension Points ## {#implementation-extension}
 
