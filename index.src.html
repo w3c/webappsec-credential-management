@@ -384,7 +384,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     with |navigator|.
   </div>
 
-  ## The `CredentialRequestOptions` Dictionary ## {#credentialrequestoptions-dictionary}
+  ### The `CredentialRequestOptions` Dictionary ### {#credentialrequestoptions-dictionary}
 
   In order to retrieve a {{Credential}} via {{CredentialsContainer/get()}}, the caller specifies a
   few parameters in a {{CredentialRequestOptions}} object.
@@ -393,22 +393,28 @@ spec:url; type:dfn; text:urlencoded byte serializer
   credentials are introduced that require options, their dictionary types will be added to the
   dictionary so they can be passed into the request. See [[#implementation-extension]].
 
-  <pre class="idl">
+  <pre>
     [Exposed=Window, SecureContext]
     dictionary CredentialRequestOptions {
-      boolean unmediated = false;
+      CredentialMediationRequirement mediation = "allowed";
     };
   </pre>
-  <dl dfn-for="CredentialRequestOptions">
-    :   <dfn dict-member>unmediated</dfn>
-    ::  If `true`, the user agent will only attempt to provide a {{Credential}} without user
-        interaction. It MUST NOT present the user with any visible prompt to grant access to a
-        {{Credential}}: if the user has opted-into always giving a particular site access to a
-        particular set of credentials, they will be provided. If not, the promise will resolve
-        with `null`. For processing details, see the algorithm defined in
-        [[#algorithm-request]].
+  <dl dfn-for="CredentialRequestOptions" dfn-type="dict-member">
+    :   <dfn>mediation</dfn>
+    ::  This property specifies the mediation requirements for a given credential request. The
+        meaning of each enum value are described below in {{CredentialMediationRequirement}}.
+        Processing details are defined in [[#algorithm-request]].
   </dl>
 
+  <div class="note">
+    Earlier versions of this specification defined a boolean `unmediated` member. Setting that
+    to `true` had similar effect to setting {{CredentialRequestOptions/mediation}} to "silent", and
+    setting it to `false` had similar effect to setting {{CredentialRequestOptions/mediation}} to
+    "optional".
+
+    `unmediated` should be considered deprecated; new code should instead rely on
+    {{CredentialRequestOptions/mediation}}.
+  </div>
 
   <div algorithm="relevant credential interfaces">
     The <dfn for="CredentialRequestOptions">relevant credential interface objects</dfn> for a given
@@ -459,6 +465,48 @@ spec:url; type:dfn; text:urlencoded byte serializer
     to guide the discovery process (by choosing a federated identity provider, BTLE device, etc).
   </div>
 
+  ### Mediation Requirements ### {#mediation-requirements}
+
+  When making a request via {{get(options)}}, developers can set a case-by-case requirement for
+  [=user mediation=] by choosing the appropriate {{CredentialMediationRequirement}} enum value.
+
+  Note: The [[#user-mediation]] section gives more detail on the concept in general, and its
+  implications on how the user agent deals with individual requests for a given origin).
+
+  <pre class="idl">
+    enum CredentialMediationRequirement {
+      "silent",
+      "optional",
+      "required"
+    };
+  </pre>
+  <dl dfn-for="CredentialMediationRequirement" dfn-type="enum-value">
+    :   <dfn>silent</dfn>
+    ::  User mediation is suppressed for the given operation. If it can be performed without user
+        involvement, wonderful. If user involvement is necessary, then the operation will fail
+        rather than involving the user.
+
+        Note: The intended usage is to support "Keep me signed-into this site" scenarios, where
+        a developer may wish to silently obtain credentials if a user should be automatically
+        signed in, but to delay bothering the user with a sign-in prompt until they actively
+        choose to sign-in.
+
+    :   <dfn>optional</dfn>
+    ::  If credentials can be handed over without user mediation, they will be. If no such
+        credentials are available, then the user agent will ask the user for permission.
+
+    :   <dfn>required</dfn>
+    ::  The user agent will not hand over credentials without [=user mediation=], even if the
+        [=requires user mediation=] flag is unset for an origin.
+
+        Note: For some operations, developers may wish to ensure that the user is involved, even if
+        they've otherwise chosen to stay signed-in. In these cases, the developer can set the user
+        mediation requirement to "required" for a specific request, and the user agent will not hand
+        over credentials without [=user mediation=]. Note also that this is a case-by-case
+        requirement that does not affect the [=requires user mediation=] flag for the origin. To
+        toggle that flag, developers should call {{requireUserMediation()}}.
+  </dl>
+
   ## Algorithms ## {#algorithms}
 
   <h4 id="algorithm-request" algorithm>Request a `Credential`</h4>
@@ -501,8 +549,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
             to accept either username/passwords or webauthn-style credentials without forcing
             a chooser for those users who use the former, and who wish to remain signed in.
 
-        3.  If |options|' {{CredentialRequestOptions/unmediated}} is `true`, resolve |p| with `null`
-            and skip the remaining steps.
+        3.  If |options|' {{CredentialRequestOptions/mediation}} is not
+            "{{CredentialMediationRequirement/required}}", resolve |p| with `null` and skip
+            the remaining steps.
 
         4.  Let |choice| be the result of <a abstract-op lt="ask to choose">asking the user to
             choose a `Credential`</a>, given |options| and |credentials|.
@@ -1719,7 +1768,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   ## Website Authors ## {#implementation-authors}
 
   ISSUE(w3c/webappsec#290): Add some thoughts here about when and how the API
-  should be used, especially with regard to {{unmediated}}.
+  should be used, especially with regard to {{CredentialRequestOptions/mediation}}.
 
   ## Extension Points ## {#implementation-extension}
 
