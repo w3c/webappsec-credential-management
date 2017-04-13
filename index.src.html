@@ -535,6 +535,28 @@ spec:url; type:dfn; text:urlencoded byte serializer
     </pre>
   </div>
 
+  <div class="example" id="example-mediation-optional">
+    When a user clicks "Sign In", MegaCorp, Inc. wishes to give them the smoothest possible
+    experience. If they have [[#user-mediation-requirement|opted-into]] signing in without
+    [=user mediation=], and the user agent can unambigiously choose a credential, great! If
+    not, a [=credential chooser=] will be presented.
+
+    <pre>
+      document.querySelector('#sign-in').addEventListener('click', e =&gt; {
+        var c = await navigatior.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
+          ...,
+          <a for="CredentialRequestOptions" dict-member>mediation</a>: "<a for="CredentialMediationRequirement" enum-value>optional</a>"
+        });
+        if (c) {
+          // Hooray! Let's sign the user in using these credentials!
+        }
+      });
+    </pre>
+
+    Note: MegaCorp, Inc. could also have left off the {{CredentialRequestOptions/mediation}}
+    member entirely, as "{{CredentialMediationRequirement/optional}}" is its default.
+  </div>
+
   <div class="example" id="example-mediation-require">
     MegaCorp, Inc. wishes to protect a sensitive operation by requiring a user to reauthenticate
     before taking action. Even if a user has [[#user-mediation-requirement|opted-into]] signing in
@@ -543,7 +565,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     "{{CredentialMediationRequirement/required}}":
 
     <pre>
-      document.querySelector('#important-form').addEventListener('submit', e => {
+      document.querySelector('#important-form').addEventListener('submit', e =&gt; {
         var c = await navigatior.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
           ...,
           <a for="CredentialRequestOptions" dict-member>mediation</a>: "<a for="CredentialMediationRequirement" enum-value>required</a>"
@@ -561,12 +583,11 @@ spec:url; type:dfn; text:urlencoded byte serializer
   <div class="example" id="example-mediation-switch">
     MegaCorp, Inc. wishes to support switching from one user account to another. In order to ensure
     that credentials aren't returned automatically in response to clicking on a "Change user" or "Add
-    account" button, , MegaCorp, Inc. can call {{get()}} with a
-    {{CredentialRequestOptions/mediation}} member set to
-    "{{CredentialMediationRequirement/required}}":
+    account" button, MegaCorp, Inc. can call {{get()}} with a {{CredentialRequestOptions/mediation}}
+    member set to "{{CredentialMediationRequirement/required}}":
 
     <pre>
-      document.querySelector('#switch-button').addEventListener('click', e => {
+      document.querySelector('#switch-button').addEventListener('click', e =&gt; {
         var c = await navigatior.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
           ...,
           <a for="CredentialRequestOptions" dict-member>mediation</a>: "<a for="CredentialMediationRequirement" enum-value>required</a>"
