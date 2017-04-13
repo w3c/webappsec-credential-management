@@ -621,7 +621,10 @@ spec:url; type:dfn; text:urlencoded byte serializer
             return;
           }
           if (credential.<a attribute for="Credential">type</a> == "<a const>password</a>") {
-            fetch("https://example.com/loginEndpoint", { credentials: credential, method: "POST" })
+            var form = new FormData();
+            form.append('username_field', credential.id);
+            form.append('password_field', credential.password);
+            fetch("https://example.com/loginEndpoint", { body: form, method: "POST" })
               .then(function (response) {
                 if (/* |response| indicates a successful login */) {
                   // Store the credential again, see note below.
@@ -631,6 +634,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
                   // Insert some code here to fall back to a basic login form.
                 }
               });
+            // Alternatively, the website could just copy the credential data into the
+            // form and call submit() on the form.
           }
         });
     </pre>
@@ -683,7 +688,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
             // Fetch the form's action URL, passing that new credential object in
             // as the fetch's credentials. If the response indicates success, ask
             // the user agent to ask the user to store the credential for future use:
-            var init = { method: "POST", credentials: c };
+            var init = { method: "POST", body: e.target };
             fetch(e.target.action, init).then(r =&gt; {
               if (/* |r| is a "successful" <a idl>Response</a> */)
                 <a idl lt="store()">navigator.credentials.store</a>(c);
@@ -732,7 +737,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
           // Fetch the form's action URL, passing that new credential object in
           // as the fetch's credentials. If the response indicates success, ask
           // the user agent to ask the user to store the credential for future use:
-          var init = { method: "POST", credentials: c };
+          var init = { method: "POST", body: e.target };
           fetch(e.target.action, init).then(r =&gt; {
             if (/* |r| is a "successful" <a idl>Response</a> */)
               <a idl lt="store()">navigator.credentials.store</a>(c);
@@ -752,10 +757,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
      Exposed=Window,
      SecureContext]
     interface PasswordCredential : Credential {
-      attribute USVString idName;
-      attribute USVString passwordName;
-
-      attribute CredentialBodyType? additionalData;
+      attribute USVString password;
     };
     PasswordCredential implements CredentialUserData;
 
@@ -771,22 +773,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
     };
   </pre>
   <dl dfn-for="PasswordCredential">
-    :   <dfn attribute>idName</dfn>
-    ::  This attribute represents the name which will be used for the ID field when submitting the
-        {{PasswordCredential}} to a remote endpoint via {{fetch()}}. It defaults to "`username`",
-        but can be overridden by a developer to match whatever the backend service expects.
-
-    :   <dfn attribute>passwordName</dfn>
-    ::  This attribute represents the name which will be used for the ID field when submitting the
-        {{PasswordCredential}} to a remote endpoint via {{fetch()}}. It defaults to "`password`",
-        but can be overridden by a developer to match whatever the backend service expects.
-
-    :   <dfn attribute>additionalData</dfn>
-    ::  If the developer wishes to specify additional data to insert into the request body when
-        submitting the credential information to a remote endpoint, they can do so by assigning a
-        {{FormData}} or {{URLSearchParams}} object to this attribute. The credential information
-        will be mixed into the object to produce the body. The value is `null` unless otherwise
-        specified.
+    :   <dfn attribute>password</dfn>
+    ::  This attribute represents the password of the credential.
 
     :   {{Credential/[[type]]}}
     ::  The {{PasswordCredential}} [=interface object=] has an internal slot named `[[type]]` whose
@@ -795,11 +783,6 @@ spec:url; type:dfn; text:urlencoded byte serializer
     :   {{Credential/[[discovery]]}}
     ::  The {{PasswordCredential}} [=interface object=] has an internal slot named `[[discovery]]`
         whose value is "{{Credential/[[discovery]]/credential store}}".
-
-    :   <dfn attribute>\[[password]]</dfn>
-    ::  Each {{PasswordCredential}} object has an internal slot named `[[password]]` which stores
-        the credential's password. This property is not directly exposed to the web, but used to
-        construct a request body during {{fetch()}}.
 
     :   {{PasswordCredential(form)}}
     ::  This constructor is defined in [[#construct-passwordcredential-form]].
@@ -821,7 +804,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     `PasswordCredential`'s `[[CollectFromCredentialStore]](options)`
   </h4>
 
-  <dfn for="PasswordCredential" method>\[[CollectFromCredentialStore]](options)</dfn> is called
+  <dfn for="PasswordCrede    ntial" method>\[[CollectFromCredentialStore]](options)</dfn> is called
   with a {{CredentialRequestOptions}} (|options|), and returns a set of {{Credential}} objects from
   the [=credential store=]. If no matching {{Credential}} objects are available, the returned set
   will be empty.
@@ -856,8 +839,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
         1.  If the user grants permission to update credentials (as discussed when defining
             [=user mediation=]), then:
 
-            1.  Set |stored|'s {{[[password]]}} slot's value to the value of |credential|'s
-                {{[[password]]}} slot.
+            1.  Set |stored|'s {{PasswordCredential/password}} to |credential|'s
+                {{PasswordCredential/password}}.
 
             2.  Set |stored|'s {{CredentialUserData/name}} to |credential|'s
                 {{CredentialUserData/name}}.
@@ -879,13 +862,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
             ::  |credential|'s {{CredentialUserData/iconURL}}
             :   {{Credential/[[origin]]}}
             ::  |credential|'s {{Credential/[[origin]]}}
-            :   {{PasswordCredential/[[password]]}}
-            ::  |credential|'s {{PasswordCredential/[[password]]}}
+            :   {{PasswordCredential/password}}
+            ::  |credential|'s {{PasswordCredential/password}}
 
-            Note: Ancillary properties like {{PasswordCredential/idName}},
-            {{PasswordCredential/passwordName}}, and {{PasswordCredential/additionalData}}
-            are _not_ stored in the [=credential store=]. They are used for a single
-            authentication event, and are expected to be populated at request time.
   </ol>
 
   <h4 algorithm id="construct-passwordcredential-form">
@@ -906,11 +885,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     3.  Let |elements| be a list of all the [=submittable elements=] whose [=form owner=] is |form|, in [=tree order=].
 
-    4.  Let |idName| and |passwordName| be empty strings.
+    4.  Let |newPasswordObserved| be `false`.
 
-    5.  Let |newPasswordObserved| be `false`.
-
-    6.  For each |field| in |elements|, run the following steps:
+    5.  For each |field| in |elements|, run the following steps:
 
         1.  If |field| does not have an <{input/autocomplete}> attribute, then skip to the next
             |field|.
@@ -931,15 +908,13 @@ spec:url; type:dfn; text:urlencoded byte serializer
                     :   "<a attr-value>`new-password`</a>"
                     ::  Set |data|'s {{PasswordCredentialData/password}} member's
                         value to the result of executing |formData|'s
-                        {{FormData/get()}} method on |name|, |passwordName| to
-                        |name|, and |newPasswordObserved| to `true`.
+                        {{FormData/get()}} method on |name| and |newPasswordObserved| to `true`.
 
                     :   "<a attr-value>`current-password`</a>"
                     ::  If |newPasswordObserved| is `false`,
                         set |data|'s {{PasswordCredentialData/password}} member's
                         value to the result of executing |formData|'s
-                        {{FormData/get()}} method on |name|, and |passwordName| to
-                        |name|.
+                        {{FormData/get()}} method on |name|.
 
                         Note: By checking that |newPasswordObserved| is `false`,
                         `new-password` fields take precedence over
@@ -959,33 +934,12 @@ spec:url; type:dfn; text:urlencoded byte serializer
                     :   "<a attr-value>`username`</a>"
                     ::  Set |data|'s {{CredentialData/id}} member's value to the
                         result of executing |formData|'s {{FormData/get()}} method
-                        on |name|, and |idName| to |name|.
+                        on |name|.
 
-    7.  Let |c| be the result of executing the {{PasswordCredential(data)}} constructor on |data|.
+    6.  Let |c| be the result of executing the {{PasswordCredential(data)}} constructor on |data|.
         Rethrow any exception generated.
 
-    8.  Set |c|'s {{PasswordCredential/idName}} attribute to |idName|.
-
-    9.  Set |c|'s {{PasswordCredential/passwordName}} attribute to |passwordName|.
-
-    10. If |form|'s <{form/enctype}> is "`multipart/form-data`", then:
-       
-        1.  Set |c|'s {{PasswordCredential/additionalData}} attribute to |formData|.
-
-        Otherwise:
-
-        1.  Let |params| be a new {{URLSearchParams}} object.
-
-        2.  For each |entry| in |formData|'s <a for="FormData">entries</a>:
-
-            1.  If |entry|'s <a for="entry">type</a> is "file", <a for="iteration">continue</a>.
-
-            2.  Execute |params| {{URLSearchParams/append()}} method on |entry|'s [=entry/name=] and
-                [=entry/value=].
-
-        3.  Set |c|'s {{PasswordCredential/additionalData}} attribute to |params|.
-
-    11. Return |c|.
+    7.  Return |c|.
   </ol>
 
   <h4 algorithm id="construct-passwordcredential-data">
@@ -1005,18 +959,14 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     3.  Set |c|'s properties as follows:
     
-        :   {{PasswordCredential/[[password]]}} slot
+        :   {{PasswordCredential/password}}
         ::  |data|'s {{PasswordCredentialData/password}} member's value
         :   {{Credential/id}}
         ::  |data|'s {{CredentialData/id}} member's value
-        :   {{PasswordCredential/idName}}
-        ::  "`username`"
         :   {{CredentialUserData/iconURL}}
         ::  |data|'s {{PasswordCredentialData/iconURL}} member's value
         :   {{CredentialUserData/name}}
         ::  |data|'s {{PasswordCredentialData/name}} member's value
-        :   {{PasswordCredential/passwordName}}
-        ::  "`password`"
         :   {{Credential/[[origin]]}}
         ::  The [=environment settings object/origin=] of the [=current settings object=].
 
@@ -1035,194 +985,6 @@ spec:url; type:dfn; text:urlencoded byte serializer
       return "`Matches`".
 
   2.  Return "`Does Not Match`".
-
-  ## Integration with Fetch ## {#fetch-integration}
-  
-  In order to actually authenticate a user, {{PasswordCredential}} objects may
-  be submitted to a server for evaluation. To prevent the risk that sensitive
-  credential information will be exposed directly to a page's JavaScript (see
-  [[#passwords-cross-origin-leakage]]), we hide the credential information in
-  non-web-exposed slots on the {{PasswordCredential}} object, and extract them
-  during {{fetch()}} in ways that will remain opaque to anything other than the
-  remote (same-origin) server.
-
-  {{PasswordCredential}} objects may be bound to a {{Request}} by passing them
-  into the {{Request}} constructor as the "`credentials`" member of a
-  {{RequestInit}} object:
- 
-  <pre class="example">
-    [ Given a `PasswordCredential` named 'c' ]
-    var init = {
-      method: "POST",
-      credentials: c
-    };
-    var r = new Request("https://example.com/endpoint", init);
-  </pre>
-
-  Note: The credential information will be transmitted as the request's body,
-  just as it would be for a form submission. This means that the "`method`"
-  cannot be "`GET`".
-
-  Until the request hits the network, the credential object will be hidden from
-  JavaScript. Once the user agent determines that the {{Request}} is going to
-  hit the network (that is, once Fetch hits the
-  "<a>HTTP-network-or-cache fetch</a>" algorithm), the {{PasswordCredential}}
-  will be serialized into a body and content type as defined in
-  [[#body-extraction]], and the request will proceed out to the server-side
-  authentication endpoint.
-
-  ### Monkey Patches to Fetch ### {#monkey-patching}
-
-  To accomplish the above, Fetch could be modified in the following ways:
-
-  1.  A <a>request</a> has an associated <dfn for="request">attached
-      credential</dfn> (null, or a {{PasswordCredential}}). Unless stated
-      otherwise, it is null.
-
-  2.  A <a>request</a>'s <a for="request">credentials mode</a> gains a new
-      "`password`" value, which implies the same behavior as "`include`", with
-      the additional assertion that the <a>request</a> has a non-null
-      <a for="request">attached credential</a> which will be serialized into
-      its <a for="request">body</a> when it hits the network.
-      
-  3.  The {{RequestCredentials}} enum is renamed to "`RequestCredentialsMode`,
-      and likewise updated with the new "`password`" value:
-
-      <pre class="idl">
-        enum RequestCredentialsMode { "omit", "same-origin", "include", "password" };
-      </pre>
-
-  4.  The {{RequestInit}} dictionary is updated to accept a
-      {{PasswordCredential}} as its `credentials` member:
-
-      <pre class="idl">
-        typedef (<a>PasswordCredential</a> or RequestCredentials) CredentialInfo;
-
-        partial dictionary RequestInit {
-          CredentialInfo credentials;
-        };
-      </pre>
-
-  5.  Replace step 20 of the current {{Request}} constructor with the following:
-
-      20. If |credentials| is non-null:
-
-          1.  If |credentials| is a {{PasswordCredential}}, then set |request|'s
-              <a for="request">credentials mode</a> to "`password`", and
-              |request|'s <a for="request">attached credential</a> to
-              |credentials|.
-
-              Otherwise, set |request|'s <a for="request">credentials mode</a>
-              to |credentials|.
-
-  6.  Replace step 32 of the current {{Request}} constructor with the following:
-
-      32. If |request|'s <a for="request">method</a> is `GET` or `HEAD`, then
-          throw a `TypeError` if any of the following are true:
-
-          *   <var ignore>init</var>'s `body` member is present and non-null
-          *   <var ignore>inputBody</var> is non-null
-          *   |request|'s <a for="request">attached credential</a> is non-null
-
-  7.  The <a>HTTP-network-or-cache fetch</a> algorithm is updated with the
-      following step after the existing step 2:
-
-      3.  If |httpRequest|'s <a for="request">attached credential</a> is not
-          null, run these substeps:
-
-          1.  Assert: |httpRequest|'s <a for="request">body</a> is null.
-
-          2.  Let |body| and |type| be the result of running
-              [[#body-extraction]] on |httpRequest|.
-
-          3.  If |type| is the empty string, return a <a>network error</a>.
-
-          4.  Let |httpRequest|'s <a for="request">body</a> be |body|,
-              <var ignore>Content-Type</var> be |type|, and <a for="request">redirect
-              mode</a> be "`manual`".
-
-  ISSUE(whatwg/fetch#237): These patches are combined into a pull request against Fetch.
-
-  <h4 id="body-extraction" algorithm>
-    Extract a |body| and |Content-Type| for |request|'s attached credential
-  </h4>
-
-  Given a {{Request}} (|request|), this algorithm returns a {{Body}} (|body|) and
-  a string (|Content-Type|):
-
-  1.  Let |credential| be |request|'s <a>attached credential</a>.
-
-  2.  Let |body| be a new <a for="request">body</a>, and |Content-Type| be the empty string.
-
-  3.  If |credential| is a {{PasswordCredential}}, run these substeps.
-
-      1.  If |request|'s <a for="request">url</a>'s scheme is not the same as
-          |request|'s <a for="request">client</a>'s {{URL/origin}}'s scheme,
-          or |request|'s <a for="request">url</a>'s host's <a>registerable
-          domain</a> is not the same as |request|'s
-          <a for="request">client</a>'s {{URL/origin}}'s host's <a>registerable
-          domain</a>, then skip the remaining substeps.
-
-      2.  Let |data| be a copy of |credential|'s
-          {{PasswordCredential/additionalData}} attribute if it is not
-          `undefined`, and a new {{FormData}} object otherwise.
-
-      3.  Let |list| be an empty list.
-
-      4.  If |data| is a {{FormData}} object, then:
-
-          1.  Set |list| to a copy of |data|'s <a for="FormData">entries</a>.
-
-          2.  Remove all <a>entry</a> objects from |list| whose
-              <a for="entry">name</a> is either |credential|'s
-              {{PasswordCredential/idName}} or |credential|'s
-              {{PasswordCredential/passwordName}}.
-
-          3.  Let |entry| be a new <a>entry</a> whose <a for="entry">name</a>
-              is |credential|'s {{PasswordCredential/idName}} and whose
-              <a for="entry">value</a> is |credential|'s {{Credential/id}}.
-
-          4.  Append |entry| to |list|.
-
-          5.  Let |entry| be a new <a>entry</a> whose <a for="entry">name</a>
-              is |credential|'s {{PasswordCredential/passwordName}} and whose
-              <a for="entry">value</a> is |credential|'s {{[[password]]}}.
-
-          6.  Append |entry| to |list|.
-
-          7.  Push the result of running the <a>`multipart/form-data` encoding
-              algorithm</a>, with |list| as the form data set and with "`utf-8`" as
-              the explicit character encoding, to |body|'s
-              <a for="body">stream</a>.
-
-          8.  Set |Content-Type| to `multipart/form-data;boundary=`, followed by the
-              <a>`multipart/form-data` boundary string</a> generated by the
-              multipart/form-data encoding algorithm.
-
-          Otherwise |data| is a {{URLSearchParams}} object, so:
-
-          1.  Set |list| to a copy of |data|'s
-              <a for="URLSearchParams">list</a>.
-
-          2.  Remove all name-value pairs from |list| whose name is either
-              |credential|'s {{PasswordCredential/idName}} or |credential|'s
-              {{PasswordCredential/passwordName}}.
-
-          3.  Append a new name-value pair to |list| whose name is 
-              |credential|'s {{PasswordCredential/idName}} and whose value is
-              |credential|'s {{Credential/id}}.
-
-          4.  Append a new name-value pair to |list| whose name is 
-              |credential|'s {{PasswordCredential/passwordName}} and whose value
-              is |credential|'s {{[[password]]}}.
-
-          5.  Push the result of running the <a>urlencoded byte serializer</a> with |list|, to
-              |body|'s <a for="body">stream</a>.
-
-          6.  Set |Content-Type| to
-              `application/x-www-form-urlencoded;charset=UTF-8`.
-
-  4.  Return |body| and |Content-Type|. 
 
   ## Security Considerations ## {#passwords-security}
 
@@ -1252,17 +1014,11 @@ spec:url; type:dfn; text:urlencoded byte serializer
       That is, {{Credential}} objects for `https://example.com` would not be returned directly to
       `https://www.example.com`, but could be offered to the user via the chooser.
 
-  {{PasswordCredential}}s further mitigate the risk of data leakage by never exposing the
-  {{[[password]]}} slot directly to a page's JavaScript, but only allowing its submission to a
-  same-origin server-side endpoint via {{fetch()}}.
 
   ### Same-origin Leakage ### {#passwords-same-origin-leakage}
 
-  Cross-site scripting attacks could make it possible to exploit {{PasswordCredential}}'s
-  integration with {{fetch()}} in order to leak credential information via a vulnerable
-  same-origin endpoint. To mitigate this kind of risk, authors SHOULD set a reasonable Content
-  Security Policy which restricts the kinds of content which can execute in their sites' context
-  [[CSP]]. Moreover, authors should ensure that both <a>`script-src`</a> and <a>`object-src`</a>
+  Cross-site scripting attacks could leak credential information. To mitigate this kind of risk,
+  authors should ensure that both <a>`script-src`</a> and <a>`object-src`</a>
   directives are set in any policy they specify in order to ensure that only trusted script is
   executed on a page with access to a user's credentials.
 </section>
