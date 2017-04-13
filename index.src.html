@@ -402,15 +402,15 @@ spec:url; type:dfn; text:urlencoded byte serializer
   <dl dfn-for="CredentialRequestOptions" dfn-type="dict-member">
     :   <dfn>mediation</dfn>
     ::  This property specifies the mediation requirements for a given credential request. The
-        meaning of each enum value are described below in {{CredentialMediationRequirement}}.
+        meaning of each enum value is described below in {{CredentialMediationRequirement}}.
         Processing details are defined in [[#algorithm-request]].
   </dl>
 
   <div class="note">
     Earlier versions of this specification defined a boolean `unmediated` member. Setting that
-    to `true` had similar effect to setting {{CredentialRequestOptions/mediation}} to "silent", and
-    setting it to `false` had similar effect to setting {{CredentialRequestOptions/mediation}} to
-    "optional".
+    to `true` had the effect of setting {{CredentialRequestOptions/mediation}} to
+    "{{CredentialMediationRequirement/silent}}", and setting it to `false` had the effect of
+    setting {{CredentialRequestOptions/mediation}} to "{{CredentialMediationRequirement/optional}}".
 
     `unmediated` should be considered deprecated; new code should instead rely on
     {{CredentialRequestOptions/mediation}}.
@@ -482,9 +482,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
   </pre>
   <dl dfn-for="CredentialMediationRequirement" dfn-type="enum-value">
     :   <dfn>silent</dfn>
-    ::  User mediation is suppressed for the given operation. If it can be performed without user
-        involvement, wonderful. If user involvement is necessary, then the operation will fail
-        rather than involving the user.
+    ::  User mediation is suppressed for the given operation. If the operation can be performed
+        without user involvement, wonderful. If user involvement is necessary, then the operation
+        will fail rather than involving the user.
 
         Note: The intended usage is to support "Keep me signed-into this site" scenarios, where
         a developer may wish to silently obtain credentials if a user should be automatically
@@ -492,19 +492,27 @@ spec:url; type:dfn; text:urlencoded byte serializer
         choose to sign-in.
 
     :   <dfn>optional</dfn>
-    ::  If credentials can be handed over without user mediation, they will be. If no such
-        credentials are available, then the user agent will ask the user for permission.
+    ::  If credentials can be handed over for a given operation without user mediation, they will
+        be. If [=requires user mediation|user mediation is required=], then the user agent will
+        involve the user in the decision.
+
+        Note: This is the default behavior for {{get()}}, and is intended to serve a case where a
+        developer has reasonable confidence that a user expects to start a sign-in operation. If
+        a user has just clicked "sign-in" for example, then they won't be surprised or confused to
+        see a [=credential chooser=].
 
     :   <dfn>required</dfn>
     ::  The user agent will not hand over credentials without [=user mediation=], even if the
         [=requires user mediation=] flag is unset for an origin.
 
         Note: For some operations, developers may wish to ensure that the user is involved, even if
-        they've otherwise chosen to stay signed-in. In these cases, the developer can set the user
-        mediation requirement to "required" for a specific request, and the user agent will not hand
-        over credentials without [=user mediation=]. Note also that this is a case-by-case
-        requirement that does not affect the [=requires user mediation=] flag for the origin. To
-        toggle that flag, developers should call {{requireUserMediation()}}.
+        they've otherwise chosen to stay signed-in. For example, a website might support sign-in
+        with multiple accounts at once, and it would be unfortunate if {{get()}} automatically
+        returned credentials without asking for disambiguation. In these cases, the developer can
+        set the user mediation requirement to "required" for a specific request, and the user agent
+        will not hand over credentials without [=user mediation=]. Note also that this is a
+        case-by-case requirement that does not affect the [=requires user mediation=] flag for the
+        origin. To toggle that flag, developers should call {{requireUserMediation()}}.
   </dl>
 
   ## Algorithms ## {#algorithms}
