@@ -393,7 +393,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   credentials are introduced that require options, their dictionary types will be added to the
   dictionary so they can be passed into the request. See [[#implementation-extension]].
 
-  <pre>
+  <pre class="idl">
     [Exposed=Window, SecureContext]
     dictionary CredentialRequestOptions {
       CredentialMediationRequirement mediation = "allowed";
@@ -545,12 +545,15 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
             3.  |options| is <a>matchable <i lang="la">a priori</i></a>.
 
+            4.  |options|.{{CredentialRequestOptions/mediation}} is not
+                "{{CredentialMediationRequirement/required}}".
+
             ISSUE: This might be the wrong model. It would be nice to support a site that wished
             to accept either username/passwords or webauthn-style credentials without forcing
             a chooser for those users who use the former, and who wish to remain signed in.
 
-        3.  If |options|' {{CredentialRequestOptions/mediation}} is not
-            "{{CredentialMediationRequirement/required}}", resolve |p| with `null` and skip
+        3.  If |options|' {{CredentialRequestOptions/mediation}} is 
+            "{{CredentialMediationRequirement/silent}}", resolve |p| with `null` and skip
             the remaining steps.
 
         4.  Let |choice| be the result of <a abstract-op lt="ask to choose">asking the user to
