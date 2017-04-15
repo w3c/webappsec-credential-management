@@ -56,6 +56,7 @@ spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
 <pre class="link-defaults">
 spec:html; type:dfn; for:/; text:origin
 spec:fetch; type:dfn; for:/; text:request
+spec:fetch; type:dictionary; for:/; text:RequestInit
 
 <!-- These need to be exported -->
 spec:html; type:dfn; text:submittable element
@@ -414,7 +415,6 @@ spec:url; type:dfn; text:urlencoded byte serializer
   dictionary so they can be passed into the request. See [[#implementation-extension]].
 
   <pre class="idl">
-    [Exposed=Window, SecureContext]
     dictionary CredentialRequestOptions {
       boolean unmediated = false;
     };
@@ -506,7 +506,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   <h4 id="algorithm-request" algorithm>Request a `Credential`</h4>
 
   The <dfn abstract-op>Request a `Credential`</dfn> algorithm accepts a {{CredentialRequestOptions}}
-  (|options|), and returns a {{Promise}} which resolves with a {{Credential}} if one can be
+  (|options|), and returns a {{Promise}} that resolves with a {{Credential}} if one can be
   unambigiously obtained, or with `null` if not.
 
   <ol class="algorithm">
@@ -514,7 +514,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     2.  Assert: |settings| is a [=secure context=].
 
-    3.  Return a {{Promise}} rejected with `NotSupportedError` if any of the following statements
+    3.  Return [=a promise rejected with=] `NotSupportedError` if any of the following statements
         are true:
 
         1.  |settings| does not have a [=environment settings object/responsible document=].
@@ -522,9 +522,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
         2.  |settings|' [=environment settings object/responsible document=] is not the
             [=active document=] in a [=top-level browsing context=].
 
-    4.  Let |p| be a new {{Promise}}.
-    
-    5.  Return |p|, and execute the following steps asynchronously:
+    4.  Let |p| be [=a new promise=].
+   
+    5.  Run the following steps [=in parallel=]: 
 
         1.  Let |credentials| be the result of <a abstract-op lt="collect local">collecting
             `Credential`s from the credential store</a>, given |options|.
@@ -543,13 +543,13 @@ spec:url; type:dfn; text:urlencoded byte serializer
             to accept either username/passwords or webauthn-style credentials without forcing
             a chooser for those users who use the former, and who wish to remain signed in.
 
-        3.  If |options|' {{CredentialRequestOptions/unmediated}} is `true`, resolve |p| with `null`
-            and skip the remaining steps.
+        3.  If |options|' {{CredentialRequestOptions/unmediated}} is `true`, [=resolve=] |p| with
+            `null` and skip the remaining steps.
 
         4.  Let |choice| be the result of <a abstract-op lt="ask to choose">asking the user to
             choose a `Credential`</a>, given |options| and |credentials|.
 
-        5.  If |choice| is `null` or a {{Credential}}, resolve |p| with |choice| and skip the
+        5.  If |choice| is `null` or a {{Credential}}, [=resolve=] |p| with |choice| and skip the
             remaining steps.
 
         6.  Assert: |choice| is an [=interface object=].
@@ -559,7 +559,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
         8.  If |result| is a {{Credential}} or `null`, resolve |p| with |result|.
 
-            Otherwise, reject |p| with |result|.
+            Otherwise, [=reject=] |p| with |result|.
+
+    6.  Return |p|.
   </ol>
 
   <h4 id="algorithm-collect-known" algorithm>Collect `Credential`s from the credential store</h4>
@@ -596,7 +598,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     2.  Assert: |settings| is a [=secure context=].
 
-    3.  Return a {{Promise}} rejected with `NotSupportedError` if any of the following statements
+    3.  Return [=a promise rejected with=] `NotSupportedError` if any of the following statements
         are true:
 
         1.  |settings| does not have a [=environment settings object/responsible document=].
@@ -604,8 +606,16 @@ spec:url; type:dfn; text:urlencoded byte serializer
         2.  |settings|' [=environment settings object/responsible document=] is not the
             [=active document=] in a [=top-level browsing context=].
 
-    4.  Return a {{Promise}} which resolves with the result of executing |credential|'s
-        [=interface object=]'s {{Credential/[[Store]](credential)}} internal method on |credential|.
+    4.  Let |p| be [=a new promise=].
+
+    5.  Run the following steps [=in parallel=]:
+
+        1.  Let |r| be the result of executing |credential|'s [=interface object=]'s
+            {{Credential/[[Store]](credential)}} internal method on |credential|.
+
+        2.  [=Resolve=] |p| with |r|.
+
+    6.  Return |p|.
   </ol>
 
   <h4 id="algorithm-create" algorithm>Create a `Credential`</h4>
@@ -621,7 +631,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     3.  Let |interfaces| be the set of |data|' <a>relevant credential interface objects</a>.
 
-    4.  Return a {{Promise}} rejected with `NotSupportedError` if any of the following statements
+    4.  Return [=a promise rejected with=] `NotSupportedError` if any of the following statements
         are true:
 
         1.  |settings| does not have a [=environment settings object/responsible document=].
@@ -636,8 +646,16 @@ spec:url; type:dfn; text:urlencoded byte serializer
             types in order to support a "sign-up" use case. For the moment, though, we're punting
             on that by restricting the dictionary to a single entry.
 
-    5.  Return a {{Promise}} which resolves with the result of executing |interfaces|[0]'s
-        {{Credential/[[Create]](data)}} internal method on |data|.
+    4.  Let |p| be [=a new promise=].
+
+    5.  Run the following steps [=in parallel=]:
+
+        1.  Let |r| be the result of executing |interfaces|[0] {{Credential/[[Create]](data)}}
+            internal method on |data|.
+
+        2.  [=Resolve=] |p| with |r|.
+
+    6.  Return |p|.
   </ol>
 
   <h4 id="algorithm-require-mediation" algorithm>Require User Mediation</h4>
@@ -649,13 +667,15 @@ spec:url; type:dfn; text:urlencoded byte serializer
   <ol class="algorithm">
     1.  Let |origin| be |settings|' [=environment settings object/origin=].
 
-    2.  Let |p| be a new {{Promise}}.
+    2.  Let |p| be [=a new promise=]
 
-    3.  Return |p|, and execute the following steps asynchronously:
+    3.  Run the following seps [=in parallel=]:
 
         1.  Set |origin|'s <a>`requires user mediation` flag</a> in the [=credential store=].
 
-        2.  Resolve |p|.
+        2.  [=Resolve=] |p| with `undefined`.
+
+    4.  Retun |p|.
   </ol>
 </section>
 
@@ -833,7 +853,6 @@ spec:url; type:dfn; text:urlencoded byte serializer
     };
     PasswordCredential implements CredentialUserData;
 
-    [Exposed=Window, SecureContext]
     dictionary PasswordCredentialData : CredentialData {
       USVString name;
       USVString iconURL;
@@ -1386,7 +1405,6 @@ spec:url; type:dfn; text:urlencoded byte serializer
     };
     FederatedCredential implements CredentialUserData;
 
-    [Exposed=Window, SecureContext]
     dictionary FederatedCredentialData : CredentialData {
       USVString name;
       USVString iconURL;
