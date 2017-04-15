@@ -1937,7 +1937,7 @@ store user credentials for future use.</p>
     </div>
     <h3 class="heading settled" data-level="2.5" id="algorithms"><span class="secno">2.5. </span><span class="content">Algorithms</span><a class="self-link" href="#algorithms"></a></h3>
     <h4 class="heading settled algorithm" data-algorithm="Request a Credential" data-level="2.5.1" id="algorithm-request"><span class="secno">2.5.1. </span><span class="content">Request a <code>Credential</code></span><a class="self-link" href="#algorithm-request"></a></h4>
-    <p>The <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export="" id="abstract-opdef-request-a-credential">Request a <code>Credential</code></dfn> algorithm accepts a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-9">CredentialRequestOptions</a></code> (<var>options</var>), and returns a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise">Promise</a></code> which resolves with a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-25">Credential</a></code> if one can be
+    <p>The <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export="" id="abstract-opdef-request-a-credential">Request a <code>Credential</code></dfn> algorithm accepts a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-9">CredentialRequestOptions</a></code> (<var>options</var>), and returns a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise">Promise</a></code> that resolves with a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-25">Credential</a></code> if one can be
   unambigiously obtained, or with <code>null</code> if not.</p>
     <ol class="algorithm">
      <li data-md="">
@@ -1945,7 +1945,7 @@ store user credentials for future use.</p>
      <li data-md="">
       <p class="assertion">Assert: <var>settings</var> is a <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#secure-context">secure context</a>.</p>
      <li data-md="">
-      <p>Return a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise">Promise</a></code> rejected with <code>NotSupportedError</code> if any of the following statements
+      <p>Return <a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide/#a-promise-rejected-with">a promise rejected with</a> <code>NotSupportedError</code> if any of the following statements
   are true:</p>
       <ol>
        <li data-md="">
@@ -1954,9 +1954,9 @@ store user credentials for future use.</p>
         <p><var>settings</var>’ <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-document">responsible document</a> is not the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#active-document">active document</a> in a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context">top-level browsing context</a>.</p>
       </ol>
      <li data-md="">
-      <p>Let <var>p</var> be a new <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise">Promise</a></code>.</p>
+      <p>Let <var>p</var> be <a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide/#a-new-promise">a new promise</a>.</p>
      <li data-md="">
-      <p>Return <var>p</var>, and execute the following steps asynchronously:</p>
+      <p>Run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel">in parallel</a>:</p>
       <ol>
        <li data-md="">
         <p>Let <var>credentials</var> be the result of <a data-link-type="abstract-op" href="#abstract-opdef-collect-credentials-from-the-credential-store" id="ref-for-abstract-opdef-collect-credentials-from-the-credential-store-1">collecting <code>Credential</code>s from the credential store</a>, given <var>options</var>.</p>
@@ -1975,12 +1975,12 @@ store user credentials for future use.</p>
   to accept either username/passwords or webauthn-style credentials without forcing
   a chooser for those users who use the former, and who wish to remain signed in.</p>
        <li data-md="">
-        <p>If <var>options</var>’ <code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-unmediated" id="ref-for-dom-credentialrequestoptions-unmediated-2">unmediated</a></code> is <code>true</code>, resolve <var>p</var> with <code>null</code> and skip the remaining steps.</p>
+        <p>If <var>options</var>’ <code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-unmediated" id="ref-for-dom-credentialrequestoptions-unmediated-2">unmediated</a></code> is <code>true</code>, <a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide/#resolve-promise">resolve</a> <var>p</var> with <code>null</code> and skip the remaining steps.</p>
        <li data-md="">
         <p>Let <var>choice</var> be the result of <a data-link-type="abstract-op" href="#abstract-opdef-ask-the-user-to-choose-a-credential" id="ref-for-abstract-opdef-ask-the-user-to-choose-a-credential-1">asking the user to
   choose a <code>Credential</code></a>, given <var>options</var> and <var>credentials</var>.</p>
        <li data-md="">
-        <p>If <var>choice</var> is <code>null</code> or a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-26">Credential</a></code>, resolve <var>p</var> with <var>choice</var> and skip the
+        <p>If <var>choice</var> is <code>null</code> or a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-26">Credential</a></code>, <a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide/#resolve-promise">resolve</a> <var>p</var> with <var>choice</var> and skip the
   remaining steps.</p>
        <li data-md="">
         <p class="assertion">Assert: <var>choice</var> is an <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a>.</p>
@@ -1988,8 +1988,10 @@ store user credentials for future use.</p>
         <p>Let <var>result</var> be the result of executing <var>choice</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-discoverfromexternalsource-slot" id="ref-for-dom-credential-discoverfromexternalsource-slot-1">[[DiscoverFromExternalSource]](options)</a></code>, given <var>options</var>.</p>
        <li data-md="">
         <p>If <var>result</var> is a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential-27">Credential</a></code> or <code>null</code>, resolve <var>p</var> with <var>result</var>.</p>
-        <p>Otherwise, reject <var>p</var> with <var>result</var>.</p>
+        <p>Otherwise, <a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide/#reject-promise">reject</a> <var>p</var> with <var>result</var>.</p>
       </ol>
+     <li data-md="">
+      <p>Return <var>p</var>.</p>
     </ol>
     <h4 class="heading settled algorithm" data-algorithm="Collect Credentials from the credential store" data-level="2.5.2" id="algorithm-collect-known"><span class="secno">2.5.2. </span><span class="content">Collect <code>Credential</code>s from the credential store</span><a class="self-link" href="#algorithm-collect-known"></a></h4>
     <p>Given a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-10">CredentialRequestOptions</a></code> (<var>options</var>), the user agent may <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export="" data-local-lt="collect local" id="abstract-opdef-collect-credentials-from-the-credential-store">collect <code>Credential</code>s from the credential store</dfn>,
@@ -2024,7 +2026,7 @@ store user credentials for future use.</p>
       <li data-md="">
        <p class="assertion">Assert: <var>settings</var> is a <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#secure-context">secure context</a>.</p>
       <li data-md="">
-       <p>Return a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise">Promise</a></code> rejected with <code>NotSupportedError</code> if any of the following statements
+       <p>Return <a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide/#a-promise-rejected-with">a promise rejected with</a> <code>NotSupportedError</code> if any of the following statements
   are true:</p>
        <ol>
         <li data-md="">
@@ -2033,7 +2035,17 @@ store user credentials for future use.</p>
          <p><var>settings</var>’ <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-document">responsible document</a> is not the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#active-document">active document</a> in a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context">top-level browsing context</a>.</p>
        </ol>
       <li data-md="">
-       <p>Return a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise">Promise</a></code> which resolves with the result of executing <var>credential</var>’s <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a>'s <code class="idl"><a data-link-type="idl" href="#dom-credential-store-slot" id="ref-for-dom-credential-store-slot-1">[[Store]](credential)</a></code> internal method on <var>credential</var>.</p>
+       <p>Let <var>p</var> be <a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide/#a-new-promise">a new promise</a>.</p>
+      <li data-md="">
+       <p>Run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel">in parallel</a>:</p>
+       <ol>
+        <li data-md="">
+         <p>Let <var>r</var> be the result of executing <var>credential</var>’s <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a>'s <code class="idl"><a data-link-type="idl" href="#dom-credential-store-slot" id="ref-for-dom-credential-store-slot-1">[[Store]](credential)</a></code> internal method on <var>credential</var>.</p>
+        <li data-md="">
+         <p><a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide/#resolve-promise">Resolve</a> <var>p</var> with <var>r</var>.</p>
+       </ol>
+      <li data-md="">
+       <p>Return <var>p</var>.</p>
      </ol>
     </ul>
     <h4 class="heading settled algorithm" data-algorithm="Require User Mediation" data-level="2.5.4" id="algorithm-require-mediation"><span class="secno">2.5.4. </span><span class="content">Require User Mediation</span><a class="self-link" href="#algorithm-require-mediation"></a></h4>
@@ -2044,15 +2056,17 @@ store user credentials for future use.</p>
       <li data-md="">
        <p>Let <var>origin</var> be <var>settings</var>’ <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin">origin</a>.</p>
       <li data-md="">
-       <p>Let <var>p</var> be a new <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise">Promise</a></code>.</p>
+       <p>Let <var>p</var> be <a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide/#a-new-promise">a new promise</a></p>
       <li data-md="">
-       <p>Return <var>p</var>, and execute the following steps asynchronously:</p>
+       <p>Run the following seps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel">in parallel</a>:</p>
        <ol>
         <li data-md="">
          <p>Set <var>origin</var>’s <a data-link-type="dfn" href="#origin-requires-user-mediation-flag" id="ref-for-origin-requires-user-mediation-flag-2"><code>requires user mediation</code> flag</a> in the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-12">credential store</a>.</p>
         <li data-md="">
-         <p>Resolve <var>p</var>.</p>
+         <p><a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide/#resolve-promise">Resolve</a> <var>p</var> with <code>undefined</code>.</p>
        </ol>
+      <li data-md="">
+       <p>Retun <var>p</var>.</p>
      </ol>
     </ul>
    </section>
@@ -3299,6 +3313,7 @@ partial dictionary CredentialRequestOptions {
      <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object">environment settings object</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#form-owner">form owner</a>
      <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-global">global object</a>
+     <li><a href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel">in parallel</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#multipart/form-data-boundary-string">multipart/form-data boundary string</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#multipart/form-data-encoding-algorithm">multipart/form-data encoding algorithm</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-name">name <small>(for autocomplete)</small></a>
@@ -3330,6 +3345,14 @@ partial dictionary CredentialRequestOptions {
     <a data-link-type="biblio">[mixed-content]</a> defines the following terms:
     <ul>
      <li><a href="https://w3c.github.io/webappsec-mixed-content/#a-priori-authenticated-url">a priori authenticated url</a>
+    </ul>
+   <li>
+    <a data-link-type="biblio">[promises-guide]</a> defines the following terms:
+    <ul>
+     <li><a href="https://www.w3.org/2001/tag/doc/promises-guide/#a-new-promise">a new promise</a>
+     <li><a href="https://www.w3.org/2001/tag/doc/promises-guide/#a-promise-rejected-with">a promise rejected with</a>
+     <li><a href="https://www.w3.org/2001/tag/doc/promises-guide/#reject-promise">reject</a>
+     <li><a href="https://www.w3.org/2001/tag/doc/promises-guide/#resolve-promise">resolve</a>
     </ul>
    <li>
     <a data-link-type="biblio">[PSL]</a> defines the following terms:
@@ -3397,6 +3420,8 @@ partial dictionary CredentialRequestOptions {
    <dd>Anne van Kesteren; Domenic Denicola. <a href="https://infra.spec.whatwg.org/">Infra Standard</a>. Living Standard. URL: <a href="https://infra.spec.whatwg.org/">https://infra.spec.whatwg.org/</a>
    <dt id="biblio-mixed-content">[MIXED-CONTENT]
    <dd>Mike West. <a href="https://www.w3.org/TR/mixed-content/">Mixed Content</a>. URL: <a href="https://www.w3.org/TR/mixed-content/">https://www.w3.org/TR/mixed-content/</a>
+   <dt id="biblio-promises-guide">[PROMISES-GUIDE]
+   <dd>Domenic Denicola. <a href="https://www.w3.org/2001/tag/doc/promises-guide">Writing Promise-Using Specifications</a>. 16 February 2016. Finding of the W3C TAG. URL: <a href="https://www.w3.org/2001/tag/doc/promises-guide">https://www.w3.org/2001/tag/doc/promises-guide</a>
    <dt id="biblio-psl">[PSL]
    <dd><cite><a href="https://publicsuffix.org/">Public Suffix List</a></cite>.    Mozilla Foundation.
    <dt id="biblio-rfc2119">[RFC2119]
