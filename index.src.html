@@ -489,7 +489,6 @@ spec:url; type:dfn; text:urlencoded byte serializer
   creation method. See [[#implementation-extension]].
 
   <pre class="idl">
-    [Exposed=Window, SecureContext]
     dictionary CredentialCreationData {
       boolean unmediated = false;
     };
@@ -841,9 +840,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   <pre class="idl">
     typedef (FormData or URLSearchParams) CredentialBodyType;
 
-    [Constructor(PasswordCredentialData data),
-     Constructor(HTMLFormElement form),
-     Exposed=Window,
+    [Exposed=Window,
      SecureContext]
     interface PasswordCredential : Credential {
       attribute USVString idName;
@@ -852,12 +849,6 @@ spec:url; type:dfn; text:urlencoded byte serializer
       attribute CredentialBodyType? additionalData;
     };
     PasswordCredential implements CredentialUserData;
-
-    dictionary PasswordCredentialData : CredentialData {
-      USVString name;
-      USVString iconURL;
-      required USVString password;
-    };
 
     partial dictionary CredentialRequestOptions {
       boolean password = false;
@@ -893,13 +884,24 @@ spec:url; type:dfn; text:urlencoded byte serializer
     ::  Each {{PasswordCredential}} object has an internal slot named `[[password]]` which stores
         the credential's password. This property is not directly exposed to the web, but used to
         construct a request body during {{fetch()}}.
-
-    :   {{PasswordCredential(form)}}
-    ::  This constructor is defined in [[#construct-passwordcredential-form]].
-
-    :   {{PasswordCredential(data)}}
-    ::  This constructor is defined in [[#construct-passwordcredential-data]].
   </dl>
+ 
+  {{PasswordCredential}} objects can be created either explicitly with a {{PasswordCredentialData}}
+  dictionary, or based on the contents of an {{HTMLFormElement}}'s [=submittable elements=]. 
+
+  <pre class="idl">
+    dictionary PasswordCredentialData : CredentialData {
+      USVString name;
+      USVString iconURL;
+      required USVString password;
+    };
+
+    typedef (PasswordCredentialData or HTMLFormElement) PasswordCredentialInit;
+
+    partial dictionary CredentialCreationData {
+      PasswordCredentialInit? password;
+    };
+  </pre>
 
   {{PasswordCredential}} objects are [=Credential/origin bound=].
 
@@ -921,9 +923,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
   will be empty.
 
   <ol class="algorithm">
-    1.  Assert: |options|["password"] [=map/exists=].
+    1.  Assert: |options|["{{CredentialRequestOptions/password}}"] [=map/exists=].
 
-    2.  If |options|["password"] is not `true`, return the empty set.
+    2.  If |options|["{{CredentialRequestOptions/password}}"] is not `true`, return the empty set.
 
     3.  Return the result of <a abstract-op lt="Retrieve a list of credentials">retrieving</a>
         credentials from the [=credential store=] that match the following filter:
@@ -939,16 +941,20 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
   <dfn for="PasswordCredential" method>\[[Create]](data)</dfn> is called with a
   {{CredentialCreationData}} (|data|), and returns a {{PasswordCredential}} if one can be created,
-  or `null` otherwise:
+  or `null` otherwise. The {{CredentialCreationData}} dictionary must have a `password` member which
+  holds either an {{HTMLFormElement}} or a {{PasswordCredentialData}}:
+
 
   <ol class="algorithm">
-    1.  Assert: |data|["password"] [=map/exists=].
+    1.  Assert: |data|["{{CredentialCreationData/password}}"] [=map/exists=].
 
-    2.  If |data|["password"] is an {{HTMLFormElement}}, return the result of executing the
-        {{PasswordCredential(form)}} constructor on |data|["password"].
+    2.  If |data|["{{CredentialCreationData/password}}"] is an {{HTMLFormElement}}, return the
+        result of executing <a abstract-op>Create a `PasswordCredential` from an
+        `HTMLFormElement`</a> on |data|["{{CredentialCreationData/password}}"].
 
-    3.  If |data|["password"] is a {{PasswordCredentialData}}, return the result of executing the
-        {{PasswordCredential(data)}} constructor on |data|["password"].
+    3.  If |data|["{{CredentialCreationData/password}}"] is a {{PasswordCredentialData}}, return
+        the result of executing <a abstract-op>Create a `PasswordCredential` from
+        `PasswordCredentialData`</a> on |data|["{{CredentialCreationData/password}}"].
 
     4.  Return `null`.
   </ol>
@@ -1003,11 +1009,11 @@ spec:url; type:dfn; text:urlencoded byte serializer
   </ol>
 
   <h4 algorithm id="construct-passwordcredential-form">
-    The `PasswordCredental(HTMLFormElement)` Constructor
+    Create a `PasswordCredential` from an `HTMLFormElement`
   </h4>
 
-  The <dfn for="PasswordCredential" constructor>`PasswordCredential(form)`</dfn> constructor, when
-  invoked with an {{HTMLFormElement}} (|form|), must run these steps.
+  To <dfn abstract-op>Create a `PasswordCredential` from an `HTMLFormElement`</dfn>, given an
+  {{HTMLFormElement}} (|form|), run these steps.
   
   Note: [[#examples-post-signin]] and [[#examples-change-password]] provide examples of the intended
   usage.
@@ -1075,8 +1081,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
                         result of executing |formData|'s {{FormData/get()}} method
                         on |name|, and |idName| to |name|.
 
-    7.  Let |c| be the result of executing the {{PasswordCredential(data)}} constructor on |data|.
-        Rethrow any exception generated.
+    7.  Let |c| be the result of executing <a abstract-op>Create a `PasswordCredential` from
+        `PasswordCredentialData`</a> on |data|. Rethrow any exception generated.
 
     8.  Set |c|'s {{PasswordCredential/idName}} attribute to |idName|.
 
@@ -1103,16 +1109,16 @@ spec:url; type:dfn; text:urlencoded byte serializer
   </ol>
 
   <h4 algorithm id="construct-passwordcredential-data">
-    The `PasswordCredental(PasswordCredentialData)` Constructor
+    Create a `PasswordCredential` from `PasswordCredentialData`
   </h4>
 
-  The <dfn for="PasswordCredential" constructor>PasswordCredential(data)</dfn> constructor, when
-  invoked with a {{PasswordCredentialData}} (|data|), must run the following steps:
+  To <dfn abstract-op>Create a `PasswordCredential` from `PasswordCredentialData`</dfn>, given an
+  {{PasswordCredentialData}} (|data|), run these steps.
 
   <ol class="algorithm">
     1.  Let |c| be a new {{PasswordCredential}} object.
     
-    2.  If any of the following are the empty string, <a>throw</a> a `TypeError` exception:
+    2.  If any of the following are the empty string, [=throw=] a `TypeError` exception:
 
         *   |data|'s {{CredentialData/id}} member's value
         *   |data|'s {{PasswordCredentialData/password}} member's value
@@ -1396,21 +1402,13 @@ spec:url; type:dfn; text:urlencoded byte serializer
   ## The `FederatedCredential` Interface ## {#federatedcredential-interface}
 
   <pre class="idl">
-    [Constructor(FederatedCredentialData data),
-     Exposed=Window,
+    [Exposed=Window,
      SecureContext]
     interface FederatedCredential : Credential {
       readonly attribute USVString provider;
       readonly attribute DOMString? protocol;
     };
     FederatedCredential implements CredentialUserData;
-
-    dictionary FederatedCredentialData : CredentialData {
-      USVString name;
-      USVString iconURL;
-      required USVString provider;
-      DOMString protocol;
-    };
 
     dictionary FederatedCredentialRequestOptions {
       sequence&lt;USVString&gt; providers;
@@ -1438,10 +1436,22 @@ spec:url; type:dfn; text:urlencoded byte serializer
     :   {{Credential/[[discovery]]}}
     ::  The {{FederatedCredential}} [=interface object=] has an internal slot named `[[discovery]]`
         whose value is "{{Credential/[[discovery]]/credential store}}".
-
-    :   {{FederatedCredential(data)}}
-    ::  This constructor is defined in [[#construct-passwordcredential-data]].
   </dl>
+
+  {{FederatedCredential}} objects can be created with a {{FederatedCredentialInit}} dictionary:
+
+  <pre class="idl">
+    dictionary FederatedCredentialInit : CredentialData {
+      USVString name;
+      USVString iconURL;
+      required USVString provider;
+      DOMString protocol;
+    };
+
+    partial dictionary CredentialCreationData {
+      FederatedCredentialInit federated;
+    };
+  </pre>
 
   {{FederatedCredential}} objects are [=Credential/origin bound=].
 
@@ -1509,12 +1519,10 @@ spec:url; type:dfn; text:urlencoded byte serializer
   or `null` otherwise:
 
   <ol class="algorithm">
-    1.  Assert: |data|["federated"] [=map/exists=].
+    1.  Assert: |data|["{{CredentialCreationData/federated}}"] [=map/exists=].
 
-    2.  If |data|["federated"] is a {{FederatedCredentialData}}, return the result of executing the
-        {{FederatedCredential(data)}} constructor on |data|["federated"].
-
-    3.  Return `null`.
+    2.  Return the result of executing <a abstract-op>Create a `FederatedCredential` from
+        `FederatedCredentialInit`</a> on |data|["{{CredentialCreationData/federated}}"].
   </ol>
 
   <h4 algorithm id="store-federatedcredential">
@@ -1550,30 +1558,31 @@ spec:url; type:dfn; text:urlencoded byte serializer
   </ol>
 
   <h4 algorithm id="construct-federatedcredential-data">
-    The `FederatedCredental(FederatedCredentialData)` Constructor
+    Create a `FederatedCredential` from `FederatedCredentialInit`
   </h4>
 
-  The <dfn for="FederatedCredential" constructor>`FederatedCredential(data)`</dfn> constructor, when
-  invoked with a {{FederatedCredentialData}} (|data|), must run the following steps:
+
+  To <dfn abstract-op>Create a `FederatedCredential` from `FederatedCredentialInit`</dfn>, given a
+  {{FederatedCredentialInit}} (|init|), run these steps.
 
   <ol class="algorithm">
     1.  Let |c| be a new {{FederatedCredential}} object.
     
     2.  If any of the following are the empty string, <a>throw</a> a `TypeError` exception:
 
-        *   |data|'s {{CredentialData/id}} member's value
-        *   |data|'s {{FederatedCredentialData/provider}} member's value
+        *   |init|.{{CredentialData/id}}'s value
+        *   |init|.{{FederatedCredentialInit/provider}}'s value
 
     3.  Set |c|'s properties as follows:
     
         :   {{Credential/id}}
-        ::  |data|'s {{CredentialData/id}} member's value
+        ::  |init|.{{CredentialData/id}}'s value
         :   {{FederatedCredential/provider}}
-        ::  |data|'s {{FederatedCredentialData/provider}} member's value
+        ::  |init|.{{FederatedCredentialInit/provider}}'s value
         :   {{CredentialUserData/iconURL}}
-        ::  |data|'s {{CredentialUserData/iconURL}} member's value
+        ::  |init|.{{CredentialUserData/iconURL}}'s value
         :   {{CredentialUserData/name}}
-        ::  |data|'s {{CredentialUserData/name}} member's value
+        ::  |init|.{{CredentialUserData/name}}'s value
         :   {{Credential/[[origin]]}}
         ::  The [=environment settings object/origin=] of the [=current settings object=].
 
@@ -1862,8 +1871,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
  
       <div class="example"> 
         <pre>
-          [Constructor(...),
-           Exposed=Window,
+          [Exposed=Window,
            SecureContext]
           interface ExampleCredential : Credential {
             // Definition goes here.
@@ -1871,7 +1879,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
         </pre>
       </div>
 
-  2.  Define appropriate {{Credential/[[CollectFromCredentialStore]](options)}},
+  2.  Define appropriate {{Credential/[[Create]](data)}},
+      {{Credential/[[CollectFromCredentialStore]](options)}},
       {{Credential/[[DiscoverFromExternalSource]](options)}}, and
       {{Credential/[[Store]](credential)}} methods on `ExampleCredential`'s
       [=interface object=]:
@@ -1916,6 +1925,21 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
           partial dictionary CredentialRequestOptions {
             ExampleCredentialRequestOptions? example;
+          };
+        </pre>
+      </div>
+
+  5.  Extend {{CredentialCreationData}} with the data the new credential type needs to create
+      `Credential` objects in response to {{create()}}:
+
+      <div class="example">
+        <pre>
+          dictionary ExampleCredentialInit {
+            // Definition goes here.
+          };
+
+          partial dictionary CredentialCreationData {
+            ExampleCredentialInit? example;
           };
         </pre>
       </div>
