@@ -56,6 +56,7 @@ spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
 <pre class="link-defaults">
 spec:html; type:dfn; for:/; text:origin
 spec:fetch; type:dfn; for:/; text:request
+spec:fetch; type:dictionary; for:/; text:RequestInit
 
 <!-- These need to be exported -->
 spec:html; type:dfn; text:submittable element
@@ -394,7 +395,6 @@ spec:url; type:dfn; text:urlencoded byte serializer
   dictionary so they can be passed into the request. See [[#implementation-extension]].
 
   <pre class="idl">
-    [Exposed=Window, SecureContext]
     dictionary CredentialRequestOptions {
       boolean unmediated = false;
     };
@@ -759,7 +759,6 @@ spec:url; type:dfn; text:urlencoded byte serializer
     };
     PasswordCredential implements CredentialUserData;
 
-    [Exposed=Window, SecureContext]
     dictionary PasswordCredentialData : CredentialData {
       USVString name;
       USVString iconURL;
@@ -1291,7 +1290,6 @@ spec:url; type:dfn; text:urlencoded byte serializer
     };
     FederatedCredential implements CredentialUserData;
 
-    [Exposed=Window, SecureContext]
     dictionary FederatedCredentialData : CredentialData {
       USVString name;
       USVString iconURL;
