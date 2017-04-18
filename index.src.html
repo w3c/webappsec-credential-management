@@ -801,8 +801,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
         });
     </pre>
 
-    Alternatively, the website could just copy the crednetial data into a form and call
-    `submit()` on the form.
+    Alternatively, the website could just copy the credential data into a <{form}> and call
+    {{HTMLFormElement/submit()}} on the form:
 
     <pre>
       navigator.<a attribute>credentials</a>
@@ -821,9 +821,10 @@ spec:url; type:dfn; text:urlencoded byte serializer
         });
     </pre>
 
-    Note that the previous method is much preferred, as it contains an explicit call
-    to {{CredentialsContainer/store()}} and does not rely on other heuristics
-    to catch the form submission and save the credentials.
+    Note that the former method is much preferred, as it contains an explicit call
+    to {{CredentialsContainer/store()}} and saves the credentials. The <{form}> based mechanism
+    relies on form submission, which navigates the browsing context, making it difficult to
+    ensure that {{store()}} is called after successful sign-in.
   </div>
 
   Note: The [=credential chooser=] presented by the user agent could allow the user to choose
@@ -1202,7 +1203,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   authors should ensure that both <a>`script-src`</a> and <a>`object-src`</a>
   directives are set in any policy they specify in order to ensure that only trusted script is
   executed on a page with access to a user's credentials. If you are populating
-  {{HTMLFormElement|HTMLFormElements}}, also <a>`form-action`</a> directives
+  <{form}> elements, also <a>`form-action`</a> directives
   should be set.
 </section>
 
@@ -1658,6 +1659,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
   ISSUE(w3c/webappsec#290): Add some thoughts here about when and how the API
   should be used, especially with regard to {{CredentialRequestOptions/mediation}}.
+
+  ISSUE: Describe encoding restrictions of submitting credentials by {{fetch()}} with
+  a {{FormData}} body.
 
   ## Extension Points ## {#implementation-extension}
 

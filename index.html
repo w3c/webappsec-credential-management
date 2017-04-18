@@ -2198,8 +2198,8 @@ store user credentials for future use.</p>
   from within a <a data-link-type="dfn" href="#credential-chooser" id="ref-for-credential-chooser-7">credential chooser</a>.</p>
     <h3 class="heading settled" data-level="3.1" id="password-examples"><span class="secno">3.1. </span><span class="content">Examples</span><a class="self-link" href="#password-examples"></a></h3>
     <h4 class="heading settled" data-level="3.1.1" id="examples-password-signin"><span class="secno">3.1.1. </span><span class="content">Password-based Sign-in</span><a class="self-link" href="#examples-password-signin"></a></h4>
-    <div class="example" id="example-f4254e42">
-     <a class="self-link" href="#example-f4254e42"></a> MegaCorp, Inc. supports passwords, and can use <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-15">navigator.credentials.get()</a></code> to obtain
+    <div class="example" id="example-1ac61b74">
+     <a class="self-link" href="#example-1ac61b74"></a> MegaCorp, Inc. supports passwords, and can use <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-15">navigator.credentials.get()</a></code> to obtain
     username/password pairs from a user’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-13">credential store</a>: 
 <pre>navigator.<a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-7">credentials</a>
   .<a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-16">get</a>({ "<a class="idl-code" data-link-type="dict-member" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password-1">password</a>": true })
@@ -2229,7 +2229,7 @@ store user credentials for future use.</p>
     }
   });
 </pre>
-     <p>Alternatively, the website could just copy the crednetial data into a form and call <code>submit()</code> on the form.</p>
+     <p>Alternatively, the website could just copy the credential data into a <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/forms.html#the-form-element">form</a></code> and call <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/forms.html#dom-form-submit">submit()</a></code> on the form:</p>
 <pre>navigator.<a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-9">credentials</a>
   .<a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-17">get</a>({ "<a class="idl-code" data-link-type="dict-member" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password-2">password</a>": true })
   .then(credential => {
@@ -2245,21 +2245,22 @@ store user credentials for future use.</p>
     }
   });
 </pre>
-     <p>Note that the previous method is much preferred, as it contains an explicit call
-    to <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-5">store()</a></code> and does not rely on other heuristics
-    to catch the form submission and save the credentials.</p>
+     <p>Note that the former method is much preferred, as it contains an explicit call
+    to <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-5">store()</a></code> and saves the credentials. The <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/forms.html#the-form-element">form</a></code> based mechanism
+    relies on form submission, which navigates the browsing context, making it difficult to
+    ensure that <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-6">store()</a></code> is called after successful sign-in.</p>
     </div>
     <p class="note" role="note"><span>Note:</span> The <a data-link-type="dfn" href="#credential-chooser" id="ref-for-credential-chooser-8">credential chooser</a> presented by the user agent could allow the user to choose
   credentials that aren’t actually stored for the current origin. For instance, it might offer up
   redentials from <code>https://m.example.com</code> when signing into <code>https://www.example.com</code> (as
   described in <a href="#passwords-credential-leakage">§3.4.1 Credential Leakage</a>), or it might allow a user to create a new
-  credential on the fly. Developers can deal gracefully with this uncertainty by calling <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-6">store()</a></code> every time credentials are successfully used, even right after
+  credential on the fly. Developers can deal gracefully with this uncertainty by calling <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-7">store()</a></code> every time credentials are successfully used, even right after
   credentials have been retrieved from <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-18">get()</a></code>: if the credentials aren’t
   yet stored for the origin, the user will be given the opportunity to do so. If they are stored,
   the user won’t be prompted.</p>
     <h4 class="heading settled" data-level="3.1.2" id="examples-post-signin"><span class="secno">3.1.2. </span><span class="content">Post-sign-in Confirmation</span><a class="self-link" href="#examples-post-signin"></a></h4>
     <p>To ensure that users are offered to store new credentials after a successful sign-in, they can
-  to be passed to <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-7">store()</a></code>.</p>
+  to be passed to <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-8">store()</a></code>.</p>
     <div class="example" id="example-18ea1440">
      <a class="self-link" href="#example-18ea1440"></a> If a user is signed in by submitting the credentials to a sign-in endpoint via <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a></code>,
     we can check the response to determine whether the user
@@ -2290,7 +2291,7 @@ store user credentials for future use.</p>
       var init = { method: "POST", body: new FormData(e.target) };
       fetch(e.target.action, init).then(r => {
         if (/* |r| is a "successful" <a data-link-type="idl" href="https://fetch.spec.whatwg.org/#response">Response</a> */)
-          <a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-8">navigator.credentials.store</a>(c);
+          <a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-9">navigator.credentials.store</a>(c);
       });
     }
 });
@@ -2303,7 +2304,7 @@ store user credentials for future use.</p>
     <div class="example" id="example-b2fcc30c">
      <a class="self-link" href="#example-b2fcc30c"></a> MegaCorp Inc. allows users to change their passwords by POSTing data to
     a backend server asynchronously. After doing so successfully, they can
-    update the user’s credentials by calling <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-9">store()</a></code> with the new information. 
+    update the user’s credentials by calling <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-10">store()</a></code> with the new information. 
      <p>Given a password change form like the following:</p>
 <pre>&lt;form action="https://example.com/changePassword" method="POST" id="theForm">
   &lt;input type="hidden" name="username" <a data-link-type="element-attr" href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete">autocomplete</a>="<a data-link-type="attr-value" href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-username">username</a>" value="user">
@@ -2329,7 +2330,7 @@ store user credentials for future use.</p>
     var init = { method: "POST", body: new FormData(e.target) };
     fetch(e.target.action, init).then(r => {
       if (/* |r| is a "successful" <a data-link-type="idl" href="https://fetch.spec.whatwg.org/#response">Response</a> */)
-        <a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-10">navigator.credentials.store</a>(c);
+        <a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-11">navigator.credentials.store</a>(c);
     });
   }
 });
@@ -2580,7 +2581,7 @@ store user credentials for future use.</p>
     </ol>
     <p>Cross-site scripting attacks could leak credential information. To mitigate this kind of risk,
   authors should ensure that both <a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#script-src"><code>script-src</code></a> and <a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#object-src"><code>object-src</code></a> directives are set in any policy they specify in order to ensure that only trusted script is
-  executed on a page with access to a user’s credentials. If you are populating <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">HTMLFormElements</a></code>, also <a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#form-action"><code>form-action</code></a> directives
+  executed on a page with access to a user’s credentials. If you are populating <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/forms.html#the-form-element">form</a></code> elements, also <a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#form-action"><code>form-action</code></a> directives
   should be set.</p>
    </section>
    <section>
@@ -2759,7 +2760,7 @@ store user credentials for future use.</p>
      <li data-md="">
       <p>Credential information SHOULD NOT be stored or updated without <a data-link-type="dfn" href="#user-mediated" id="ref-for-user-mediated-11">user mediation</a>. For
   example, the user agent could display a "Save this credential?" dialog box to the user in
-  response to each call to <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-11">store()</a></code>.</p>
+  response to each call to <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-12">store()</a></code>.</p>
       <p>User consent MAY be inferred if a user agent chooses to offer a persistant grant of consent
   in the form of an "Always save passwords" option (though we’d suggest that user agents should
   err on the side of something more narrowly scoped: perhaps "Always save _generated_
@@ -2870,7 +2871,7 @@ store user credentials for future use.</p>
     <p>If framed pages have access to the APIs defined here, it might be possible to confuse a user into
   granting access to credentials for an origin other than the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context">top-level browsing context</a>,
   which is the only security origin which users can reasonably be expected to understand.</p>
-    <p>Therefore, both <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-24">get()</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-12">store()</a></code> will result in a rejected <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise">Promise</a></code> when called from
+    <p>Therefore, both <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-24">get()</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-13">store()</a></code> will result in a rejected <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise">Promise</a></code> when called from
   a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context">nested browsing context</a>, and the API and related interfaces are not exposed inside <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#worker">Worker</a></code> contexts.</p>
     <p>The algorithms in <a href="#algorithm-request">§2.4.1 Request a Credential</a> and <a href="#algorithm-store">§2.4.3 Store a Credential</a> contain more detail.</p>
     <h3 class="heading settled" data-level="6.4" id="security-timing"><span class="secno">6.4. </span><span class="content">Timing Attacks</span><a class="self-link" href="#security-timing"></a></h3>
@@ -2917,6 +2918,8 @@ store user credentials for future use.</p>
     <h3 class="heading settled" data-level="7.1" id="implementation-authors"><span class="secno">7.1. </span><span class="content">Website Authors</span><a class="self-link" href="#implementation-authors"></a></h3>
     <p class="issue" id="issue-8678ef20"><a class="self-link" href="#issue-8678ef20"></a> Add some thoughts here about when and how the API
   should be used, especially with regard to <code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-mediation" id="ref-for-dom-credentialrequestoptions-mediation-15">mediation</a></code>. <a href="https://github.com/w3c/webappsec/issues/290">&lt;https://github.com/w3c/webappsec/issues/290></a></p>
+    <p class="issue" id="issue-1c5542f0"><a class="self-link" href="#issue-1c5542f0"></a> Describe encoding restrictions of submitting credentials by <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a></code> with
+  a <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> body.</p>
     <h3 class="heading settled" data-level="7.2" id="implementation-extension"><span class="secno">7.2. </span><span class="content">Extension Points</span><a class="self-link" href="#implementation-extension"></a></h3>
     <p>This document provides a generic, high-level API that’s meant to be extended with specific types
   of <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential-13">credentials</a> that serve specific authentication needs. Doing so is, hopefully,
@@ -2987,7 +2990,7 @@ partial dictionary CredentialRequestOptions {
   the behavior of third party credential management software in the same way
   that user agents can improve their own via this imperative approach.</p>
     <p>This could range from a complex new API that the user agent mediates, or
-  simply by allowing extensions to overwrite the <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-27">get()</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-13">store()</a></code> endpoints for their own purposes.</p>
+  simply by allowing extensions to overwrite the <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-27">get()</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-14">store()</a></code> endpoints for their own purposes.</p>
    </section>
    <section>
     <h2 class="heading settled" data-level="8" id="teh-futur"><span class="secno">8. </span><span class="content">Future Work</span><a class="self-link" href="#teh-futur"></a></h2>
@@ -3213,6 +3216,7 @@ partial dictionary CredentialRequestOptions {
      <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object">current settings object</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-current-password">current-password</a>
      <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object">environment settings object</a>
+     <li><a href="https://html.spec.whatwg.org/multipage/forms.html#the-form-element">form</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#form-owner">form owner</a>
      <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-global">global object</a>
      <li><a href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel">in parallel</a>
@@ -3227,6 +3231,7 @@ partial dictionary CredentialRequestOptions {
      <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-realm">relevant realm</a>
      <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-document">responsible document</a>
      <li><a href="https://html.spec.whatwg.org/multipage/browsers.html#same-origin">same origin</a>
+     <li><a href="https://html.spec.whatwg.org/multipage/forms.html#dom-form-submit">submit()</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#category-submit">submittable elements</a>
      <li><a href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context">top-level browsing context</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-username">username</a>
@@ -3438,6 +3443,8 @@ partial dictionary CredentialRequestOptions {
   a chooser for those users who use the former, and who wish to remain signed in.<a href="#issue-d9160978"> ↵ </a></div>
    <div class="issue"> Add some thoughts here about when and how the API
   should be used, especially with regard to <code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-mediation">mediation</a></code>. <a href="https://github.com/w3c/webappsec/issues/290">&lt;https://github.com/w3c/webappsec/issues/290></a><a href="#issue-8678ef20"> ↵ </a></div>
+   <div class="issue"> Describe encoding restrictions of submitting credentials by <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a></code> with
+  a <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> body.<a href="#issue-1c5542f0"> ↵ </a></div>
   </div>
   <aside class="dfn-panel" data-for="concept-credential">
    <b><a href="#concept-credential">#concept-credential</a></b><b>Referenced in:</b>
@@ -3724,12 +3731,12 @@ partial dictionary CredentialRequestOptions {
    <b><a href="#dom-credentialscontainer-store">#dom-credentialscontainer-store</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-credentialscontainer-store-1">2.3. navigator.credentials</a> <a href="#ref-for-dom-credentialscontainer-store-2">(2)</a> <a href="#ref-for-dom-credentialscontainer-store-3">(3)</a>
-    <li><a href="#ref-for-dom-credentialscontainer-store-4">3.1.1. Password-based Sign-in</a> <a href="#ref-for-dom-credentialscontainer-store-5">(2)</a> <a href="#ref-for-dom-credentialscontainer-store-6">(3)</a>
-    <li><a href="#ref-for-dom-credentialscontainer-store-7">3.1.2. Post-sign-in Confirmation</a> <a href="#ref-for-dom-credentialscontainer-store-8">(2)</a>
-    <li><a href="#ref-for-dom-credentialscontainer-store-9">3.1.3. Change Password</a> <a href="#ref-for-dom-credentialscontainer-store-10">(2)</a>
-    <li><a href="#ref-for-dom-credentialscontainer-store-11">5.1. Storing and Updating Credentials</a>
-    <li><a href="#ref-for-dom-credentialscontainer-store-12">6.3. Origin Confusion</a>
-    <li><a href="#ref-for-dom-credentialscontainer-store-13">7.3. Browser Extensions</a>
+    <li><a href="#ref-for-dom-credentialscontainer-store-4">3.1.1. Password-based Sign-in</a> <a href="#ref-for-dom-credentialscontainer-store-5">(2)</a> <a href="#ref-for-dom-credentialscontainer-store-6">(3)</a> <a href="#ref-for-dom-credentialscontainer-store-7">(4)</a>
+    <li><a href="#ref-for-dom-credentialscontainer-store-8">3.1.2. Post-sign-in Confirmation</a> <a href="#ref-for-dom-credentialscontainer-store-9">(2)</a>
+    <li><a href="#ref-for-dom-credentialscontainer-store-10">3.1.3. Change Password</a> <a href="#ref-for-dom-credentialscontainer-store-11">(2)</a>
+    <li><a href="#ref-for-dom-credentialscontainer-store-12">5.1. Storing and Updating Credentials</a>
+    <li><a href="#ref-for-dom-credentialscontainer-store-13">6.3. Origin Confusion</a>
+    <li><a href="#ref-for-dom-credentialscontainer-store-14">7.3. Browser Extensions</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-credentialscontainer-store-credential-credential">
