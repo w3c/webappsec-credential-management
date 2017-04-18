@@ -275,7 +275,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     <dfn for="Credential" method export>\[[DiscoverFromExternalSource]](options)</dfn> is called
     with a {{CredentialRequestOptions}} object. It returns a {{Credential}} if one can be
     returned given the options provided, `null` if no credential is available, or an error if
-    discovery fails.
+    discovery fails (for example, incorrect options could produce a {{TypeError}}):
 
     <ul class="algorithm">
       1.  Return `null`.
@@ -293,8 +293,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
   <section algorithm="'create a credential' internal method">
     <dfn for="Credential" method export>\[[Create]](options)</dfn> is called with a
-    {{CredentialCreationOptions}}, and returns either a {{Credential}}, if one can be created, or
-    `null`:
+    {{CredentialCreationOptions}}, and returns either a {{Credential}}, if one can be created, 
+    `null` if no credential was created, or an error if creation fails due to exceptional situations
+    (for example, incorrect options could produce a {{TypeError}}):
 
     <ul class="algorithm">
       1.  Return `null`.
@@ -522,7 +523,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
         1.  Let |credentials| be the result of <a abstract-op lt="collect local">collecting
             `Credential`s from the credential store</a>, given |options|.
 
-        2.  If all of the following statements are true, resolve |p| with |credentials|[0] and
+        2.  If |credentials| is an [=exception=], [=reject=] |p| with |credentials|.
+
+        3.  If all of the following statements are true, resolve |p| with |credentials|[0] and
             skip the remaining steps:
 
             1.  |credentials|' [=set/size=] is 1
@@ -536,21 +539,21 @@ spec:url; type:dfn; text:urlencoded byte serializer
             to accept either username/passwords or webauthn-style credentials without forcing
             a chooser for those users who use the former, and who wish to remain signed in.
 
-        3.  If |options|' {{CredentialRequestOptions/unmediated}} is `true`, [=resolve=] |p| with
+        4.  If |options|' {{CredentialRequestOptions/unmediated}} is `true`, [=resolve=] |p| with
             `null` and skip the remaining steps.
 
-        4.  Let |choice| be the result of <a abstract-op lt="ask to choose">asking the user to
+        5.  Let |choice| be the result of <a abstract-op lt="ask to choose">asking the user to
             choose a `Credential`</a>, given |options| and |credentials|.
 
-        5.  If |choice| is `null` or a {{Credential}}, [=resolve=] |p| with |choice| and skip the
+        6.  If |choice| is `null` or a {{Credential}}, [=resolve=] |p| with |choice| and skip the
             remaining steps.
 
-        6.  Assert: |choice| is an [=interface object=].
+        7.  Assert: |choice| is an [=interface object=].
 
-        7.  Let |result| be the result of executing |choice|'s
+        8.  Let |result| be the result of executing |choice|'s
             {{[[DiscoverFromExternalSource]](options)}}, given |options|.
 
-        8.  If |result| is a {{Credential}} or `null`, resolve |p| with |result|.
+        9.  If |result| is a {{Credential}} or `null`, resolve |p| with |result|.
 
             Otherwise, [=reject=] |p| with |result|.
 
@@ -569,10 +572,14 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     2.  For each |interface| in |options|' <a>relevant credential interface objects</a>:
 
-        1.  Let |credentials| be the result of executing |interface|'s
+        1.  Let |r| be the result of executing |interface|'s
             {{Credential/[[CollectFromCredentialStore]](options)}} internal method on |options|.
 
-        2.  For each |c| in |credentials|:
+        2.  If |r| is an [=exception=], return |r|.
+
+        3.  Assert: |r| is a list of [=interface objects=].
+
+        4.  For each |c| in |r|:
        
             1.  <a for="set">Append</a> |c| to |possible matches|.
 
@@ -615,7 +622,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
   The <dfn abstract-op>Create a `Credential`</dfn> algorithm accepts a {{CredentialCreationOptions}}
   (|options|), and returns a {{Promise}} which resolves with a {{Credential}} if one can be created
-  using the options provided, or with `null` if not.
+  using the options provided, or `null` if no {{Credential}} can be created. In exceptional
+  circumstances, the {{Promise}} may reject with an appropriate exception:
 
   <ol class="algorithm">
     1.  Let |settings| be the <a>current settings object</a>
@@ -646,7 +654,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
         1.  Let |r| be the result of executing |interfaces|[0] {{Credential/[[Create]](options)}}
             internal method on |options|.
 
-        2.  [=Resolve=] |p| with |r|.
+        2.  If |r| is an [=exception=], [=reject=] |p| with |r|.
+
+            Otherwise, [=resolve=] |p| with |r|.
 
     7.  Return |p|.
   </ol>
