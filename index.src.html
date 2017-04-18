@@ -56,6 +56,7 @@ spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
 <pre class="link-defaults">
 spec:html; type:dfn; for:/; text:origin
 spec:fetch; type:dfn; for:/; text:request
+spec:fetch; type:dictionary; for:/; text:RequestInit
 
 <!-- These need to be exported -->
 spec:html; type:dfn; text:submittable element
@@ -384,7 +385,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     with |navigator|.
   </div>
 
-  ## The `CredentialRequestOptions` Dictionary ## {#credentialrequestoptions-dictionary}
+  ### The `CredentialRequestOptions` Dictionary ### {#credentialrequestoptions-dictionary}
 
   In order to retrieve a {{Credential}} via {{CredentialsContainer/get()}}, the caller specifies a
   few parameters in a {{CredentialRequestOptions}} object.
@@ -394,21 +395,26 @@ spec:url; type:dfn; text:urlencoded byte serializer
   dictionary so they can be passed into the request. See [[#implementation-extension]].
 
   <pre class="idl">
-    [Exposed=Window, SecureContext]
     dictionary CredentialRequestOptions {
-      boolean unmediated = false;
+      CredentialMediationRequirement mediation = "optional";
     };
   </pre>
-  <dl dfn-for="CredentialRequestOptions">
-    :   <dfn dict-member>unmediated</dfn>
-    ::  If `true`, the user agent will only attempt to provide a {{Credential}} without user
-        interaction. It MUST NOT present the user with any visible prompt to grant access to a
-        {{Credential}}: if the user has opted-into always giving a particular site access to a
-        particular set of credentials, they will be provided. If not, the promise will resolve
-        with `null`. For processing details, see the algorithm defined in
-        [[#algorithm-request]].
+  <dl dfn-for="CredentialRequestOptions" dfn-type="dict-member">
+    :   <dfn>mediation</dfn>
+    ::  This property specifies the mediation requirements for a given credential request. The
+        meaning of each enum value is described below in {{CredentialMediationRequirement}}.
+        Processing details are defined in [[#algorithm-request]].
   </dl>
 
+  <div class="note">
+    Earlier versions of this specification defined a boolean `unmediated` member. Setting that
+    to `true` had the effect of setting {{CredentialRequestOptions/mediation}} to
+    "{{CredentialMediationRequirement/silent}}", and setting it to `false` had the effect of
+    setting {{CredentialRequestOptions/mediation}} to "{{CredentialMediationRequirement/optional}}".
+
+    `unmediated` should be considered deprecated; new code should instead rely on
+    {{CredentialRequestOptions/mediation}}.
+  </div>
 
   <div algorithm="relevant credential interfaces">
     The <dfn for="CredentialRequestOptions">relevant credential interface objects</dfn> for a given
@@ -459,12 +465,151 @@ spec:url; type:dfn; text:urlencoded byte serializer
     to guide the discovery process (by choosing a federated identity provider, BTLE device, etc).
   </div>
 
+  ### Mediation Requirements ### {#mediation-requirements}
+
+  When making a request via {{get(options)}}, developers can set a case-by-case requirement for
+  [=user mediation=] by choosing the appropriate {{CredentialMediationRequirement}} enum value.
+
+  Note: The [[#user-mediation]] section gives more detail on the concept in general, and its
+  implications on how the user agent deals with individual requests for a given origin).
+
+  <pre class="idl">
+    enum CredentialMediationRequirement {
+      "silent",
+      "optional",
+      "required"
+    };
+  </pre>
+  <dl dfn-for="CredentialMediationRequirement" dfn-type="enum-value">
+    :   <dfn>silent</dfn>
+    ::  User mediation is suppressed for the given operation. If the operation can be performed
+        without user involvement, wonderful. If user involvement is necessary, then the operation
+        will return `null` rather than involving the user.
+
+        Note: The intended usage is to support ["Keep me signed-into this site"
+        scenarios](#example-mediation-silent), where a developer may wish to silently obtain
+        credentials if a user should be automatically signed in, but to delay bothering the user
+        with a sign-in prompt until they actively choose to sign-in.
+
+    :   <dfn>optional</dfn>
+    ::  If credentials can be handed over for a given operation without user mediation, they will
+        be. If [=requires user mediation|user mediation is required=], then the user agent will
+        involve the user in the decision.
+
+        Note: This is the default behavior for {{get()}}, and is intended to serve a case where a
+        developer has reasonable confidence that a user expects to start a sign-in operation. If
+        a user has just clicked "sign-in" for example, then they won't be surprised or confused to
+        see a [=credential chooser=] if necessary.
+
+    :   <dfn>required</dfn>
+    ::  The user agent will not hand over credentials without [=user mediation=], even if the
+        [=requires user mediation=] flag is unset for an origin.
+
+        Note: This requirement is intended to support [reauthentication](#example-mediation-require)
+        or [user-switching](#example-mediation-switch) scenarios. Further, the requirement is tied
+        to a specific operation, and does not affect the [=requires user mediation=] flag for the
+        origin. To set that flag, developers should call {{requireUserMediation()}}.
+  </dl>
+
+  #### Examples #### {#mediation-examples}
+
+  <div class="example" id="example-mediation-silent">
+    MegaCorp, Inc. wishes to seamlessly sign in users when possible. They can do so by calling
+    {{get()}} for all non-signed in users at some convinient point while a landing page is loading,
+    passing in a {{CredentialRequestOptions/mediation}} member set to
+    "{{CredentialMediationRequirement/silent}}". This ensures that users who have opted-into
+    dropping the requirements for user mediation (as described in [[#user-mediation-requirement]])
+    are signed in, and users who haven't opted-into such behavior won't be bothered with a confusing
+    [=credential chooser=] popping up without context:
+
+    <pre>
+      window.addEventListener('load', _ =&gt; {
+        var c = await navigatior.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
+          ...,
+          <a for="CredentialRequestOptions" dict-member>mediation</a>: "<a for="CredentialMediationRequirement" enum-value>silent</a>"
+        });
+        if (c) {
+          // Hooray! Let's sign the user in using these credentials!
+        }
+      });
+    </pre>
+  </div>
+
+  <div class="example" id="example-mediation-optional">
+    When a user clicks "Sign In", MegaCorp, Inc. wishes to give them the smoothest possible
+    experience. If they have [[#user-mediation-requirement|opted-into]] signing in without
+    [=user mediation=], and the user agent can unambigiously choose a credential, great! If
+    not, a [=credential chooser=] will be presented.
+
+    <pre>
+      document.querySelector('#sign-in').addEventListener('click', e =&gt; {
+        var c = await navigatior.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
+          ...,
+          <a for="CredentialRequestOptions" dict-member>mediation</a>: "<a for="CredentialMediationRequirement" enum-value>optional</a>"
+        });
+        if (c) {
+          // Hooray! Let's sign the user in using these credentials!
+        }
+      });
+    </pre>
+
+    Note: MegaCorp, Inc. could also have left off the {{CredentialRequestOptions/mediation}}
+    member entirely, as "{{CredentialMediationRequirement/optional}}" is its default.
+  </div>
+
+  <div class="example" id="example-mediation-require">
+    MegaCorp, Inc. wishes to protect a sensitive operation by requiring a user to reauthenticate
+    before taking action. Even if a user has [[#user-mediation-requirement|opted-into]] signing in
+    without [=user mediation=], MegaCorp, Inc. can ensure that the user agent requires mediation
+    by calling {{get()}} with a {{CredentialRequestOptions/mediation}} member set to
+    "{{CredentialMediationRequirement/required}}":
+
+    Note: Depending on the security model of the browser or the credential type, this may require
+    the user to authenticate themselves in some way, perhaps by entering a master password, scanning
+    a fingerprint, etc. before a credential is handed to the website.
+
+    <pre>
+      document.querySelector('#important-form').addEventListener('submit', e =&gt; {
+        var c = await navigatior.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
+          ...,
+          <a for="CredentialRequestOptions" dict-member>mediation</a>: "<a for="CredentialMediationRequirement" enum-value>required</a>"
+        });
+        if (c) {
+          // Verify that |c| enables access, and cancel the submission
+          // if it doesn't.
+        } else {
+          e.preventDefault();
+        }
+      });
+    </pre>
+  </div>
+
+  <div class="example" id="example-mediation-switch">
+    MegaCorp, Inc. wishes to support signing into multiple user accounts at once. In order to ensure
+    that the user gets a chance to select a different credential, MegaCorp, Inc. can call {{get()}}
+    with a {{CredentialRequestOptions/mediation}} member set to
+    "{{CredentialMediationRequirement/required}}" in order to ensure that that credentials aren't
+    returned automatically in response to clicking on an "Add account" button:
+
+    <pre>
+      document.querySelector('#switch-button').addEventListener('click', e =&gt; {
+        var c = await navigatior.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
+          ...,
+          <a for="CredentialRequestOptions" dict-member>mediation</a>: "<a for="CredentialMediationRequirement" enum-value>required</a>"
+        });
+        if (c) {
+          // Sign the user in using |c|.
+        }
+      });
+    </pre>
+  </div>
+
   ## Algorithms ## {#algorithms}
 
   <h4 id="algorithm-request" algorithm>Request a `Credential`</h4>
 
   The <dfn abstract-op>Request a `Credential`</dfn> algorithm accepts a {{CredentialRequestOptions}}
-  (|options|), and returns a {{Promise}} which resolves with a {{Credential}} if one can be
+  (|options|), and returns a {{Promise}} that resolves with a {{Credential}} if one can be
   unambigiously obtained, or with `null` if not.
 
   <ol class="algorithm">
@@ -472,7 +617,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     2.  Assert: |settings| is a [=secure context=].
 
-    3.  Return a {{Promise}} rejected with `NotSupportedError` if any of the following statements
+    3.  Return [=a promise rejected with=] `NotSupportedError` if any of the following statements
         are true:
 
         1.  |settings| does not have a [=environment settings object/responsible document=].
@@ -480,9 +625,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
         2.  |settings|' [=environment settings object/responsible document=] is not the
             [=active document=] in a [=top-level browsing context=].
 
-    4.  Let |p| be a new {{Promise}}.
-    
-    5.  Return |p|, and execute the following steps asynchronously:
+    4.  Let |p| be [=a new promise=].
+   
+    5.  Run the following steps [=in parallel=]: 
 
         1.  Let |credentials| be the result of <a abstract-op lt="collect local">collecting
             `Credential`s from the credential store</a>, given |options|.
@@ -497,17 +642,21 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
             3.  |options| is <a>matchable <i lang="la">a priori</i></a>.
 
+            4.  |options|.{{CredentialRequestOptions/mediation}} is not
+                "{{CredentialMediationRequirement/required}}".
+
             ISSUE: This might be the wrong model. It would be nice to support a site that wished
             to accept either username/passwords or webauthn-style credentials without forcing
             a chooser for those users who use the former, and who wish to remain signed in.
 
-        3.  If |options|' {{CredentialRequestOptions/unmediated}} is `true`, resolve |p| with `null`
-            and skip the remaining steps.
+        3.  If |options|' {{CredentialRequestOptions/mediation}} is
+            "{{CredentialMediationRequirement/silent}}", [=resolve=] |p| with `null`, and skip
+            the remaining steps.
 
         4.  Let |choice| be the result of <a abstract-op lt="ask to choose">asking the user to
             choose a `Credential`</a>, given |options| and |credentials|.
 
-        5.  If |choice| is `null` or a {{Credential}}, resolve |p| with |choice| and skip the
+        5.  If |choice| is `null` or a {{Credential}}, [=resolve=] |p| with |choice| and skip the
             remaining steps.
 
         6.  Assert: |choice| is an [=interface object=].
@@ -517,7 +666,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
         8.  If |result| is a {{Credential}} or `null`, resolve |p| with |result|.
 
-            Otherwise, reject |p| with |result|.
+            Otherwise, [=reject=] |p| with |result|.
+
+    6.  Return |p|.
   </ol>
 
   <h4 id="algorithm-collect-known" algorithm>Collect `Credential`s from the credential store</h4>
@@ -554,7 +705,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     2.  Assert: |settings| is a [=secure context=].
 
-    3.  Return a {{Promise}} rejected with `NotSupportedError` if any of the following statements
+    3.  Return [=a promise rejected with=] `NotSupportedError` if any of the following statements
         are true:
 
         1.  |settings| does not have a [=environment settings object/responsible document=].
@@ -562,8 +713,16 @@ spec:url; type:dfn; text:urlencoded byte serializer
         2.  |settings|' [=environment settings object/responsible document=] is not the
             [=active document=] in a [=top-level browsing context=].
 
-    4.  Return a {{Promise}} which resolves with the result of executing |credential|'s
-        [=interface object=]'s {{Credential/[[Store]](credential)}} internal method on |credential|.
+    4.  Let |p| be [=a new promise=].
+
+    5.  Run the following steps [=in parallel=]:
+
+        1.  Let |r| be the result of executing |credential|'s [=interface object=]'s
+            {{Credential/[[Store]](credential)}} internal method on |credential|.
+
+        2.  [=Resolve=] |p| with |r|.
+
+    6.  Return |p|.
   </ul>
 
   <h4 id="algorithm-require-mediation" algorithm>Require User Mediation</h4>
@@ -575,13 +734,15 @@ spec:url; type:dfn; text:urlencoded byte serializer
   <ul class="algorithm">
     1.  Let |origin| be |settings|' [=environment settings object/origin=].
 
-    2.  Let |p| be a new {{Promise}}.
+    2.  Let |p| be [=a new promise=]
 
-    3.  Return |p|, and execute the following steps asynchronously:
+    3.  Run the following seps [=in parallel=]:
 
         1.  Set |origin|'s <a>`requires user mediation` flag</a> in the [=credential store=].
 
-        2.  Resolve |p|.
+        2.  [=Resolve=] |p| with `undefined`.
+
+    4.  Retun |p|.
   </ul>
 </section>
 
@@ -630,21 +791,45 @@ spec:url; type:dfn; text:urlencoded byte serializer
                   // Store the credential again, see note below.
                   navigator.<a attribute>credentials</a>.<a idl lt="store()" for="CredentialsContainer">store</a>(credential);
                   // Notify the user that sign-in succeeded! Do amazing, signed-in things!
+                  // Maybe navigate to a landing page via location.href =
+                  // '/signed-in-experience'?
                 } else {
                   // Insert some code here to fall back to a basic login form.
                 }
               });
-            // Alternatively, the website could just copy the credential data into the
-            // form and call submit() on the form.
           }
         });
     </pre>
+
+    Alternatively, the website could just copy the crednetial data into a form and call
+    `submit()` on the form.
+
+    <pre>
+      navigator.<a attribute>credentials</a>
+        .<a idl lt="get()" for="CredentialsContainer">get</a>({ "<a for="CredentialRequestOptions" dict-member>password</a>": true })
+        .then(credential =&gt; {
+          if (!credential) {
+            return; // as above...
+          }
+          if (credential.<a attribute for="Credential">type</a> == "<a const>password</a>") {
+            document.getQuerySelector('input[name=username_field]').value =
+                credential.id;
+            document.getQuerySelector('input[name=password_field]').value =
+                credential.password;
+            document.getQuerySelector('#myform').submit();
+          }
+        });
+    </pre>
+
+    Note that the previous method is much preferred, as it contains an explicit call
+    to {{CredentialsContainer/store()}} and does not rely on other heuristics
+    to catch the form submission and save the credentials.
   </div>
 
   Note: The [=credential chooser=] presented by the user agent could allow the user to choose
   credentials that aren't actually stored for the current origin. For instance, it might offer up
   redentials from `https://m.example.com` when signing into `https://www.example.com` (as
-  described in [[#passwords-cross-origin-leakage]]), or it might allow a user to create a new
+  described in [[#passwords-credential-leakage]]), or it might allow a user to create a new
   credential on the fly. Developers can deal gracefully with this uncertainty by calling
   {{CredentialsContainer/store()}} every time credentials are successfully used, even right after
   credentials have been retrieved from {{CredentialsContainer/get()}}: if the credentials aren't
@@ -657,8 +842,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
   to be passed to {{CredentialsContainer/store()}}.
 
   <div class="example">
-    If a user is signed in by calling {{fetch()}} on a {{PasswordCredential}} object, submitting
-    that data to a sign-in endpoint, then we can check the response to determine whether the user
+    If a user is signed in by submitting the credentials to a sign-in endpoint via {{fetch()}},
+    we can check the response to determine whether the user
     was signed in successfully, and notify the user agent accordingly. Given a sign-in form like the
     following:
 
@@ -686,9 +871,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
             var c = new <a idl lt="PasswordCredential(form)">PasswordCredential</a>(e.target);
 
             // Fetch the form's action URL, passing that new credential object in
-            // as the fetch's credentials. If the response indicates success, ask
+            // as a FormData object. If the response indicates success, ask
             // the user agent to ask the user to store the credential for future use:
-            var init = { method: "POST", body: e.target };
+            var init = { method: "POST", body: new FormData(e.target) };
             fetch(e.target.action, init).then(r =&gt; {
               if (/* |r| is a "successful" <a idl>Response</a> */)
                 <a idl lt="store()">navigator.credentials.store</a>(c);
@@ -735,9 +920,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
           var c = new <a idl lt="PasswordCredential(form)">PasswordCredential</a>(e.target);
 
           // Fetch the form's action URL, passing that new credential object in
-          // as the fetch's credentials. If the response indicates success, ask
+          // as a FormData object. If the response indicates success, ask
           // the user agent to ask the user to store the credential for future use:
-          var init = { method: "POST", body: e.target };
+          var init = { method: "POST", body: new FormData(e.target) };
           fetch(e.target.action, init).then(r =&gt; {
             if (/* |r| is a "successful" <a idl>Response</a> */)
               <a idl lt="store()">navigator.credentials.store</a>(c);
@@ -761,7 +946,6 @@ spec:url; type:dfn; text:urlencoded byte serializer
     };
     PasswordCredential implements CredentialUserData;
 
-    [Exposed=Window, SecureContext]
     dictionary PasswordCredentialData : CredentialData {
       USVString name;
       USVString iconURL;
@@ -804,7 +988,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     `PasswordCredential`'s `[[CollectFromCredentialStore]](options)`
   </h4>
 
-  <dfn for="PasswordCrede    ntial" method>\[[CollectFromCredentialStore]](options)</dfn> is called
+  <dfn for="PasswordCredential" method>\[[CollectFromCredentialStore]](options)</dfn> is called
   with a {{CredentialRequestOptions}} (|options|), and returns a set of {{Credential}} objects from
   the [=credential store=]. If no matching {{Credential}} objects are available, the returned set
   will be empty.
@@ -908,7 +1092,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
                     :   "<a attr-value>`new-password`</a>"
                     ::  Set |data|'s {{PasswordCredentialData/password}} member's
                         value to the result of executing |formData|'s
-                        {{FormData/get()}} method on |name| and |newPasswordObserved| to `true`.
+                        {{FormData/get()}} method on |name|, and |newPasswordObserved| to `true`.
 
                     :   "<a attr-value>`current-password`</a>"
                     ::  If |newPasswordObserved| is `false`,
@@ -988,7 +1172,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
   ## Security Considerations ## {#passwords-security}
 
-  ### Cross-origin Credential Leakage ### {#passwords-cross-origin-leakage}
+  ### Credential Leakage ### {#passwords-credential-leakage}
 
   Credentials are sensitive information, and user agents need to exercise caution in determining
   when they can be safely shared with a website. The safest option is to restrict credential
@@ -1014,13 +1198,12 @@ spec:url; type:dfn; text:urlencoded byte serializer
       That is, {{Credential}} objects for `https://example.com` would not be returned directly to
       `https://www.example.com`, but could be offered to the user via the chooser.
 
-
-  ### Same-origin Leakage ### {#passwords-same-origin-leakage}
-
   Cross-site scripting attacks could leak credential information. To mitigate this kind of risk,
   authors should ensure that both <a>`script-src`</a> and <a>`object-src`</a>
   directives are set in any policy they specify in order to ensure that only trusted script is
-  executed on a page with access to a user's credentials.
+  executed on a page with access to a user's credentials. If you are populating
+  {{HTMLFormElement|HTMLFormElements}}, also <a>`form-action`</a> directives
+  should be set.
 </section>
 
 <!--
@@ -1047,7 +1230,6 @@ spec:url; type:dfn; text:urlencoded byte serializer
     };
     FederatedCredential implements CredentialUserData;
 
-    [Exposed=Window, SecureContext]
     dictionary FederatedCredentialData : CredentialData {
       USVString name;
       USVString iconURL;
@@ -1475,7 +1657,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   ## Website Authors ## {#implementation-authors}
 
   ISSUE(w3c/webappsec#290): Add some thoughts here about when and how the API
-  should be used, especially with regard to {{unmediated}}.
+  should be used, especially with regard to {{CredentialRequestOptions/mediation}}.
 
   ## Extension Points ## {#implementation-extension}
 
