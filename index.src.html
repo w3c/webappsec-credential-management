@@ -406,7 +406,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     with |navigator|.
   </div>
 
-  ## The `CredentialRequestOptions` Dictionary ## {#credentialrequestoptions-dictionary}
+  ### The `CredentialRequestOptions` Dictionary ### {#credentialrequestoptions-dictionary}
 
   In order to retrieve a {{Credential}} via {{CredentialsContainer/get()}}, the caller specifies a
   few parameters in a {{CredentialRequestOptions}} object.
@@ -417,19 +417,25 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
   <pre class="idl">
     dictionary CredentialRequestOptions {
-      boolean unmediated = false;
+      CredentialMediationRequirement mediation = "optional";
     };
   </pre>
-  <dl dfn-for="CredentialRequestOptions">
-    :   <dfn dict-member>unmediated</dfn>
-    ::  If `true`, the user agent will only attempt to provide a {{Credential}} without user
-        interaction. It MUST NOT present the user with any visible prompt to grant access to a
-        {{Credential}}: if the user has opted-into always giving a particular site access to a
-        particular set of credentials, they will be provided. If not, the promise will resolve
-        with `null`. For processing details, see the algorithm defined in
-        [[#algorithm-request]].
+  <dl dfn-for="CredentialRequestOptions" dfn-type="dict-member">
+    :   <dfn>mediation</dfn>
+    ::  This property specifies the mediation requirements for a given credential request. The
+        meaning of each enum value is described below in {{CredentialMediationRequirement}}.
+        Processing details are defined in [[#algorithm-request]].
   </dl>
 
+  <div class="note">
+    Earlier versions of this specification defined a boolean `unmediated` member. Setting that
+    to `true` had the effect of setting {{CredentialRequestOptions/mediation}} to
+    "{{CredentialMediationRequirement/silent}}", and setting it to `false` had the effect of
+    setting {{CredentialRequestOptions/mediation}} to "{{CredentialMediationRequirement/optional}}".
+
+    `unmediated` should be considered deprecated; new code should instead rely on
+    {{CredentialRequestOptions/mediation}}.
+  </div>
 
   <div algorithm="relevant credential interfaces">
     The <dfn for="CredentialRequestOptions">relevant credential interface objects</dfn> for a given
@@ -480,6 +486,145 @@ spec:url; type:dfn; text:urlencoded byte serializer
     to guide the discovery process (by choosing a federated identity provider, BTLE device, etc).
   </div>
 
+  ### Mediation Requirements ### {#mediation-requirements}
+
+  When making a request via {{get(options)}}, developers can set a case-by-case requirement for
+  [=user mediation=] by choosing the appropriate {{CredentialMediationRequirement}} enum value.
+
+  Note: The [[#user-mediation]] section gives more detail on the concept in general, and its
+  implications on how the user agent deals with individual requests for a given origin).
+
+  <pre class="idl">
+    enum CredentialMediationRequirement {
+      "silent",
+      "optional",
+      "required"
+    };
+  </pre>
+  <dl dfn-for="CredentialMediationRequirement" dfn-type="enum-value">
+    :   <dfn>silent</dfn>
+    ::  User mediation is suppressed for the given operation. If the operation can be performed
+        without user involvement, wonderful. If user involvement is necessary, then the operation
+        will return `null` rather than involving the user.
+
+        Note: The intended usage is to support ["Keep me signed-into this site"
+        scenarios](#example-mediation-silent), where a developer may wish to silently obtain
+        credentials if a user should be automatically signed in, but to delay bothering the user
+        with a sign-in prompt until they actively choose to sign-in.
+
+    :   <dfn>optional</dfn>
+    ::  If credentials can be handed over for a given operation without user mediation, they will
+        be. If [=requires user mediation|user mediation is required=], then the user agent will
+        involve the user in the decision.
+
+        Note: This is the default behavior for {{get()}}, and is intended to serve a case where a
+        developer has reasonable confidence that a user expects to start a sign-in operation. If
+        a user has just clicked "sign-in" for example, then they won't be surprised or confused to
+        see a [=credential chooser=] if necessary.
+
+    :   <dfn>required</dfn>
+    ::  The user agent will not hand over credentials without [=user mediation=], even if the
+        [=requires user mediation=] flag is unset for an origin.
+
+        Note: This requirement is intended to support [reauthentication](#example-mediation-require)
+        or [user-switching](#example-mediation-switch) scenarios. Further, the requirement is tied
+        to a specific operation, and does not affect the [=requires user mediation=] flag for the
+        origin. To set that flag, developers should call {{requireUserMediation()}}.
+  </dl>
+
+  #### Examples #### {#mediation-examples}
+
+  <div class="example" id="example-mediation-silent">
+    MegaCorp, Inc. wishes to seamlessly sign in users when possible. They can do so by calling
+    {{get()}} for all non-signed in users at some convinient point while a landing page is loading,
+    passing in a {{CredentialRequestOptions/mediation}} member set to
+    "{{CredentialMediationRequirement/silent}}". This ensures that users who have opted-into
+    dropping the requirements for user mediation (as described in [[#user-mediation-requirement]])
+    are signed in, and users who haven't opted-into such behavior won't be bothered with a confusing
+    [=credential chooser=] popping up without context:
+
+    <pre>
+      window.addEventListener('load', _ =&gt; {
+        var c = await navigatior.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
+          ...,
+          <a for="CredentialRequestOptions" dict-member>mediation</a>: "<a for="CredentialMediationRequirement" enum-value>silent</a>"
+        });
+        if (c) {
+          // Hooray! Let's sign the user in using these credentials!
+        }
+      });
+    </pre>
+  </div>
+
+  <div class="example" id="example-mediation-optional">
+    When a user clicks "Sign In", MegaCorp, Inc. wishes to give them the smoothest possible
+    experience. If they have [[#user-mediation-requirement|opted-into]] signing in without
+    [=user mediation=], and the user agent can unambigiously choose a credential, great! If
+    not, a [=credential chooser=] will be presented.
+
+    <pre>
+      document.querySelector('#sign-in').addEventListener('click', e =&gt; {
+        var c = await navigatior.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
+          ...,
+          <a for="CredentialRequestOptions" dict-member>mediation</a>: "<a for="CredentialMediationRequirement" enum-value>optional</a>"
+        });
+        if (c) {
+          // Hooray! Let's sign the user in using these credentials!
+        }
+      });
+    </pre>
+
+    Note: MegaCorp, Inc. could also have left off the {{CredentialRequestOptions/mediation}}
+    member entirely, as "{{CredentialMediationRequirement/optional}}" is its default.
+  </div>
+
+  <div class="example" id="example-mediation-require">
+    MegaCorp, Inc. wishes to protect a sensitive operation by requiring a user to reauthenticate
+    before taking action. Even if a user has [[#user-mediation-requirement|opted-into]] signing in
+    without [=user mediation=], MegaCorp, Inc. can ensure that the user agent requires mediation
+    by calling {{get()}} with a {{CredentialRequestOptions/mediation}} member set to
+    "{{CredentialMediationRequirement/required}}":
+
+    Note: Depending on the security model of the browser or the credential type, this may require
+    the user to authenticate themselves in some way, perhaps by entering a master password, scanning
+    a fingerprint, etc. before a credential is handed to the website.
+
+    <pre>
+      document.querySelector('#important-form').addEventListener('submit', e =&gt; {
+        var c = await navigatior.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
+          ...,
+          <a for="CredentialRequestOptions" dict-member>mediation</a>: "<a for="CredentialMediationRequirement" enum-value>required</a>"
+        });
+        if (c) {
+          // Verify that |c| enables access, and cancel the submission
+          // if it doesn't.
+        } else {
+          e.preventDefault();
+        }
+      });
+    </pre>
+  </div>
+
+  <div class="example" id="example-mediation-switch">
+    MegaCorp, Inc. wishes to support signing into multiple user accounts at once. In order to ensure
+    that the user gets a chance to select a different credential, MegaCorp, Inc. can call {{get()}}
+    with a {{CredentialRequestOptions/mediation}} member set to
+    "{{CredentialMediationRequirement/required}}" in order to ensure that that credentials aren't
+    returned automatically in response to clicking on an "Add account" button:
+
+    <pre>
+      document.querySelector('#switch-button').addEventListener('click', e =&gt; {
+        var c = await navigatior.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
+          ...,
+          <a for="CredentialRequestOptions" dict-member>mediation</a>: "<a for="CredentialMediationRequirement" enum-value>required</a>"
+        });
+        if (c) {
+          // Sign the user in using |c|.
+        }
+      });
+    </pre>
+ 
+  </div>
   ## The `CredentialCreationOptions` Dictionary ## {#credentialcreationoptions-dictionary}
 
   In order to create a {{Credential}} via {{CredentialsContainer/create()}}, the caller specifies a
@@ -535,12 +680,16 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
             3.  |options| is <a>matchable <i lang="la">a priori</i></a>.
 
+            4.  |options|.{{CredentialRequestOptions/mediation}} is not
+                "{{CredentialMediationRequirement/required}}".
+
             ISSUE: This might be the wrong model. It would be nice to support a site that wished
             to accept either username/passwords or webauthn-style credentials without forcing
             a chooser for those users who use the former, and who wish to remain signed in.
 
-        4.  If |options|' {{CredentialRequestOptions/unmediated}} is `true`, [=resolve=] |p| with
-            `null` and skip the remaining steps.
+        4.  If |options|' {{CredentialRequestOptions/mediation}} is
+            "{{CredentialMediationRequirement/silent}}", [=resolve=] |p| with `null`, and skip
+            the remaining steps.
 
         5.  Let |choice| be the result of <a abstract-op lt="ask to choose">asking the user to
             choose a `Credential`</a>, given |options| and |credentials|.
@@ -1863,7 +2012,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   ## Website Authors ## {#implementation-authors}
 
   ISSUE(w3c/webappsec#290): Add some thoughts here about when and how the API
-  should be used, especially with regard to `unmediated`.
+  should be used, especially with regard to {{CredentialRequestOptions/mediation}}.
 
   ## Extension Points ## {#implementation-extension}
 
