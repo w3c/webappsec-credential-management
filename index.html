@@ -2353,7 +2353,7 @@ store user credentials for future use.</p>
       // that fired the "submit" event: this will suck up the values of the fields
       // labeled with "username" and "current-password" <a data-link-type="element-attr" href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete">autocomplete</a>
       // attributes:
-      var c = new <a data-link-type="idl" href="https://w3c.github.io/webappsec-credential-management/#dom-passwordcredential-passwordcredential">PasswordCredential</a>(e.target);
+      var c = new <a data-link-type="idl" href="#dom-passwordcredential-passwordcredential" id="ref-for-dom-passwordcredential-passwordcredential-1">PasswordCredential</a>(e.target);
 
       // Fetch the form’s action URL, passing that new credential object in
       // as the fetch’s credentials. If the response indicates success, ask
@@ -2392,7 +2392,7 @@ store user credentials for future use.</p>
     // that fired the "submit" event: this will suck up the values of the fields
     // labeled with "username" and "new-password" <a data-link-type="element-attr" href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete">autocomplete</a>
     // attributes:
-    var c = new <a data-link-type="idl" href="https://w3c.github.io/webappsec-credential-management/#dom-passwordcredential-passwordcredential">PasswordCredential</a>(e.target);
+    var c = new <a data-link-type="idl" href="#dom-passwordcredential-passwordcredential" id="ref-for-dom-passwordcredential-passwordcredential-2">PasswordCredential</a>(e.target);
 
     // Fetch the form’s action URL, passing that new credential object in
     // as the fetch’s credentials. If the response indicates success, ask
@@ -2409,7 +2409,9 @@ store user credentials for future use.</p>
     <h3 class="heading settled" data-level="3.2" id="passwordcredential-interface"><span class="secno">3.2. </span><span class="content">The <code>PasswordCredential</code> Interface</span><a class="self-link" href="#passwordcredential-interface"></a></h3>
 <pre class="idl highlight def"><span class="kt">typedef</span> (<a class="n" data-link-type="idl-name" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a> <span class="kt">or</span> <a class="n" data-link-type="idl-name" href="https://url.spec.whatwg.org/#urlsearchparams">URLSearchParams</a>) <dfn class="nv dfn-paneled idl-code" data-dfn-type="typedef" data-export="" id="typedefdef-credentialbodytype">CredentialBodyType</dfn>;
 
-[<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<span class="n">Window</span>,
+[<a class="nv idl-code" data-link-type="constructor" href="#dom-passwordcredential-passwordcredential" id="ref-for-dom-passwordcredential-passwordcredential-3">Constructor</a>(<a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">HTMLFormElement</a> <dfn class="nv idl-code" data-dfn-for="PasswordCredential/PasswordCredential(form)" data-dfn-type="argument" data-export="" id="dom-passwordcredential-passwordcredential-form-form">form<a class="self-link" href="#dom-passwordcredential-passwordcredential-form-form"></a></dfn>),
+ <a class="nv idl-code" data-link-type="constructor" href="#dom-passwordcredential-passwordcredential-data" id="ref-for-dom-passwordcredential-passwordcredential-data-1">Constructor</a>(<a class="n" data-link-type="idl-name" href="#dictdef-passwordcredentialdata" id="ref-for-dictdef-passwordcredentialdata-1">PasswordCredentialData</a> <dfn class="nv idl-code" data-dfn-for="PasswordCredential/PasswordCredential(data)" data-dfn-type="argument" data-export="" id="dom-passwordcredential-passwordcredential-data-data">data<a class="self-link" href="#dom-passwordcredential-passwordcredential-data-data"></a></dfn>),
+ <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<span class="n">Window</span>,
  <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>]
 <span class="kt">interface</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="passwordcredential">PasswordCredential</dfn> : <a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential-34">Credential</a> {
   <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString"><span class="kt">USVString</span></a> <a class="nv idl-code" data-link-type="attribute" data-type="USVString" href="#dom-passwordcredential-idname" id="ref-for-dom-passwordcredential-idname-1">idName</a>;
@@ -2450,8 +2452,29 @@ store user credentials for future use.</p>
       <p>Each <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-11">PasswordCredential</a></code> object has an internal slot named <code>[[password]]</code> which stores
   the credential’s password. This property is not directly exposed to the web, but used to
   construct a request body during <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a></code>.</p>
+     <dt data-md=""><dfn class="dfn-paneled idl-code" data-dfn-for="PasswordCredential" data-dfn-type="constructor" data-export="" id="dom-passwordcredential-passwordcredential">PasswordCredential(form)</dfn>
+     <dd data-md="">
+      <p>This constructor accepts an <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">HTMLFormElement</a></code> (<var>form</var>), and runs the following steps:</p>
+      <ol>
+       <li data-md="">
+        <p>Let <var>r</var> be the result of executing <a data-link-type="abstract-op" href="#abstract-opdef-create-a-passwordcredential-from-an-htmlformelement" id="ref-for-abstract-opdef-create-a-passwordcredential-from-an-htmlformelement-1">Create a <code>PasswordCredential</code> from
+  an <code>HTMLFormElement</code></a> on <var>form</var>.</p>
+       <li data-md="">
+        <p>If <var>r</var> is an <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-exception">exception</a>, <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-throw">throw</a> <var>r</var>.</p>
+        <p>Otherwise, return <var>r</var>.</p>
+      </ol>
+     <dt data-md=""><dfn class="dfn-paneled idl-code" data-dfn-for="PasswordCredential" data-dfn-type="constructor" data-export="" id="dom-passwordcredential-passwordcredential-data">PasswordCredential(data)</dfn>
+     <dd data-md="">
+      <p>This constructor accepts a <code class="idl"><a data-link-type="idl" href="#dictdef-passwordcredentialdata" id="ref-for-dictdef-passwordcredentialdata-2">PasswordCredentialData</a></code> (<var>data</var>), and runs the following steps:</p>
+      <ol>
+       <li data-md="">
+        <p>Let <var>r</var> be the result of executing <a data-link-type="abstract-op" href="#abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata" id="ref-for-abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata-1">Create a <code>PasswordCredential</code> from <code>PasswordCredentialData</code></a> on <var>data</var>.</p>
+       <li data-md="">
+        <p>If <var>r</var> is an <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-exception">exception</a>, <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-throw">throw</a> <var>r</var>.</p>
+        <p>Otherwise, return <var>r</var>.</p>
+      </ol>
     </dl>
-    <p><code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-12">PasswordCredential</a></code> objects can be created via <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-create" id="ref-for-dom-credentialscontainer-create-5">navigator.credentials.create()</a></code> either explicitly by passing in a <code class="idl"><a data-link-type="idl" href="#dictdef-passwordcredentialdata" id="ref-for-dictdef-passwordcredentialdata-1">PasswordCredentialData</a></code> dictionary, or based on the contents
+    <p><code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-12">PasswordCredential</a></code> objects can be created via <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-create" id="ref-for-dom-credentialscontainer-create-5">navigator.credentials.create()</a></code> either explicitly by passing in a <code class="idl"><a data-link-type="idl" href="#dictdef-passwordcredentialdata" id="ref-for-dictdef-passwordcredentialdata-3">PasswordCredentialData</a></code> dictionary, or based on the contents
   of an <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">HTMLFormElement</a></code>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/forms.html#category-submit">submittable elements</a>.</p>
 <pre class="idl highlight def"><span class="kt">dictionary</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-passwordcredentialdata">PasswordCredentialData</dfn> : <a class="n" data-link-type="idl-name" href="#dictdef-credentialdata" id="ref-for-dictdef-credentialdata-1">CredentialData</a> {
   <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString"><span class="kt">USVString</span></a> <dfn class="nv dfn-paneled idl-code" data-dfn-for="PasswordCredentialData" data-dfn-type="dict-member" data-export="" data-type="USVString " id="dom-passwordcredentialdata-name">name</dfn>;
@@ -2459,7 +2482,7 @@ store user credentials for future use.</p>
   <span class="kt">required</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString"><span class="kt">USVString</span></a> <dfn class="nv dfn-paneled idl-code" data-dfn-for="PasswordCredentialData" data-dfn-type="dict-member" data-export="" data-type="USVString " id="dom-passwordcredentialdata-password">password</dfn>;
 };
 
-<span class="kt">typedef</span> (<a class="n" data-link-type="idl-name" href="#dictdef-passwordcredentialdata" id="ref-for-dictdef-passwordcredentialdata-2">PasswordCredentialData</a> <span class="kt">or</span> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">HTMLFormElement</a>) <dfn class="nv dfn-paneled idl-code" data-dfn-type="typedef" data-export="" id="typedefdef-passwordcredentialinit">PasswordCredentialInit</dfn>;
+<span class="kt">typedef</span> (<a class="n" data-link-type="idl-name" href="#dictdef-passwordcredentialdata" id="ref-for-dictdef-passwordcredentialdata-4">PasswordCredentialData</a> <span class="kt">or</span> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">HTMLFormElement</a>) <dfn class="nv dfn-paneled idl-code" data-dfn-type="typedef" data-export="" id="typedefdef-passwordcredentialinit">PasswordCredentialInit</dfn>;
 
 <span class="kt">partial</span> <span class="kt">dictionary</span> <a class="nv idl-code" data-link-type="dictionary" href="#dictdef-credentialcreationoptions" id="ref-for-dictdef-credentialcreationoptions-6">CredentialCreationOptions</a> {
   <a class="n" data-link-type="idl-name" href="#typedefdef-passwordcredentialinit" id="ref-for-typedefdef-passwordcredentialinit-1">PasswordCredentialInit</a>? <dfn class="nv dfn-paneled idl-code" data-dfn-for="CredentialCreationOptions" data-dfn-type="dict-member" data-export="" data-type="PasswordCredentialInit? " id="dom-credentialcreationoptions-password">password</dfn>;
@@ -2489,17 +2512,17 @@ store user credentials for future use.</p>
     </ol>
     <h4 class="heading settled algorithm" data-algorithm="PasswordCredential&apos;s [[Create]](options)" data-level="3.3.2" id="create-passwordcredential"><span class="secno">3.3.2. </span><span class="content"> <code>PasswordCredential</code>'s <code>[[Create]](options)</code> </span><a class="self-link" href="#create-passwordcredential"></a></h4>
     <p><dfn class="dfn-paneled idl-code" data-dfn-for="PasswordCredential" data-dfn-type="method" data-export="" id="dom-passwordcredential-create-slot">[[Create]](options)</dfn> is called with a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialcreationoptions" id="ref-for-dictdef-credentialcreationoptions-7">CredentialCreationOptions</a></code> (<var>options</var>), and returns a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-16">PasswordCredential</a></code> if one can be created, <code>null</code> otherwise. The <code class="idl"><a data-link-type="idl" href="#dictdef-credentialcreationoptions" id="ref-for-dictdef-credentialcreationoptions-8">CredentialCreationOptions</a></code> dictionary must have a <code>password</code> member which
-  holds either an <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">HTMLFormElement</a></code> or a <code class="idl"><a data-link-type="idl" href="#dictdef-passwordcredentialdata" id="ref-for-dictdef-passwordcredentialdata-3">PasswordCredentialData</a></code>. If that member’s value cannot be
-  used to create a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-17">PasswordCredential</a></code>, this algorithm will return <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#exceptiondef-typeerror">TypeError</a></code> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-exception">exception</a>.</p>
+  holds either an <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">HTMLFormElement</a></code> or a <code class="idl"><a data-link-type="idl" href="#dictdef-passwordcredentialdata" id="ref-for-dictdef-passwordcredentialdata-5">PasswordCredentialData</a></code>. If that member’s value cannot be
+  used to create a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-17">PasswordCredential</a></code>, this algorithm will return a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#exceptiondef-typeerror">TypeError</a></code> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-exception">exception</a>.</p>
     <ol class="algorithm">
      <li data-md="">
       <p class="assertion">Assert: <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-password" id="ref-for-dom-credentialcreationoptions-password-1">password</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists">exists</a>.</p>
      <li data-md="">
       <p>If <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-password" id="ref-for-dom-credentialcreationoptions-password-2">password</a></code>"] is an <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">HTMLFormElement</a></code>, return the
-  result of executing <a data-link-type="abstract-op" href="#abstract-opdef-create-a-passwordcredential-from-an-htmlformelement" id="ref-for-abstract-opdef-create-a-passwordcredential-from-an-htmlformelement-1">Create a <code>PasswordCredential</code> from an <code>HTMLFormElement</code></a> on <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-password" id="ref-for-dom-credentialcreationoptions-password-3">password</a></code>"].</p>
+  result of executing <a data-link-type="abstract-op" href="#abstract-opdef-create-a-passwordcredential-from-an-htmlformelement" id="ref-for-abstract-opdef-create-a-passwordcredential-from-an-htmlformelement-2">Create a <code>PasswordCredential</code> from an <code>HTMLFormElement</code></a> on <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-password" id="ref-for-dom-credentialcreationoptions-password-3">password</a></code>"].</p>
      <li data-md="">
-      <p>If <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-password" id="ref-for-dom-credentialcreationoptions-password-4">password</a></code>"] is a <code class="idl"><a data-link-type="idl" href="#dictdef-passwordcredentialdata" id="ref-for-dictdef-passwordcredentialdata-4">PasswordCredentialData</a></code>, return
-  the result of executing <a data-link-type="abstract-op" href="#abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata" id="ref-for-abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata-1">Create a <code>PasswordCredential</code> from <code>PasswordCredentialData</code></a> on <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-password" id="ref-for-dom-credentialcreationoptions-password-5">password</a></code>"].</p>
+      <p>If <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-password" id="ref-for-dom-credentialcreationoptions-password-4">password</a></code>"] is a <code class="idl"><a data-link-type="idl" href="#dictdef-passwordcredentialdata" id="ref-for-dictdef-passwordcredentialdata-6">PasswordCredentialData</a></code>, return
+  the result of executing <a data-link-type="abstract-op" href="#abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata" id="ref-for-abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata-2">Create a <code>PasswordCredential</code> from <code>PasswordCredentialData</code></a> on <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-password" id="ref-for-dom-credentialcreationoptions-password-5">password</a></code>"].</p>
      <li data-md="">
       <p>Return a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#exceptiondef-typeerror">TypeError</a></code> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-exception">exception</a>.</p>
     </ol>
@@ -2555,7 +2578,7 @@ store user credentials for future use.</p>
   usage.</p>
     <ol class="algorithm">
      <li data-md="">
-      <p>Let <var>data</var> be a new <code class="idl"><a data-link-type="idl" href="#dictdef-passwordcredentialdata" id="ref-for-dictdef-passwordcredentialdata-5">PasswordCredentialData</a></code> dictionary.</p>
+      <p>Let <var>data</var> be a new <code class="idl"><a data-link-type="idl" href="#dictdef-passwordcredentialdata" id="ref-for-dictdef-passwordcredentialdata-7">PasswordCredentialData</a></code> dictionary.</p>
      <li data-md="">
       <p>Let <var>formData</var> be the result of executing the <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> constructor
   on <var>form</var>.</p>
@@ -2615,7 +2638,7 @@ store user credentials for future use.</p>
         </ol>
       </ol>
      <li data-md="">
-      <p>Let <var>c</var> be the result of executing <a data-link-type="abstract-op" href="#abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata" id="ref-for-abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata-2">Create a <code>PasswordCredential</code> from <code>PasswordCredentialData</code></a> on <var>data</var>.</p>
+      <p>Let <var>c</var> be the result of executing <a data-link-type="abstract-op" href="#abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata" id="ref-for-abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata-3">Create a <code>PasswordCredential</code> from <code>PasswordCredentialData</code></a> on <var>data</var>.</p>
      <li data-md="">
       <p>If <var>c</var> is an <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-exception">exception</a>, return <var>c</var>.</p>
      <li data-md="">
@@ -2649,12 +2672,12 @@ store user credentials for future use.</p>
       <p>Return <var>c</var>.</p>
     </ol>
     <h4 class="heading settled algorithm" data-algorithm="Create a PasswordCredential from PasswordCredentialData" data-level="3.3.5" id="construct-passwordcredential-data"><span class="secno">3.3.5. </span><span class="content"> Create a <code>PasswordCredential</code> from <code>PasswordCredentialData</code> </span><a class="self-link" href="#construct-passwordcredential-data"></a></h4>
-    <p>To <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export="" id="abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata">Create a <code>PasswordCredential</code> from <code>PasswordCredentialData</code></dfn>, given an <code class="idl"><a data-link-type="idl" href="#dictdef-passwordcredentialdata" id="ref-for-dictdef-passwordcredentialdata-6">PasswordCredentialData</a></code> (<var>data</var>), run these steps.</p>
+    <p>To <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export="" id="abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata">Create a <code>PasswordCredential</code> from <code>PasswordCredentialData</code></dfn>, given an <code class="idl"><a data-link-type="idl" href="#dictdef-passwordcredentialdata" id="ref-for-dictdef-passwordcredentialdata-8">PasswordCredentialData</a></code> (<var>data</var>), run these steps.</p>
     <ol class="algorithm">
      <li data-md="">
       <p>Let <var>c</var> be a new <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-22">PasswordCredential</a></code> object.</p>
      <li data-md="">
-      <p>If any of the following are the empty string, return a <code>TypeError</code> exception:</p>
+      <p>If any of the following are the empty string, return a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#exceptiondef-typeerror">TypeError</a></code> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-exception">exception</a>:</p>
       <ul>
        <li data-md="">
         <p><var>data</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credentialdata-id" id="ref-for-dom-credentialdata-id-2">id</a></code> member’s value</p>
@@ -2764,7 +2787,7 @@ var r = new Request("https://example.com/endpoint", init);
       <ol start="32">
        <li data-md="">
         <p>If <var>request</var>’s <a data-link-type="dfn" href="https://fetch.spec.whatwg.org/#concept-request-method">method</a> is <code>GET</code> or <code>HEAD</code>, then
-  throw a <code>TypeError</code> if any of the following are true:</p>
+  throw a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#exceptiondef-typeerror">TypeError</a></code> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-exception">exception</a> if any of the following are true:</p>
         <ul>
          <li data-md="">
           <p><var>init</var>’s <code>body</code> member is present and non-null</p>
@@ -2891,7 +2914,8 @@ var r = new Request("https://example.com/endpoint", init);
    <section>
     <h2 class="heading settled" data-level="4" id="federated"><span class="secno">4. </span><span class="content">Federated Credentials</span><a class="self-link" href="#federated"></a></h2>
     <h3 class="heading settled" data-level="4.1" id="federatedcredential-interface"><span class="secno">4.1. </span><span class="content">The <code>FederatedCredential</code> Interface</span><a class="self-link" href="#federatedcredential-interface"></a></h3>
-<pre class="idl highlight def">[<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<span class="n">Window</span>,
+<pre class="idl highlight def">[<a class="nv idl-code" data-link-type="constructor" href="#dom-federatedcredential-federatedcredential" id="ref-for-dom-federatedcredential-federatedcredential-1">Constructor</a>(<a class="n" data-link-type="idl-name" href="#dictdef-federatedcredentialinit" id="ref-for-dictdef-federatedcredentialinit-1">FederatedCredentialInit</a> <dfn class="nv idl-code" data-dfn-for="FederatedCredential/FederatedCredential(data)" data-dfn-type="argument" data-export="" id="dom-federatedcredential-federatedcredential-data-data">data<a class="self-link" href="#dom-federatedcredential-federatedcredential-data-data"></a></dfn>),
+ <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<span class="n">Window</span>,
  <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>]
 <span class="kt">interface</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="federatedcredential">FederatedCredential</dfn> : <a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential-39">Credential</a> {
   <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString"><span class="kt">USVString</span></a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="USVString" href="#dom-federatedcredential-provider" id="ref-for-dom-federatedcredential-provider-1">provider</a>;
@@ -2924,8 +2948,18 @@ var r = new Request("https://example.com/endpoint", init);
      <dt data-md=""><code class="idl"><a data-link-type="idl" href="#dom-credential-discovery-slot" id="ref-for-dom-credential-discovery-slot-3">[[discovery]]</a></code>
      <dd data-md="">
       <p>The <code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential-4">FederatedCredential</a></code> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a> has an internal slot named <code>[[discovery]]</code> whose value is "<code class="idl"><a data-link-type="idl" href="#dom-credential-discovery-credential-store" id="ref-for-dom-credential-discovery-credential-store-3">credential store</a></code>".</p>
+     <dt data-md=""><dfn class="dfn-paneled idl-code" data-dfn-for="FederatedCredential" data-dfn-type="constructor" data-export="" id="dom-federatedcredential-federatedcredential">FederatedCredential(data)</dfn>
+     <dd data-md="">
+      <p>This constructor accepts a <code class="idl"><a data-link-type="idl" href="#dictdef-federatedcredentialinit" id="ref-for-dictdef-federatedcredentialinit-2">FederatedCredentialInit</a></code> (<var>data</var>), and runs the following steps:</p>
+      <ol>
+       <li data-md="">
+        <p>Let <var>r</var> be the result of executing <a data-link-type="abstract-op" href="#abstract-opdef-create-a-federatedcredential-from-federatedcredentialinit" id="ref-for-abstract-opdef-create-a-federatedcredential-from-federatedcredentialinit-1">Create a <code>FederatedCredential</code> from <code>FederatedCredentialInit</code></a> on <var>data</var>.</p>
+       <li data-md="">
+        <p>If <var>r</var> is an <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-exception">exception</a>, <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-throw">throw</a> <var>r</var>.</p>
+        <p>Otherwise, return <var>r</var>.</p>
+      </ol>
     </dl>
-    <p><code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential-5">FederatedCredential</a></code> objects can be created by passing a <code class="idl"><a data-link-type="idl" href="#dictdef-federatedcredentialinit" id="ref-for-dictdef-federatedcredentialinit-1">FederatedCredentialInit</a></code> dictionary
+    <p><code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential-5">FederatedCredential</a></code> objects can be created by passing a <code class="idl"><a data-link-type="idl" href="#dictdef-federatedcredentialinit" id="ref-for-dictdef-federatedcredentialinit-3">FederatedCredentialInit</a></code> dictionary
   into <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-create" id="ref-for-dom-credentialscontainer-create-6">navigator.credentials.create()</a></code>.</p>
 <pre class="idl highlight def"><span class="kt">dictionary</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-federatedcredentialinit">FederatedCredentialInit</dfn> : <a class="n" data-link-type="idl-name" href="#dictdef-credentialdata" id="ref-for-dictdef-credentialdata-2">CredentialData</a> {
   <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString"><span class="kt">USVString</span></a> <dfn class="nv idl-code" data-dfn-for="FederatedCredentialInit" data-dfn-type="dict-member" data-export="" data-type="USVString " id="dom-federatedcredentialinit-name">name<a class="self-link" href="#dom-federatedcredentialinit-name"></a></dfn>;
@@ -2935,7 +2969,7 @@ var r = new Request("https://example.com/endpoint", init);
 };
 
 <span class="kt">partial</span> <span class="kt">dictionary</span> <a class="nv idl-code" data-link-type="dictionary" href="#dictdef-credentialcreationoptions" id="ref-for-dictdef-credentialcreationoptions-9">CredentialCreationOptions</a> {
-  <a class="n" data-link-type="idl-name" href="#dictdef-federatedcredentialinit" id="ref-for-dictdef-federatedcredentialinit-2">FederatedCredentialInit</a>? <dfn class="nv dfn-paneled idl-code" data-dfn-for="CredentialCreationOptions" data-dfn-type="dict-member" data-export="" data-type="FederatedCredentialInit? " id="dom-credentialcreationoptions-federated">federated</dfn>;
+  <a class="n" data-link-type="idl-name" href="#dictdef-federatedcredentialinit" id="ref-for-dictdef-federatedcredentialinit-4">FederatedCredentialInit</a>? <dfn class="nv dfn-paneled idl-code" data-dfn-for="CredentialCreationOptions" data-dfn-type="dict-member" data-export="" data-type="FederatedCredentialInit? " id="dom-credentialcreationoptions-federated">federated</dfn>;
 };
 </pre>
     <p><code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential-6">FederatedCredential</a></code> objects are <a data-link-type="dfn" href="#credential-origin-bound" id="ref-for-credential-origin-bound-2">origin bound</a>.</p>
@@ -2980,7 +3014,7 @@ var r = new Request("https://example.com/endpoint", init);
      <li data-md="">
       <p class="assertion">Assert: <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-federated" id="ref-for-dom-credentialcreationoptions-federated-1">federated</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists">exists</a>.</p>
      <li data-md="">
-      <p>Return the result of executing <a data-link-type="abstract-op" href="#abstract-opdef-create-a-federatedcredential-from-federatedcredentialinit" id="ref-for-abstract-opdef-create-a-federatedcredential-from-federatedcredentialinit-1">Create a <code>FederatedCredential</code> from <code>FederatedCredentialInit</code></a> on <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-federated" id="ref-for-dom-credentialcreationoptions-federated-2">federated</a></code>"].</p>
+      <p>Return the result of executing <a data-link-type="abstract-op" href="#abstract-opdef-create-a-federatedcredential-from-federatedcredentialinit" id="ref-for-abstract-opdef-create-a-federatedcredential-from-federatedcredentialinit-2">Create a <code>FederatedCredential</code> from <code>FederatedCredentialInit</code></a> on <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-federated" id="ref-for-dom-credentialcreationoptions-federated-2">federated</a></code>"].</p>
     </ol>
     <h4 class="heading settled algorithm" data-algorithm="FederatedCredential&apos;s [[Store]](credential)" data-level="4.2.3" id="store-federatedcredential"><span class="secno">4.2.3. </span><span class="content"> <code>FederatedCredential</code>'s <code>[[Store]](credential)</code> </span><a class="self-link" href="#store-federatedcredential"></a></h4>
     <p><dfn class="dfn-paneled idl-code" data-dfn-for="FederatedCredential" data-dfn-type="method" data-export="" id="dom-federatedcredential-store-slot">[[Store]](credential)</dfn> is called with a <code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential-11">FederatedCredential</a></code> (<var>credential</var>), and returns once <var>credential</var> is persisted to the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-22">credential store</a>.</p>
@@ -3013,12 +3047,12 @@ var r = new Request("https://example.com/endpoint", init);
       </dl>
     </ol>
     <h4 class="heading settled algorithm" data-algorithm="Create a FederatedCredential from FederatedCredentialInit" data-level="4.2.4" id="construct-federatedcredential-data"><span class="secno">4.2.4. </span><span class="content"> Create a <code>FederatedCredential</code> from <code>FederatedCredentialInit</code> </span><a class="self-link" href="#construct-federatedcredential-data"></a></h4>
-    <p>To <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export="" id="abstract-opdef-create-a-federatedcredential-from-federatedcredentialinit">Create a <code>FederatedCredential</code> from <code>FederatedCredentialInit</code></dfn>, given a <code class="idl"><a data-link-type="idl" href="#dictdef-federatedcredentialinit" id="ref-for-dictdef-federatedcredentialinit-3">FederatedCredentialInit</a></code> (<var>init</var>), run these steps.</p>
+    <p>To <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export="" id="abstract-opdef-create-a-federatedcredential-from-federatedcredentialinit">Create a <code>FederatedCredential</code> from <code>FederatedCredentialInit</code></dfn>, given a <code class="idl"><a data-link-type="idl" href="#dictdef-federatedcredentialinit" id="ref-for-dictdef-federatedcredentialinit-5">FederatedCredentialInit</a></code> (<var>init</var>), run these steps.</p>
     <ol class="algorithm">
      <li data-md="">
       <p>Let <var>c</var> be a new <code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential-14">FederatedCredential</a></code> object.</p>
      <li data-md="">
-      <p>If any of the following are the empty string, return a <code>TypeError</code> exception:</p>
+      <p>If any of the following are the empty string, return a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#exceptiondef-typeerror">TypeError</a></code> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-exception">exception</a>:</p>
       <ul>
        <li data-md="">
         <p><var>init</var>.<code class="idl"><a data-link-type="idl" href="#dom-credentialdata-id" id="ref-for-dom-credentialdata-id-4">id</a></code>'s value</p>
@@ -3390,6 +3424,7 @@ partial dictionary CredentialCreationOptions {
    <li><a href="#abstract-opdef-create-a-federatedcredential-from-federatedcredentialinit">Create a FederatedCredential from FederatedCredentialInit</a><span>, in §4.2.4</span>
    <li><a href="#abstract-opdef-create-a-passwordcredential-from-an-htmlformelement">Create a PasswordCredential from an HTMLFormElement</a><span>, in §3.3.4</span>
    <li><a href="#abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata">Create a PasswordCredential from PasswordCredentialData</a><span>, in §3.3.5</span>
+   <li><a href="#dom-credentialscontainer-create">create(options)</a><span>, in §2.3</span>
    <li>
     [[Create]](options)
     <ul>
@@ -3397,7 +3432,6 @@ partial dictionary CredentialCreationOptions {
      <li><a href="#dom-passwordcredential-create-slot">method for PasswordCredential</a><span>, in §3.3.2</span>
      <li><a href="#dom-federatedcredential-create-slot">method for FederatedCredential</a><span>, in §4.2.2</span>
     </ul>
-   <li><a href="#dom-credentialscontainer-create">create(options)</a><span>, in §2.3</span>
    <li><a href="#credential">Credential</a><span>, in §2.2</span>
    <li><a href="#concept-credential">credential</a><span>, in §2</span>
    <li><a href="#typedefdef-credentialbodytype">CredentialBodyType</a><span>, in §3.2</span>
@@ -3431,6 +3465,7 @@ partial dictionary CredentialCreationOptions {
      <li><a href="#dom-credentialcreationoptions-federated">dict-member for CredentialCreationOptions</a><span>, in §4.1</span>
     </ul>
    <li><a href="#federatedcredential">FederatedCredential</a><span>, in §4.1</span>
+   <li><a href="#dom-federatedcredential-federatedcredential">FederatedCredential(data)</a><span>, in §4.1</span>
    <li><a href="#dictdef-federatedcredentialinit">FederatedCredentialInit</a><span>, in §4.1</span>
    <li><a href="#dictdef-federatedcredentialrequestoptions">FederatedCredentialRequestOptions</a><span>, in §4.1</span>
    <li><a href="#dom-credentialscontainer-get">get()</a><span>, in §2.3</span>
@@ -3461,11 +3496,12 @@ partial dictionary CredentialCreationOptions {
      <li><a href="#dom-passwordcredentialdata-name">dict-member for PasswordCredentialData</a><span>, in §3.2</span>
      <li><a href="#dom-federatedcredentialinit-name">dict-member for FederatedCredentialInit</a><span>, in §4.1</span>
     </ul>
-   <li><a href="#dom-requestcredentialsmode-omit">omit</a><span>, in §3.4.1</span>
    <li><a href="#dom-requestcredentialsmode-omit">"omit"</a><span>, in §3.4.1</span>
+   <li><a href="#dom-requestcredentialsmode-omit">omit</a><span>, in §3.4.1</span>
    <li><a href="#dom-credentialmediationrequirement-optional">optional</a><span>, in §2.3.2</span>
    <li><a href="#dom-credential-origin-slot">[[origin]]</a><span>, in §2.2</span>
    <li><a href="#credential-origin-bound">origin bound</a><span>, in §2.2</span>
+   <li><a href="#dom-requestcredentialsmode-password">"password"</a><span>, in §3.4.1</span>
    <li>
     password
     <ul>
@@ -3475,10 +3511,11 @@ partial dictionary CredentialCreationOptions {
      <li><a href="#dom-credentialcreationoptions-password">dict-member for CredentialCreationOptions</a><span>, in §3.2</span>
      <li><a href="#dom-requestcredentialsmode-password">enum-value for RequestCredentialsMode</a><span>, in §3.4.1</span>
     </ul>
-   <li><a href="#dom-requestcredentialsmode-password">"password"</a><span>, in §3.4.1</span>
    <li><a href="#dom-passwordcredential-password-slot">[[password]]</a><span>, in §3.2</span>
    <li><a href="#passwordcredential">PasswordCredential</a><span>, in §3.2</span>
+   <li><a href="#dom-passwordcredential-passwordcredential-data">PasswordCredential(data)</a><span>, in §3.2</span>
    <li><a href="#dictdef-passwordcredentialdata">PasswordCredentialData</a><span>, in §3.2</span>
+   <li><a href="#dom-passwordcredential-passwordcredential">PasswordCredential(form)</a><span>, in §3.2</span>
    <li><a href="#typedefdef-passwordcredentialinit">PasswordCredentialInit</a><span>, in §3.2</span>
    <li><a href="#dom-passwordcredential-passwordname">passwordName</a><span>, in §3.2</span>
    <li>
@@ -3505,13 +3542,12 @@ partial dictionary CredentialCreationOptions {
    <li><a href="#dom-credentialscontainer-requireusermediation">requireUserMediation()</a><span>, in §2.3</span>
    <li><a href="#abstract-opdef-require-user-mediation">Require user mediation</a><span>, in §2.5.5</span>
    <li><a href="#abstract-opdef-credential-store-retrieve-a-list-of-credentials">Retrieve a list of credentials</a><span>, in §2.1</span>
-   <li><a href="#dom-requestcredentialsmode-same-origin">"same-origin"</a><span>, in §3.4.1</span>
    <li><a href="#dom-requestcredentialsmode-same-origin">same-origin</a><span>, in §3.4.1</span>
+   <li><a href="#dom-requestcredentialsmode-same-origin">"same-origin"</a><span>, in §3.4.1</span>
    <li><a href="#dom-credentialmediationrequirement-silent">silent</a><span>, in §2.3.2</span>
    <li><a href="#dom-credentialscontainer-store">store()</a><span>, in §2.3</span>
-   <li><a href="#abstract-opdef-credential-store-store-a-credential">Store a credential</a><span>, in §2.1</span>
    <li><a href="#abstract-opdef-store-a-credential">Store a Credential</a><span>, in §2.5.3</span>
-   <li><a href="#dom-credentialscontainer-store">store(credential)</a><span>, in §2.3</span>
+   <li><a href="#abstract-opdef-credential-store-store-a-credential">Store a credential</a><span>, in §2.1</span>
    <li>
     [[Store]](credential)
     <ul>
@@ -3519,8 +3555,9 @@ partial dictionary CredentialCreationOptions {
      <li><a href="#dom-passwordcredential-store-slot">method for PasswordCredential</a><span>, in §3.3.3</span>
      <li><a href="#dom-federatedcredential-store-slot">method for FederatedCredential</a><span>, in §4.2.3</span>
     </ul>
-   <li><a href="#dom-credential-type">type</a><span>, in §2.2</span>
+   <li><a href="#dom-credentialscontainer-store">store(credential)</a><span>, in §2.3</span>
    <li><a href="#dom-credential-type-slot">[[type]]</a><span>, in §2.2</span>
+   <li><a href="#dom-credential-type">type</a><span>, in §2.2</span>
    <li><a href="#unmediated">unmediated</a><span>, in §5</span>
    <li><a href="#user-mediated">user mediated</a><span>, in §5</span>
    <li><a href="#user-mediated">user mediation</a><span>, in §5</span>
@@ -3641,11 +3678,6 @@ partial dictionary CredentialCreationOptions {
      <li><a href="https://url.spec.whatwg.org/#concept-urlencoded-byte-serializer">urlencoded byte serializer</a>
     </ul>
    <li>
-    <a data-link-type="biblio">[webappsec-credential-management-1]</a> defines the following terms:
-    <ul>
-     <li><a href="https://w3c.github.io/webappsec-credential-management/#dom-passwordcredential-passwordcredential">PasswordCredential(form)</a>
-    </ul>
-   <li>
     <a data-link-type="biblio">[WebIDL]</a> defines the following terms:
     <ul>
      <li><a href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a>
@@ -3663,6 +3695,7 @@ partial dictionary CredentialCreationOptions {
      <li><a href="https://heycam.github.io/webidl/#dfn-interface">interface</a>
      <li><a href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a>
      <li><a href="https://heycam.github.io/webidl/#dfn-interface-prototype-object">interface prototype object</a>
+     <li><a href="https://heycam.github.io/webidl/#dfn-throw">throw</a>
     </ul>
    <li>
     <a data-link-type="biblio">[XHR]</a> defines the following terms:
@@ -3716,8 +3749,6 @@ partial dictionary CredentialCreationOptions {
    <dd>Devdatta Akhawe; et al. <a href="https://www.w3.org/TR/SRI/">Subresource Integrity</a>. URL: <a href="https://www.w3.org/TR/SRI/">https://www.w3.org/TR/SRI/</a>
    <dt id="biblio-web-login">[WEB-LOGIN]
    <dd>Jason Denizac; Robin Berjon; Anne van Kesteren. <a href="https://github.com/jden/web-login">web-login</a>. URL: <a href="https://github.com/jden/web-login">https://github.com/jden/web-login</a>
-   <dt id="biblio-webappsec-credential-management-1">[WEBAPPSEC-CREDENTIAL-MANAGEMENT-1]
-   <dd>Credential Management Level 1 URL: <a href="https://w3c.github.io/webappsec-credential-management/">https://w3c.github.io/webappsec-credential-management/</a>
    <dt id="biblio-webauthn">[WEBAUTHN]
    <dd>Vijay Bharadwaj; et al. <a href="https://www.w3.org/TR/webauthn/">Web Authentication: An API for accessing Scoped Credentials</a>. URL: <a href="https://www.w3.org/TR/webauthn/">https://www.w3.org/TR/webauthn/</a>
    <dt id="biblio-webmessaging">[WEBMESSAGING]
@@ -3769,7 +3800,9 @@ partial dictionary CredentialCreationOptions {
 
 <span class="kt"><span class="kt">typedef</span></span> (<a class="n" data-link-type="idl-name" href="https://xhr.spec.whatwg.org/#interface-formdata"><span class="n">FormData</span></a> <span class="kt"><span class="kt">or</span></span> <a class="n" data-link-type="idl-name" href="https://url.spec.whatwg.org/#urlsearchparams"><span class="n">URLSearchParams</span></a>) <a class="nv" href="#typedefdef-credentialbodytype"><span class="nv">CredentialBodyType</span></a>;
 
-[<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed"><span class="nv">Exposed</span></a>=<span class="n"><span class="n">Window</span></span>,
+[<a class="nv idl-code" data-link-type="constructor" href="#dom-passwordcredential-passwordcredential"><span class="nv">Constructor</span></a>(<a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement"><span class="n">HTMLFormElement</span></a> <a class="nv" href="#dom-passwordcredential-passwordcredential-form-form"><span class="nv">form</span></a>),
+ <a class="nv idl-code" data-link-type="constructor" href="#dom-passwordcredential-passwordcredential-data"><span class="nv">Constructor</span></a>(<a class="n" data-link-type="idl-name" href="#dictdef-passwordcredentialdata"><span class="n">PasswordCredentialData</span></a> <a class="nv" href="#dom-passwordcredential-passwordcredential-data-data"><span class="nv">data</span></a>),
+ <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed"><span class="nv">Exposed</span></a>=<span class="n"><span class="n">Window</span></span>,
  <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext"><span class="nv">SecureContext</span></a>]
 <span class="kt"><span class="kt">interface</span></span> <a class="nv" href="#passwordcredential"><span class="nv">PasswordCredential</span></a> : <a class="n" data-link-type="idl-name" href="#credential"><span class="n">Credential</span></a> {
   <span class="kt"><span class="kt">attribute</span></span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString"><span class="kt"><span class="kt">USVString</span></span></a> <a class="nv idl-code" data-link-type="attribute" data-type="USVString" href="#dom-passwordcredential-idname"><span class="nv">idName</span></a>;
@@ -3803,7 +3836,8 @@ partial dictionary CredentialCreationOptions {
   <a class="n" data-link-type="idl-name" href="#typedefdef-credentialinfo"><span class="n">CredentialInfo</span></a> <a class="nv" data-type="CredentialInfo " href="#dom-requestinit-credentials"><span class="nv">credentials</span></a>;
 };
 
-[<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed"><span class="nv">Exposed</span></a>=<span class="n"><span class="n">Window</span></span>,
+[<a class="nv idl-code" data-link-type="constructor" href="#dom-federatedcredential-federatedcredential"><span class="nv">Constructor</span></a>(<a class="n" data-link-type="idl-name" href="#dictdef-federatedcredentialinit"><span class="n">FederatedCredentialInit</span></a> <a class="nv" href="#dom-federatedcredential-federatedcredential-data-data"><span class="nv">data</span></a>),
+ <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed"><span class="nv">Exposed</span></a>=<span class="n"><span class="n">Window</span></span>,
  <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext"><span class="nv">SecureContext</span></a>]
 <span class="kt"><span class="kt">interface</span></span> <a class="nv" href="#federatedcredential"><span class="nv">FederatedCredential</span></a> : <a class="n" data-link-type="idl-name" href="#credential"><span class="n">Credential</span></a> {
   <span class="kt"><span class="kt">readonly</span></span> <span class="kt"><span class="kt">attribute</span></span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString"><span class="kt"><span class="kt">USVString</span></span></a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="USVString" href="#dom-federatedcredential-provider"><span class="nv">provider</span></a>;
@@ -4406,15 +4440,29 @@ partial dictionary CredentialCreationOptions {
     <li><a href="#ref-for-dom-passwordcredential-password-slot-8">3.5.1. Cross-origin Credential Leakage</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="dom-passwordcredential-passwordcredential">
+   <b><a href="#dom-passwordcredential-passwordcredential">#dom-passwordcredential-passwordcredential</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dom-passwordcredential-passwordcredential-1">3.1.2. Post-sign-in Confirmation</a>
+    <li><a href="#ref-for-dom-passwordcredential-passwordcredential-2">3.1.3. Change Password</a>
+    <li><a href="#ref-for-dom-passwordcredential-passwordcredential-3">3.2. The PasswordCredential Interface</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="dom-passwordcredential-passwordcredential-data">
+   <b><a href="#dom-passwordcredential-passwordcredential-data">#dom-passwordcredential-passwordcredential-data</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dom-passwordcredential-passwordcredential-data-1">3.2. The PasswordCredential Interface</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="dictdef-passwordcredentialdata">
    <b><a href="#dictdef-passwordcredentialdata">#dictdef-passwordcredentialdata</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dictdef-passwordcredentialdata-1">3.2. The PasswordCredential Interface</a> <a href="#ref-for-dictdef-passwordcredentialdata-2">(2)</a>
-    <li><a href="#ref-for-dictdef-passwordcredentialdata-3">3.3.2. 
-    PasswordCredential's [[Create]](options) </a> <a href="#ref-for-dictdef-passwordcredentialdata-4">(2)</a>
-    <li><a href="#ref-for-dictdef-passwordcredentialdata-5">3.3.4. 
+    <li><a href="#ref-for-dictdef-passwordcredentialdata-1">3.2. The PasswordCredential Interface</a> <a href="#ref-for-dictdef-passwordcredentialdata-2">(2)</a> <a href="#ref-for-dictdef-passwordcredentialdata-3">(3)</a> <a href="#ref-for-dictdef-passwordcredentialdata-4">(4)</a>
+    <li><a href="#ref-for-dictdef-passwordcredentialdata-5">3.3.2. 
+    PasswordCredential's [[Create]](options) </a> <a href="#ref-for-dictdef-passwordcredentialdata-6">(2)</a>
+    <li><a href="#ref-for-dictdef-passwordcredentialdata-7">3.3.4. 
     Create a PasswordCredential from an HTMLFormElement </a>
-    <li><a href="#ref-for-dictdef-passwordcredentialdata-6">3.3.5. 
+    <li><a href="#ref-for-dictdef-passwordcredentialdata-8">3.3.5. 
     Create a PasswordCredential from PasswordCredentialData </a>
    </ul>
   </aside>
@@ -4475,16 +4523,18 @@ partial dictionary CredentialCreationOptions {
   <aside class="dfn-panel" data-for="abstract-opdef-create-a-passwordcredential-from-an-htmlformelement">
    <b><a href="#abstract-opdef-create-a-passwordcredential-from-an-htmlformelement">#abstract-opdef-create-a-passwordcredential-from-an-htmlformelement</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-abstract-opdef-create-a-passwordcredential-from-an-htmlformelement-1">3.3.2. 
+    <li><a href="#ref-for-abstract-opdef-create-a-passwordcredential-from-an-htmlformelement-1">3.2. The PasswordCredential Interface</a>
+    <li><a href="#ref-for-abstract-opdef-create-a-passwordcredential-from-an-htmlformelement-2">3.3.2. 
     PasswordCredential's [[Create]](options) </a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata">
    <b><a href="#abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata">#abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata-1">3.3.2. 
+    <li><a href="#ref-for-abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata-1">3.2. The PasswordCredential Interface</a>
+    <li><a href="#ref-for-abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata-2">3.3.2. 
     PasswordCredential's [[Create]](options) </a>
-    <li><a href="#ref-for-abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata-2">3.3.4. 
+    <li><a href="#ref-for-abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata-3">3.3.4. 
     Create a PasswordCredential from an HTMLFormElement </a>
    </ul>
   </aside>
@@ -4571,11 +4621,17 @@ partial dictionary CredentialCreationOptions {
     FederatedCredential's [[Store]](credential) </a> <a href="#ref-for-dom-federatedcredential-protocol-4">(2)</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="dom-federatedcredential-federatedcredential">
+   <b><a href="#dom-federatedcredential-federatedcredential">#dom-federatedcredential-federatedcredential</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dom-federatedcredential-federatedcredential-1">4.1. The FederatedCredential Interface</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="dictdef-federatedcredentialinit">
    <b><a href="#dictdef-federatedcredentialinit">#dictdef-federatedcredentialinit</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dictdef-federatedcredentialinit-1">4.1. The FederatedCredential Interface</a> <a href="#ref-for-dictdef-federatedcredentialinit-2">(2)</a>
-    <li><a href="#ref-for-dictdef-federatedcredentialinit-3">4.2.4. 
+    <li><a href="#ref-for-dictdef-federatedcredentialinit-1">4.1. The FederatedCredential Interface</a> <a href="#ref-for-dictdef-federatedcredentialinit-2">(2)</a> <a href="#ref-for-dictdef-federatedcredentialinit-3">(3)</a> <a href="#ref-for-dictdef-federatedcredentialinit-4">(4)</a>
+    <li><a href="#ref-for-dictdef-federatedcredentialinit-5">4.2.4. 
     Create a FederatedCredential from FederatedCredentialInit </a>
    </ul>
   </aside>
@@ -4614,7 +4670,8 @@ partial dictionary CredentialCreationOptions {
   <aside class="dfn-panel" data-for="abstract-opdef-create-a-federatedcredential-from-federatedcredentialinit">
    <b><a href="#abstract-opdef-create-a-federatedcredential-from-federatedcredentialinit">#abstract-opdef-create-a-federatedcredential-from-federatedcredentialinit</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-abstract-opdef-create-a-federatedcredential-from-federatedcredentialinit-1">4.2.2. 
+    <li><a href="#ref-for-abstract-opdef-create-a-federatedcredential-from-federatedcredentialinit-1">4.1. The FederatedCredential Interface</a>
+    <li><a href="#ref-for-abstract-opdef-create-a-federatedcredential-from-federatedcredentialinit-2">4.2.2. 
     FederatedCredential's [[Create]](options) </a>
    </ul>
   </aside>
