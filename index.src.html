@@ -993,7 +993,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
   <pre class="idl">
     typedef (FormData or URLSearchParams) CredentialBodyType;
 
-    [Exposed=Window,
+    [Constructor(HTMLFormElement form),
+     Constructor(PasswordCredentialData data),
+     Exposed=Window,
      SecureContext]
     interface PasswordCredential : Credential {
       attribute USVString idName;
@@ -1037,6 +1039,26 @@ spec:url; type:dfn; text:urlencoded byte serializer
     ::  Each {{PasswordCredential}} object has an internal slot named `[[password]]` which stores
         the credential's password. This property is not directly exposed to the web, but used to
         construct a request body during {{fetch()}}.
+
+    :   <dfn constructor>PasswordCredential(form)</dfn>
+    ::  This constructor accepts an {{HTMLFormElement}} (|form|), and runs the following steps:
+
+        1.  Let |r| be the result of executing <a abstract-op>Create a `PasswordCredential` from
+            an `HTMLFormElement`</a> on |form|.
+
+        2.  If |r| is an [=exception=], [=throw=] |r|.
+
+            Otherwise, return |r|.
+
+    :   <dfn constructor>PasswordCredential(data)</dfn>
+    ::  This constructor accepts a {{PasswordCredentialData}} (|data|), and runs the following steps:
+
+        1.  Let |r| be the result of executing <a abstract-op>Create a `PasswordCredential` from
+            `PasswordCredentialData`</a> on |data|.
+
+        2.  If |r| is an [=exception=], [=throw=] |r|.
+
+            Otherwise, return |r|.
   </dl>
  
   {{PasswordCredential}} objects can be created via
@@ -1561,7 +1583,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
   ## The `FederatedCredential` Interface ## {#federatedcredential-interface}
 
   <pre class="idl">
-    [Exposed=Window,
+    [Constructor(FederatedCredentialInit data),
+     Exposed=Window,
      SecureContext]
     interface FederatedCredential : Credential {
       readonly attribute USVString provider;
@@ -1595,6 +1618,16 @@ spec:url; type:dfn; text:urlencoded byte serializer
     :   {{Credential/[[discovery]]}}
     ::  The {{FederatedCredential}} [=interface object=] has an internal slot named `[[discovery]]`
         whose value is "{{Credential/[[discovery]]/credential store}}".
+
+    :   <dfn constructor>FederatedCredential(data)</dfn>
+    ::  This constructor accepts a {{FederatedCredentialInit}} (|data|), and runs the following steps:
+
+        1.  Let |r| be the result of executing <a abstract-op>Create a `FederatedCredential` from
+            `FederatedCredentialInit`</a> on |data|.
+
+        2.  If |r| is an [=exception=], [=throw=] |r|.
+
+            Otherwise, return |r|.
   </dl>
 
   {{FederatedCredential}} objects can be created by passing a {{FederatedCredentialInit}} dictionary
