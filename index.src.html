@@ -785,7 +785,12 @@ spec:url; type:dfn; text:urlencoded byte serializer
             var form = new FormData();
             form.append('username_field', credential.id);
             form.append('password_field', credential.password);
-            fetch("https://example.com/loginEndpoint", { body: form, method: "POST" })
+            var opt = {
+              method: 'POST',
+              body: form,
+              credentials: 'include  // Send cookies.
+            };
+            fetch("https://example.com/loginEndpoint", opt)
               .then(function (response) {
                 if (/* |response| indicates a successful login */) {
                   // Store the credential again, see note below.
@@ -829,7 +834,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
   Note: The [=credential chooser=] presented by the user agent could allow the user to choose
   credentials that aren't actually stored for the current origin. For instance, it might offer up
-  redentials from `https://m.example.com` when signing into `https://www.example.com` (as
+  credentials from `https://m.example.com` when signing into `https://www.example.com` (as
   described in [[#passwords-credential-leakage]]), or it might allow a user to create a new
   credential on the fly. Developers can deal gracefully with this uncertainty by calling
   {{CredentialsContainer/store()}} every time credentials are successfully used, even right after
@@ -874,8 +879,12 @@ spec:url; type:dfn; text:urlencoded byte serializer
             // Fetch the form's action URL, passing that new credential object in
             // as a FormData object. If the response indicates success, ask
             // the user agent to ask the user to store the credential for future use:
-            var init = { method: "POST", body: new FormData(e.target) };
-            fetch(e.target.action, init).then(r =&gt; {
+            var opt = {
+              method: 'POST',
+              body: new FormData(e.target),
+              credentials: 'include  // Send cookies.
+            };
+            fetch(e.target.action, opt).then(r =&gt; {
               if (/* |r| is a "successful" <a idl>Response</a> */)
                 <a idl lt="store()">navigator.credentials.store</a>(c);
             });
@@ -923,8 +932,12 @@ spec:url; type:dfn; text:urlencoded byte serializer
           // Fetch the form's action URL, passing that new credential object in
           // as a FormData object. If the response indicates success, ask
           // the user agent to ask the user to store the credential for future use:
-          var init = { method: "POST", body: new FormData(e.target) };
-          fetch(e.target.action, init).then(r =&gt; {
+          var opt = {
+            method: 'POST',
+            body: new FormData(e.target),
+            credentials: 'include  // Send cookies.
+          };
+          fetch(e.target.action, opt).then(r =&gt; {
             if (/* |r| is a "successful" <a idl>Response</a> */)
               <a idl lt="store()">navigator.credentials.store</a>(c);
           });

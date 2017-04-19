@@ -1423,7 +1423,7 @@ pre.idl.highlight { color: #708090; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-04-18">18 April 2017</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-04-19">19 April 2017</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -2198,8 +2198,8 @@ store user credentials for future use.</p>
   from within a <a data-link-type="dfn" href="#credential-chooser" id="ref-for-credential-chooser-7">credential chooser</a>.</p>
     <h3 class="heading settled" data-level="3.1" id="password-examples"><span class="secno">3.1. </span><span class="content">Examples</span><a class="self-link" href="#password-examples"></a></h3>
     <h4 class="heading settled" data-level="3.1.1" id="examples-password-signin"><span class="secno">3.1.1. </span><span class="content">Password-based Sign-in</span><a class="self-link" href="#examples-password-signin"></a></h4>
-    <div class="example" id="example-1ac61b74">
-     <a class="self-link" href="#example-1ac61b74"></a> MegaCorp, Inc. supports passwords, and can use <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-15">navigator.credentials.get()</a></code> to obtain
+    <div class="example" id="example-dc389790">
+     <a class="self-link" href="#example-dc389790"></a> MegaCorp, Inc. supports passwords, and can use <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-15">navigator.credentials.get()</a></code> to obtain
     username/password pairs from a user’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-13">credential store</a>: 
 <pre>navigator.<a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-7">credentials</a>
   .<a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-16">get</a>({ "<a class="idl-code" data-link-type="dict-member" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password-1">password</a>": true })
@@ -2214,7 +2214,12 @@ store user credentials for future use.</p>
       var form = new FormData();
       form.append('username_field', credential.id);
       form.append('password_field', credential.password);
-      fetch("https://example.com/loginEndpoint", { body: form, method: "POST" })
+      var opt = {
+        method: 'POST',
+        body: form,
+        credentials: 'include  // Send cookies.
+      };
+      fetch("https://example.com/loginEndpoint", opt)
         .then(function (response) {
           if (/* |response| indicates a successful login */) {
             // Store the credential again, see note below.
@@ -2252,7 +2257,7 @@ store user credentials for future use.</p>
     </div>
     <p class="note" role="note"><span>Note:</span> The <a data-link-type="dfn" href="#credential-chooser" id="ref-for-credential-chooser-8">credential chooser</a> presented by the user agent could allow the user to choose
   credentials that aren’t actually stored for the current origin. For instance, it might offer up
-  redentials from <code>https://m.example.com</code> when signing into <code>https://www.example.com</code> (as
+  credentials from <code>https://m.example.com</code> when signing into <code>https://www.example.com</code> (as
   described in <a href="#passwords-credential-leakage">§3.4.1 Credential Leakage</a>), or it might allow a user to create a new
   credential on the fly. Developers can deal gracefully with this uncertainty by calling <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-7">store()</a></code> every time credentials are successfully used, even right after
   credentials have been retrieved from <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-18">get()</a></code>: if the credentials aren’t
@@ -2261,8 +2266,8 @@ store user credentials for future use.</p>
     <h4 class="heading settled" data-level="3.1.2" id="examples-post-signin"><span class="secno">3.1.2. </span><span class="content">Post-sign-in Confirmation</span><a class="self-link" href="#examples-post-signin"></a></h4>
     <p>To ensure that users are offered to store new credentials after a successful sign-in, they can
   to be passed to <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-8">store()</a></code>.</p>
-    <div class="example" id="example-18ea1440">
-     <a class="self-link" href="#example-18ea1440"></a> If a user is signed in by submitting the credentials to a sign-in endpoint via <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a></code>,
+    <div class="example" id="example-be40ccd3">
+     <a class="self-link" href="#example-be40ccd3"></a> If a user is signed in by submitting the credentials to a sign-in endpoint via <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a></code>,
     we can check the response to determine whether the user
     was signed in successfully, and notify the user agent accordingly. Given a sign-in form like the
     following: 
@@ -2288,8 +2293,12 @@ store user credentials for future use.</p>
       // Fetch the form’s action URL, passing that new credential object in
       // as a FormData object. If the response indicates success, ask
       // the user agent to ask the user to store the credential for future use:
-      var init = { method: "POST", body: new FormData(e.target) };
-      fetch(e.target.action, init).then(r => {
+      var opt = {
+        method: 'POST',
+        body: new FormData(e.target),
+        credentials: 'include  // Send cookies.
+      };
+      fetch(e.target.action, opt).then(r => {
         if (/* |r| is a "successful" <a data-link-type="idl" href="https://fetch.spec.whatwg.org/#response">Response</a> */)
           <a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-9">navigator.credentials.store</a>(c);
       });
@@ -2301,8 +2310,8 @@ store user credentials for future use.</p>
     <p>This same storage mechanism can be reused for "password change" with no modifications: if the
   user changes their credentials, the website can notify the user agent that they’ve successfully
   signed in with new credentials. The user agent can then update the credentials it stores:</p>
-    <div class="example" id="example-b2fcc30c">
-     <a class="self-link" href="#example-b2fcc30c"></a> MegaCorp Inc. allows users to change their passwords by POSTing data to
+    <div class="example" id="example-bd397935">
+     <a class="self-link" href="#example-bd397935"></a> MegaCorp Inc. allows users to change their passwords by POSTing data to
     a backend server asynchronously. After doing so successfully, they can
     update the user’s credentials by calling <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-10">store()</a></code> with the new information. 
      <p>Given a password change form like the following:</p>
@@ -2327,8 +2336,12 @@ store user credentials for future use.</p>
     // Fetch the form’s action URL, passing that new credential object in
     // as a FormData object. If the response indicates success, ask
     // the user agent to ask the user to store the credential for future use:
-    var init = { method: "POST", body: new FormData(e.target) };
-    fetch(e.target.action, init).then(r => {
+    var opt = {
+      method: 'POST',
+      body: new FormData(e.target),
+      credentials: 'include  // Send cookies.
+    };
+    fetch(e.target.action, opt).then(r => {
       if (/* |r| is a "successful" <a data-link-type="idl" href="https://fetch.spec.whatwg.org/#response">Response</a> */)
         <a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-11">navigator.credentials.store</a>(c);
     });
