@@ -258,7 +258,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   ### `Credential` Internal Methods ### {#credential-internal-methods}
 
   Each [=interface object=] created for interfaces which [=interface/inherit=] from {{Credential}}
-  define several internal methods that allow retrieval and storage of {{Credential}} objects:
+  defines several internal methods that allow retrieval and storage of {{Credential}} objects:
 
   <section algorithm="'collect credentials' internal method">
     <dfn for="Credential" method export>\[[CollectFromCredentialStore]](options)</dfn> is called
@@ -351,7 +351,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     interface CredentialsContainer {
       Promise&lt;Credential?&gt; get(optional CredentialRequestOptions options);
       Promise&lt;Credential&gt; store(Credential credential);
-      Promise&lt;Credential&gt; create(optional CredentialCreationOptions options);
+      Promise&lt;Credential?&gt; create(optional CredentialCreationOptions options);
       Promise&lt;void&gt; requireUserMediation();
     };
 
@@ -1039,8 +1039,10 @@ spec:url; type:dfn; text:urlencoded byte serializer
         construct a request body during {{fetch()}}.
   </dl>
  
-  {{PasswordCredential}} objects can be created either explicitly with a {{PasswordCredentialData}}
-  dictionary, or based on the contents of an {{HTMLFormElement}}'s [=submittable elements=]. 
+  {{PasswordCredential}} objects can be created via
+  {{CredentialsContainer/create()|navigator.credentials.create()}}
+  either explicitly by passing in a {{PasswordCredentialData}} dictionary, or based on the contents
+  of an {{HTMLFormElement}}'s [=submittable elements=]. 
 
   <pre class="idl">
     dictionary PasswordCredentialData : CredentialData {
@@ -1094,9 +1096,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
   <dfn for="PasswordCredential" method>\[[Create]](options)</dfn> is called with a
   {{CredentialCreationOptions}} (|options|), and returns a {{PasswordCredential}} if one can be created,
-  or `null` otherwise. The {{CredentialCreationOptions}} dictionary must have a `password` member which
-  holds either an {{HTMLFormElement}} or a {{PasswordCredentialData}}:
-
+  `null` otherwise. The {{CredentialCreationOptions}} dictionary must have a `password` member which
+  holds either an {{HTMLFormElement}} or a {{PasswordCredentialData}}. If that member's value cannot be
+  used to create a {{PasswordCredential}}, this algorithm will return a {{TypeError}} [=exception=].
 
   <ol class="algorithm">
     1.  Assert: |options|["{{CredentialCreationOptions/password}}"] [=map/exists=].
@@ -1109,7 +1111,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
         the result of executing <a abstract-op>Create a `PasswordCredential` from
         `PasswordCredentialData`</a> on |options|["{{CredentialCreationOptions/password}}"].
 
-    4.  Return `null`.
+    4.  Return a {{TypeError}} [=exception=].
   </ol>
 
   <h4 algorithm id="store-passwordcredential">
@@ -1235,7 +1237,11 @@ spec:url; type:dfn; text:urlencoded byte serializer
                         on |name|, and |idName| to |name|.
 
     7.  Let |c| be the result of executing <a abstract-op>Create a `PasswordCredential` from
-        `PasswordCredentialData`</a> on |data|. Rethrow any exception generated.
+        `PasswordCredentialData`</a> on |data|.
+     
+    8.  If |c| is an [=exception=], return |c|.
+
+    9.  Assert: |c| is a {{PasswordCredential}}.
 
     8.  Set |c|'s {{PasswordCredential/idName}} attribute to |idName|.
 
@@ -1271,7 +1277,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   <ol class="algorithm">
     1.  Let |c| be a new {{PasswordCredential}} object.
     
-    2.  If any of the following are the empty string, [=throw=] a `TypeError` exception:
+    2.  If any of the following are the empty string, return a {{TypeError}} [=exception=]:
 
         *   |data|'s {{CredentialData/id}} member's value
         *   |data|'s {{PasswordCredentialData/password}} member's value
@@ -1391,7 +1397,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   6.  Replace step 32 of the current {{Request}} constructor with the following:
 
       32. If |request|'s <a for="request">method</a> is `GET` or `HEAD`, then
-          throw a `TypeError` if any of the following are true:
+          throw a {{TypeError}} [=exception=] if any of the following are true:
 
           *   <var ignore>init</var>'s `body` member is present and non-null
           *   <var ignore>inputBody</var> is non-null
@@ -1591,7 +1597,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
         whose value is "{{Credential/[[discovery]]/credential store}}".
   </dl>
 
-  {{FederatedCredential}} objects can be created with a {{FederatedCredentialInit}} dictionary:
+  {{FederatedCredential}} objects can be created by passing a {{FederatedCredentialInit}} dictionary
+  into {{CredentialsContainer/create()|navigator.credentials.create()}}.
 
   <pre class="idl">
     dictionary FederatedCredentialInit : CredentialData {
@@ -1669,7 +1676,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
   <dfn for="FederatedCredential" method>\[[Create]](options)</dfn> is called with a
   {{CredentialCreationOptions}} (|options|), and returns a {{FederatedCredential}} if one can be created,
-  or `null` otherwise:
+  `null` otherwise, or an [=exception=] in exceptional circumstances:
 
   <ol class="algorithm">
     1.  Assert: |options|["{{CredentialCreationOptions/federated}}"] [=map/exists=].
@@ -1721,7 +1728,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   <ol class="algorithm">
     1.  Let |c| be a new {{FederatedCredential}} object.
     
-    2.  If any of the following are the empty string, <a>throw</a> a `TypeError` exception:
+    2.  If any of the following are the empty string, return a {{TypeError}} [=exception=]:
 
         *   |init|.{{CredentialData/id}}'s value
         *   |init|.{{FederatedCredentialInit/provider}}'s value
