@@ -1423,7 +1423,7 @@ pre.idl.highlight { color: #708090; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-04-19">19 April 2017</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-05-04">4 May 2017</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1987,7 +1987,7 @@ store user credentials for future use.</p>
 <pre>window.addEventListener('load', _ => {
   var c = await navigatior.<a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-3">credentials</a>.<a class="idl-code" data-link-type="method" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-9">get</a>({
     ...,
-    <a class="idl-code" data-link-type="dict-member" href="#dom-credentialrequestoptions-mediation" id="ref-for-dom-credentialrequestoptions-mediation-6">mediation</a>: "<a class="idl-code" data-link-type="enum-value" href="#dom-credentialmediationrequirement-silent" id="ref-for-dom-credentialmediationrequirement-silent-4">silent</a>"
+    <a class="idl-code" data-link-type="dict-member" href="#dom-credentialrequestoptions-mediation" id="ref-for-dom-credentialrequestoptions-mediation-6">mediation</a>: '<a class="idl-code" data-link-type="enum-value" href="#dom-credentialmediationrequirement-silent" id="ref-for-dom-credentialmediationrequirement-silent-4">silent</a>'
   });
   if (c) {
     // Hooray! Let’s sign the user in using these credentials!
@@ -2002,7 +2002,7 @@ store user credentials for future use.</p>
 <pre>document.querySelector('#sign-in').addEventListener('click', e => {
   var c = await navigatior.<a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-4">credentials</a>.<a class="idl-code" data-link-type="method" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-10">get</a>({
     ...,
-    <a class="idl-code" data-link-type="dict-member" href="#dom-credentialrequestoptions-mediation" id="ref-for-dom-credentialrequestoptions-mediation-7">mediation</a>: "<a class="idl-code" data-link-type="enum-value" href="#dom-credentialmediationrequirement-optional" id="ref-for-dom-credentialmediationrequirement-optional-3">optional</a>"
+    <a class="idl-code" data-link-type="dict-member" href="#dom-credentialrequestoptions-mediation" id="ref-for-dom-credentialrequestoptions-mediation-7">mediation</a>: '<a class="idl-code" data-link-type="enum-value" href="#dom-credentialmediationrequirement-optional" id="ref-for-dom-credentialmediationrequirement-optional-3">optional</a>'
   });
   if (c) {
     // Hooray! Let’s sign the user in using these credentials!
@@ -2023,7 +2023,7 @@ store user credentials for future use.</p>
 <pre>document.querySelector('#important-form').addEventListener('submit', e => {
   var c = await navigatior.<a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-5">credentials</a>.<a class="idl-code" data-link-type="method" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-12">get</a>({
     ...,
-    <a class="idl-code" data-link-type="dict-member" href="#dom-credentialrequestoptions-mediation" id="ref-for-dom-credentialrequestoptions-mediation-10">mediation</a>: "<a class="idl-code" data-link-type="enum-value" href="#dom-credentialmediationrequirement-required" id="ref-for-dom-credentialmediationrequirement-required-3">required</a>"
+    <a class="idl-code" data-link-type="dict-member" href="#dom-credentialrequestoptions-mediation" id="ref-for-dom-credentialrequestoptions-mediation-10">mediation</a>: '<a class="idl-code" data-link-type="enum-value" href="#dom-credentialmediationrequirement-required" id="ref-for-dom-credentialmediationrequirement-required-3">required</a>'
   });
   if (c) {
     // Verify that |c| enables access, and cancel the submission
@@ -2042,7 +2042,7 @@ store user credentials for future use.</p>
 <pre>document.querySelector('#switch-button').addEventListener('click', e => {
   var c = await navigatior.<a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-6">credentials</a>.<a class="idl-code" data-link-type="method" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-14">get</a>({
     ...,
-    <a class="idl-code" data-link-type="dict-member" href="#dom-credentialrequestoptions-mediation" id="ref-for-dom-credentialrequestoptions-mediation-12">mediation</a>: "<a class="idl-code" data-link-type="enum-value" href="#dom-credentialmediationrequirement-required" id="ref-for-dom-credentialmediationrequirement-required-5">required</a>"
+    <a class="idl-code" data-link-type="dict-member" href="#dom-credentialrequestoptions-mediation" id="ref-for-dom-credentialrequestoptions-mediation-12">mediation</a>: '<a class="idl-code" data-link-type="enum-value" href="#dom-credentialmediationrequirement-required" id="ref-for-dom-credentialmediationrequirement-required-5">required</a>'
   });
   if (c) {
     // Sign the user in using |c|.
@@ -2198,11 +2198,11 @@ store user credentials for future use.</p>
   from within a <a data-link-type="dfn" href="#credential-chooser" id="ref-for-credential-chooser-7">credential chooser</a>.</p>
     <h3 class="heading settled" data-level="3.1" id="password-examples"><span class="secno">3.1. </span><span class="content">Examples</span><a class="self-link" href="#password-examples"></a></h3>
     <h4 class="heading settled" data-level="3.1.1" id="examples-password-signin"><span class="secno">3.1.1. </span><span class="content">Password-based Sign-in</span><a class="self-link" href="#examples-password-signin"></a></h4>
-    <div class="example" id="example-dc389790">
-     <a class="self-link" href="#example-dc389790"></a> MegaCorp, Inc. supports passwords, and can use <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-15">navigator.credentials.get()</a></code> to obtain
+    <div class="example" id="example-928ac0ff">
+     <a class="self-link" href="#example-928ac0ff"></a> MegaCorp, Inc. supports passwords, and can use <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-15">navigator.credentials.get()</a></code> to obtain
     username/password pairs from a user’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-13">credential store</a>: 
 <pre>navigator.<a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-7">credentials</a>
-  .<a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-16">get</a>({ "<a class="idl-code" data-link-type="dict-member" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password-1">password</a>": true })
+  .<a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-16">get</a>({ '<a class="idl-code" data-link-type="dict-member" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password-1">password</a>': true })
   .then(credential => {
     if (!credential) {
       // The user either doesn’t have credentials for this site, or
@@ -2210,7 +2210,7 @@ store user credentials for future use.</p>
       // a basic login form.
       return;
     }
-    if (credential.<a class="idl-code" data-link-type="attribute" href="#dom-credential-type" id="ref-for-dom-credential-type-2">type</a> == "<a class="idl-code" data-link-type="const" href="#dom-passwordcredential-password0" id="ref-for-dom-passwordcredential-password0-1">password</a>") {
+    if (credential.<a class="idl-code" data-link-type="attribute" href="#dom-credential-type" id="ref-for-dom-credential-type-2">type</a> == '<a class="idl-code" data-link-type="const" href="#dom-passwordcredential-password0" id="ref-for-dom-passwordcredential-password0-1">password</a>') {
       var form = new FormData();
       form.append('username_field', credential.id);
       form.append('password_field', credential.password);
@@ -2219,7 +2219,7 @@ store user credentials for future use.</p>
         body: form,
         credentials: 'include  // Send cookies.
       };
-      fetch("https://example.com/loginEndpoint", opt)
+      fetch('https://example.com/loginEndpoint', opt)
         .then(function (response) {
           if (/* |response| indicates a successful login */) {
             // Store the credential again, see note below.
@@ -2236,12 +2236,12 @@ store user credentials for future use.</p>
 </pre>
      <p>Alternatively, the website could just copy the credential data into a <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/forms.html#the-form-element">form</a></code> and call <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/forms.html#dom-form-submit">submit()</a></code> on the form:</p>
 <pre>navigator.<a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-9">credentials</a>
-  .<a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-17">get</a>({ "<a class="idl-code" data-link-type="dict-member" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password-2">password</a>": true })
+  .<a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-17">get</a>({ '<a class="idl-code" data-link-type="dict-member" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password-2">password</a>': true })
   .then(credential => {
     if (!credential) {
       return; // as above...
     }
-    if (credential.<a class="idl-code" data-link-type="attribute" href="#dom-credential-type" id="ref-for-dom-credential-type-3">type</a> == "<a class="idl-code" data-link-type="const" href="#dom-passwordcredential-password0" id="ref-for-dom-passwordcredential-password0-2">password</a>") {
+    if (credential.<a class="idl-code" data-link-type="attribute" href="#dom-credential-type" id="ref-for-dom-credential-type-3">type</a> == '<a class="idl-code" data-link-type="const" href="#dom-passwordcredential-password0" id="ref-for-dom-passwordcredential-password0-2">password</a>') {
       document.getQuerySelector('input[name=username_field]').value =
           credential.id;
       document.getQuerySelector('input[name=password_field]').value =
@@ -2266,8 +2266,8 @@ store user credentials for future use.</p>
     <h4 class="heading settled" data-level="3.1.2" id="examples-post-signin"><span class="secno">3.1.2. </span><span class="content">Post-sign-in Confirmation</span><a class="self-link" href="#examples-post-signin"></a></h4>
     <p>To ensure that users are offered to store new credentials after a successful sign-in, they can
   to be passed to <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-8">store()</a></code>.</p>
-    <div class="example" id="example-be40ccd3">
-     <a class="self-link" href="#example-be40ccd3"></a> If a user is signed in by submitting the credentials to a sign-in endpoint via <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a></code>,
+    <div class="example" id="example-b07a90ff">
+     <a class="self-link" href="#example-b07a90ff"></a> If a user is signed in by submitting the credentials to a sign-in endpoint via <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a></code>,
     we can check the response to determine whether the user
     was signed in successfully, and notify the user agent accordingly. Given a sign-in form like the
     following: 
@@ -2280,7 +2280,7 @@ store user credentials for future use.</p>
 &lt;/form>
 </pre>
      <p>Then the developer can handle the form submission with something like the following handler:</p>
-<pre>document.querySelector('#theForm').addEventListener("submit", e => {
+<pre>document.querySelector('#theForm').addEventListener('submit', e => {
     if (<a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-10">navigator.credentials</a>) {
       e.preventDefault();
 
@@ -2296,7 +2296,7 @@ store user credentials for future use.</p>
       var opt = {
         method: 'POST',
         body: new FormData(e.target),
-        credentials: 'include  // Send cookies.
+        credentials: 'include'  // Send cookies.
       };
       fetch(e.target.action, opt).then(r => {
         if (/* |r| is a "successful" <a data-link-type="idl" href="https://fetch.spec.whatwg.org/#response">Response</a> */)
@@ -2310,8 +2310,8 @@ store user credentials for future use.</p>
     <p>This same storage mechanism can be reused for "password change" with no modifications: if the
   user changes their credentials, the website can notify the user agent that they’ve successfully
   signed in with new credentials. The user agent can then update the credentials it stores:</p>
-    <div class="example" id="example-bd397935">
-     <a class="self-link" href="#example-bd397935"></a> MegaCorp Inc. allows users to change their passwords by POSTing data to
+    <div class="example" id="example-6629143c">
+     <a class="self-link" href="#example-6629143c"></a> MegaCorp Inc. allows users to change their passwords by POSTing data to
     a backend server asynchronously. After doing so successfully, they can
     update the user’s credentials by calling <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-10">store()</a></code> with the new information. 
      <p>Given a password change form like the following:</p>
@@ -2323,7 +2323,7 @@ store user credentials for future use.</p>
 &lt;/form>
 </pre>
      <p>The developer can handle the form submission with something like the following:</p>
-<pre>document.querySelector('#theForm').addEventListener("submit", e => {
+<pre>document.querySelector('#theForm').addEventListener('submit', e => {
   if (<a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-11">navigator.credentials</a>) {
     e.preventDefault();
 

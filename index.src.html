@@ -526,7 +526,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
       window.addEventListener('load', _ =&gt; {
         var c = await navigatior.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
           ...,
-          <a for="CredentialRequestOptions" dict-member>mediation</a>: "<a for="CredentialMediationRequirement" enum-value>silent</a>"
+          <a for="CredentialRequestOptions" dict-member>mediation</a>: '<a for="CredentialMediationRequirement" enum-value>silent</a>'
         });
         if (c) {
           // Hooray! Let's sign the user in using these credentials!
@@ -545,7 +545,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
       document.querySelector('#sign-in').addEventListener('click', e =&gt; {
         var c = await navigatior.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
           ...,
-          <a for="CredentialRequestOptions" dict-member>mediation</a>: "<a for="CredentialMediationRequirement" enum-value>optional</a>"
+          <a for="CredentialRequestOptions" dict-member>mediation</a>: '<a for="CredentialMediationRequirement" enum-value>optional</a>'
         });
         if (c) {
           // Hooray! Let's sign the user in using these credentials!
@@ -572,7 +572,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
       document.querySelector('#important-form').addEventListener('submit', e =&gt; {
         var c = await navigatior.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
           ...,
-          <a for="CredentialRequestOptions" dict-member>mediation</a>: "<a for="CredentialMediationRequirement" enum-value>required</a>"
+          <a for="CredentialRequestOptions" dict-member>mediation</a>: '<a for="CredentialMediationRequirement" enum-value>required</a>'
         });
         if (c) {
           // Verify that |c| enables access, and cancel the submission
@@ -595,7 +595,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
       document.querySelector('#switch-button').addEventListener('click', e =&gt; {
         var c = await navigatior.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
           ...,
-          <a for="CredentialRequestOptions" dict-member>mediation</a>: "<a for="CredentialMediationRequirement" enum-value>required</a>"
+          <a for="CredentialRequestOptions" dict-member>mediation</a>: '<a for="CredentialMediationRequirement" enum-value>required</a>'
         });
         if (c) {
           // Sign the user in using |c|.
@@ -773,7 +773,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     <pre>
       navigator.<a attribute>credentials</a>
-        .<a idl lt="get()" for="CredentialsContainer">get</a>({ "<a for="CredentialRequestOptions" dict-member>password</a>": true })
+        .<a idl lt="get()" for="CredentialsContainer">get</a>({ '<a for="CredentialRequestOptions" dict-member>password</a>': true })
         .then(credential =&gt; {
           if (!credential) {
             // The user either doesn't have credentials for this site, or
@@ -781,7 +781,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
             // a basic login form.
             return;
           }
-          if (credential.<a attribute for="Credential">type</a> == "<a const>password</a>") {
+          if (credential.<a attribute for="Credential">type</a> == '<a const>password</a>') {
             var form = new FormData();
             form.append('username_field', credential.id);
             form.append('password_field', credential.password);
@@ -790,7 +790,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
               body: form,
               credentials: 'include  // Send cookies.
             };
-            fetch("https://example.com/loginEndpoint", opt)
+            fetch('https://example.com/loginEndpoint', opt)
               .then(function (response) {
                 if (/* |response| indicates a successful login */) {
                   // Store the credential again, see note below.
@@ -811,12 +811,12 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     <pre>
       navigator.<a attribute>credentials</a>
-        .<a idl lt="get()" for="CredentialsContainer">get</a>({ "<a for="CredentialRequestOptions" dict-member>password</a>": true })
+        .<a idl lt="get()" for="CredentialsContainer">get</a>({ '<a for="CredentialRequestOptions" dict-member>password</a>': true })
         .then(credential =&gt; {
           if (!credential) {
             return; // as above...
           }
-          if (credential.<a attribute for="Credential">type</a> == "<a const>password</a>") {
+          if (credential.<a attribute for="Credential">type</a> == '<a const>password</a>') {
             document.getQuerySelector('input[name=username_field]').value =
                 credential.id;
             document.getQuerySelector('input[name=password_field]').value =
@@ -866,7 +866,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     Then the developer can handle the form submission with something like the following handler:
 
     <pre>
-      document.querySelector('#theForm').addEventListener("submit", e =&gt; {
+      document.querySelector('#theForm').addEventListener('submit', e =&gt; {
           if (<a attribute lt="credentials">navigator.credentials</a>) {
             e.preventDefault();
 
@@ -882,7 +882,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
             var opt = {
               method: 'POST',
               body: new FormData(e.target),
-              credentials: 'include  // Send cookies.
+              credentials: 'include'  // Send cookies.
             };
             fetch(e.target.action, opt).then(r =&gt; {
               if (/* |r| is a "successful" <a idl>Response</a> */)
@@ -919,7 +919,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     The developer can handle the form submission with something like the following:
 
     <pre>
-      document.querySelector('#theForm').addEventListener("submit", e =&gt; {
+      document.querySelector('#theForm').addEventListener('submit', e =&gt; {
         if (<a attribute lt="credentials">navigator.credentials</a>) {
           e.preventDefault();
 
