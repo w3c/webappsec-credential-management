@@ -788,7 +788,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
             var opt = {
               method: 'POST',
               body: form,
-              credentials: 'include  // Send cookies.
+              credentials: 'include'  // Send cookies.
             };
             fetch('https://example.com/loginEndpoint', opt)
               .then(function (response) {
@@ -835,7 +835,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   Note: The [=credential chooser=] presented by the user agent could allow the user to choose
   credentials that aren't actually stored for the current origin. For instance, it might offer up
   credentials from `https://m.example.com` when signing into `https://www.example.com` (as
-  described in [[#passwords-credential-leakage]]), or it might allow a user to create a new
+  described in [[#security-credential-access]]), or it might allow a user to create a new
   credential on the fly. Developers can deal gracefully with this uncertainty by calling
   {{CredentialsContainer/store()}} every time credentials are successfully used, even right after
   credentials have been retrieved from {{CredentialsContainer/get()}}: if the credentials aren't
@@ -935,7 +935,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
           var opt = {
             method: 'POST',
             body: new FormData(e.target),
-            credentials: 'include  // Send cookies.
+            credentials: 'include'  // Send cookies.
           };
           fetch(e.target.action, opt).then(r =&gt; {
             if (/* |r| is a "successful" <a idl>Response</a> */)
@@ -1184,40 +1184,6 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
   2.  Return "`Does Not Match`".
 
-  ## Security Considerations ## {#passwords-security}
-
-  ### Credential Leakage ### {#passwords-credential-leakage}
-
-  Credentials are sensitive information, and user agents need to exercise caution in determining
-  when they can be safely shared with a website. The safest option is to restrict credential
-  sharing to the exact origin on which they were saved. That is likely too restrictive for the
-  web, however: consider sites which divide functionality into subdomains like `example.com` vs
-  `admin.example.com`.
-
-  As a compromise between annoying users, and securing their credentials, user agents:
-
-  1.  MUST NOT share credentials between origins whose scheme components represent a downgrade in
-      security. That is, it may make sense to allow credentials saved on `http://example.com/` to
-      be made available to `https://example.com/` (in order to encourage developers to migrate to
-      secure transport), but the inverse would be dangerous.
-
-  2.  MAY use the Public Suffix List [[!PSL]] to determine the effective scope of a credential by
-      comparing the [=registerable domain=] of the credential's {{Credential/[[origin]]}} with the
-      origin in which {{CredentialsContainer/get()}} is called. That is: credentials saved on
-      `https://admin.example.com/` and `https://example.com/` MAY be offered to users when
-      {{CredentialsContainer/get()}} is called from `https://www.example.com/`, and vice versa.
-
-  3.  MUST NOT offer credentials to an origin in response to {{CredentialsContainer/get()}} without
-      [=user mediation=] if the credential's origin is not an exact match for the calling origin.
-      That is, {{Credential}} objects for `https://example.com` would not be returned directly to
-      `https://www.example.com`, but could be offered to the user via the chooser.
-
-  Cross-site scripting attacks could leak credential information. To mitigate this kind of risk,
-  authors should ensure that both <a>`script-src`</a> and <a>`object-src`</a>
-  directives are set in any policy they specify in order to ensure that only trusted script is
-  executed on a page with access to a user's credentials. If you are populating
-  <{form}> elements, also <a>`form-action`</a> directives
-  should be set.
 </section>
 
 <!--
@@ -1552,17 +1518,46 @@ spec:url; type:dfn; text:urlencoded byte serializer
 <section>
   # Security and Privacy Considerations # {#security-and-privacy}
 
-  ## Credential Leakage ## {#security-leakage}
+  The following sections represent guidelines for various security and privacy considerations.
+  Individual credential types may enforce stricter or more relaxed versions of these guidelines.
+
+  ## Cross-domain credential access ## {#security-credential-access}
 
   Credentials are sensitive information, and user agents need to exercise caution in determining
-  when they can be safely shared with a website. Likewise, developers would be well-advised to take
+  when they can be safely shared with a website. The safest option is to restrict credential
+  sharing to the exact origin on which they were saved. That is likely too restrictive for the
+  web, however: consider sites which divide functionality into subdomains like `example.com` vs
+  `admin.example.com`.
+
+  As a compromise between annoying users, and securing their credentials, user agents:
+
+  1.  MUST NOT share credentials between origins whose scheme components represent a downgrade in
+      security. That is, it may make sense to allow credentials saved on `http://example.com/` to
+      be made available to `https://example.com/` (in order to encourage developers to migrate to
+      secure transport), but the inverse would be dangerous.
+
+  2.  MAY use the Public Suffix List [[!PSL]] to determine the effective scope of a credential by
+      comparing the [=registerable domain=] of the credential's {{Credential/[[origin]]}} with the
+      origin in which {{CredentialsContainer/get()}} is called. That is: credentials saved on
+      `https://admin.example.com/` and `https://example.com/` MAY be offered to users when
+      {{CredentialsContainer/get()}} is called from `https://www.example.com/`, and vice versa.
+
+  3.  MUST NOT offer credentials to an origin in response to {{CredentialsContainer/get()}} without
+      [=user mediation=] if the credential's origin is not an exact match for the calling origin.
+      That is, {{Credential}} objects for `https://example.com` would not be returned directly to
+      `https://www.example.com`, but could be offered to the user via the chooser.
+
+  ## Credential Leakage ## {#security-leakage}
+
+  Developers are well-advised to take
   some precautions to mitigate the risk that a cross-site scripting attack could turn into
-  persistent access to a user's account by by setting a reasonable Content Security Policy [[!CSP]]
+  persistent access to a user's account by setting a reasonable Content Security Policy [[!CSP]]
   which restricts the endpoints to which data can be sent. In particular, developers should ensure
   that the following directives are set, explicitly or implicitly, in their pages' policies:
 
   *   <a>`script-src`</a> and <a>`object-src`</a> both restrict script execution on a page, making
-      it less likely that a cross-site scripting attack will succeed in the first place.
+      it less likely that a cross-site scripting attack will succeed in the first place. If sites 
+      are populating <{form}> elements, also <a>`form-action`</a> directives should be set.
 
   *   <a>`connect-src`</a> restricts the origins to which {{fetch()}} may submit data (which
       mitigates the risk that credentials could be exfiltrated to `evil.com`.
