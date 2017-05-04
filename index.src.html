@@ -1087,11 +1087,6 @@ spec:url; type:dfn; text:urlencoded byte serializer
     ::  The {{PasswordCredential}} [=interface object=] has an internal slot named `[[discovery]]`
         whose value is "{{Credential/[[discovery]]/credential store}}".
 
-    :   <dfn attribute>\[[password]]</dfn>
-    ::  Each {{PasswordCredential}} object has an internal slot named `[[password]]` which stores
-        the credential's password. This property is not directly exposed to the web, but used to
-        construct a request body during {{fetch()}}.
-
     :   <dfn constructor>PasswordCredential(form)</dfn>
     ::  This constructor accepts an {{HTMLFormElement}} (|form|), and runs the following steps:
 
