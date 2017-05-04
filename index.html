@@ -2306,8 +2306,8 @@ store user credentials for future use.</p>
   from within a <a data-link-type="dfn" href="#credential-chooser" id="ref-for-credential-chooser-7">credential chooser</a>.</p>
     <h3 class="heading settled" data-level="3.1" id="password-examples"><span class="secno">3.1. </span><span class="content">Examples</span><a class="self-link" href="#password-examples"></a></h3>
     <h4 class="heading settled" data-level="3.1.1" id="examples-password-signin"><span class="secno">3.1.1. </span><span class="content">Password-based Sign-in</span><a class="self-link" href="#examples-password-signin"></a></h4>
-    <div class="example" id="example-d90c11f4">
-     <a class="self-link" href="#example-d90c11f4"></a> MegaCorp, Inc. supports passwords, and can use <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-15">navigator.credentials.get()</a></code> to obtain
+    <div class="example" id="example-9d459b26">
+     <a class="self-link" href="#example-9d459b26"></a> MegaCorp, Inc. supports passwords, and can use <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-15">navigator.credentials.get()</a></code> to obtain
     username/password pairs from a user’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-13">credential store</a>: 
 <pre>navigator.<a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials-7">credentials</a>
   .<a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-16">get</a>({ '<a class="idl-code" data-link-type="dict-member" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password-1">password</a>': true })
@@ -2318,7 +2318,7 @@ store user credentials for future use.</p>
       // a basic login form.
       return;
     }
-    if (credential.<a class="idl-code" data-link-type="attribute" href="#dom-credential-type" id="ref-for-dom-credential-type-2">type</a> == '<a class="idl-code" data-link-type="const" href="#dom-passwordcredential-password0" id="ref-for-dom-passwordcredential-password0-1">password</a>') {
+    if (credential.<a class="idl-code" data-link-type="attribute" href="#dom-credential-type" id="ref-for-dom-credential-type-2">type</a> == '<a class="idl-code" data-link-type="const" href="#password-const" id="ref-for-password-const-1">password</a>') {
       var form = new FormData();
       form.append('username_field', credential.id);
       form.append('password_field', credential.password);
@@ -2349,7 +2349,7 @@ store user credentials for future use.</p>
     if (!credential) {
       return; // as above...
     }
-    if (credential.<a class="idl-code" data-link-type="attribute" href="#dom-credential-type" id="ref-for-dom-credential-type-3">type</a> == '<a class="idl-code" data-link-type="const" href="#dom-passwordcredential-password0" id="ref-for-dom-passwordcredential-password0-2">password</a>') {
+    if (credential.<a class="idl-code" data-link-type="attribute" href="#dom-credential-type" id="ref-for-dom-credential-type-3">type</a> == '<a class="idl-code" data-link-type="const" href="#password-literal">password</a>') {
       document.getQuerySelector('input[name=username_field]').value =
           credential.id;
       document.getQuerySelector('input[name=password_field]').value =
@@ -2480,7 +2480,7 @@ store user credentials for future use.</p>
      <dt data-md=""><code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot-4">[[type]]</a></code>
      <dd data-md="">
       <p>The <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-6">PasswordCredential</a></code> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a> has an internal slot named <code>[[type]]</code> whose
-  value is "<dfn class="dfn-paneled idl-code" data-dfn-for="PasswordCredential" data-dfn-type="const" data-export="" id="dom-passwordcredential-password0"><code>password</code></dfn>".</p>
+  value is "<dfn class="dfn-paneled idl-code" data-dfn-for="PasswordCredential" data-dfn-type="const" data-export="" id="password-const"><code>password</code></dfn>".</p>
      <dt data-md=""><code class="idl"><a data-link-type="idl" href="#dom-credential-discovery-slot" id="ref-for-dom-credential-discovery-slot-2">[[discovery]]</a></code>
      <dd data-md="">
       <p>The <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-7">PasswordCredential</a></code> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a> has an internal slot named <code>[[discovery]]</code> whose value is "<code class="idl"><a data-link-type="idl" href="#dom-credential-discovery-credential-store" id="ref-for-dom-credential-discovery-credential-store-2">credential store</a></code>".</p>
@@ -2570,7 +2570,7 @@ store user credentials for future use.</p>
         <p>If the user grants permission to update credentials (as discussed when defining <a data-link-type="dfn" href="#user-mediated" id="ref-for-user-mediated-7">user mediation</a>), then:</p>
         <ol>
          <li data-md="">
-          <p>Set <var>stored</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password" id="ref-for-dom-passwordcredential-password-2">password</a></code> to <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password" id="ref-for-dom-passwordcredential-password-3">password</a></code>.</p>
+          <p>Set <var>stored</var>’s <a class="idl-code" data-link-type="attribute" href="#dom-passwordcredential-password" id="ref-for-dom-passwordcredential-password-2"><code>password</code></a> to <var>credential</var>’s <a class="idl-code" data-link-type="attribute" href="#dom-passwordcredential-password" id="ref-for-dom-passwordcredential-password-3"><code>password</code></a>.</p>
          <li data-md="">
           <p>Set <var>stored</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credentialuserdata-name" id="ref-for-dom-credentialuserdata-name-2">name</a></code> to <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credentialuserdata-name" id="ref-for-dom-credentialuserdata-name-3">name</a></code>.</p>
          <li data-md="">
@@ -2596,9 +2596,9 @@ store user credentials for future use.</p>
          <dt data-md=""><code class="idl"><a data-link-type="idl" href="#dom-credential-origin-slot" id="ref-for-dom-credential-origin-slot-4">[[origin]]</a></code>
          <dd data-md="">
           <p><var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-origin-slot" id="ref-for-dom-credential-origin-slot-5">[[origin]]</a></code></p>
-         <dt data-md=""><code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password" id="ref-for-dom-passwordcredential-password-4">password</a></code>
+         <dt data-md=""><a class="idl-code" data-link-type="attribute" href="#dom-passwordcredential-password" id="ref-for-dom-passwordcredential-password-4"><code>password</code></a>
          <dd data-md="">
-          <p><var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password" id="ref-for-dom-passwordcredential-password-5">password</a></code></p>
+          <p><var>credential</var>’s <a class="idl-code" data-link-type="attribute" href="#dom-passwordcredential-password" id="ref-for-dom-passwordcredential-password-5"><code>password</code></a></p>
         </dl>
       </ol>
     </ol>
@@ -2690,7 +2690,7 @@ store user credentials for future use.</p>
      <li data-md="">
       <p>Set <var>c</var>’s properties as follows:</p>
       <dl>
-       <dt data-md=""><code class="idl"><a data-link-type="idl" href="#dom-passwordcredential-password" id="ref-for-dom-passwordcredential-password-6">password</a></code>
+       <dt data-md=""><a class="idl-code" data-link-type="attribute" href="#dom-passwordcredential-password" id="ref-for-dom-passwordcredential-password-6"><code>password</code></a>
        <dd data-md="">
         <p><var>data</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredentialdata-password" id="ref-for-dom-passwordcredentialdata-password-4">password</a></code> member’s value</p>
        <dt data-md=""><code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id-6">id</a></code>
@@ -3342,7 +3342,7 @@ partial dictionary CredentialCreationOptions {
     <ul>
      <li><a href="#dom-credentialrequestoptions-password">dict-member for CredentialRequestOptions</a><span>, in §3.2</span>
      <li><a href="#dom-passwordcredential-password">attribute for PasswordCredential</a><span>, in §3.2</span>
-     <li><a href="#dom-passwordcredential-password0">const for PasswordCredential</a><span>, in §3.2</span>
+     <li><a href="#password-const">const for PasswordCredential</a><span>, in §3.2</span>
      <li><a href="#dom-passwordcredentialdata-password">dict-member for PasswordCredentialData</a><span>, in §3.2</span>
      <li><a href="#dom-credentialcreationoptions-password">dict-member for CredentialCreationOptions</a><span>, in §3.2</span>
     </ul>
@@ -4191,10 +4191,10 @@ partial dictionary CredentialCreationOptions {
     Create a PasswordCredential from PasswordCredentialData </a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="dom-passwordcredential-password0">
-   <b><a href="#dom-passwordcredential-password0">#dom-passwordcredential-password0</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="password-const">
+   <b><a href="#password-const">#password-const</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-passwordcredential-password0-1">3.1.1. Password-based Sign-in</a> <a href="#ref-for-dom-passwordcredential-password0-2">(2)</a>
+    <li><a href="#ref-for-password-const-1">3.1.1. Password-based Sign-in</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-passwordcredential-passwordcredential">

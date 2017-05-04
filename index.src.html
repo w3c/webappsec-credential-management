@@ -927,7 +927,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
           if (!credential) {
             return; // as above...
           }
-          if (credential.<a attribute for="Credential">type</a> == '<a const>password</a>') {
+          if (credential.<a attribute for="Credential">type</a> == '<a const href="#password-literal">password</a>') {
             document.getQuerySelector('input[name=username_field]').value =
                 credential.id;
             document.getQuerySelector('input[name=password_field]').value =
@@ -1081,7 +1081,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     :   {{Credential/[[type]]}}
     ::  The {{PasswordCredential}} [=interface object=] has an internal slot named `[[type]]` whose
-        value is "<dfn const>`password`</dfn>".
+        value is "<dfn const id="password-const">`password`</dfn>".
 
     :   {{Credential/[[discovery]]}}
     ::  The {{PasswordCredential}} [=interface object=] has an internal slot named `[[discovery]]`
@@ -1200,8 +1200,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
         1.  If the user grants permission to update credentials (as discussed when defining
             [=user mediation=]), then:
 
-            1.  Set |stored|'s {{PasswordCredential/password}} to |credential|'s
-                {{PasswordCredential/password}}.
+            1.  Set |stored|'s <a attribute for="PasswordCredential">`password`</a> to |credential|'s
+                <a attribute for="PasswordCredential">`password`</a>.
 
             2.  Set |stored|'s {{CredentialUserData/name}} to |credential|'s
                 {{CredentialUserData/name}}.
@@ -1223,8 +1223,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
             ::  |credential|'s {{CredentialUserData/iconURL}}
             :   {{Credential/[[origin]]}}
             ::  |credential|'s {{Credential/[[origin]]}}
-            :   {{PasswordCredential/password}}
-            ::  |credential|'s {{PasswordCredential/password}}
+            :   <a attribute for="PasswordCredential">`password`</a>
+            ::  |credential|'s <a attribute for="PasswordCredential">`password`</a>
 
   </ol>
 
@@ -1324,7 +1324,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     3.  Set |c|'s properties as follows:
     
-        :   {{PasswordCredential/password}}
+        :   <a attribute for="PasswordCredential">`password`</a>
         ::  |data|'s {{PasswordCredentialData/password}} member's value
         :   {{Credential/id}}
         ::  |data|'s {{CredentialData/id}} member's value
