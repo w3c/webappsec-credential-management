@@ -573,7 +573,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
       window.addEventListener('load', _ =&gt; {
         var c = await navigatior.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
           ...,
-          <a for="CredentialRequestOptions" dict-member>mediation</a>: "<a for="CredentialMediationRequirement" enum-value>silent</a>"
+          <a for="CredentialRequestOptions" dict-member>mediation</a>: '<a for="CredentialMediationRequirement" enum-value>silent</a>'
         });
         if (c) {
           // Hooray! Let's sign the user in using these credentials!
@@ -592,7 +592,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
       document.querySelector('#sign-in').addEventListener('click', e =&gt; {
         var c = await navigatior.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
           ...,
-          <a for="CredentialRequestOptions" dict-member>mediation</a>: "<a for="CredentialMediationRequirement" enum-value>optional</a>"
+          <a for="CredentialRequestOptions" dict-member>mediation</a>: '<a for="CredentialMediationRequirement" enum-value>optional</a>'
         });
         if (c) {
           // Hooray! Let's sign the user in using these credentials!
@@ -619,7 +619,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
       document.querySelector('#important-form').addEventListener('submit', e =&gt; {
         var c = await navigatior.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
           ...,
-          <a for="CredentialRequestOptions" dict-member>mediation</a>: "<a for="CredentialMediationRequirement" enum-value>required</a>"
+          <a for="CredentialRequestOptions" dict-member>mediation</a>: '<a for="CredentialMediationRequirement" enum-value>required</a>'
         });
         if (c) {
           // Verify that |c| enables access, and cancel the submission
@@ -642,7 +642,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
       document.querySelector('#switch-button').addEventListener('click', e =&gt; {
         var c = await navigatior.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
           ...,
-          <a for="CredentialRequestOptions" dict-member>mediation</a>: "<a for="CredentialMediationRequirement" enum-value>required</a>"
+          <a for="CredentialRequestOptions" dict-member>mediation</a>: '<a for="CredentialMediationRequirement" enum-value>required</a>'
         });
         if (c) {
           // Sign the user in using |c|.
@@ -884,7 +884,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     <pre>
       navigator.<a attribute>credentials</a>
-        .<a idl lt="get()" for="CredentialsContainer">get</a>({ "<a for="CredentialRequestOptions" dict-member>password</a>": true })
+        .<a idl lt="get()" for="CredentialsContainer">get</a>({ '<a for="CredentialRequestOptions" dict-member>password</a>': true })
         .then(credential =&gt; {
           if (!credential) {
             // The user either doesn't have credentials for this site, or
@@ -892,13 +892,23 @@ spec:url; type:dfn; text:urlencoded byte serializer
             // a basic login form.
             return;
           }
-          if (credential.<a attribute for="Credential">type</a> == "<a const>password</a>") {
-            fetch("https://example.com/loginEndpoint", { credentials: credential, method: "POST" })
+          if (credential.<a attribute for="Credential">type</a> == '<a const>password</a>') {
+            var form = new FormData();
+            form.append('username_field', credential.id);
+            form.append('password_field', credential.password);
+            var opt = {
+              method: 'POST',
+              body: form,
+              credentials: 'include'  // Send cookies.
+            };
+            fetch('https://example.com/loginEndpoint', opt)
               .then(function (response) {
                 if (/* |response| indicates a successful login */) {
                   // Record that the credential was effective. See note below.
                   navigator.<a attribute>credentials</a>.<a idl lt="store()" for="CredentialsContainer">store</a>(credential);
                   // Notify the user that sign-in succeeded! Do amazing, signed-in things!
+                  // Maybe navigate to a landing page via location.href =
+                  // '/signed-in-experience'?
                 } else {
                   // Insert some code here to fall back to a basic login form.
                 }
@@ -906,12 +916,37 @@ spec:url; type:dfn; text:urlencoded byte serializer
           }
         });
     </pre>
+
+    Alternatively, the website could just copy the credential data into a <{form}> and call
+    {{HTMLFormElement/submit()}} on the form:
+
+    <pre>
+      navigator.<a attribute>credentials</a>
+        .<a idl lt="get()" for="CredentialsContainer">get</a>({ '<a for="CredentialRequestOptions" dict-member>password</a>': true })
+        .then(credential =&gt; {
+          if (!credential) {
+            return; // as above...
+          }
+          if (credential.<a attribute for="Credential">type</a> == '<a const href="#password-literal">password</a>') {
+            document.getQuerySelector('input[name=username_field]').value =
+                credential.id;
+            document.getQuerySelector('input[name=password_field]').value =
+                credential.password;
+            document.getQuerySelector('#myform').submit();
+          }
+        });
+    </pre>
+
+    Note that the former method is much preferred, as it contains an explicit call
+    to {{CredentialsContainer/store()}} and saves the credentials. The <{form}> based mechanism
+    relies on form submission, which navigates the browsing context, making it difficult to
+    ensure that {{store()}} is called after successful sign-in.
   </div>
 
   Note: The [=credential chooser=] presented by the user agent could allow the user to choose
   credentials that aren't actually stored for the current origin. For instance, it might offer up
-  redentials from `https://m.example.com` when signing into `https://www.example.com` (as
-  described in [[#passwords-cross-origin-leakage]]), or it might allow a user to create a new
+  credentials from `https://m.example.com` when signing into `https://www.example.com` (as
+  described in [[#security-credential-access]]), or it might allow a user to create a new
   credential on the fly. Developers can deal gracefully with this uncertainty by calling
   {{CredentialsContainer/store()}} every time credentials are successfully used, even right after
   credentials have been retrieved from {{CredentialsContainer/get()}}: if the credentials aren't
@@ -924,8 +959,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
   to be passed to {{CredentialsContainer/store()}}.
 
   <div class="example">
-    If a user is signed in by calling {{fetch()}} on a {{PasswordCredential}} object, submitting
-    that data to a sign-in endpoint, then we can check the response to determine whether the user
+    If a user is signed in by submitting the credentials to a sign-in endpoint via {{fetch()}},
+    we can check the response to determine whether the user
     was signed in successfully, and notify the user agent accordingly. Given a sign-in form like the
     following:
 
@@ -942,7 +977,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     Then the developer can handle the form submission with something like the following handler:
 
     <pre>
-      document.querySelector('#theForm').addEventListener("submit", e =&gt; {
+      document.querySelector('#theForm').addEventListener('submit', e =&gt; {
           if (<a attribute lt="credentials">navigator.credentials</a>) {
             e.preventDefault();
 
@@ -953,11 +988,14 @@ spec:url; type:dfn; text:urlencoded byte serializer
             var c = new <a idl lt="PasswordCredential(form)">PasswordCredential</a>(e.target);
 
             // Fetch the form's action URL, passing that new credential object in
-            // as the fetch's credentials. If the response indicates success,
-            // tell the user agent so it can ask the user to store the password
-            // for future use:
-            var init = { method: "POST", credentials: c };
-            fetch(e.target.action, init).then(r =&gt; {
+            // as a FormData object. If the response indicates success, tell the user agent
+            // so it can ask the user to store the password for future use:
+            var opt = {
+              method: 'POST',
+              body: new FormData(e.target),
+              credentials: 'include'  // Send cookies.
+            };
+            fetch(e.target.action, opt).then(r =&gt; {
               if (/* |r| is a "successful" <a idl>Response</a> */)
                 <a idl lt="store()">navigator.credentials.store</a>(c);
             });
@@ -992,7 +1030,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     The developer can handle the form submission with something like the following:
 
     <pre>
-      document.querySelector('#theForm').addEventListener("submit", e =&gt; {
+      document.querySelector('#theForm').addEventListener('submit', e =&gt; {
         if (<a attribute lt="credentials">navigator.credentials</a>) {
           e.preventDefault();
 
@@ -1003,11 +1041,14 @@ spec:url; type:dfn; text:urlencoded byte serializer
           var c = new <a idl lt="PasswordCredential(form)">PasswordCredential</a>(e.target);
 
           // Fetch the form's action URL, passing that new credential object in
-          // as the fetch's credentials. If the response indicates success, tell
-          // the user agent so it can ask the user to store the password for
-          // future use:
-          var init = { method: "POST", credentials: c };
-          fetch(e.target.action, init).then(r =&gt; {
+          // as a FormData object. If the response indicates success, tell the user agent
+          // so it can ask the user to store the password for future use:
+          var opt = {
+            method: 'POST',
+            body: new FormData(e.target),
+            credentials: 'include'  // Send cookies.
+          };
+          fetch(e.target.action, opt).then(r =&gt; {
             if (/* |r| is a "successful" <a idl>Response</a> */)
               <a idl lt="store()">navigator.credentials.store</a>(c);
           });
@@ -1026,10 +1067,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
      Exposed=Window,
      SecureContext]
     interface PasswordCredential : Credential {
-      attribute USVString idName;
-      attribute USVString passwordName;
-
-      attribute CredentialBodyType? additionalData;
+      readonly attribute USVString password;
     };
     PasswordCredential implements CredentialUserData;
 
@@ -1038,35 +1076,16 @@ spec:url; type:dfn; text:urlencoded byte serializer
     };
   </pre>
   <dl dfn-for="PasswordCredential">
-    :   <dfn attribute>idName</dfn>
-    ::  This attribute represents the name which will be used for the ID field when submitting the
-        {{PasswordCredential}} to a remote endpoint via {{fetch()}}. It defaults to "`username`",
-        but can be overridden by a developer to match whatever the backend service expects.
-
-    :   <dfn attribute>passwordName</dfn>
-    ::  This attribute represents the name which will be used for the ID field when submitting the
-        {{PasswordCredential}} to a remote endpoint via {{fetch()}}. It defaults to "`password`",
-        but can be overridden by a developer to match whatever the backend service expects.
-
-    :   <dfn attribute>additionalData</dfn>
-    ::  If the developer wishes to specify additional data to insert into the request body when
-        submitting the credential information to a remote endpoint, they can do so by assigning a
-        {{FormData}} or {{URLSearchParams}} object to this attribute. The credential information
-        will be mixed into the object to produce the body. The value is `null` unless otherwise
-        specified.
+    :   <dfn attribute>password</dfn>
+    ::  This attribute represents the password of the credential.
 
     :   {{Credential/[[type]]}}
     ::  The {{PasswordCredential}} [=interface object=] has an internal slot named `[[type]]` whose
-        value is "<dfn const>`password`</dfn>".
+        value is "<dfn const for="Credential/[[type]]">`password`</dfn>".
 
     :   {{Credential/[[discovery]]}}
     ::  The {{PasswordCredential}} [=interface object=] has an internal slot named `[[discovery]]`
         whose value is "{{Credential/[[discovery]]/credential store}}".
-
-    :   <dfn attribute>\[[password]]</dfn>
-    ::  Each {{PasswordCredential}} object has an internal slot named `[[password]]` which stores
-        the credential's password. This property is not directly exposed to the web, but used to
-        construct a request body during {{fetch()}}.
 
     :   <dfn constructor>PasswordCredential(form)</dfn>
     ::  This constructor accepts an {{HTMLFormElement}} (|form|), and runs the following steps:
@@ -1181,8 +1200,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
         1.  If the user grants permission to update credentials (as discussed when defining
             [=user mediation=]), then:
 
-            1.  Set |stored|'s {{[[password]]}} slot's value to the value of |credential|'s
-                {{[[password]]}} slot.
+            1.  Set |stored|'s <a attribute for="PasswordCredential">`password`</a> to |credential|'s
+                <a attribute for="PasswordCredential">`password`</a>.
 
             2.  Set |stored|'s {{CredentialUserData/name}} to |credential|'s
                 {{CredentialUserData/name}}.
@@ -1204,13 +1223,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
             ::  |credential|'s {{CredentialUserData/iconURL}}
             :   {{Credential/[[origin]]}}
             ::  |credential|'s {{Credential/[[origin]]}}
-            :   {{PasswordCredential/[[password]]}}
-            ::  |credential|'s {{PasswordCredential/[[password]]}}
+            :   <a attribute for="PasswordCredential">`password`</a>
+            ::  |credential|'s <a attribute for="PasswordCredential">`password`</a>
 
-            Note: Ancillary properties like {{PasswordCredential/idName}},
-            {{PasswordCredential/passwordName}}, and {{PasswordCredential/additionalData}}
-            are _not_ stored in the [=credential store=]. They are used for a single
-            authentication event, and are expected to be populated at request time.
   </ol>
 
   <h4 algorithm id="construct-passwordcredential-form">
@@ -1231,11 +1246,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     3.  Let |elements| be a list of all the [=submittable elements=] whose [=form owner=] is |form|, in [=tree order=].
 
-    4.  Let |idName| and |passwordName| be empty strings.
+    4.  Let |newPasswordObserved| be `false`.
 
-    5.  Let |newPasswordObserved| be `false`.
-
-    6.  For each |field| in |elements|, run the following steps:
+    5.  For each |field| in |elements|, run the following steps:
 
         1.  If |field| does not have an <{input/autocomplete}> attribute, then skip to the next
             |field|.
@@ -1256,15 +1269,13 @@ spec:url; type:dfn; text:urlencoded byte serializer
                     :   "<a attr-value>`new-password`</a>"
                     ::  Set |data|'s {{PasswordCredentialData/password}} member's
                         value to the result of executing |formData|'s
-                        {{FormData/get()}} method on |name|, |passwordName| to
-                        |name|, and |newPasswordObserved| to `true`.
+                        {{FormData/get()}} method on |name|, and |newPasswordObserved| to `true`.
 
                     :   "<a attr-value>`current-password`</a>"
                     ::  If |newPasswordObserved| is `false`,
                         set |data|'s {{PasswordCredentialData/password}} member's
                         value to the result of executing |formData|'s
-                        {{FormData/get()}} method on |name|, and |passwordName| to
-                        |name|.
+                        {{FormData/get()}} method on |name|.
 
                         Note: By checking that |newPasswordObserved| is `false`,
                         `new-password` fields take precedence over
@@ -1284,37 +1295,16 @@ spec:url; type:dfn; text:urlencoded byte serializer
                     :   "<a attr-value>`username`</a>"
                     ::  Set |data|'s {{CredentialData/id}} member's value to the
                         result of executing |formData|'s {{FormData/get()}} method
-                        on |name|, and |idName| to |name|.
+                        on |name|.
 
-    7.  Let |c| be the result of executing <a abstract-op>Create a `PasswordCredential` from
+    6.  Let |c| be the result of executing <a abstract-op>Create a `PasswordCredential` from
         `PasswordCredentialData`</a> on |data|.
      
-    8.  If |c| is an [=exception=], return |c|.
+    7.  If |c| is an [=exception=], return |c|.
 
-    9.  Assert: |c| is a {{PasswordCredential}}.
+    8.  Assert: |c| is a {{PasswordCredential}}.
 
-    8.  Set |c|'s {{PasswordCredential/idName}} attribute to |idName|.
-
-    9.  Set |c|'s {{PasswordCredential/passwordName}} attribute to |passwordName|.
-
-    10. If |form|'s <{form/enctype}> is "`multipart/form-data`", then:
-       
-        1.  Set |c|'s {{PasswordCredential/additionalData}} attribute to |formData|.
-
-        Otherwise:
-
-        1.  Let |params| be a new {{URLSearchParams}} object.
-
-        2.  For each |entry| in |formData|'s <a for="FormData">entries</a>:
-
-            1.  If |entry|'s <a for="entry">type</a> is "file", <a for="iteration">continue</a>.
-
-            2.  Execute |params| {{URLSearchParams/append()}} method on |entry|'s [=entry/name=] and
-                [=entry/value=].
-
-        3.  Set |c|'s {{PasswordCredential/additionalData}} attribute to |params|.
-
-    11. Return |c|.
+    9.  Return |c|.
   </ol>
 
   <h4 algorithm id="construct-passwordcredential-data">
@@ -1334,18 +1324,14 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     3.  Set |c|'s properties as follows:
     
-        :   {{PasswordCredential/[[password]]}} slot
+        :   <a attribute for="PasswordCredential">`password`</a>
         ::  |data|'s {{PasswordCredentialData/password}} member's value
         :   {{Credential/id}}
         ::  |data|'s {{CredentialData/id}} member's value
-        :   {{PasswordCredential/idName}}
-        ::  "`username`"
         :   {{CredentialUserData/iconURL}}
         ::  |data|'s {{PasswordCredentialData/iconURL}} member's value
         :   {{CredentialUserData/name}}
         ::  |data|'s {{PasswordCredentialData/name}} member's value
-        :   {{PasswordCredential/passwordName}}
-        ::  "`password`"
         :   {{Credential/[[origin]]}}
         ::  The [=environment settings object/origin=] of the [=current settings object=].
 
@@ -1365,235 +1351,6 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
   2.  Return "`Does Not Match`".
 
-  ## Integration with Fetch ## {#fetch-integration}
-  
-  In order to actually authenticate a user, {{PasswordCredential}} objects may
-  be submitted to a server for evaluation. To prevent the risk that sensitive
-  credential information will be exposed directly to a page's JavaScript (see
-  [[#passwords-cross-origin-leakage]]), we hide the credential information in
-  non-web-exposed slots on the {{PasswordCredential}} object, and extract them
-  during {{fetch()}} in ways that will remain opaque to anything other than the
-  remote (same-origin) server.
-
-  {{PasswordCredential}} objects may be bound to a {{Request}} by passing them
-  into the {{Request}} constructor as the "`credentials`" member of a
-  {{RequestInit}} object:
- 
-  <pre class="example">
-    [ Given a `PasswordCredential` named 'c' ]
-    var init = {
-      method: "POST",
-      credentials: c
-    };
-    var r = new Request("https://example.com/endpoint", init);
-  </pre>
-
-  Note: The credential information will be transmitted as the request's body,
-  just as it would be for a form submission. This means that the "`method`"
-  cannot be "`GET`".
-
-  Until the request hits the network, the credential object will be hidden from
-  JavaScript. Once the user agent determines that the {{Request}} is going to
-  hit the network (that is, once Fetch hits the
-  "<a>HTTP-network-or-cache fetch</a>" algorithm), the {{PasswordCredential}}
-  will be serialized into a body and content type as defined in
-  [[#body-extraction]], and the request will proceed out to the server-side
-  authentication endpoint.
-
-  ### Monkey Patches to Fetch ### {#monkey-patching}
-
-  To accomplish the above, Fetch could be modified in the following ways:
-
-  1.  A <a>request</a> has an associated <dfn for="request">attached
-      credential</dfn> (null, or a {{PasswordCredential}}). Unless stated
-      otherwise, it is null.
-
-  2.  A <a>request</a>'s <a for="request">credentials mode</a> gains a new
-      "`password`" value, which implies the same behavior as "`include`", with
-      the additional assertion that the <a>request</a> has a non-null
-      <a for="request">attached credential</a> which will be serialized into
-      its <a for="request">body</a> when it hits the network.
-      
-  3.  The {{RequestCredentials}} enum is renamed to "`RequestCredentialsMode`,
-      and likewise updated with the new "`password`" value:
-
-      <pre class="idl">
-        enum RequestCredentialsMode { "omit", "same-origin", "include", "password" };
-      </pre>
-
-  4.  The {{RequestInit}} dictionary is updated to accept a
-      {{PasswordCredential}} as its `credentials` member:
-
-      <pre class="idl">
-        typedef (<a>PasswordCredential</a> or RequestCredentials) CredentialInfo;
-
-        partial dictionary RequestInit {
-          CredentialInfo credentials;
-        };
-      </pre>
-
-  5.  Replace step 20 of the current {{Request}} constructor with the following:
-
-      20. If |credentials| is non-null:
-
-          1.  If |credentials| is a {{PasswordCredential}}, then set |request|'s
-              <a for="request">credentials mode</a> to "`password`", and
-              |request|'s <a for="request">attached credential</a> to
-              |credentials|.
-
-              Otherwise, set |request|'s <a for="request">credentials mode</a>
-              to |credentials|.
-
-  6.  Replace step 32 of the current {{Request}} constructor with the following:
-
-      32. If |request|'s <a for="request">method</a> is `GET` or `HEAD`, then
-          throw a {{TypeError}} [=exception=] if any of the following are true:
-
-          *   <var ignore>init</var>'s `body` member is present and non-null
-          *   <var ignore>inputBody</var> is non-null
-          *   |request|'s <a for="request">attached credential</a> is non-null
-
-  7.  The <a>HTTP-network-or-cache fetch</a> algorithm is updated with the
-      following step after the existing step 2:
-
-      3.  If |httpRequest|'s <a for="request">attached credential</a> is not
-          null, run these substeps:
-
-          1.  Assert: |httpRequest|'s <a for="request">body</a> is null.
-
-          2.  Let |body| and |type| be the result of running
-              [[#body-extraction]] on |httpRequest|.
-
-          3.  If |type| is the empty string, return a <a>network error</a>.
-
-          4.  Let |httpRequest|'s <a for="request">body</a> be |body|,
-              <var ignore>Content-Type</var> be |type|, and <a for="request">redirect
-              mode</a> be "`manual`".
-
-  ISSUE(whatwg/fetch#237): These patches are combined into a pull request against Fetch.
-
-  <h4 id="body-extraction" algorithm>
-    Extract a |body| and |Content-Type| for |request|'s attached credential
-  </h4>
-
-  Given a {{Request}} (|request|), this algorithm returns a {{Body}} (|body|) and
-  a string (|Content-Type|):
-
-  1.  Let |credential| be |request|'s <a>attached credential</a>.
-
-  2.  Let |body| be a new <a for="request">body</a>, and |Content-Type| be the empty string.
-
-  3.  If |credential| is a {{PasswordCredential}}, run these substeps.
-
-      1.  If |request|'s <a for="request">url</a>'s scheme is not the same as
-          |request|'s <a for="request">client</a>'s {{URL/origin}}'s scheme,
-          or |request|'s <a for="request">url</a>'s host's <a>registerable
-          domain</a> is not the same as |request|'s
-          <a for="request">client</a>'s {{URL/origin}}'s host's <a>registerable
-          domain</a>, then skip the remaining substeps.
-
-      2.  Let |data| be a copy of |credential|'s
-          {{PasswordCredential/additionalData}} attribute if it is not
-          `undefined`, and a new {{FormData}} object otherwise.
-
-      3.  Let |list| be an empty list.
-
-      4.  If |data| is a {{FormData}} object, then:
-
-          1.  Set |list| to a copy of |data|'s <a for="FormData">entries</a>.
-
-          2.  Remove all <a>entry</a> objects from |list| whose
-              <a for="entry">name</a> is either |credential|'s
-              {{PasswordCredential/idName}} or |credential|'s
-              {{PasswordCredential/passwordName}}.
-
-          3.  Let |entry| be a new <a>entry</a> whose <a for="entry">name</a>
-              is |credential|'s {{PasswordCredential/idName}} and whose
-              <a for="entry">value</a> is |credential|'s {{Credential/id}}.
-
-          4.  Append |entry| to |list|.
-
-          5.  Let |entry| be a new <a>entry</a> whose <a for="entry">name</a>
-              is |credential|'s {{PasswordCredential/passwordName}} and whose
-              <a for="entry">value</a> is |credential|'s {{[[password]]}}.
-
-          6.  Append |entry| to |list|.
-
-          7.  Push the result of running the <a>`multipart/form-data` encoding
-              algorithm</a>, with |list| as the form data set and with "`utf-8`" as
-              the explicit character encoding, to |body|'s
-              <a for="body">stream</a>.
-
-          8.  Set |Content-Type| to `multipart/form-data;boundary=`, followed by the
-              <a>`multipart/form-data` boundary string</a> generated by the
-              multipart/form-data encoding algorithm.
-
-          Otherwise |data| is a {{URLSearchParams}} object, so:
-
-          1.  Set |list| to a copy of |data|'s
-              <a for="URLSearchParams">list</a>.
-
-          2.  Remove all name-value pairs from |list| whose name is either
-              |credential|'s {{PasswordCredential/idName}} or |credential|'s
-              {{PasswordCredential/passwordName}}.
-
-          3.  Append a new name-value pair to |list| whose name is 
-              |credential|'s {{PasswordCredential/idName}} and whose value is
-              |credential|'s {{Credential/id}}.
-
-          4.  Append a new name-value pair to |list| whose name is 
-              |credential|'s {{PasswordCredential/passwordName}} and whose value
-              is |credential|'s {{[[password]]}}.
-
-          5.  Push the result of running the <a>urlencoded byte serializer</a> with |list|, to
-              |body|'s <a for="body">stream</a>.
-
-          6.  Set |Content-Type| to
-              `application/x-www-form-urlencoded;charset=UTF-8`.
-
-  4.  Return |body| and |Content-Type|. 
-
-  ## Security Considerations ## {#passwords-security}
-
-  ### Cross-origin Credential Leakage ### {#passwords-cross-origin-leakage}
-
-  Credentials are sensitive information, and user agents need to exercise caution in determining
-  when they can be safely shared with a website. The safest option is to restrict credential
-  sharing to the exact origin on which they were saved. That is likely too restrictive for the
-  web, however: consider sites which divide functionality into subdomains like `example.com` vs
-  `admin.example.com`.
-
-  As a compromise between annoying users, and securing their credentials, user agents:
-
-  1.  MUST NOT share credentials between origins whose scheme components represent a downgrade in
-      security. That is, it may make sense to allow credentials saved on `http://example.com/` to
-      be made available to `https://example.com/` (in order to encourage developers to migrate to
-      secure transport), but the inverse would be dangerous.
-
-  2.  MAY use the Public Suffix List [[!PSL]] to determine the effective scope of a credential by
-      comparing the [=registerable domain=] of the credential's {{Credential/[[origin]]}} with the
-      origin in which {{CredentialsContainer/get()}} is called. That is: credentials saved on
-      `https://admin.example.com/` and `https://example.com/` MAY be offered to users when
-      {{CredentialsContainer/get()}} is called from `https://www.example.com/`, and vice versa.
-
-  3.  MUST NOT offer credentials to an origin in response to {{CredentialsContainer/get()}} without
-      [=user mediation=] if the credential's origin is not an exact match for the calling origin.
-      That is, {{Credential}} objects for `https://example.com` would not be returned directly to
-      `https://www.example.com`, but could be offered to the user via the chooser.
-
-  {{PasswordCredential}}s further mitigate the risk of data leakage by never exposing the
-  {{[[password]]}} slot directly to a page's JavaScript, but only allowing its submission to a
-  same-origin server-side endpoint via {{fetch()}}.
-
-  ### Same-origin Leakage ### {#passwords-same-origin-leakage}
-
-  Cross-site scripting attacks could make it possible to exploit {{PasswordCredential}}'s
-  integration with {{fetch()}} in order to leak credential information via a vulnerable
-  same-origin endpoint. To mitigate this kind of risk, authors SHOULD set a reasonable Content
-  Security Policy which restricts the kinds of content which can execute in their sites' context
-  [[CSP]]. Moreover, authors should ensure that both <a>`script-src`</a> and <a>`object-src`</a>
-  directives are set in any policy they specify in order to ensure that only trusted script is
-  executed on a page with access to a user's credentials.
 </section>
 
 <!--
@@ -1961,17 +1718,46 @@ spec:url; type:dfn; text:urlencoded byte serializer
 <section>
   # Security and Privacy Considerations # {#security-and-privacy}
 
-  ## Credential Leakage ## {#security-leakage}
+  The following sections represent guidelines for various security and privacy considerations.
+  Individual credential types may enforce stricter or more relaxed versions of these guidelines.
+
+  ## Cross-domain credential access ## {#security-credential-access}
 
   Credentials are sensitive information, and user agents need to exercise caution in determining
-  when they can be safely shared with a website. Likewise, developers would be well-advised to take
+  when they can be safely shared with a website. The safest option is to restrict credential
+  sharing to the exact origin on which they were saved. That is likely too restrictive for the
+  web, however: consider sites which divide functionality into subdomains like `example.com` vs
+  `admin.example.com`.
+
+  As a compromise between annoying users, and securing their credentials, user agents:
+
+  1.  MUST NOT share credentials between origins whose scheme components represent a downgrade in
+      security. That is, it may make sense to allow credentials saved on `http://example.com/` to
+      be made available to `https://example.com/` (in order to encourage developers to migrate to
+      secure transport), but the inverse would be dangerous.
+
+  2.  MAY use the Public Suffix List [[!PSL]] to determine the effective scope of a credential by
+      comparing the [=registerable domain=] of the credential's {{Credential/[[origin]]}} with the
+      origin in which {{CredentialsContainer/get()}} is called. That is: credentials saved on
+      `https://admin.example.com/` and `https://example.com/` MAY be offered to users when
+      {{CredentialsContainer/get()}} is called from `https://www.example.com/`, and vice versa.
+
+  3.  MUST NOT offer credentials to an origin in response to {{CredentialsContainer/get()}} without
+      [=user mediation=] if the credential's origin is not an exact match for the calling origin.
+      That is, {{Credential}} objects for `https://example.com` would not be returned directly to
+      `https://www.example.com`, but could be offered to the user via the chooser.
+
+  ## Credential Leakage ## {#security-leakage}
+
+  Developers are well-advised to take
   some precautions to mitigate the risk that a cross-site scripting attack could turn into
-  persistent access to a user's account by by setting a reasonable Content Security Policy [[!CSP]]
+  persistent access to a user's account by setting a reasonable Content Security Policy [[!CSP]]
   which restricts the endpoints to which data can be sent. In particular, developers should ensure
   that the following directives are set, explicitly or implicitly, in their pages' policies:
 
   *   <a>`script-src`</a> and <a>`object-src`</a> both restrict script execution on a page, making
-      it less likely that a cross-site scripting attack will succeed in the first place.
+      it less likely that a cross-site scripting attack will succeed in the first place. If sites
+      are populating <{form}> elements, also <a>`form-action`</a> directives should be set.
 
   *   <a>`connect-src`</a> restricts the origins to which {{fetch()}} may submit data (which
       mitigates the risk that credentials could be exfiltrated to `evil.com`.
@@ -2081,6 +1867,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
   ISSUE(w3c/webappsec#290): Add some thoughts here about when and how the API
   should be used, especially with regard to {{CredentialRequestOptions/mediation}}.
+
+  ISSUE: Describe encoding restrictions of submitting credentials by {{fetch()}} with
+  a {{FormData}} body.
 
   ## Extension Points ## {#implementation-extension}
 
