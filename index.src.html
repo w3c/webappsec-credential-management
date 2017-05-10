@@ -1067,7 +1067,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
      Exposed=Window,
      SecureContext]
     interface PasswordCredential : Credential {
-      attribute USVString password;
+      readonly attribute USVString password;
     };
     PasswordCredential implements CredentialUserData;
 
@@ -1081,7 +1081,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     :   {{Credential/[[type]]}}
     ::  The {{PasswordCredential}} [=interface object=] has an internal slot named `[[type]]` whose
-        value is "<dfn const id="password-const">`password`</dfn>".
+        value is "<dfn const for="Credential/[[type]]">`password`</dfn>".
 
     :   {{Credential/[[discovery]]}}
     ::  The {{PasswordCredential}} [=interface object=] has an internal slot named `[[discovery]]`

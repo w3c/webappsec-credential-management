@@ -1423,7 +1423,7 @@ pre.idl.highlight { color: #708090; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-05-04">4 May 2017</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-05-09">9 May 2017</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -2318,7 +2318,7 @@ store user credentials for future use.</p>
       // a basic login form.
       return;
     }
-    if (credential.<a class="idl-code" data-link-type="attribute" href="#dom-credential-type" id="ref-for-dom-credential-type-2">type</a> == '<a class="idl-code" data-link-type="const" href="#password-const" id="ref-for-password-const-1">password</a>') {
+    if (credential.<a class="idl-code" data-link-type="attribute" href="#dom-credential-type" id="ref-for-dom-credential-type-2">type</a> == '<a class="idl-code" data-link-type="const" href="#dom-credential-type-password" id="ref-for-dom-credential-type-password-1">password</a>') {
       var form = new FormData();
       form.append('username_field', credential.id);
       form.append('password_field', credential.password);
@@ -2465,7 +2465,7 @@ store user credentials for future use.</p>
  <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<span class="n">Window</span>,
  <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>]
 <span class="kt">interface</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="passwordcredential">PasswordCredential</dfn> : <a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential-36">Credential</a> {
-  <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString"><span class="kt">USVString</span></a> <a class="nv idl-code" data-link-type="attribute" data-type="USVString" href="#dom-passwordcredential-password" id="ref-for-dom-passwordcredential-password-1">password</a>;
+  <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString"><span class="kt">USVString</span></a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="USVString" href="#dom-passwordcredential-password" id="ref-for-dom-passwordcredential-password-1">password</a>;
 };
 <a class="n" data-link-type="idl-name" href="#passwordcredential" id="ref-for-passwordcredential-5">PasswordCredential</a> <span class="kt">implements</span> <a class="n" data-link-type="idl-name" href="#credentialuserdata" id="ref-for-credentialuserdata-1">CredentialUserData</a>;
 
@@ -2474,13 +2474,13 @@ store user credentials for future use.</p>
 };
 </pre>
     <dl>
-     <dt data-md=""><dfn class="dfn-paneled idl-code" data-dfn-for="PasswordCredential" data-dfn-type="attribute" data-export="" id="dom-passwordcredential-password">password</dfn>, <span> of type <a data-link-type="idl-name" href="https://heycam.github.io/webidl/#idl-USVString">USVString</a></span>
+     <dt data-md=""><dfn class="dfn-paneled idl-code" data-dfn-for="PasswordCredential" data-dfn-type="attribute" data-export="" id="dom-passwordcredential-password">password</dfn>, <span> of type <a data-link-type="idl-name" href="https://heycam.github.io/webidl/#idl-USVString">USVString</a>, readonly</span>
      <dd data-md="">
       <p>This attribute represents the password of the credential.</p>
      <dt data-md=""><code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot-4">[[type]]</a></code>
      <dd data-md="">
       <p>The <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-6">PasswordCredential</a></code> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a> has an internal slot named <code>[[type]]</code> whose
-  value is "<dfn class="dfn-paneled idl-code" data-dfn-for="PasswordCredential" data-dfn-type="const" data-export="" id="password-const"><code>password</code></dfn>".</p>
+  value is "<dfn class="dfn-paneled idl-code" data-dfn-for="Credential/[[type]]" data-dfn-type="const" data-export="" id="dom-credential-type-password"><code>password</code></dfn>".</p>
      <dt data-md=""><code class="idl"><a data-link-type="idl" href="#dom-credential-discovery-slot" id="ref-for-dom-credential-discovery-slot-2">[[discovery]]</a></code>
      <dd data-md="">
       <p>The <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-7">PasswordCredential</a></code> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a> has an internal slot named <code>[[discovery]]</code> whose value is "<code class="idl"><a data-link-type="idl" href="#dom-credential-discovery-credential-store" id="ref-for-dom-credential-discovery-credential-store-2">credential store</a></code>".</p>
@@ -3342,7 +3342,7 @@ partial dictionary CredentialCreationOptions {
     <ul>
      <li><a href="#dom-credentialrequestoptions-password">dict-member for CredentialRequestOptions</a><span>, in §3.2</span>
      <li><a href="#dom-passwordcredential-password">attribute for PasswordCredential</a><span>, in §3.2</span>
-     <li><a href="#password-const">const for PasswordCredential</a><span>, in §3.2</span>
+     <li><a href="#dom-credential-type-password">const for Credential/[[type]]</a><span>, in §3.2</span>
      <li><a href="#dom-passwordcredentialdata-password">dict-member for PasswordCredentialData</a><span>, in §3.2</span>
      <li><a href="#dom-credentialcreationoptions-password">dict-member for CredentialCreationOptions</a><span>, in §3.2</span>
     </ul>
@@ -3614,7 +3614,7 @@ partial dictionary CredentialCreationOptions {
  <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed">Exposed</a>=<span class="n">Window</span>,
  <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>]
 <span class="kt">interface</span> <a class="nv" href="#passwordcredential">PasswordCredential</a> : <a class="n" data-link-type="idl-name" href="#credential">Credential</a> {
-  <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString"><span class="kt">USVString</span></a> <a class="nv idl-code" data-link-type="attribute" data-type="USVString" href="#dom-passwordcredential-password">password</a>;
+  <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString"><span class="kt">USVString</span></a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="USVString" href="#dom-passwordcredential-password">password</a>;
 };
 <a class="n" data-link-type="idl-name" href="#passwordcredential">PasswordCredential</a> <span class="kt">implements</span> <a class="n" data-link-type="idl-name" href="#credentialuserdata">CredentialUserData</a>;
 
@@ -4191,10 +4191,10 @@ partial dictionary CredentialCreationOptions {
     Create a PasswordCredential from PasswordCredentialData </a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="password-const">
-   <b><a href="#password-const">#password-const</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="dom-credential-type-password">
+   <b><a href="#dom-credential-type-password">#dom-credential-type-password</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-password-const-1">3.1.1. Password-based Sign-in</a>
+    <li><a href="#ref-for-dom-credential-type-password-1">3.1.1. Password-based Sign-in</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-passwordcredential-passwordcredential">
