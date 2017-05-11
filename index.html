@@ -1423,7 +1423,7 @@ pre.idl.highlight { color: #708090; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-05-09">9 May 2017</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-05-11">11 May 2017</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1512,7 +1512,7 @@ store user credentials for future use.</p>
         <li><a href="#algorithm-collect-known"><span class="secno">2.5.2</span> <span class="content">Collect <code>Credential</code>s from the credential store</span></a>
         <li><a href="#algorithm-store"><span class="secno">2.5.3</span> <span class="content">Store a <code>Credential</code></span></a>
         <li><a href="#algorithm-create"><span class="secno">2.5.4</span> <span class="content">Create a <code>Credential</code></span></a>
-        <li><a href="#algorithm-require-mediation"><span class="secno">2.5.5</span> <span class="content">Require User Mediation</span></a>
+        <li><a href="#algorithm-require-mediation"><span class="secno">2.5.5</span> <span class="content">Prevent Silent Access</span></a>
        </ol>
      </ol>
     <li>
@@ -1840,7 +1840,7 @@ store user credentials for future use.</p>
   <span class="kt">Promise</span>&lt;<a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential-21">Credential</a>?> <a class="nv idl-code" data-link-type="method" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-1">get</a>(<span class="kt">optional</span> <a class="n" data-link-type="idl-name" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-3">CredentialRequestOptions</a> <a class="nv idl-code" data-link-type="argument" href="#dom-credentialscontainer-get-options-options" id="ref-for-dom-credentialscontainer-get-options-options-1">options</a>);
   <span class="kt">Promise</span>&lt;<a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential-22">Credential</a>> <a class="nv idl-code" data-link-type="method" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store-2">store</a>(<a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential-23">Credential</a> <a class="nv idl-code" data-link-type="argument" href="#dom-credentialscontainer-store-credential-credential" id="ref-for-dom-credentialscontainer-store-credential-credential-1">credential</a>);
   <span class="kt">Promise</span>&lt;<a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential-24">Credential</a>?> <a class="nv idl-code" data-link-type="method" href="#dom-credentialscontainer-create" id="ref-for-dom-credentialscontainer-create-1">create</a>(<span class="kt">optional</span> <a class="n" data-link-type="idl-name" href="#dictdef-credentialcreationoptions" id="ref-for-dictdef-credentialcreationoptions-2">CredentialCreationOptions</a> <a class="nv idl-code" data-link-type="argument" href="#dom-credentialscontainer-create-options-options" id="ref-for-dom-credentialscontainer-create-options-options-1">options</a>);
-  <span class="kt">Promise</span>&lt;<span class="kt">void</span>> <a class="nv idl-code" data-link-type="method" href="#dom-credentialscontainer-requireusermediation" id="ref-for-dom-credentialscontainer-requireusermediation-1">requireUserMediation</a>();
+  <span class="kt">Promise</span>&lt;<span class="kt">void</span>> <a class="nv idl-code" data-link-type="method" href="#dom-credentialscontainer-preventsilentaccess" id="ref-for-dom-credentialscontainer-preventsilentaccess-1">preventSilentAccess</a>();
 };
 
 <span class="kt">dictionary</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-credentialdata">CredentialData</dfn> {
@@ -1918,15 +1918,17 @@ store user credentials for future use.</p>
         <td>The options used to create a <code>Credential</code>. 
      </table>
      <dl>
-      <dt data-md=""><dfn class="dfn-paneled idl-code" data-dfn-for="CredentialsContainer" data-dfn-type="method" data-export="" id="dom-credentialscontainer-requireusermediation">requireUserMediation()</dfn>
+      <dt data-md=""><dfn class="dfn-paneled idl-code" data-dfn-for="CredentialsContainer" data-dfn-type="method" data-export="" id="dom-credentialscontainer-preventsilentaccess">preventSilentAccess()</dfn>
       <dd data-md="">
-       <p>When <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-requireusermediation" id="ref-for-dom-credentialscontainer-requireusermediation-2">requireUserMediation()</a></code> is called, the user agent MUST return
-  the result of executing <a data-link-type="abstract-op" href="#abstract-opdef-require-user-mediation" id="ref-for-abstract-opdef-require-user-mediation-1">Require user mediation</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object">current settings
+       <p>When <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-preventsilentaccess" id="ref-for-dom-credentialscontainer-preventsilentaccess-2">preventSilentAccess()</a></code> is called, the user agent MUST return
+  the result of executing <a data-link-type="abstract-op" href="#abstract-opdef-prevent-silent-access" id="ref-for-abstract-opdef-prevent-silent-access-1">Prevent Silent Access</a> on the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object">current settings
   object</a>.</p>
        <p class="note" role="note"><span>Note:</span> The intent here is a signal from the origin that the user has signed out. That
   is, after a click on a "Sign out" button, the site updates the user’s session info, and
-  calls <code>navigator.credentials.requireUserMediation()</code>. This toggles the <a data-link-type="dfn" href="#origin-requires-user-mediation-flag" id="ref-for-origin-requires-user-mediation-flag-1"><code>requires user mediation</code> flag</a>, meaning that credentials will not be automagically handed back to the
+  calls <code>navigator.credentials.preventSilentAccess()</code>. This toggles the <a data-link-type="dfn" href="#origin-requires-user-mediation-flag" id="ref-for-origin-requires-user-mediation-flag-1"><code>requires user mediation</code> flag</a>, meaning that credentials will not be automagically handed back to the
   page next time the user visits.</p>
+       <p class="note" role="note"><span>Note:</span> This function used to be called <code>requireUserNavigation()</code> which
+  should be considered deprecated.</p>
      </dl>
     </dl>
     <div class="algorithm" data-algorithm="create credentialscontainer"> When a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/webappapis.html#navigator">Navigator</a></code> object (<var>navigator</var>) is created, the user agent MUST create a
@@ -2034,7 +2036,7 @@ store user credentials for future use.</p>
       <p>The user agent will not hand over credentials without <a data-link-type="dfn" href="#user-mediated" id="ref-for-user-mediated-4">user mediation</a>, even if the <a data-link-type="dfn" href="#origin-requires-user-mediation" id="ref-for-origin-requires-user-mediation-2">requires user mediation</a> flag is unset for an origin.</p>
       <p class="note" role="note"><span>Note:</span> This requirement is intended to support <a href="#example-mediation-require">reauthentication</a> or <a href="#example-mediation-switch">user-switching</a> scenarios. Further, the requirement is tied
   to a specific operation, and does not affect the <a data-link-type="dfn" href="#origin-requires-user-mediation" id="ref-for-origin-requires-user-mediation-3">requires user mediation</a> flag for the
-  origin. To set that flag, developers should call <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-requireusermediation" id="ref-for-dom-credentialscontainer-requireusermediation-3">requireUserMediation()</a></code>.</p>
+  origin. To set that flag, developers should call <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-preventsilentaccess" id="ref-for-dom-credentialscontainer-preventsilentaccess-3">preventSilentAccess()</a></code>.</p>
     </dl>
     <h5 class="heading settled" data-level="2.3.2.1" id="mediation-examples"><span class="secno">2.3.2.1. </span><span class="content">Examples</span><a class="self-link" href="#mediation-examples"></a></h5>
     <div class="example" id="example-mediation-silent">
@@ -2278,8 +2280,8 @@ store user credentials for future use.</p>
      <li data-md="">
       <p>Return <var>p</var>.</p>
     </ol>
-    <h4 class="heading settled algorithm" data-algorithm="Require User Mediation" data-level="2.5.5" id="algorithm-require-mediation"><span class="secno">2.5.5. </span><span class="content">Require User Mediation</span><a class="self-link" href="#algorithm-require-mediation"></a></h4>
-    <p>The <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export="" id="abstract-opdef-require-user-mediation">Require user mediation</dfn> algorithm accepts an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object">environment settings
+    <h4 class="heading settled algorithm" data-algorithm="Prevent Silent Access" data-level="2.5.5" id="algorithm-require-mediation"><span class="secno">2.5.5. </span><span class="content">Prevent Silent Access</span><a class="self-link" href="#algorithm-require-mediation"></a></h4>
+    <p>The <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export="" id="abstract-opdef-prevent-silent-access">Prevent Silent Access</dfn> algorithm accepts an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object">environment settings
   object</a> (<var>settings</var>), and returns a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise">Promise</a></code> which resolves once the <code>requires user mediation</code> flag is persisted to the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-11">credential store</a>.</p>
     <ol class="algorithm">
      <li data-md="">
@@ -3062,7 +3064,7 @@ store user credentials for future use.</p>
     <h3 class="heading settled" data-level="6.6" id="security-signout"><span class="secno">6.6. </span><span class="content">Signing-Out</span><a class="self-link" href="#security-signout"></a></h3>
     <p>If a user has chosen to automatically sign-in to websites, as discussed in <a href="#user-mediation-requirement">§5.2 Requiring User Mediation</a>, then the user agent will provide credentials to an origin
   whenever it asks for them. The website can instruct the user agent to suppress this behavior by
-  calling <code class="idl"><a data-link-type="idl" href="#credentialscontainer" id="ref-for-credentialscontainer-6">CredentialsContainer</a></code>'s <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-requireusermediation" id="ref-for-dom-credentialscontainer-requireusermediation-4">requireUserMediation()</a></code> method, which
+  calling <code class="idl"><a data-link-type="idl" href="#credentialscontainer" id="ref-for-credentialscontainer-6">CredentialsContainer</a></code>'s <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-preventsilentaccess" id="ref-for-dom-credentialscontainer-preventsilentaccess-4">preventSilentAccess()</a></code> method, which
   will turn off automatic sign-in for a given origin.</p>
     <p>The user agent relies on the website to do the right thing; an inattentive (or malicious) website
   could simply neglect to call this method, causing the user agent to continue providing credentials
@@ -3351,6 +3353,8 @@ partial dictionary CredentialCreationOptions {
    <li><a href="#dictdef-passwordcredentialdata">PasswordCredentialData</a><span>, in §3.2</span>
    <li><a href="#dom-passwordcredential-passwordcredential">PasswordCredential(form)</a><span>, in §3.2</span>
    <li><a href="#typedefdef-passwordcredentialinit">PasswordCredentialInit</a><span>, in §3.2</span>
+   <li><a href="#dom-credentialscontainer-preventsilentaccess">preventSilentAccess()</a><span>, in §2.3</span>
+   <li><a href="#abstract-opdef-prevent-silent-access">Prevent Silent Access</a><span>, in §2.5.5</span>
    <li>
     protocol
     <ul>
@@ -3371,8 +3375,6 @@ partial dictionary CredentialCreationOptions {
    <li><a href="#dom-credentialmediationrequirement-required">required</a><span>, in §2.3.2</span>
    <li><a href="#origin-requires-user-mediation">requires user mediation</a><span>, in §2.1</span>
    <li><a href="#origin-requires-user-mediation-flag">requires user mediation flag</a><span>, in §2.1</span>
-   <li><a href="#dom-credentialscontainer-requireusermediation">requireUserMediation()</a><span>, in §2.3</span>
-   <li><a href="#abstract-opdef-require-user-mediation">Require user mediation</a><span>, in §2.5.5</span>
    <li><a href="#abstract-opdef-credential-store-retrieve-a-list-of-credentials">Retrieve a list of credentials</a><span>, in §2.1</span>
    <li><a href="#dom-credentialmediationrequirement-silent">silent</a><span>, in §2.3.2</span>
    <li><a href="#dom-credentialscontainer-store">store()</a><span>, in §2.3</span>
@@ -3587,7 +3589,7 @@ partial dictionary CredentialCreationOptions {
   <span class="kt">Promise</span>&lt;<a class="n" data-link-type="idl-name" href="#credential">Credential</a>?> <a class="nv idl-code" data-link-type="method" href="#dom-credentialscontainer-get">get</a>(<span class="kt">optional</span> <a class="n" data-link-type="idl-name" href="#dictdef-credentialrequestoptions">CredentialRequestOptions</a> <a class="nv idl-code" data-link-type="argument" href="#dom-credentialscontainer-get-options-options">options</a>);
   <span class="kt">Promise</span>&lt;<a class="n" data-link-type="idl-name" href="#credential">Credential</a>> <a class="nv idl-code" data-link-type="method" href="#dom-credentialscontainer-store">store</a>(<a class="n" data-link-type="idl-name" href="#credential">Credential</a> <a class="nv idl-code" data-link-type="argument" href="#dom-credentialscontainer-store-credential-credential">credential</a>);
   <span class="kt">Promise</span>&lt;<a class="n" data-link-type="idl-name" href="#credential">Credential</a>?> <a class="nv idl-code" data-link-type="method" href="#dom-credentialscontainer-create">create</a>(<span class="kt">optional</span> <a class="n" data-link-type="idl-name" href="#dictdef-credentialcreationoptions">CredentialCreationOptions</a> <a class="nv idl-code" data-link-type="argument" href="#dom-credentialscontainer-create-options-options">options</a>);
-  <span class="kt">Promise</span>&lt;<span class="kt">void</span>> <a class="nv idl-code" data-link-type="method" href="#dom-credentialscontainer-requireusermediation">requireUserMediation</a>();
+  <span class="kt">Promise</span>&lt;<span class="kt">void</span>> <a class="nv idl-code" data-link-type="method" href="#dom-credentialscontainer-preventsilentaccess">preventSilentAccess</a>();
 };
 
 <span class="kt">dictionary</span> <a class="nv" href="#dictdef-credentialdata">CredentialData</a> {
@@ -3715,7 +3717,7 @@ partial dictionary CredentialCreationOptions {
     <li><a href="#ref-for-concept-credential-store-7">2.2.1. Credential Internal Methods</a> <a href="#ref-for-concept-credential-store-8">(2)</a>
     <li><a href="#ref-for-concept-credential-store-9">2.3. navigator.credentials</a>
     <li><a href="#ref-for-concept-credential-store-10">2.5.3. Store a Credential</a>
-    <li><a href="#ref-for-concept-credential-store-11">2.5.5. Require User Mediation</a> <a href="#ref-for-concept-credential-store-12">(2)</a>
+    <li><a href="#ref-for-concept-credential-store-11">2.5.5. Prevent Silent Access</a> <a href="#ref-for-concept-credential-store-12">(2)</a>
     <li><a href="#ref-for-concept-credential-store-13">3.1.1. Password-based Sign-in</a>
     <li><a href="#ref-for-concept-credential-store-14">3.3.1. 
     PasswordCredential's [[CollectFromCredentialStore]](options) </a> <a href="#ref-for-concept-credential-store-15">(2)</a>
@@ -3744,7 +3746,7 @@ partial dictionary CredentialCreationOptions {
    <b><a href="#origin-requires-user-mediation-flag">#origin-requires-user-mediation-flag</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-origin-requires-user-mediation-flag-1">2.3. navigator.credentials</a>
-    <li><a href="#ref-for-origin-requires-user-mediation-flag-2">2.5.5. Require User Mediation</a>
+    <li><a href="#ref-for-origin-requires-user-mediation-flag-2">2.5.5. Prevent Silent Access</a>
     <li><a href="#ref-for-origin-requires-user-mediation-flag-3">5.2. Requiring User Mediation</a> <a href="#ref-for-origin-requires-user-mediation-flag-4">(2)</a> <a href="#ref-for-origin-requires-user-mediation-flag-5">(3)</a> <a href="#ref-for-origin-requires-user-mediation-flag-6">(4)</a>
     <li><a href="#ref-for-origin-requires-user-mediation-flag-7">6.6. Signing-Out</a>
    </ul>
@@ -4021,12 +4023,12 @@ partial dictionary CredentialCreationOptions {
     <li><a href="#ref-for-dom-credentialscontainer-create-options-options-1">2.3. navigator.credentials</a> <a href="#ref-for-dom-credentialscontainer-create-options-options-2">(2)</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="dom-credentialscontainer-requireusermediation">
-   <b><a href="#dom-credentialscontainer-requireusermediation">#dom-credentialscontainer-requireusermediation</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="dom-credentialscontainer-preventsilentaccess">
+   <b><a href="#dom-credentialscontainer-preventsilentaccess">#dom-credentialscontainer-preventsilentaccess</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-credentialscontainer-requireusermediation-1">2.3. navigator.credentials</a> <a href="#ref-for-dom-credentialscontainer-requireusermediation-2">(2)</a>
-    <li><a href="#ref-for-dom-credentialscontainer-requireusermediation-3">2.3.2. Mediation Requirements</a>
-    <li><a href="#ref-for-dom-credentialscontainer-requireusermediation-4">6.6. Signing-Out</a>
+    <li><a href="#ref-for-dom-credentialscontainer-preventsilentaccess-1">2.3. navigator.credentials</a> <a href="#ref-for-dom-credentialscontainer-preventsilentaccess-2">(2)</a>
+    <li><a href="#ref-for-dom-credentialscontainer-preventsilentaccess-3">2.3.2. Mediation Requirements</a>
+    <li><a href="#ref-for-dom-credentialscontainer-preventsilentaccess-4">6.6. Signing-Out</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dictdef-credentialrequestoptions">
@@ -4143,10 +4145,10 @@ partial dictionary CredentialCreationOptions {
     <li><a href="#ref-for-abstract-opdef-create-a-credential-1">2.3. navigator.credentials</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="abstract-opdef-require-user-mediation">
-   <b><a href="#abstract-opdef-require-user-mediation">#abstract-opdef-require-user-mediation</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="abstract-opdef-prevent-silent-access">
+   <b><a href="#abstract-opdef-prevent-silent-access">#abstract-opdef-prevent-silent-access</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-abstract-opdef-require-user-mediation-1">2.3. navigator.credentials</a>
+    <li><a href="#ref-for-abstract-opdef-prevent-silent-access-1">2.3. navigator.credentials</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="passwordcredential">

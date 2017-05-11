@@ -378,7 +378,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
       Promise&lt;Credential?&gt; get(optional CredentialRequestOptions options);
       Promise&lt;Credential&gt; store(Credential credential);
       Promise&lt;Credential?&gt; create(optional CredentialCreationOptions options);
-      Promise&lt;void&gt; requireUserMediation();
+      Promise&lt;void&gt; preventSilentAccess();
     };
 
     dictionary CredentialData {
@@ -414,16 +414,19 @@ spec:url; type:dfn; text:urlencoded byte serializer
           options: The options used to create a `Credential`.
         </pre>
     
-    :   <dfn method>requireUserMediation()</dfn>
-    ::  When {{CredentialsContainer/requireUserMediation()}} is called, the user agent MUST return
-        the result of executing <a abstract-op>Require user mediation</a> on the <a>current settings
+    :   <dfn method>preventSilentAccess()</dfn>
+    ::  When {{CredentialsContainer/preventSilentAccess()}} is called, the user agent MUST return
+        the result of executing <a abstract-op>Prevent Silent Access</a> on the <a>current settings
         object</a>.
   
         Note: The intent here is a signal from the origin that the user has signed out. That
         is, after a click on a "Sign out" button, the site updates the user's session info, and
-        calls `navigator.credentials.requireUserMediation()`. This toggles the <a>`requires user
+        calls `navigator.credentials.preventSilentAccess()`. This toggles the <a>`requires user
         mediation` flag</a>, meaning that credentials will not be automagically handed back to the
         page next time the user visits.
+
+        Note: This function used to be called `requireUserMediation()` which should be considered
+        deprecated.
   </dl>
 
   <div algorithm="create credentialscontainer">
@@ -555,7 +558,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
         Note: This requirement is intended to support [reauthentication](#example-mediation-require)
         or [user-switching](#example-mediation-switch) scenarios. Further, the requirement is tied
         to a specific operation, and does not affect the [=requires user mediation=] flag for the
-        origin. To set that flag, developers should call {{requireUserMediation()}}.
+        origin. To set that flag, developers should call {{preventSilentAccess()}}.
   </dl>
 
   #### Examples #### {#mediation-examples}
@@ -836,9 +839,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
     7.  Return |p|.
   </ol>
 
-  <h4 id="algorithm-require-mediation" algorithm>Require User Mediation</h4>
+  <h4 id="algorithm-require-mediation" algorithm>Prevent Silent Access</h4>
 
-  The <dfn abstract-op>Require user mediation</dfn> algorithm accepts an [=environment settings
+  The <dfn abstract-op>Prevent Silent Access</dfn> algorithm accepts an [=environment settings
   object=] (|settings|), and returns a {{Promise}} which resolves once the `requires user mediation`
   flag is persisted to the [=credential store=].
 
@@ -1806,7 +1809,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   If a user has chosen to automatically sign-in to websites, as discussed in
   [[#user-mediation-requirement]], then the user agent will provide credentials to an origin
   whenever it asks for them. The website can instruct the user agent to suppress this behavior by
-  calling {{CredentialsContainer}}'s {{CredentialsContainer/requireUserMediation()}} method, which
+  calling {{CredentialsContainer}}'s {{CredentialsContainer/preventSilentAccess()}} method, which
   will turn off automatic sign-in for a given origin.
 
   The user agent relies on the website to do the right thing; an inattentive (or malicious) website
