@@ -1423,7 +1423,7 @@ pre.idl.highlight { color: #708090; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-05-11">11 May 2017</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-05-22">22 May 2017</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1927,8 +1927,8 @@ store user credentials for future use.</p>
   is, after a click on a "Sign out" button, the site updates the user’s session info, and
   calls <code>navigator.credentials.preventSilentAccess()</code>. This toggles the <a data-link-type="dfn" href="#origin-requires-user-mediation-flag" id="ref-for-origin-requires-user-mediation-flag-1"><code>requires user mediation</code> flag</a>, meaning that credentials will not be automagically handed back to the
   page next time the user visits.</p>
-       <p class="note" role="note"><span>Note:</span> This function used to be called <code>requireUserNavigation()</code> which
-  should be considered deprecated.</p>
+       <p class="note" role="note"><span>Note:</span> This function used to be called <code>requireUserMediation()</code> which should be considered
+  deprecated.</p>
      </dl>
     </dl>
     <div class="algorithm" data-algorithm="create credentialscontainer"> When a <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/webappapis.html#navigator">Navigator</a></code> object (<var>navigator</var>) is created, the user agent MUST create a
