@@ -217,8 +217,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
       [=credential=], and overwrites the state of an existing [=credential=] in the
       [=credential store=].
 
-  Additionally, the [=credential store=] should maintain a <dfn for="origin">`requires user
-  mediation` flag</dfn> for [=origins=] (which is set to `true` unless otherwise specified).
+  Additionally, the [=credential store=] should maintain a <dfn for="origin">`prevent silent
+  access` flag</dfn> for [=origins=] (which is set to `true` unless otherwise specified).
   An origin <dfn for="origin">requires user mediation</dfn> if its flag is set to `true`.
 
   Note: The importance of user mediation is discussed in more detail in [[#user-mediation]].
@@ -421,8 +421,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
   
         Note: The intent here is a signal from the origin that the user has signed out. That
         is, after a click on a "Sign out" button, the site updates the user's session info, and
-        calls `navigator.credentials.preventSilentAccess()`. This toggles the <a>`requires user
-        mediation` flag</a>, meaning that credentials will not be automagically handed back to the
+        calls `navigator.credentials.preventSilentAccess()`. This toggles the <a>`prevent silent
+        access` flag</a>, meaning that credentials will not be automagically handed back to the
         page next time the user visits.
 
         Note: This function used to be called `requireUserMediation()` which should be considered
@@ -553,11 +553,11 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     :   <dfn>required</dfn>
     ::  The user agent will not hand over credentials without [=user mediation=], even if the
-        [=requires user mediation=] flag is unset for an origin.
+        [=prevent silent access flag=] is unset for an origin.
 
         Note: This requirement is intended to support [reauthentication](#example-mediation-require)
         or [user-switching](#example-mediation-switch) scenarios. Further, the requirement is tied
-        to a specific operation, and does not affect the [=requires user mediation=] flag for the
+        to a specific operation, and does not affect the [=prevent silent access flag=] for the
         origin. To set that flag, developers should call {{preventSilentAccess()}}.
   </dl>
 
@@ -842,7 +842,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   <h4 id="algorithm-require-mediation" algorithm>Prevent Silent Access</h4>
 
   The <dfn abstract-op>Prevent Silent Access</dfn> algorithm accepts an [=environment settings
-  object=] (|settings|), and returns a {{Promise}} which resolves once the `requires user mediation`
+  object=] (|settings|), and returns a {{Promise}} which resolves once the `prevent silent access`
   flag is persisted to the [=credential store=].
 
   <ol class="algorithm">
@@ -852,7 +852,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     3.  Run the following seps [=in parallel=]:
 
-        1.  Set |origin|'s <a>`requires user mediation` flag</a> in the [=credential store=].
+        1.  Set |origin|'s <a>`prevent silent access` flag</a> in the [=credential store=].
 
         2.  [=Resolve=] |p| with `undefined`.
 
@@ -1594,9 +1594,10 @@ spec:url; type:dfn; text:urlencoded byte serializer
   mediated=] actions will involve presenting the user some sort of UI, and asking them to make a
   decision.
 
-  An action is <dfn export>unmediated</dfn> if it takes place without explicit user consent. For
-  example, if a user configures their browser to grant persistent credential access to a particular
-  origin, credentials may be provided without presenting the user with a UI requesting a decision.
+  An action is <dfn export>unmediated</dfn> or <dfn export>silent</dfn> if it takes place without
+  explicit user consent. For example, if a user configures their browser to grant persistent
+  credential access to a particular origin, credentials may be provided without presenting the user
+  with a UI requesting a decision.
 
   Here we'll spell out a few requirements that hold for all credential types, but note that there's
   a good deal of latitude left up to the user agent (which is in a priviliged position to assist
@@ -1626,10 +1627,10 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
   ## Requiring User Mediation ## {#user-mediation-requirement}
 
-  By default, [=user mediation=] is required for all [=origins=], as the relevant [=requires user
-  mediation flag=] in the [=credential store=] is set to `true`. Users MAY choose to grant an
+  By default, [=user mediation=] is required for all [=origins=], as the relevant [=prevent silent
+  access flag=] in the [=credential store=] is set to `true`. Users MAY choose to grant an
   origin persistent access to credentials (perhaps in the form of a "Stay signed into this site."
-  option), which would set this flag to `true`. In this case, the user would always be signed into
+  option), which would set this flag to `false`. In this case, the user would always be signed into
   that site, which is desirable from the perspective of usability and convinience, but which
   might nevertheless have surprising implications (consider a user agent which syncs this flag's
   state across devices, for instance).
@@ -1638,10 +1639,10 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
   1.  User agents MUST allow users to require [=user mediation=] for a given origin or for all
       origins. This functionality might be implemented as a global toggle that overrides each
-      origin's <a>`requires user mediation` flag</a> to return `false`, or via more granular
+      origin's <a>`prevent silent access` flag</a> to return `false`, or via more granular
       settings for specific origins (or specific credentials on specific origins).
 
-  2.  User agents MUST NOT set an [=origin=]'s <a>`requires user mediation` flag</a> to
+  2.  User agents MUST NOT set an [=origin=]'s <a>`prevent silent access` flag</a> to
       `false` without [=user mediation=]. For example, the [=credential chooser=] described in
       [[#user-mediated-selection]] could have a checkbox which the user could toggle to mark a
       credential as available without mediation for the origin, or the user agent could have an
@@ -1651,7 +1652,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
       form of an icon in the address bar, or some similar location.
 
   4.  If a user clears her browsing data for an origin (cookies, localStorage, and so on), the user
-      agent MUST set the <a>`requires user mediation` flag</a> to `false` for that origin.
+      agent MUST set the <a>`prevent silent access` flag</a> to `true` for that origin.
 
   ## Credential Selection ## {#user-mediated-selection}
 
@@ -1819,7 +1820,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   the authentication.
 
   The user MUST have some control over this behavior. As noted in [[#user-mediation-requirement]],
-  clearing cookies for an origin will also reset that origin's <a>`requires user mediation` flag</a>
+  clearing cookies for an origin will also reset that origin's <a>`prevent silent access` flag</a>
   the [=credential store=] to `true`. Additionally, the user agent SHOULD provide some UI affordance
   for disabling automatic sign-in for a particular origin. This could be tied to the notification
   that credentials have been provided to an origin, for example.
