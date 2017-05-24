@@ -421,7 +421,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   
         Note: The intent here is a signal from the origin that the user has signed out. That
         is, after a click on a "Sign out" button, the site updates the user's session info, and
-        calls `navigator.credentials.preventSilentAccess()`. This toggles the <a>`prevent silent
+        calls `navigator.credentials.preventSilentAccess()`. This sets the <a>`prevent silent
         access` flag</a>, meaning that credentials will not be automagically handed back to the
         page next time the user visits.
 
@@ -839,7 +839,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     7.  Return |p|.
   </ol>
 
-  <h4 id="algorithm-require-mediation" algorithm>Prevent Silent Access</h4>
+  <h4 id="algorithm-prevent-silent-access" algorithm>Prevent Silent Access</h4>
 
   The <dfn abstract-op>Prevent Silent Access</dfn> algorithm accepts an [=environment settings
   object=] (|settings|), and returns a {{Promise}} which resolves once the `prevent silent access`
@@ -1594,10 +1594,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
   mediated=] actions will involve presenting the user some sort of UI, and asking them to make a
   decision.
 
-  An action is <dfn export>unmediated</dfn> or <dfn export>silent</dfn> if it takes place without
-  explicit user consent. For example, if a user configures their browser to grant persistent
-  credential access to a particular origin, credentials may be provided without presenting the user
-  with a UI requesting a decision.
+  An action is unmediated if it takes place silently, without explicit user consent. For example,
+  if a user configures their browser to grant persistent credential access to a particular origin,
+  credentials may be provided without presenting the user with a UI requesting a decision.
 
   Here we'll spell out a few requirements that hold for all credential types, but note that there's
   a good deal of latitude left up to the user agent (which is in a priviliged position to assist

@@ -1512,7 +1512,7 @@ store user credentials for future use.</p>
         <li><a href="#algorithm-collect-known"><span class="secno">2.5.2</span> <span class="content">Collect <code>Credential</code>s from the credential store</span></a>
         <li><a href="#algorithm-store"><span class="secno">2.5.3</span> <span class="content">Store a <code>Credential</code></span></a>
         <li><a href="#algorithm-create"><span class="secno">2.5.4</span> <span class="content">Create a <code>Credential</code></span></a>
-        <li><a href="#algorithm-require-mediation"><span class="secno">2.5.5</span> <span class="content">Prevent Silent Access</span></a>
+        <li><a href="#algorithm-prevent-silent-access"><span class="secno">2.5.5</span> <span class="content">Prevent Silent Access</span></a>
        </ol>
      </ol>
     <li>
@@ -1925,7 +1925,7 @@ store user credentials for future use.</p>
   object</a>.</p>
        <p class="note" role="note"><span>Note:</span> The intent here is a signal from the origin that the user has signed out. That
   is, after a click on a "Sign out" button, the site updates the user’s session info, and
-  calls <code>navigator.credentials.preventSilentAccess()</code>. This toggles the <a data-link-type="dfn" href="#origin-prevent-silent-access-flag" id="ref-for-origin-prevent-silent-access-flag-1"><code>prevent silent access</code> flag</a>, meaning that credentials will not be automagically handed back to the
+  calls <code>navigator.credentials.preventSilentAccess()</code>. This sets the <a data-link-type="dfn" href="#origin-prevent-silent-access-flag" id="ref-for-origin-prevent-silent-access-flag-1"><code>prevent silent access</code> flag</a>, meaning that credentials will not be automagically handed back to the
   page next time the user visits.</p>
        <p class="note" role="note"><span>Note:</span> This function was previously called <code>requireUserMediation()</code> which should be considered
   deprecated.</p>
@@ -2280,7 +2280,7 @@ store user credentials for future use.</p>
      <li data-md="">
       <p>Return <var>p</var>.</p>
     </ol>
-    <h4 class="heading settled algorithm" data-algorithm="Prevent Silent Access" data-level="2.5.5" id="algorithm-require-mediation"><span class="secno">2.5.5. </span><span class="content">Prevent Silent Access</span><a class="self-link" href="#algorithm-require-mediation"></a></h4>
+    <h4 class="heading settled algorithm" data-algorithm="Prevent Silent Access" data-level="2.5.5" id="algorithm-prevent-silent-access"><span class="secno">2.5.5. </span><span class="content">Prevent Silent Access</span><a class="self-link" href="#algorithm-prevent-silent-access"></a></h4>
     <p>The <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export="" id="abstract-opdef-prevent-silent-access">Prevent Silent Access</dfn> algorithm accepts an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object">environment settings
   object</a> (<var>settings</var>), and returns a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise">Promise</a></code> which resolves once the <code>prevent silent access</code> flag is persisted to the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store-11">credential store</a>.</p>
     <ol class="algorithm">
@@ -2903,10 +2903,9 @@ store user credentials for future use.</p>
   user’s direct interaction with a <a data-link-type="dfn" href="#credential-chooser" id="ref-for-credential-chooser-9">credential chooser</a> interface, for example. In general, <a data-link-type="dfn" href="#user-mediated" id="ref-for-user-mediated-9">user
   mediated</a> actions will involve presenting the user some sort of UI, and asking them to make a
   decision.</p>
-    <p>An action is <dfn data-dfn-type="dfn" data-export="" id="unmediated">unmediated<a class="self-link" href="#unmediated"></a></dfn> or <dfn data-dfn-type="dfn" data-export="" id="silent">silent<a class="self-link" href="#silent"></a></dfn> if it takes place without
-  explicit user consent. For example, if a user configures their browser to grant persistent
-  credential access to a particular origin, credentials may be provided without presenting the user
-  with a UI requesting a decision.</p>
+    <p>An action is unmediated if it takes place silently, without explicit user consent. For example,
+  if a user configures their browser to grant persistent credential access to a particular origin,
+  credentials may be provided without presenting the user with a UI requesting a decision.</p>
     <p>Here we’ll spell out a few requirements that hold for all credential types, but note that there’s
   a good deal of latitude left up to the user agent (which is in a priviliged position to assist
   the user). Moreover, specific credential types may have distinct requirements that exceed the
@@ -3377,12 +3376,7 @@ partial dictionary CredentialCreationOptions {
    <li><a href="#dom-credentialmediationrequirement-required">required</a><span>, in §2.3.2</span>
    <li><a href="#origin-requires-user-mediation">requires user mediation</a><span>, in §2.1</span>
    <li><a href="#abstract-opdef-credential-store-retrieve-a-list-of-credentials">Retrieve a list of credentials</a><span>, in §2.1</span>
-   <li>
-    silent
-    <ul>
-     <li><a href="#dom-credentialmediationrequirement-silent">enum-value for CredentialMediationRequirement</a><span>, in §2.3.2</span>
-     <li><a href="#silent">definition of</a><span>, in §5</span>
-    </ul>
+   <li><a href="#dom-credentialmediationrequirement-silent">silent</a><span>, in §2.3.2</span>
    <li><a href="#dom-credentialscontainer-store">store()</a><span>, in §2.3</span>
    <li><a href="#abstract-opdef-credential-store-store-a-credential">Store a credential</a><span>, in §2.1</span>
    <li><a href="#abstract-opdef-store-a-credential">Store a Credential</a><span>, in §2.5.3</span>
@@ -3396,7 +3390,6 @@ partial dictionary CredentialCreationOptions {
     </ul>
    <li><a href="#dom-credential-type">type</a><span>, in §2.2</span>
    <li><a href="#dom-credential-type-slot">[[type]]</a><span>, in §2.2</span>
-   <li><a href="#unmediated">unmediated</a><span>, in §5</span>
    <li><a href="#user-mediated">user mediated</a><span>, in §5</span>
    <li><a href="#user-mediated">user mediation</a><span>, in §5</span>
   </ul>
