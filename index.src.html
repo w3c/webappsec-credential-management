@@ -1126,7 +1126,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     typedef (PasswordCredentialData or HTMLFormElement) PasswordCredentialInit;
 
     partial dictionary CredentialCreationOptions {
-      PasswordCredentialInit? password;
+      PasswordCredentialInit password;
     };
   </pre>
 
@@ -1386,7 +1386,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     };
 
     partial dictionary CredentialRequestOptions {
-      FederatedCredentialRequestOptions? federated;
+      FederatedCredentialRequestOptions federated;
     };
   </pre>
   <dl dfn-for="FederatedCredential">
@@ -1430,7 +1430,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     };
 
     partial dictionary CredentialCreationOptions {
-      FederatedCredentialInit? federated;
+      FederatedCredentialInit federated;
     };
   </pre>
 
@@ -1941,7 +1941,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
           };
 
           partial dictionary CredentialRequestOptions {
-            ExampleCredentialRequestOptions? example;
+            ExampleCredentialRequestOptions example;
           };
         </pre>
       </div>
@@ -1956,7 +1956,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
           };
 
           partial dictionary CredentialCreationOptions {
-            ExampleCredentialInit? example;
+            ExampleCredentialInit example;
           };
         </pre>
       </div>

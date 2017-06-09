@@ -1424,7 +1424,7 @@ pre.idl.highlight { color: #708090; }
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-05-24">24 May 2017</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-06-08">8 June 2017</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -2520,7 +2520,7 @@ store user credentials for future use.</p>
 <span class="kt">typedef</span> (<a class="n" data-link-type="idl-name" href="#dictdef-passwordcredentialdata" id="ref-for-dictdef-passwordcredentialdata-4">PasswordCredentialData</a> <span class="kt">or</span> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">HTMLFormElement</a>) <dfn class="nv dfn-paneled idl-code" data-dfn-type="typedef" data-export="" id="typedefdef-passwordcredentialinit"><code>PasswordCredentialInit</code></dfn>;
 
 <span class="kt">partial</span> <span class="kt">dictionary</span> <a class="nv idl-code" data-link-type="dictionary" href="#dictdef-credentialcreationoptions" id="ref-for-dictdef-credentialcreationoptions-6">CredentialCreationOptions</a> {
-  <a class="n" data-link-type="idl-name" href="#typedefdef-passwordcredentialinit" id="ref-for-typedefdef-passwordcredentialinit-1">PasswordCredentialInit</a>? <dfn class="nv dfn-paneled idl-code" data-dfn-for="CredentialCreationOptions" data-dfn-type="dict-member" data-export="" data-type="PasswordCredentialInit? " id="dom-credentialcreationoptions-password"><code>password</code></dfn>;
+  <a class="n" data-link-type="idl-name" href="#typedefdef-passwordcredentialinit" id="ref-for-typedefdef-passwordcredentialinit-1">PasswordCredentialInit</a> <dfn class="nv dfn-paneled idl-code" data-dfn-for="CredentialCreationOptions" data-dfn-type="dict-member" data-export="" data-type="PasswordCredentialInit " id="dom-credentialcreationoptions-password"><code>password</code></dfn>;
 };
 </pre>
     <p><code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential-9">PasswordCredential</a></code> objects are <a data-link-type="dfn" href="#credential-origin-bound" id="ref-for-credential-origin-bound-1">origin bound</a>.</p>
@@ -2741,7 +2741,7 @@ store user credentials for future use.</p>
 };
 
 <span class="kt">partial</span> <span class="kt">dictionary</span> <a class="nv idl-code" data-link-type="dictionary" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-14">CredentialRequestOptions</a> {
-  <a class="n" data-link-type="idl-name" href="#dictdef-federatedcredentialrequestoptions" id="ref-for-dictdef-federatedcredentialrequestoptions-1">FederatedCredentialRequestOptions</a>? <dfn class="nv dfn-paneled idl-code" data-dfn-for="CredentialRequestOptions" data-dfn-type="dict-member" data-export="" data-type="FederatedCredentialRequestOptions? " id="dom-credentialrequestoptions-federated"><code>federated</code></dfn>;
+  <a class="n" data-link-type="idl-name" href="#dictdef-federatedcredentialrequestoptions" id="ref-for-dictdef-federatedcredentialrequestoptions-1">FederatedCredentialRequestOptions</a> <dfn class="nv dfn-paneled idl-code" data-dfn-for="CredentialRequestOptions" data-dfn-type="dict-member" data-export="" data-type="FederatedCredentialRequestOptions " id="dom-credentialrequestoptions-federated"><code>federated</code></dfn>;
 };
 </pre>
     <dl>
@@ -2781,7 +2781,7 @@ store user credentials for future use.</p>
 };
 
 <span class="kt">partial</span> <span class="kt">dictionary</span> <a class="nv idl-code" data-link-type="dictionary" href="#dictdef-credentialcreationoptions" id="ref-for-dictdef-credentialcreationoptions-9">CredentialCreationOptions</a> {
-  <a class="n" data-link-type="idl-name" href="#dictdef-federatedcredentialinit" id="ref-for-dictdef-federatedcredentialinit-4">FederatedCredentialInit</a>? <dfn class="nv dfn-paneled idl-code" data-dfn-for="CredentialCreationOptions" data-dfn-type="dict-member" data-export="" data-type="FederatedCredentialInit? " id="dom-credentialcreationoptions-federated"><code>federated</code></dfn>;
+  <a class="n" data-link-type="idl-name" href="#dictdef-federatedcredentialinit" id="ref-for-dictdef-federatedcredentialinit-4">FederatedCredentialInit</a> <dfn class="nv dfn-paneled idl-code" data-dfn-for="CredentialCreationOptions" data-dfn-type="dict-member" data-export="" data-type="FederatedCredentialInit " id="dom-credentialcreationoptions-federated"><code>federated</code></dfn>;
 };
 </pre>
     <p><code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential-6">FederatedCredential</a></code> objects are <a data-link-type="dfn" href="#credential-origin-bound" id="ref-for-credential-origin-bound-2">origin bound</a>.</p>
@@ -3149,27 +3149,27 @@ interface ExampleCredential : Credential {
      <li data-md="">
       <p>Extend <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions-17">CredentialRequestOptions</a></code> with the options the new credential type needs to respond
   reasonably to <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get-26">get()</a></code>:</p>
-      <div class="example" id="example-980172a4">
-       <a class="self-link" href="#example-980172a4"></a> 
+      <div class="example" id="example-f0110d62">
+       <a class="self-link" href="#example-f0110d62"></a> 
 <pre>dictionary ExampleCredentialRequestOptions {
   // Definition goes here.
 };
 
 partial dictionary CredentialRequestOptions {
-  ExampleCredentialRequestOptions? example;
+  ExampleCredentialRequestOptions example;
 };
 </pre>
       </div>
      <li data-md="">
       <p>Extend <code class="idl"><a data-link-type="idl" href="#dictdef-credentialcreationoptions" id="ref-for-dictdef-credentialcreationoptions-11">CredentialCreationOptions</a></code> with the data the new credential type needs to create <code>Credential</code> objects in response to <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-create" id="ref-for-dom-credentialscontainer-create-7">create()</a></code>:</p>
-      <div class="example" id="example-33f35cae">
-       <a class="self-link" href="#example-33f35cae"></a> 
+      <div class="example" id="example-17ce7fc3">
+       <a class="self-link" href="#example-17ce7fc3"></a> 
 <pre>dictionary ExampleCredentialInit {
   // Definition goes here.
 };
 
 partial dictionary CredentialCreationOptions {
-  ExampleCredentialInit? example;
+  ExampleCredentialInit example;
 };
 </pre>
       </div>
@@ -3621,7 +3621,7 @@ partial dictionary CredentialCreationOptions {
 <span class="kt"><span class="kt">typedef</span></span> (<a class="n" data-link-type="idl-name" href="#dictdef-passwordcredentialdata"><span class="n">PasswordCredentialData</span></a> <span class="kt"><span class="kt">or</span></span> <a class="n" data-link-type="idl-name" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement"><span class="n">HTMLFormElement</span></a>) <a class="nv" href="#typedefdef-passwordcredentialinit"><code><span class="nv">PasswordCredentialInit</span></code></a>;
 
 <span class="kt"><span class="kt">partial</span></span> <span class="kt"><span class="kt">dictionary</span></span> <a class="nv idl-code" data-link-type="dictionary" href="#dictdef-credentialcreationoptions"><span class="nv">CredentialCreationOptions</span></a> {
-  <a class="n" data-link-type="idl-name" href="#typedefdef-passwordcredentialinit"><span class="n">PasswordCredentialInit</span></a>? <a class="nv" data-type="PasswordCredentialInit? " href="#dom-credentialcreationoptions-password"><code><span class="nv">password</span></code></a>;
+  <a class="n" data-link-type="idl-name" href="#typedefdef-passwordcredentialinit"><span class="n">PasswordCredentialInit</span></a> <a class="nv" data-type="PasswordCredentialInit " href="#dom-credentialcreationoptions-password"><code><span class="nv">password</span></code></a>;
 };
 
 [<a class="nv idl-code" data-link-type="constructor" href="#dom-federatedcredential-federatedcredential"><span class="nv">Constructor</span></a>(<a class="n" data-link-type="idl-name" href="#dictdef-federatedcredentialinit"><span class="n">FederatedCredentialInit</span></a> <a class="nv" href="#dom-federatedcredential-federatedcredential-data-data"><code><span class="nv">data</span></code></a>),
@@ -3639,7 +3639,7 @@ partial dictionary CredentialCreationOptions {
 };
 
 <span class="kt"><span class="kt">partial</span></span> <span class="kt"><span class="kt">dictionary</span></span> <a class="nv idl-code" data-link-type="dictionary" href="#dictdef-credentialrequestoptions"><span class="nv">CredentialRequestOptions</span></a> {
-  <a class="n" data-link-type="idl-name" href="#dictdef-federatedcredentialrequestoptions"><span class="n">FederatedCredentialRequestOptions</span></a>? <a class="nv" data-type="FederatedCredentialRequestOptions? " href="#dom-credentialrequestoptions-federated"><code><span class="nv">federated</span></code></a>;
+  <a class="n" data-link-type="idl-name" href="#dictdef-federatedcredentialrequestoptions"><span class="n">FederatedCredentialRequestOptions</span></a> <a class="nv" data-type="FederatedCredentialRequestOptions " href="#dom-credentialrequestoptions-federated"><code><span class="nv">federated</span></code></a>;
 };
 
 <span class="kt"><span class="kt">dictionary</span></span> <a class="nv" href="#dictdef-federatedcredentialinit"><code><span class="nv">FederatedCredentialInit</span></code></a> : <a class="n" data-link-type="idl-name" href="#dictdef-credentialdata"><span class="n">CredentialData</span></a> {
@@ -3650,7 +3650,7 @@ partial dictionary CredentialCreationOptions {
 };
 
 <span class="kt"><span class="kt">partial</span></span> <span class="kt"><span class="kt">dictionary</span></span> <a class="nv idl-code" data-link-type="dictionary" href="#dictdef-credentialcreationoptions"><span class="nv">CredentialCreationOptions</span></a> {
-  <a class="n" data-link-type="idl-name" href="#dictdef-federatedcredentialinit"><span class="n">FederatedCredentialInit</span></a>? <a class="nv" data-type="FederatedCredentialInit? " href="#dom-credentialcreationoptions-federated"><code><span class="nv">federated</span></code></a>;
+  <a class="n" data-link-type="idl-name" href="#dictdef-federatedcredentialinit"><span class="n">FederatedCredentialInit</span></a> <a class="nv" data-type="FederatedCredentialInit " href="#dom-credentialcreationoptions-federated"><code><span class="nv">federated</span></code></a>;
 };
 
 </pre>
