@@ -236,8 +236,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
   <pre class="idl">
     [Exposed=Window, SecureContext]
     interface Credential {
-      [SameObject] readonly attribute USVString id;
-      [SameObject] readonly attribute DOMString type;
+      readonly attribute USVString id;
+      readonly attribute DOMString type;
     };
   </pre>
   <dl dfn-for="Credential">
@@ -339,8 +339,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
   <pre class="idl">
     [NoInterfaceObject, SecureContext]
     interface CredentialUserData {
-      [SameObject] readonly attribute USVString name;
-      [SameObject] readonly attribute USVString iconURL;
+      readonly attribute USVString name;
+      readonly attribute USVString iconURL;
     };
   </pre>
   <dl dfn-for="CredentialUserData">
@@ -1070,7 +1070,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
      Exposed=Window,
      SecureContext]
     interface PasswordCredential : Credential {
-      [SameObject] readonly attribute USVString password;
+      readonly attribute USVString password;
     };
     PasswordCredential implements CredentialUserData;
 
@@ -1375,8 +1375,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
      Exposed=Window,
      SecureContext]
     interface FederatedCredential : Credential {
-      [SameObject] readonly attribute USVString provider;
-      [SameObject] readonly attribute DOMString? protocol;
+      readonly attribute USVString provider;
+      readonly attribute DOMString? protocol;
     };
     FederatedCredential implements CredentialUserData;
 
