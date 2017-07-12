@@ -284,8 +284,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
   defines several internal methods that allow retrieval and storage of {{Credential}} objects:
 
   <section algorithm="'collect credentials' internal method">
-    <dfn for="Credential" method export>\[[CollectFromCredentialStore]](options)</dfn> is called
-    with a {{CredentialRequestOptions}}, and returns a set of {{Credential}} objects from the user
+    <dfn for="Credential" method export>\[[CollectFromCredentialStore]](origin, options)</dfn> is called
+    with an [=environment settings object/origin=] and a {{CredentialRequestOptions}}, and returns
+    a set of {{Credential}} objects from the user
     agent's [=credential store=] that match the options provided. If no matching {{Credential}}
     objects are available, the returned set will be empty.
 
@@ -295,8 +296,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
   </section>
 
   <section algorithm="'discover credentials' internal method">
-    <dfn for="Credential" method export>\[[DiscoverFromExternalSource]](options)</dfn> is called
-    with a {{CredentialRequestOptions}} object. It returns a {{Credential}} if one can be
+    <dfn for="Credential" method export>\[[DiscoverFromExternalSource]](origin, options)</dfn> is called
+    with an [=environment settings object/origin=] and a {{CredentialRequestOptions}} object. 
+    It returns a {{Credential}} if one can be
     returned given the options provided, `null` if no credential is available, or an error if
     discovery fails (for example, incorrect options could produce a {{TypeError}}). If this
     kind of {{Credential}} is only [=effective=] for a single use or a limited time, this
@@ -691,11 +693,13 @@ spec:url; type:dfn; text:urlencoded byte serializer
             [=active document=] in a [=top-level browsing context=].
 
     4.  Let |p| be [=a new promise=].
-   
-    5.  Run the following steps [=in parallel=]: 
+
+    5.  Let |origin| be the [=current settings object=]'s [=environment settings object/origin=].
+
+    6.  Run the following steps [=in parallel=]:
 
         1.  Let |credentials| be the result of <a abstract-op lt="collect local">collecting
-            `Credential`s from the credential store</a>, given |options|.
+            `Credential`s from the credential store</a>, given |origin| and |options|.
 
         2.  If |credentials| is an [=exception=], [=reject=] |p| with |credentials|.
 
@@ -704,8 +708,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
             1.  |credentials|' [=set/size=] is 1
 
-            2.  |settings|' [=environment settings object/origin=] does not
-                [=origin/requires user mediation|require user mediation=]
+            2.  |origin| does not [=origin/requires user mediation|require user mediation=]
 
             3.  |options| is <a>matchable <i lang="la">a priori</i></a>.
 
@@ -729,18 +732,19 @@ spec:url; type:dfn; text:urlencoded byte serializer
         7.  Assert: |choice| is an [=interface object=].
 
         8.  Let |result| be the result of executing |choice|'s
-            {{[[DiscoverFromExternalSource]](options)}}, given |options|.
+            {{[[DiscoverFromExternalSource]](origin, options)}}, given |origin| and |options|.
 
         9.  If |result| is a {{Credential}} or `null`, resolve |p| with |result|.
 
             Otherwise, [=reject=] |p| with |result|.
 
-    6.  Return |p|.
+    7.  Return |p|.
   </ol>
 
   <h4 id="algorithm-collect-known" algorithm>Collect `Credential`s from the credential store</h4>
 
-  Given a {{CredentialRequestOptions}} (|options|), the user agent may
+  Given an [=environment settings object/origin=] (|origin|) and
+  a {{CredentialRequestOptions}} (|options|), the user agent may
   <dfn abstract-op local-lt="collect local">collect `Credential`s from the credential store</dfn>,
   returning a set of {{Credential}} objects stored by the user agent locally that match |options|'
   filter. If no such {{Credential}} objects are known, the returned set will be empty:
@@ -751,7 +755,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
     2.  For each |interface| in |options|' <a>relevant credential interface objects</a>:
 
         1.  Let |r| be the result of executing |interface|'s
-            {{Credential/[[CollectFromCredentialStore]](options)}} internal method on |options|.
+            {{Credential/[[CollectFromCredentialStore]](origin, options)}} internal method on
+            |origin| and |options|.
 
         2.  If |r| is an [=exception=], return |r|.
 
@@ -1133,19 +1138,20 @@ spec:url; type:dfn; text:urlencoded byte serializer
   {{PasswordCredential}} objects are [=Credential/origin bound=].
 
   {{PasswordCredential}}'s [=interface object=] inherits {{Credential}}'s implementation of
-  {{Credential/[[DiscoverFromExternalSource]](options)}}, and defines its own implementation of
-  {{PasswordCredential/[[CollectFromCredentialStore]](options)}},
+  {{Credential/[[DiscoverFromExternalSource]](origin, options)}}, and defines its own implementation of
+  {{PasswordCredential/[[CollectFromCredentialStore]](origin, options)}},
   {{PasswordCredential/[[Create]](options)}}, and
   {{PasswordCredential/[[Store]](credential)}}.
 
   ## Algorithms ## {#passwordcredential-algorithms}
 
   <h4 algorithm id="collectfromcredentialstore-passwordcredential">
-    `PasswordCredential`'s `[[CollectFromCredentialStore]](options)`
+    `PasswordCredential`'s `[[CollectFromCredentialStore]](origin, options)`
   </h4>
 
-  <dfn for="PasswordCredential" method>\[[CollectFromCredentialStore]](options)</dfn> is called
-  with a {{CredentialRequestOptions}} (|options|), and returns a set of {{Credential}} objects from
+  <dfn for="PasswordCredential" method>\[[CollectFromCredentialStore]](origin, options)</dfn> is called
+  with an [=environment settings object/origin=] (|origin|) and a {{CredentialRequestOptions}} (|options|),
+  and returns a set of {{Credential}} objects from
   the [=credential store=]. If no matching {{Credential}} objects are available, the returned set
   will be empty.
 
@@ -1158,8 +1164,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
         credentials from the [=credential store=] that match the following filter:
 
         1.  The credential is a {{PasswordCredential}}
-        2.  The credential's {{Credential/[[origin]]}} is the [=same origin=] as the
-            [=current settings object=]'s [=environment settings object/origin=].
+        2.  The credential's {{Credential/[[origin]]}} is the [=same origin=] as |origin|.
   </ol>
 
   <h4 algorithm id="create-passwordcredential">
@@ -1437,13 +1442,13 @@ spec:url; type:dfn; text:urlencoded byte serializer
   {{FederatedCredential}} objects are [=Credential/origin bound=].
 
   {{FederatedCredential}}'s [=interface object=] inherits {{Credential}}'s implementation of
-  {{Credential/[[DiscoverFromExternalSource]](options)}}, and defines its own implementation of
-  {{FederatedCredential/[[CollectFromCredentialStore]](options)}},
+  {{Credential/[[DiscoverFromExternalSource]](origin, options)}}, and defines its own implementation of
+  {{FederatedCredential/[[CollectFromCredentialStore]](origin, options)}},
   {{FederatedCredential/[[Create]](options)}}, and
   {{FederatedCredential/[[Store]](credential)}}.
 
   Note: If, in the future, we teach the user agent to obtain authentication tokens on a user's
-  behalf, we could do so by building an implementation of `[[DiscoverFromExternalSource]](options)`.
+  behalf, we could do so by building an implementation of `[[DiscoverFromExternalSource]](origin, options)`.
 
   ### Identifying Providers ### {#provider-identification}
 
@@ -1468,11 +1473,12 @@ spec:url; type:dfn; text:urlencoded byte serializer
   ## Algorithms ## {#federatedcredential-algorithms}
 
   <h4 algorithm id="collectfromcredentialstore-federatedcredential">
-    `FederatedCredential`'s `[[CollectFromCredentialStore]](options)`
+    `FederatedCredential`'s `[[CollectFromCredentialStore]](origin, options)`
   </h4>
 
-  <dfn for="FederatedCredential" method>\[[CollectFromCredentialStore]](options)</dfn> is called
-  with a {{CredentialRequestOptions}} (|options|), and returns a set of {{Credential}} objects from
+  <dfn for="FederatedCredential" method>\[[CollectFromCredentialStore]](origin, options)</dfn> is called
+  with an [=environment settings object/origin=] (|origin|) and a {{CredentialRequestOptions}} (|options|),
+  and returns a set of {{Credential}} objects from
   the [=credential store=]. If no matching {{Credential}} objects are available, the returned set
   will be empty.
 
@@ -1483,8 +1489,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
         credentials from the [=credential store=] that match the following filter:
 
         1.  The credential is a {{FederatedCredential}}
-        2.  The credential's {{Credential/[[origin]]}} is the [=same origin=] as the
-            [=current settings object=]'s [=environment settings object/origin=].
+        2.  The credential's {{Credential/[[origin]]}} is the [=same origin=] as |origin|.
         3.  If |options|["{{CredentialRequestOptions/federated}}"]["{{FederatedCredentialRequestOptions/providers}}"]
             [=map/exists=], its value [=list/contains=] the credentials's {{FederatedCredential/provider}}.
         4.  If |options|["{{CredentialRequestOptions/federated}}"]["{{FederatedCredentialRequestOptions/protocols}}"]
@@ -1893,18 +1898,19 @@ spec:url; type:dfn; text:urlencoded byte serializer
       </div>
 
   2.  Define appropriate {{Credential/[[Create]](options)}},
-      {{Credential/[[CollectFromCredentialStore]](options)}},
-      {{Credential/[[DiscoverFromExternalSource]](options)}}, and
+      {{Credential/[[CollectFromCredentialStore]](origin, options)}},
+      {{Credential/[[DiscoverFromExternalSource]](origin, options)}}, and
       {{Credential/[[Store]](credential)}} methods on `ExampleCredential`'s
-      [=interface object=]. {{Credential/[[CollectFromCredentialStore]](options)}}
+      [=interface object=]. {{Credential/[[CollectFromCredentialStore]](origin, options)}}
       is appropriate for [=credentials=] that remain [=effective=] forever and
       can therefore simply be copied out of the [=credential store=], while
-      {{Credential/[[DiscoverFromExternalSource]](options)}} is appropriate for
+      {{Credential/[[DiscoverFromExternalSource]](origin, options)}} is appropriate for
       [=credentials=] that need to be re-generated from a [=credential source=].
 
       <div class="example">
-        `ExampleCredential`'s `[[CollectFromCredentialStore]](options)` internal method is called
-        with a CredentialRequestOptions object (`options`), and returns a set of {{Credential}}
+        `ExampleCredential`'s `[[CollectFromCredentialStore]](origin, options)` internal method is called
+        with an [=environment settings object/origin=] (`origin`) and a CredentialRequestOptions
+        object (`options`), and returns a set of {{Credential}}
         objects that match the options provided. If no matching {{Credential}} objects are
         available, the returned set will be empty.
 
