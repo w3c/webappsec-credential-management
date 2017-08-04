@@ -57,6 +57,7 @@ spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
 spec:html; type:dfn; for:/; text:origin
 spec:fetch; type:dfn; for:/; text:request
 spec:fetch; type:dictionary; for:/; text:RequestInit
+spec:webidl; type:interface; text:Promise
 
 <!-- These need to be exported -->
 spec:html; type:dfn; text:submittable element
@@ -240,7 +241,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
       readonly attribute DOMString type;
     };
   </pre>
-  <dl dfn-for="Credential">
+  <div dfn-for="Credential">
     :   <dfn attribute>id</dfn>
     ::  The credential's identifier. The requirements for the identifier are distinct for each type
         of [=credential=]. It might represent a username for username/password tuples, for example.
@@ -268,7 +269,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
         while the latter means that the user agent can discover credentials outside of those
         explicitly represented in the [=credential store=] via interaction with some external device
         or service.
-  </dl>
+  </div>
 
   ISSUE: Talk to Tobie/Dominic about the [=interface object=] bits, here and in
   [[#algorithm-request]], etc. I'm not sure I've gotten the terminology right. [=interface prototype
@@ -289,9 +290,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
     agent's [=credential store=] that match the options provided. If no matching {{Credential}}
     objects are available, the returned set will be empty.
 
-    <ul class="algorithm">
+    <ol class="algorithm">
       1.  Return an empty set.
-    </ul>
+    </ol>
   </section>
 
   <section algorithm="'discover credentials' internal method">
@@ -302,18 +303,18 @@ spec:url; type:dfn; text:urlencoded byte serializer
     kind of {{Credential}} is only [=effective=] for a single use or a limited time, this
     method is responsible for generating new [=credentials=] using a [=credential source=].
 
-    <ul class="algorithm">
+    <ol class="algorithm">
       1.  Return `null`.
-    </ul>
+    </ol>
   </section>
   
   <section algorithm="'store a credential' internal method">
     <dfn for="Credential" method export>\[[Store]](credential)</dfn> is called with a {{Credential}},
     and returns once {{Credential}} is persisted to the [=credential store=]:
 
-    <ul class="algorithm">
+    <ol class="algorithm">
       1.  Return.
-    </ul>
+    </ol>
   </section>
 
   <section algorithm="'create a credential' internal method">
@@ -322,9 +323,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
     `null` if no credential was created, or an error if creation fails due to exceptional situations
     (for example, incorrect options could produce a {{TypeError}}):
 
-    <ul class="algorithm">
+    <ol class="algorithm">
       1.  Return `null`.
-    </ul>
+    </ol>
   </section>
 
   Unless otherwise specified, the [=interface objects=] for [=interfaces=] which [=interface/inherit=] from
@@ -343,7 +344,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
       readonly attribute USVString iconURL;
     };
   </pre>
-  <dl dfn-for="CredentialUserData">
+  <div dfn-for="CredentialUserData">
     :   <dfn attribute>name</dfn>
     ::  A name associated with the credential, intended as a human-understandable public name for
         display in a [=credential chooser=].
@@ -351,7 +352,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     ::  A URL pointing to an image for the credential, intended for display in a
         [=credential chooser=]. This URL MUST be an <a><i lang="la">a priori</i> authenticated
         URL</a>.
-  </dl>
+  </div>
 
   ## `navigator.credentials` ## {#framework-credential-management}
 
@@ -386,7 +387,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     };
   </pre>
 
-  <dl dfn-for="CredentialsContainer">
+  <div dfn-for="CredentialsContainer">
     :   <dfn method>get(options)</dfn>
     ::  When {{CredentialsContainer/get()}} is called, the user agent MUST return the result of
         executing <a abstract-op>Request a `Credential`</a> on
@@ -427,7 +428,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
         Note: This function was previously called `requireUserMediation()` which should be considered
         deprecated.
-  </dl>
+  </div>
 
   <div algorithm="create credentialscontainer">
     When a {{Navigator}} object (|navigator|) is created, the user agent MUST create a
@@ -449,12 +450,12 @@ spec:url; type:dfn; text:urlencoded byte serializer
       CredentialMediationRequirement mediation = "optional";
     };
   </pre>
-  <dl dfn-for="CredentialRequestOptions" dfn-type="dict-member">
+  <div dfn-for="CredentialRequestOptions" dfn-type="dict-member">
     :   <dfn>mediation</dfn>
     ::  This property specifies the mediation requirements for a given credential request. The
         meaning of each enum value is described below in {{CredentialMediationRequirement}}.
         Processing details are defined in [[#algorithm-request]].
-  </dl>
+  </div>
 
   <div class="note">
     Earlier versions of this specification defined a boolean `unmediated` member. Setting that
@@ -470,7 +471,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     The <dfn for="CredentialRequestOptions">relevant credential interface objects</dfn> for a given
     {{CredentialRequestOptions}} (|options|) is a set of [=interface objects=], collected as follows:
 
-    <ol>
+    <ol class="algorithm">
       1.  Let |settings| be the <a>current settings object</a>
 
       2.  Let |interface objects| be the set of [=interface objects=] on |settings|'
@@ -499,7 +500,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     <dfn for="CredentialRequestOptions">matchable <i lang="la">a priori</i></dfn> if the following
     steps return `true`:
 
-    <ol>
+    <ol class="algorithm">
       1.  For each |interface| in |options|' [=relevant credential interface objects=]:
 
           1.  If |interface|'s {{Credential/[[discovery]]}} slot's value is not
@@ -530,7 +531,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
       "required"
     };
   </pre>
-  <dl dfn-for="CredentialMediationRequirement" dfn-type="enum-value">
+  <div dfn-for="CredentialMediationRequirement" dfn-type="enum-value">
     :   <dfn>silent</dfn>
     ::  User mediation is suppressed for the given operation. If the operation can be performed
         without user involvement, wonderful. If user involvement is necessary, then the operation
@@ -559,7 +560,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
         or [user-switching](#example-mediation-switch) scenarios. Further, the requirement is tied
         to a specific operation, and does not affect the [=prevent silent access flag=] for the
         origin. To set that flag, developers should call {{preventSilentAccess()}}.
-  </dl>
+  </div>
 
   #### Examples #### {#mediation-examples}
 
@@ -1078,7 +1079,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
       boolean password = false;
     };
   </pre>
-  <dl dfn-for="PasswordCredential">
+  <div dfn-for="PasswordCredential">
     :   <dfn attribute>password</dfn>
     ::  This attribute represents the password of the credential.
 
@@ -1109,7 +1110,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
         2.  If |r| is an [=exception=], [=throw=] |r|.
 
             Otherwise, return |r|.
-  </dl>
+  </div>
  
   {{PasswordCredential}} objects can be created via
   {{CredentialsContainer/create()|navigator.credentials.create()}}
@@ -1389,7 +1390,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
       FederatedCredentialRequestOptions federated;
     };
   </pre>
-  <dl dfn-for="FederatedCredential">
+  <div dfn-for="FederatedCredential">
     :   <dfn attribute>provider</dfn>
     ::  The credential's federated identity provider. See [[#provider-identification]] for
         details regarding valid formats.
@@ -1416,7 +1417,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
         2.  If |r| is an [=exception=], [=throw=] |r|.
 
             Otherwise, return |r|.
-  </dl>
+  </div>
 
   {{FederatedCredential}} objects can be created by passing a {{FederatedCredentialInit}} dictionary
   into {{CredentialsContainer/create()|navigator.credentials.create()}}.
