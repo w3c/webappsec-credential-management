@@ -51,7 +51,7 @@ spec: PSL; urlPrefix: https://publicsuffix.org/list/
     text: public suffix; url: #
 spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
   type: dfn
-    text: http-network-or-cache fetch; url: http-network-or-cache-fetch 
+    text: http-network-or-cache fetch; url: http-network-or-cache-fetch
 </pre>
 <pre class="link-defaults">
 spec:html; type:dfn; for:/; text:origin
@@ -297,7 +297,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
   <section algorithm="'discover credentials' internal method">
     <dfn for="Credential" method export>\[[DiscoverFromExternalSource]](origin, options)</dfn> is called
-    with an [=environment settings object/origin=] and a {{CredentialRequestOptions}} object. 
+    with an [=environment settings object/origin=] and a {{CredentialRequestOptions}} object.
     It returns a {{Credential}} if one can be
     returned given the options provided, `null` if no credential is available, or an error if
     discovery fails (for example, incorrect options could produce a {{TypeError}}). If this
@@ -308,7 +308,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
       1.  Return `null`.
     </ul>
   </section>
-  
+
   <section algorithm="'store a credential' internal method">
     <dfn for="Credential" method export>\[[Store]](credential)</dfn> is called with a {{Credential}},
     and returns once {{Credential}} is persisted to the [=credential store=]:
@@ -319,8 +319,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
   </section>
 
   <section algorithm="'create a credential' internal method">
-    <dfn for="Credential" method export>\[[Create]](options)</dfn> is called with a
-    {{CredentialCreationOptions}}, and returns either a {{Credential}}, if one can be created, 
+    <dfn for="Credential" method export>\[[Create]](origin, options)</dfn> is called with
+    with an [=environment settings object/origin=] and a
+    {{CredentialCreationOptions}}, and returns either a {{Credential}}, if one can be created,
     `null` if no credential was created, or an error if creation fails due to exceptional situations
     (for example, incorrect options could produce a {{TypeError}}):
 
@@ -400,7 +401,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     :   <dfn method lt="store(credential)|store()">store(credential)</dfn>
     ::  When {{CredentialsContainer/store()}} is called, the user agent MUST return the result of
-        executing <a abstract-op>Store a `Credential`</a> on 
+        executing <a abstract-op>Store a `Credential`</a> on
         {{CredentialsContainer/store(credential)/credential}}.
 
         <pre class="argumentdef" for="CredentialsContainer/store(credential)">
@@ -415,7 +416,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
         <pre class="argumentdef" for="CredentialsContainer/create(options)">
           options: The options used to create a `Credential`.
         </pre>
-    
+
     :   <dfn method>preventSilentAccess()</dfn>
     ::  When {{CredentialsContainer/preventSilentAccess()}} is called, the user agent MUST return
         the result of executing <a abstract-op>Prevent Silent Access</a> on the <a>current settings
@@ -832,16 +833,18 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     5.  Let |p| be [=a new promise=].
 
-    6.  Run the following steps [=in parallel=]:
+    6.  Let |origin| be the [=current settings object=]'s [=environment settings object/origin=].
 
-        1.  Let |r| be the result of executing |interfaces|[0] {{Credential/[[Create]](options)}}
-            internal method on |options|.
+    7.  Run the following steps [=in parallel=]:
+
+        1.  Let |r| be the result of executing |interfaces|[0] {{Credential/[[Create]](origin, options)}}
+            internal method given |origin| and |options|.
 
         2.  If |r| is an [=exception=], [=reject=] |p| with |r|.
 
             Otherwise, [=resolve=] |p| with |r|.
 
-    7.  Return |p|.
+    8.  Return |p|.
   </ol>
 
   <h4 id="algorithm-prevent-silent-access" algorithm>Prevent Silent Access</h4>
@@ -1140,7 +1143,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   {{PasswordCredential}}'s [=interface object=] inherits {{Credential}}'s implementation of
   {{Credential/[[DiscoverFromExternalSource]](origin, options)}}, and defines its own implementation of
   {{PasswordCredential/[[CollectFromCredentialStore]](origin, options)}},
-  {{PasswordCredential/[[Create]](options)}}, and
+  {{PasswordCredential/[[Create]](origin, options)}}, and
   {{PasswordCredential/[[Store]](credential)}}.
 
   ## Algorithms ## {#passwordcredential-algorithms}
@@ -1168,10 +1171,11 @@ spec:url; type:dfn; text:urlencoded byte serializer
   </ol>
 
   <h4 algorithm id="create-passwordcredential">
-    `PasswordCredential`'s `[[Create]](options)`
+    `PasswordCredential`'s `[[Create]](origin, options)`
   </h4>
 
-  <dfn for="PasswordCredential" method>\[[Create]](options)</dfn> is called with a
+  <dfn for="PasswordCredential" method>\[[Create]](origin, options)</dfn> is called with
+  an [=environment settings object/origin=] (|origin|) and a
   {{CredentialCreationOptions}} (|options|), and returns a {{PasswordCredential}} if one can be created,
   `null` otherwise. The {{CredentialCreationOptions}} dictionary must have a `password` member which
   holds either an {{HTMLFormElement}} or a {{PasswordCredentialData}}. If that member's value cannot be
@@ -1444,7 +1448,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   {{FederatedCredential}}'s [=interface object=] inherits {{Credential}}'s implementation of
   {{Credential/[[DiscoverFromExternalSource]](origin, options)}}, and defines its own implementation of
   {{FederatedCredential/[[CollectFromCredentialStore]](origin, options)}},
-  {{FederatedCredential/[[Create]](options)}}, and
+  {{FederatedCredential/[[Create]](origin, options)}}, and
   {{FederatedCredential/[[Store]](credential)}}.
 
   Note: If, in the future, we teach the user agent to obtain authentication tokens on a user's
@@ -1497,10 +1501,11 @@ spec:url; type:dfn; text:urlencoded byte serializer
   </ol>
 
   <h4 algorithm id="create-federatedcredential">
-    `FederatedCredential`'s `[[Create]](options)`
+    `FederatedCredential`'s `[[Create]](origin, options)`
   </h4>
 
-  <dfn for="FederatedCredential" method>\[[Create]](options)</dfn> is called with a
+  <dfn for="FederatedCredential" method>\[[Create]](origin, options)</dfn> is called with 
+  an [=environment settings object/origin=] (|origin|) and a
   {{CredentialCreationOptions}} (|options|), and returns a {{FederatedCredential}} if one can be created,
   `null` otherwise, or an [=exception=] in exceptional circumstances:
 
@@ -1897,7 +1902,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
         </pre>
       </div>
 
-  2.  Define appropriate {{Credential/[[Create]](options)}},
+  2.  Define appropriate {{Credential/[[Create]](origin, options)}},
       {{Credential/[[CollectFromCredentialStore]](origin, options)}},
       {{Credential/[[DiscoverFromExternalSource]](origin, options)}}, and
       {{Credential/[[Store]](credential)}} methods on `ExampleCredential`'s
