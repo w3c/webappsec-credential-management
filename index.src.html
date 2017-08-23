@@ -1175,7 +1175,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   </h4>
 
   <dfn for="PasswordCredential" method>\[[Create]](origin, options)</dfn> is called with
-  an [=environment settings object/origin=] (|origin|) and a
+  an [=environment settings object/origin=] (<var ignore>origin</var>) and a
   {{CredentialCreationOptions}} (|options|), and returns a {{PasswordCredential}} if one can be created,
   `null` otherwise. The {{CredentialCreationOptions}} dictionary must have a `password` member which
   holds either an {{HTMLFormElement}} or a {{PasswordCredentialData}}. If that member's value cannot be
@@ -1505,7 +1505,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   </h4>
 
   <dfn for="FederatedCredential" method>\[[Create]](origin, options)</dfn> is called with 
-  an [=environment settings object/origin=] (|origin|) and a
+  an [=environment settings object/origin=] (<var ignore>origin</var>) and a
   {{CredentialCreationOptions}} (|options|), and returns a {{FederatedCredential}} if one can be created,
   `null` otherwise, or an [=exception=] in exceptional circumstances:
 
