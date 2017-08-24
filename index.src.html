@@ -852,17 +852,23 @@ spec:css-syntax-3;
 
         3.  If |r| is a {{Credential}}, [=resolve=] |p| with |r|, and terminate these [=in parallel=] steps.
 
-        3.  Otherwise, |r| must be a [=struct=] whose [=items=] are:
+        4.  Otherwise, |r| must be a [=struct=] whose [=items=] are:
 
             :   <dfn>constructResultantCredentialCallback</dfn>
             ::  A Web IDL {{Function}} callback function type value, whose purpose is to construct 
                 an [=interface object=] derived from {{Credential}}, given [=credentialCreationDataInstance=] and 
                 |global|.
             :   <dfn>credentialCreationDataInstance</dfn>
-            ::  A [=struct=] referencing the data necessary to construct the [=credential=]-derived object.
+            ::  A [=struct=] referencing the data necessary to construct the {{credential}}-derived object.
 
-        4.  [=Queue a task=] to run [=constructResultantCredentialCallback=] given [=credentialCreationDataInstance=] and
-            |global|. [=Resolve=] |p| with its result.
+        5.  [=Queue a task=] to run [=constructResultantCredentialCallback=] given [=credentialCreationDataInstance=] and
+            |global|. Let |result| be the result. 
+
+            ISSUE: my understanding is we need to specify a [=task source=] here.  Which one should we use if so?
+
+        6.  If |result| is an [=exception=], [=reject=] |p| with |result|.
+
+        7.  If |result| is a {{Credential}}-derived object, [=resolve=] |p| with |result|.
 
     9.  Return |p|.
   </ol>
