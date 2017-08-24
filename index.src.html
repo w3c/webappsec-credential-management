@@ -57,12 +57,18 @@ spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
 spec:html; type:dfn; for:/; text:origin
 spec:fetch; type:dfn; for:/; text:request
 spec:fetch; type:dictionary; for:/; text:RequestInit
+spec:infra; type:dfn; for:/; text:set
+spec:infra; type:dfn; for:struct-item; text:items
+spec:webidl; type:idl; for:/; text:Function
 
 <!-- These need to be exported -->
 spec:html; type:dfn; text:submittable element
 spec:html; type:dfn; text:form owner
 spec:html; type:dfn; text:autofill detail tokens
 spec:url; type:dfn; text:urlencoded byte serializer
+</pre>
+<pre class='ignored-specs'>
+spec:css-syntax-3;
 </pre>
 <pre class="biblio">
 {
@@ -814,7 +820,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     2.  Assert: |settings| is a [=secure context=].
 
-    3.  Let |interfaces| be the set of |options|' <a>relevant credential interface objects</a>.
+    3.  Let |interfaces| be the [=set=] of |options|' <a>relevant credential interface objects</a>.
 
     4.  Return [=a promise rejected with=] `NotSupportedError` if any of the following statements
         are true:
@@ -837,12 +843,23 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     7.  Run the following steps [=in parallel=]:
 
-        1.  Let |r| be the result of executing |interfaces|[0] {{Credential/[[Create]](origin, options)}}
+        1.  Let |r| be the result of executing |interfaces|[0]'s {{Credential/[[Create]](origin, options)}}
             internal method given |origin| and |options|.
 
-        2.  If |r| is an [=exception=], [=reject=] |p| with |r|.
+        2.  If |r| is an [=exception=], [=reject=] |p| with |r|, and terminate these [=in parallel=] steps.
 
-            Otherwise, [=resolve=] |p| with |r|.
+        3.  If |r| is a {{Credential}}, [=resolve=] |p| with |r|, and terminate these [=in parallel=] steps.
+
+        3.  Otherwise, |r| must be a [=struct=] whose [=items=] are:
+
+            :   <dfn>constructResultantCredentialFunction</dfn>
+            ::  A Web IDL {{Function}} callback function type value, whose purpose is to construct 
+                an [=interface object=] derived from {{Credential}}, using [=credentialCreationDataInstance=].
+            :   <dfn>credentialCreationDataInstance</dfn>
+            ::  A [=struct=] comprising the data necessary to construct the [=credential=]-derived object.
+
+        4.  [=Queue a task=] to run [=constructResultantCredentialFunction=] given [=credentialCreationDataInstance=], 
+            and [=resolve=] |p| with its result.
 
     8.  Return |p|.
   </ol>
@@ -866,6 +883,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     4.  Retun |p|.
   </ol>
+
+
 </section>
 
 <!--
