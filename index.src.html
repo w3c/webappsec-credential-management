@@ -852,13 +852,13 @@ spec:css-syntax-3;
 
         3.  Otherwise, |r| must be a [=struct=] whose [=items=] are:
 
-            :   <dfn>constructResultantCredentialFunction</dfn>
+            :   <dfn>constructResultantCredentialCallback</dfn>
             ::  A Web IDL {{Function}} callback function type value, whose purpose is to construct 
                 an [=interface object=] derived from {{Credential}}, using [=credentialCreationDataInstance=].
             :   <dfn>credentialCreationDataInstance</dfn>
             ::  A [=struct=] comprising the data necessary to construct the [=credential=]-derived object.
 
-        4.  [=Queue a task=] to run [=constructResultantCredentialFunction=] given [=credentialCreationDataInstance=], 
+        4.  [=Queue a task=] to run [=constructResultantCredentialCallback=] given [=credentialCreationDataInstance=], 
             and [=resolve=] |p| with its result.
 
     8.  Return |p|.

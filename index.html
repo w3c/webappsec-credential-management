@@ -2287,9 +2287,9 @@ store user credentials for future use.</p>
        <li data-md="">
         <p>If <var>r</var> is a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential③⑤">Credential</a></code>, <a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide/#resolve-promise" id="ref-for-resolve-promise③">resolve</a> <var>p</var> with <var>r</var>, and terminate these <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel④">in parallel</a> steps.</p>
        <li data-md="">
-        <p>Otherwise, <var>r</var> must be a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct" id="ref-for-struct">struct</a> whose <a data-link-type="dfn">items</a> are:</p>
+        <p>Otherwise, <var>r</var> must be a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct" id="ref-for-struct">struct</a> whose <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct-item" id="ref-for-struct-item">items</a> are:</p>
         <dl>
-         <dt data-md=""><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="constructresultantcredentialfunction">constructResultantCredentialFunction</dfn>
+         <dt data-md=""><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="constructresultantcredentialcallback">constructResultantCredentialCallback</dfn>
          <dd data-md="">
           <p>A Web IDL <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#Function" id="ref-for-Function">Function</a></code> callback function type value, whose purpose is to construct
   an <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object" id="ref-for-dfn-interface-object①①">interface object</a> derived from <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential③⑥">Credential</a></code>, using <a data-link-type="dfn" href="#credentialcreationdatainstance" id="ref-for-credentialcreationdatainstance">credentialCreationDataInstance</a>.</p>
@@ -2298,7 +2298,7 @@ store user credentials for future use.</p>
           <p>A <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct" id="ref-for-struct①">struct</a> comprising the data necessary to construct the <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential①⑤">credential</a>-derived object.</p>
         </dl>
        <li data-md="">
-        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task" id="ref-for-queue-a-task">Queue a task</a> to run <a data-link-type="dfn" href="#constructresultantcredentialfunction" id="ref-for-constructresultantcredentialfunction">constructResultantCredentialFunction</a> given <a data-link-type="dfn" href="#credentialcreationdatainstance" id="ref-for-credentialcreationdatainstance①">credentialCreationDataInstance</a>,
+        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task" id="ref-for-queue-a-task">Queue a task</a> to run <a data-link-type="dfn" href="#constructresultantcredentialcallback" id="ref-for-constructresultantcredentialcallback">constructResultantCredentialCallback</a> given <a data-link-type="dfn" href="#credentialcreationdatainstance" id="ref-for-credentialcreationdatainstance①">credentialCreationDataInstance</a>,
   and <a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide/#resolve-promise" id="ref-for-resolve-promise④">resolve</a> <var>p</var> with its result.</p>
       </ol>
      <li data-md="">
@@ -3283,7 +3283,7 @@ partial dictionary CredentialCreationOptions {
      <li><a href="#dom-federatedcredential-collectfromcredentialstore-slot">method for FederatedCredential</a><span>, in §4.2.1</span>
     </ul>
    <li><a href="#abstract-opdef-collect-credentials-from-the-credential-store">collect local</a><span>, in §2.5.2</span>
-   <li><a href="#constructresultantcredentialfunction">constructResultantCredentialFunction</a><span>, in §2.5.4</span>
+   <li><a href="#constructresultantcredentialcallback">constructResultantCredentialCallback</a><span>, in §2.5.4</span>
    <li><a href="#dom-credentialscontainer-create">create()</a><span>, in §2.3</span>
    <li><a href="#abstract-opdef-create-a-credential">Create a Credential</a><span>, in §2.5.4</span>
    <li><a href="#abstract-opdef-create-a-federatedcredential-from-federatedcredentialinit">Create a FederatedCredential from FederatedCredentialInit</a><span>, in §4.2.4</span>
@@ -3482,6 +3482,7 @@ partial dictionary CredentialCreationOptions {
      <li><a href="https://infra.spec.whatwg.org/#list-contain">contain</a>
      <li><a href="https://infra.spec.whatwg.org/#iteration-continue">continue</a>
      <li><a href="https://infra.spec.whatwg.org/#map-exists">exist</a>
+     <li><a href="https://infra.spec.whatwg.org/#struct-item">item</a>
      <li><a href="https://infra.spec.whatwg.org/#ordered-set">set</a>
      <li><a href="https://infra.spec.whatwg.org/#list-size">size</a>
      <li><a href="https://infra.spec.whatwg.org/#struct">struct</a>
@@ -4188,10 +4189,10 @@ partial dictionary CredentialCreationOptions {
     <li><a href="#ref-for-abstract-opdef-create-a-credential">2.3. navigator.credentials</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="constructresultantcredentialfunction">
-   <b><a href="#constructresultantcredentialfunction">#constructresultantcredentialfunction</a></b><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="constructresultantcredentialcallback">
+   <b><a href="#constructresultantcredentialcallback">#constructresultantcredentialcallback</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-constructresultantcredentialfunction">2.5.4. Create a Credential</a>
+    <li><a href="#ref-for-constructresultantcredentialcallback">2.5.4. Create a Credential</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="credentialcreationdatainstance">
