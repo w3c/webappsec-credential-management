@@ -2253,9 +2253,11 @@ store user credentials for future use.</p>
   circumstances, the <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise" id="ref-for-idl-promise③">Promise</a></code> may reject with an appropriate exception:</p>
     <ol class="algorithm">
      <li data-md="">
-      <p>Let <var>settings</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object⑤">current settings object</a></p>
+      <p>Let <var>settings</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object⑤">current settings object</a>.</p>
      <li data-md="">
       <p class="assertion">Assert: <var>settings</var> is a <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#secure-context" id="ref-for-secure-context③">secure context</a>.</p>
+     <li data-md="">
+      <p>Let <var>global</var> be <var>settings</var>’ <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-global" id="ref-for-concept-settings-object-global①">global object</a>.</p>
      <li data-md="">
       <p>Let <var>interfaces</var> be the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set">set</a> of <var>options</var>’ <a data-link-type="dfn" href="#credentialrequestoptions-relevant-credential-interface-objects" id="ref-for-credentialrequestoptions-relevant-credential-interface-objects②">relevant credential interface objects</a>.</p>
      <li data-md="">
@@ -2292,10 +2294,10 @@ store user credentials for future use.</p>
          <dt data-md=""><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="constructresultantcredentialcallback">constructResultantCredentialCallback</dfn>
          <dd data-md="">
           <p>A Web IDL <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#Function" id="ref-for-Function">Function</a></code> callback function type value, whose purpose is to construct
-  an <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object" id="ref-for-dfn-interface-object①①">interface object</a> derived from <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential③⑥">Credential</a></code>, using <a data-link-type="dfn" href="#credentialcreationdatainstance" id="ref-for-credentialcreationdatainstance">credentialCreationDataInstance</a>.</p>
+  an <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object" id="ref-for-dfn-interface-object①①">interface object</a> derived from <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential③⑥">Credential</a></code>, given <a data-link-type="dfn" href="#credentialcreationdatainstance" id="ref-for-credentialcreationdatainstance">credentialCreationDataInstance</a> and <var>global</var>.</p>
          <dt data-md=""><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="credentialcreationdatainstance">credentialCreationDataInstance</dfn>
          <dd data-md="">
-          <p>A <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct" id="ref-for-struct①">struct</a> comprising the data necessary to construct the <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential①⑤">credential</a>-derived object.</p>
+          <p>A <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct" id="ref-for-struct①">struct</a> referencing the data necessary to construct the <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential①⑤">credential</a>-derived object.</p>
         </dl>
        <li data-md="">
         <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task" id="ref-for-queue-a-task">Queue a task</a> to run <a data-link-type="dfn" href="#constructresultantcredentialcallback" id="ref-for-constructresultantcredentialcallback">constructResultantCredentialCallback</a> given <a data-link-type="dfn" href="#credentialcreationdatainstance" id="ref-for-credentialcreationdatainstance①">credentialCreationDataInstance</a>,

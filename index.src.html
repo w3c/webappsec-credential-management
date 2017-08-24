@@ -816,13 +816,15 @@ spec:css-syntax-3;
   circumstances, the {{Promise}} may reject with an appropriate exception:
 
   <ol class="algorithm">
-    1.  Let |settings| be the <a>current settings object</a>
+    1.  Let |settings| be the <a>current settings object</a>.
 
     2.  Assert: |settings| is a [=secure context=].
 
-    3.  Let |interfaces| be the [=set=] of |options|' <a>relevant credential interface objects</a>.
+    3.  Let |global| be |settings|' [=environment settings object/global object=].
 
-    4.  Return [=a promise rejected with=] `NotSupportedError` if any of the following statements
+    4.  Let |interfaces| be the [=set=] of |options|' <a>relevant credential interface objects</a>.
+
+    5.  Return [=a promise rejected with=] `NotSupportedError` if any of the following statements
         are true:
 
         1.  |settings| does not have a [=environment settings object/responsible document=].
@@ -837,11 +839,11 @@ spec:css-syntax-3;
             types in order to support a "sign-up" use case. For the moment, though, we're punting
             on that by restricting the dictionary to a single entry.
 
-    5.  Let |p| be [=a new promise=].
+    6.  Let |p| be [=a new promise=].
 
-    6.  Let |origin| be the [=current settings object=]'s [=environment settings object/origin=].
+    7.  Let |origin| be the [=current settings object=]'s [=environment settings object/origin=].
 
-    7.  Run the following steps [=in parallel=]:
+    8.  Run the following steps [=in parallel=]:
 
         1.  Let |r| be the result of executing |interfaces|[0]'s {{Credential/[[Create]](origin, options)}}
             internal method given |origin| and |options|.
@@ -854,14 +856,15 @@ spec:css-syntax-3;
 
             :   <dfn>constructResultantCredentialCallback</dfn>
             ::  A Web IDL {{Function}} callback function type value, whose purpose is to construct 
-                an [=interface object=] derived from {{Credential}}, using [=credentialCreationDataInstance=].
+                an [=interface object=] derived from {{Credential}}, given [=credentialCreationDataInstance=] and 
+                |global|.
             :   <dfn>credentialCreationDataInstance</dfn>
-            ::  A [=struct=] comprising the data necessary to construct the [=credential=]-derived object.
+            ::  A [=struct=] referencing the data necessary to construct the [=credential=]-derived object.
 
-        4.  [=Queue a task=] to run [=constructResultantCredentialCallback=] given [=credentialCreationDataInstance=], 
-            and [=resolve=] |p| with its result.
+        4.  [=Queue a task=] to run [=constructResultantCredentialCallback=] given [=credentialCreationDataInstance=] and
+            |global|. [=Resolve=] |p| with its result.
 
-    8.  Return |p|.
+    9.  Return |p|.
   </ol>
 
   <h4 id="algorithm-prevent-silent-access" algorithm>Prevent Silent Access</h4>
