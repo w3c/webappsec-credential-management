@@ -1176,7 +1176,7 @@ Possible extra rowspan handling
 		}
 	}
 </style>
-  <meta content="Bikeshed version c2e28785d7e239a08c784e65d126cc69068b86eb" name="generator">
+  <meta content="Bikeshed version 9017513413c84d471eeab67971004f2ca187830d" name="generator">
   <link href="http://www.w3.org/TR/credential-management-1/" rel="canonical">
 <style>/* style-md-lists */
 
@@ -1424,7 +1424,7 @@ pre.highlight, pre > code.highlight { display: block; padding: 1em; margin: .5em
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-08-24">24 August 2017</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-08-25">25 August 2017</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -2280,32 +2280,35 @@ store user credentials for future use.</p>
      <li data-md="">
       <p>Let <var>origin</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object⑥">current settings object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin⑤">origin</a>.</p>
      <li data-md="">
-      <p>Run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②">in parallel</a>:</p>
+      <p>Run the following substeps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②">in parallel</a>:</p>
       <ol>
        <li data-md="">
         <p>Let <var>r</var> be the result of executing <var>interfaces</var>[0]'s <code class="idl"><a data-link-type="idl" href="#dom-credential-create-slot" id="ref-for-dom-credential-create-slot">[[Create]](origin, options)</a></code> internal method given <var>origin</var> and <var>options</var>.</p>
        <li data-md="">
-        <p>If <var>r</var> is an <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-exception" id="ref-for-dfn-exception②">exception</a>, <a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide/#reject-promise" id="ref-for-reject-promise②">reject</a> <var>p</var> with <var>r</var>, and terminate these <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel③">in parallel</a> steps.</p>
+        <p>If <var>r</var> is an <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-exception" id="ref-for-dfn-exception②">exception</a>, <a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide/#reject-promise" id="ref-for-reject-promise②">reject</a> <var>p</var> with <var>r</var>, and terminate these substeps.</p>
        <li data-md="">
-        <p>If <var>r</var> is a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential③⑤">Credential</a></code>, <a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide/#resolve-promise" id="ref-for-resolve-promise③">resolve</a> <var>p</var> with <var>r</var>, and terminate these <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel④">in parallel</a> steps.</p>
+        <p>If <var>r</var> is a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential③⑤">Credential</a></code>, <a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide/#resolve-promise" id="ref-for-resolve-promise③">resolve</a> <var>p</var> with <var>r</var>, and terminate these substeps.</p>
        <li data-md="">
         <p>Otherwise, <var>r</var> must be a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct" id="ref-for-struct">struct</a> whose <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct-item" id="ref-for-struct-item">items</a> are:</p>
         <dl>
-         <dt data-md=""><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="constructresultantcredentialcallback">constructResultantCredentialCallback</dfn>
+         <dt data-md=""><code><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="constructresultantcredentialcallback">constructResultantCredentialCallback</dfn></code>
          <dd data-md="">
-          <p>A Web IDL <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#Function" id="ref-for-Function">Function</a></code> callback function type value, whose purpose is to construct
-  an <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object" id="ref-for-dfn-interface-object①①">interface object</a> derived from <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential③⑥">Credential</a></code>, given <a data-link-type="dfn" href="#credentialcreationdatainstance" id="ref-for-credentialcreationdatainstance">credentialCreationDataInstance</a> and <var>global</var>.</p>
-         <dt data-md=""><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="credentialcreationdatainstance">credentialCreationDataInstance</dfn>
+          <p>A Web IDL <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#Function" id="ref-for-Function">Function</a></code> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-callback-function" id="ref-for-idl-callback-function">callback function type</a> value, whose purpose is to construct,
+  on the main <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop" id="ref-for-event-loop">event loop</a>, 
+  an <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object" id="ref-for-dfn-interface-object①①">interface object</a> derived from <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential③⑥">Credential</a></code>, given <code><a data-link-type="dfn" href="#credentialcreationdatainstance" id="ref-for-credentialcreationdatainstance">credentialCreationDataInstance</a></code> and <var>global</var>.</p>
+         <dt data-md=""><code><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="credentialcreationdatainstance">credentialCreationDataInstance</dfn></code>
          <dd data-md="">
-          <p>A <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct" id="ref-for-struct①">struct</a> referencing the data necessary to construct the <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store-credential-credential" id="ref-for-dom-credentialscontainer-store-credential-credential②">credential</a></code>-derived object.</p>
+          <p>An opaque <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct" id="ref-for-struct①">struct</a> referencing the data necessary to construct the appropriate
+  type of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential③⑦">Credential</a></code>-derived object.</p>
         </dl>
        <li data-md="">
-        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task" id="ref-for-queue-a-task">Queue a task</a> to run <a data-link-type="dfn" href="#constructresultantcredentialcallback" id="ref-for-constructresultantcredentialcallback">constructResultantCredentialCallback</a> given <a data-link-type="dfn" href="#credentialcreationdatainstance" id="ref-for-credentialcreationdatainstance①">credentialCreationDataInstance</a> and <var>global</var>. Let <var>result</var> be the result.</p>
+        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task" id="ref-for-queue-a-task">Queue a task</a> to run <code><var>r</var>.<a data-link-type="dfn" href="#constructresultantcredentialcallback" id="ref-for-constructresultantcredentialcallback">constructResultantCredentialCallback</a></code> given <code><var>r</var>.<a data-link-type="dfn" href="#credentialcreationdatainstance" id="ref-for-credentialcreationdatainstance①">credentialCreationDataInstance</a></code> and <var>global</var>. 
+  Let <var>result</var> be the result.</p>
         <p class="issue" id="issue-94e6c0a4"><a class="self-link" href="#issue-94e6c0a4"></a> my understanding is we need to specify a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#task-source" id="ref-for-task-source">task source</a> here.  Which one should we use if so?</p>
        <li data-md="">
-        <p>If <var>result</var> is an <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-exception" id="ref-for-dfn-exception③">exception</a>, <a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide/#reject-promise" id="ref-for-reject-promise③">reject</a> <var>p</var> with <var>result</var>.</p>
+        <p>If <var>result</var> is an <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-exception" id="ref-for-dfn-exception③">exception</a>, <a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide/#reject-promise" id="ref-for-reject-promise③">reject</a> <var>p</var> with <var>result</var> and terminate these substeps.</p>
        <li data-md="">
-        <p>If <var>result</var> is a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential③⑦">Credential</a></code>-derived object, <a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide/#resolve-promise" id="ref-for-resolve-promise④">resolve</a> <var>p</var> with <var>result</var>.</p>
+        <p><a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide/#resolve-promise" id="ref-for-resolve-promise④">Resolve</a> <var>p</var> with <var>result</var>.</p>
       </ol>
      <li data-md="">
       <p>Return <var>p</var>.</p>
@@ -2319,7 +2322,7 @@ store user credentials for future use.</p>
      <li data-md="">
       <p>Let <var>p</var> be <a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide/#a-new-promise" id="ref-for-a-new-promise③">a new promise</a></p>
      <li data-md="">
-      <p>Run the following seps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel⑤">in parallel</a>:</p>
+      <p>Run the following seps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel③">in parallel</a>:</p>
       <ol>
        <li data-md="">
         <p>Set <var>origin</var>’s <a data-link-type="dfn" href="#origin-prevent-silent-access-flag" id="ref-for-origin-prevent-silent-access-flag③"><code>prevent silent access</code> flag</a> in the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store①①">credential store</a>.</p>
@@ -3459,6 +3462,7 @@ partial dictionary CredentialCreationOptions {
      <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object">current settings object</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-current-password">current-password</a>
      <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object">environment settings object</a>
+     <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop">event loop</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#the-form-element">form</a>
      <li><a href="https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#form-owner">form owner</a>
      <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-global">global object</a>
@@ -3550,6 +3554,7 @@ partial dictionary CredentialCreationOptions {
      <li><a href="https://heycam.github.io/webidl/#exceptiondef-typeerror">TypeError</a>
      <li><a href="https://heycam.github.io/webidl/#idl-USVString">USVString</a>
      <li><a href="https://heycam.github.io/webidl/#idl-boolean">boolean</a>
+     <li><a href="https://heycam.github.io/webidl/#idl-callback-function">callback function types</a>
      <li><a href="https://heycam.github.io/webidl/#dfn-exception">exception</a>
      <li><a href="https://heycam.github.io/webidl/#dfn-inherit">inherit</a>
      <li><a href="https://heycam.github.io/webidl/#dfn-inherited-interfaces">inherited interfaces</a>
@@ -3632,7 +3637,7 @@ partial dictionary CredentialCreationOptions {
 [<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed①①">Exposed</a>=<span class="n">Window</span>, <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext" id="ref-for-SecureContext③①">SecureContext</a>]
 <span class="kt">interface</span> <a class="nv" href="#credentialscontainer"><code>CredentialsContainer</code></a> {
   <span class="kt">Promise</span>&lt;<a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential②⓪①">Credential</a>?> <a class="nv idl-code" data-link-type="method" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get②⑦">get</a>(<span class="kt">optional</span> <a class="n" data-link-type="idl-name" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions②①">CredentialRequestOptions</a> <a class="nv idl-code" data-link-type="argument" href="#dom-credentialscontainer-get-options-options" id="ref-for-dom-credentialscontainer-get-options-options②">options</a>);
-  <span class="kt">Promise</span>&lt;<a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential②①①">Credential</a>> <a class="nv idl-code" data-link-type="method" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store①⑤">store</a>(<a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential②②①">Credential</a> <a class="nv idl-code" data-link-type="argument" href="#dom-credentialscontainer-store-credential-credential" id="ref-for-dom-credentialscontainer-store-credential-credential③">credential</a>);
+  <span class="kt">Promise</span>&lt;<a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential②①①">Credential</a>> <a class="nv idl-code" data-link-type="method" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store①⑤">store</a>(<a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential②②①">Credential</a> <a class="nv idl-code" data-link-type="argument" href="#dom-credentialscontainer-store-credential-credential" id="ref-for-dom-credentialscontainer-store-credential-credential②">credential</a>);
   <span class="kt">Promise</span>&lt;<a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential②③①">Credential</a>?> <a class="nv idl-code" data-link-type="method" href="#dom-credentialscontainer-create" id="ref-for-dom-credentialscontainer-create⑦">create</a>(<span class="kt">optional</span> <a class="n" data-link-type="idl-name" href="#dictdef-credentialcreationoptions" id="ref-for-dictdef-credentialcreationoptions①①">CredentialCreationOptions</a> <a class="nv idl-code" data-link-type="argument" href="#dom-credentialscontainer-create-options-options" id="ref-for-dom-credentialscontainer-create-options-options②">options</a>);
   <span class="kt">Promise</span>&lt;<span class="kt">void</span>> <a class="nv idl-code" data-link-type="method" href="#dom-credentialscontainer-preventsilentaccess" id="ref-for-dom-credentialscontainer-preventsilentaccess④">preventSilentAccess</a>();
 };
@@ -4052,7 +4057,6 @@ partial dictionary CredentialCreationOptions {
    <b><a href="#dom-credentialscontainer-store-credential-credential">#dom-credentialscontainer-store-credential-credential</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-credentialscontainer-store-credential-credential">2.3. navigator.credentials</a> <a href="#ref-for-dom-credentialscontainer-store-credential-credential①">(2)</a>
-    <li><a href="#ref-for-dom-credentialscontainer-store-credential-credential②">2.5.4. Create a Credential</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-credentialscontainer-create">

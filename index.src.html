@@ -843,32 +843,36 @@ spec:css-syntax-3;
 
     7.  Let |origin| be the [=current settings object=]'s [=environment settings object/origin=].
 
-    8.  Run the following steps [=in parallel=]:
+    8.  Run the following substeps [=in parallel=]:
 
         1.  Let |r| be the result of executing |interfaces|[0]'s {{Credential/[[Create]](origin, options)}}
             internal method given |origin| and |options|.
 
-        2.  If |r| is an [=exception=], [=reject=] |p| with |r|, and terminate these [=in parallel=] steps.
+        2.  If |r| is an [=exception=], [=reject=] |p| with |r|, and terminate these substeps.
 
-        3.  If |r| is a {{Credential}}, [=resolve=] |p| with |r|, and terminate these [=in parallel=] steps.
+        3.  If |r| is a {{Credential}}, [=resolve=] |p| with |r|, and terminate these substeps.
 
         4.  Otherwise, |r| must be a [=struct=] whose [=items=] are:
 
-            :   <dfn>constructResultantCredentialCallback</dfn>
-            ::  A Web IDL {{Function}} callback function type value, whose purpose is to construct 
-                an [=interface object=] derived from {{Credential}}, given [=credentialCreationDataInstance=] and 
-                |global|.
-            :   <dfn>credentialCreationDataInstance</dfn>
-            ::  A [=struct=] referencing the data necessary to construct the {{credential}}-derived object.
+            :   <code><dfn>constructResultantCredentialCallback</dfn></code>
+            ::  A Web IDL {{Function}} [=callback function type=] value, whose purpose is to construct,
+                on the main [=event loop=], 
+                an [=interface object=] derived from {{Credential}}, given 
+                <code>[=credentialCreationDataInstance=]</code> and |global|.
 
-        5.  [=Queue a task=] to run [=constructResultantCredentialCallback=] given [=credentialCreationDataInstance=] and
-            |global|. Let |result| be the result. 
+            :   <code><dfn>credentialCreationDataInstance</dfn></code>
+            ::  An opaque [=struct=] referencing the data necessary to construct the appropriate 
+                type of {{Credential}}-derived object.
+
+        5.  [=Queue a task=] to run <code>|r|.[=constructResultantCredentialCallback=]</code>
+            given <code>|r|.[=credentialCreationDataInstance=]</code> and |global|. 
+            Let |result| be the result.
 
             ISSUE: my understanding is we need to specify a [=task source=] here.  Which one should we use if so?
 
-        6.  If |result| is an [=exception=], [=reject=] |p| with |result|.
+        6.  If |result| is an [=exception=], [=reject=] |p| with |result| and terminate these substeps.
 
-        7.  If |result| is a {{Credential}}-derived object, [=resolve=] |p| with |result|.
+        7.  [=Resolve=] |p| with |result|.
 
     9.  Return |p|.
   </ol>
