@@ -2296,13 +2296,16 @@ store user credentials for future use.</p>
           <p>A Web IDL <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#Function" id="ref-for-Function">Function</a></code> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-callback-function" id="ref-for-idl-callback-function">callback function type</a> value, whose purpose is to construct,
   on the main <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop" id="ref-for-event-loop">event loop</a>, 
   an <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object" id="ref-for-dfn-interface-object①①">interface object</a> derived from <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential③⑥">Credential</a></code>, given <code><a data-link-type="dfn" href="#credentialcreationdatainstance" id="ref-for-credentialcreationdatainstance">credentialCreationDataInstance</a></code> and <var>global</var>.</p>
+          <p class="note" role="note"><span>Note:</span> <code><a data-link-type="dfn" href="#credentialcreationdatainstance" id="ref-for-credentialcreationdatainstance①">credentialCreationDataInstance</a></code>’s functionality is defined on a
+      per-<a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential①⑤">credential</a> type basis by those <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential①⑥">credential</a> type specifications needing to
+      employ it. E.g., see <a data-link-type="biblio" href="#biblio-webauthn">[WEBAUTHN]</a>.</p>
          <dt data-md=""><code><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="credentialcreationdatainstance">credentialCreationDataInstance</dfn></code>
          <dd data-md="">
           <p>An opaque <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct" id="ref-for-struct①">struct</a> referencing the data necessary to construct the appropriate
   type of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential③⑦">Credential</a></code>-derived object.</p>
         </dl>
        <li data-md="">
-        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task" id="ref-for-queue-a-task">Queue a task</a> to run <code><var>r</var>.<a data-link-type="dfn" href="#constructresultantcredentialcallback" id="ref-for-constructresultantcredentialcallback">constructResultantCredentialCallback</a></code> given <code><var>r</var>.<a data-link-type="dfn" href="#credentialcreationdatainstance" id="ref-for-credentialcreationdatainstance①">credentialCreationDataInstance</a></code> and <var>global</var>. 
+        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task" id="ref-for-queue-a-task">Queue a task</a> to run <code><var>r</var>.<a data-link-type="dfn" href="#constructresultantcredentialcallback" id="ref-for-constructresultantcredentialcallback">constructResultantCredentialCallback</a></code> given <code><var>r</var>.<a data-link-type="dfn" href="#credentialcreationdatainstance" id="ref-for-credentialcreationdatainstance②">credentialCreationDataInstance</a></code> and <var>global</var>. 
   Let <var>result</var> be the result.</p>
         <p class="issue" id="issue-94e6c0a4"><a class="self-link" href="#issue-94e6c0a4"></a> my understanding is we need to specify a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#task-source" id="ref-for-task-source">task source</a> here.  Which one should we use if so?</p>
        <li data-md="">
@@ -2336,7 +2339,7 @@ store user credentials for future use.</p>
    <section>
     <h2 class="heading settled" data-level="3" id="passwords"><span class="secno">3. </span><span class="content">Password Credentials</span><a class="self-link" href="#passwords"></a></h2>
     <p>For good or for ill, many websites rely on username/password pairs as an authentication mechanism.
-  The <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential①">PasswordCredential</a></code> interface is a <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential①⑤">credential</a> meant to enable this use case, storing
+  The <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential①">PasswordCredential</a></code> interface is a <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential①⑦">credential</a> meant to enable this use case, storing
   both a username and password, as well as metadata that can help a user choose the right account
   from within a <a data-link-type="dfn" href="#credential-chooser" id="ref-for-credential-chooser⑥">credential chooser</a>.</p>
     <h3 class="heading settled" data-level="3.1" id="password-examples"><span class="secno">3.1. </span><span class="content">Examples</span><a class="self-link" href="#password-examples"></a></h3>
@@ -3140,7 +3143,7 @@ store user credentials for future use.</p>
   a <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata" id="ref-for-interface-formdata②">FormData</a></code> body.</p>
     <h3 class="heading settled" data-level="7.2" id="implementation-extension"><span class="secno">7.2. </span><span class="content">Extension Points</span><a class="self-link" href="#implementation-extension"></a></h3>
     <p>This document provides a generic, high-level API that’s meant to be extended with specific types
-  of <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential①⑥">credentials</a> that serve specific authentication needs. Doing so is, hopefully,
+  of <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential①⑧">credentials</a> that serve specific authentication needs. Doing so is, hopefully,
   straightforward:</p>
     <ol>
      <li data-md="">
@@ -3155,8 +3158,8 @@ interface ExampleCredential : Credential {
 </pre>
       </div>
      <li data-md="">
-      <p>Define appropriate <code class="idl"><a data-link-type="idl" href="#dom-credential-create-slot" id="ref-for-dom-credential-create-slot①">[[Create]](origin, options)</a></code>, <code class="idl"><a data-link-type="idl" href="#dom-credential-collectfromcredentialstore-slot" id="ref-for-dom-credential-collectfromcredentialstore-slot①">[[CollectFromCredentialStore]](origin, options)</a></code>, <code class="idl"><a data-link-type="idl" href="#dom-credential-discoverfromexternalsource-slot" id="ref-for-dom-credential-discoverfromexternalsource-slot③">[[DiscoverFromExternalSource]](origin, options)</a></code>, and <code class="idl"><a data-link-type="idl" href="#dom-credential-store-slot" id="ref-for-dom-credential-store-slot①">[[Store]](credential)</a></code> methods on <code>ExampleCredential</code>'s <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object" id="ref-for-dfn-interface-object①⑨">interface object</a>. <code class="idl"><a data-link-type="idl" href="#dom-credential-collectfromcredentialstore-slot" id="ref-for-dom-credential-collectfromcredentialstore-slot②">[[CollectFromCredentialStore]](origin, options)</a></code> is appropriate for <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential①⑦">credentials</a> that remain <a data-link-type="dfn" href="#credential-effective" id="ref-for-credential-effective③">effective</a> forever and
-  can therefore simply be copied out of the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store②⑥">credential store</a>, while <code class="idl"><a data-link-type="idl" href="#dom-credential-discoverfromexternalsource-slot" id="ref-for-dom-credential-discoverfromexternalsource-slot④">[[DiscoverFromExternalSource]](origin, options)</a></code> is appropriate for <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential①⑧">credentials</a> that need to be re-generated from a <a data-link-type="dfn" href="#credential-source" id="ref-for-credential-source①">credential source</a>.</p>
+      <p>Define appropriate <code class="idl"><a data-link-type="idl" href="#dom-credential-create-slot" id="ref-for-dom-credential-create-slot①">[[Create]](origin, options)</a></code>, <code class="idl"><a data-link-type="idl" href="#dom-credential-collectfromcredentialstore-slot" id="ref-for-dom-credential-collectfromcredentialstore-slot①">[[CollectFromCredentialStore]](origin, options)</a></code>, <code class="idl"><a data-link-type="idl" href="#dom-credential-discoverfromexternalsource-slot" id="ref-for-dom-credential-discoverfromexternalsource-slot③">[[DiscoverFromExternalSource]](origin, options)</a></code>, and <code class="idl"><a data-link-type="idl" href="#dom-credential-store-slot" id="ref-for-dom-credential-store-slot①">[[Store]](credential)</a></code> methods on <code>ExampleCredential</code>'s <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object" id="ref-for-dfn-interface-object①⑨">interface object</a>. <code class="idl"><a data-link-type="idl" href="#dom-credential-collectfromcredentialstore-slot" id="ref-for-dom-credential-collectfromcredentialstore-slot②">[[CollectFromCredentialStore]](origin, options)</a></code> is appropriate for <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential①⑨">credentials</a> that remain <a data-link-type="dfn" href="#credential-effective" id="ref-for-credential-effective③">effective</a> forever and
+  can therefore simply be copied out of the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store②⑥">credential store</a>, while <code class="idl"><a data-link-type="idl" href="#dom-credential-discoverfromexternalsource-slot" id="ref-for-dom-credential-discoverfromexternalsource-slot④">[[DiscoverFromExternalSource]](origin, options)</a></code> is appropriate for <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential②⓪">credentials</a> that need to be re-generated from a <a data-link-type="dfn" href="#credential-source" id="ref-for-credential-source①">credential source</a>.</p>
       <div class="example" id="example-3e2299db">
        <a class="self-link" href="#example-3e2299db"></a> <code>ExampleCredential</code>'s <code>[[CollectFromCredentialStore]](origin, options)</code> internal method is called
     with an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin①③">origin</a> (<code>origin</code>) and a CredentialRequestOptions
@@ -3740,8 +3743,9 @@ partial dictionary CredentialCreationOptions {
     <li><a href="#ref-for-concept-credential⑥">2.1. Infrastructure</a> <a href="#ref-for-concept-credential⑦">(2)</a> <a href="#ref-for-concept-credential⑧">(3)</a> <a href="#ref-for-concept-credential⑨">(4)</a> <a href="#ref-for-concept-credential①⓪">(5)</a> <a href="#ref-for-concept-credential①①">(6)</a> <a href="#ref-for-concept-credential①②">(7)</a>
     <li><a href="#ref-for-concept-credential①③">2.2. The Credential Interface</a>
     <li><a href="#ref-for-concept-credential①④">2.2.1. Credential Internal Methods</a>
-    <li><a href="#ref-for-concept-credential①⑤">3. Password Credentials</a>
-    <li><a href="#ref-for-concept-credential①⑥">7.2. Extension Points</a> <a href="#ref-for-concept-credential①⑦">(2)</a> <a href="#ref-for-concept-credential①⑧">(3)</a>
+    <li><a href="#ref-for-concept-credential①⑤">2.5.4. Create a Credential</a> <a href="#ref-for-concept-credential①⑥">(2)</a>
+    <li><a href="#ref-for-concept-credential①⑦">3. Password Credentials</a>
+    <li><a href="#ref-for-concept-credential①⑧">7.2. Extension Points</a> <a href="#ref-for-concept-credential①⑨">(2)</a> <a href="#ref-for-concept-credential②⓪">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="credential-effective">
@@ -4210,7 +4214,7 @@ partial dictionary CredentialCreationOptions {
   <aside class="dfn-panel" data-for="credentialcreationdatainstance">
    <b><a href="#credentialcreationdatainstance">#credentialcreationdatainstance</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-credentialcreationdatainstance">2.5.4. Create a Credential</a> <a href="#ref-for-credentialcreationdatainstance①">(2)</a>
+    <li><a href="#ref-for-credentialcreationdatainstance">2.5.4. Create a Credential</a> <a href="#ref-for-credentialcreationdatainstance①">(2)</a> <a href="#ref-for-credentialcreationdatainstance②">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="abstract-opdef-prevent-silent-access">

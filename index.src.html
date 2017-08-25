@@ -860,6 +860,10 @@ spec:css-syntax-3;
                 an [=interface object=] derived from {{Credential}}, given 
                 <code>[=credentialCreationDataInstance=]</code> and |global|.
 
+                Note: <code>[=credentialCreationDataInstance=]</code>'s functionality is defined on a 
+                    per-[=credential=] type basis by those [=credential=] type specifications needing to
+                    employ it. E.g., see [[WEBAUTHN]].
+
             :   <code><dfn>credentialCreationDataInstance</dfn></code>
             ::  An opaque [=struct=] referencing the data necessary to construct the appropriate 
                 type of {{Credential}}-derived object.
