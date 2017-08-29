@@ -285,11 +285,17 @@ spec:css-syntax-3;
   for which the {{Credential}} may be [=effective=].
 
   ### `Credential` Internal Methods ### {#credential-internal-methods}
+  
+  The {{Credential}} [=interface object=] features several internal methods facilitating 
+  retrieval and storage of {{Credential}} objects, with default "do nothing" implementations 
+  as specified in this section, below.
 
-  Each [=interface object=] created for interfaces which [=interface/inherit=] from {{Credential}}
-  defines several internal methods that allow retrieval and storage of {{Credential}} objects:
+  Unless otherwise specified, each [=interface object=] created for interfaces which [=interface/inherit=] 
+  from {{Credential}} MUST provide implementations for some or all of these internal methods, overriding 
+  {{Credential}}'s default implementations, as appropriate for the [=credential=] type. E.g., see
+  [[#passwordcredential-interface]] and [[#federatedcredential-interface]].
 
-  <section algorithm="'collect credentials' internal method">
+  <h5 id="algorithm-collect-creds" algorithm>'collect credentials' internal method</h5>
     <dfn for="Credential" method export>\[[CollectFromCredentialStore]](origin, options)</dfn> is called
     with an [=environment settings object/origin=] and a {{CredentialRequestOptions}}, and returns
     a set of {{Credential}} objects from the user
@@ -299,9 +305,9 @@ spec:css-syntax-3;
     <ul class="algorithm">
       1.  Return an empty set.
     </ul>
-  </section>
 
-  <section algorithm="'discover credentials' internal method">
+
+  <h5 id="algorithm-discover-creds" algorithm>'discover credentials' internal method</h5>
     <dfn for="Credential" method export>\[[DiscoverFromExternalSource]](origin, options)</dfn> is called
     with an [=environment settings object/origin=] and a {{CredentialRequestOptions}} object.
     It returns a {{Credential}} if one can be
@@ -313,9 +319,8 @@ spec:css-syntax-3;
     <ul class="algorithm">
       1.  Return `null`.
     </ul>
-  </section>
 
-  <section algorithm="'store a credential' internal method">
+  <h5 id="algorithm-store-cred" algorithm>'store a credential' internal method</h5>
     <dfn for="Credential" method export>\[[Store]](credential)</dfn> is called with a {{Credential}},
     and returns once {{Credential}} is persisted to the [=credential store=]:
 
@@ -324,7 +329,7 @@ spec:css-syntax-3;
     </ul>
   </section>
 
-  <section algorithm="'create a credential' internal method">
+  <h5 id="algorithm-create-cred" algorithm>'create a credential' internal method"</h5>
     <dfn for="Credential" method export>\[[Create]](origin, options)</dfn> is called with
     with an [=environment settings object/origin=] and a
     {{CredentialCreationOptions}}, and returns either a {{Credential}}, if one can be created,
@@ -334,11 +339,6 @@ spec:css-syntax-3;
     <ul class="algorithm">
       1.  Return `null`.
     </ul>
-  </section>
-
-  Unless otherwise specified, the [=interface objects=] for [=interfaces=] which [=interface/inherit=] from
-  {{Credential}} will alias {{Credential}}'s implementation of these three internal methods. Since that
-  implementation isn't particularly useful, derived interfaces MUST override one or the other.
 
   ### `CredentialUserData` Mixin ### {#credentialuserdata-mixin}
 
@@ -841,7 +841,7 @@ spec:css-syntax-3;
 
     6.  Let |p| be [=a new promise=].
 
-    7.  Let |origin| be the [=current settings object=]'s [=environment settings object/origin=].
+    7.  Let |origin| be |settings|'s [=environment settings object/origin=].
 
     8.  Run the following substeps [=in parallel=]:
 
@@ -852,21 +852,16 @@ spec:css-syntax-3;
 
         3.  If |r| is a {{Credential}}, [=resolve=] |p| with |r|, and terminate these substeps.
 
-        4.  Otherwise, |r| must be a [=struct=] whose [=items=] are:
+        4.  Otherwise, |r| MUST be a [=struct=] whose single [=item=] is a [=constructCredentialCallback=].
 
-            :   <code><dfn>constructResultantCredentialCallback</dfn></code>
+            :   <code><dfn>constructCredentialCallback</dfn></code>
             ::  A Web IDL {{Function}} [=callback function type=] value, whose purpose is to construct,
                 on the main [=event loop=], 
-                an [=interface object=] derived from {{Credential}}, given 
-                <code>[=credentialCreationDataInstance=]</code> and |global|.
+                an [=interface object=] derived from {{Credential}}, given |global|.
 
                 Note: <code>[=credentialCreationDataInstance=]</code>'s functionality is defined on a 
                     per-[=credential=] type basis by those [=credential=] type specifications needing to
                     employ it. E.g., see [[WEBAUTHN]].
-
-            :   <code><dfn>credentialCreationDataInstance</dfn></code>
-            ::  An opaque [=struct=] referencing the data necessary to construct the appropriate 
-                type of {{Credential}}-derived object.
 
         5.  [=Queue a task=] to run <code>|r|.[=constructResultantCredentialCallback=]</code>
             given <code>|r|.[=credentialCreationDataInstance=]</code> and |global|. 
