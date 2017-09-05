@@ -1800,7 +1800,7 @@ store user credentials for future use.</p>
     </section>
     <section class="algorithm" data-algorithm="&apos;create a credential&apos; internal method">
       <dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="method" data-export="" id="dom-credential-create-slot"><code>[[Create]](options)</code></dfn> is called with a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialcreationoptions" id="ref-for-dictdef-credentialcreationoptions">CredentialCreationOptions</a></code>, and returns either a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential①⑤">Credential</a></code>, if one can be created, <code>null</code> if no credential was created, or an error if creation fails due to exceptional situations
-    (for example, incorrect options could produce a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror①">TypeError</a></code>). 
+    (for example, incorrect options could produce a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror①">TypeError</a></code>): 
      <ol class="algorithm">
       <li data-md="">
        <p>Return <code>null</code>.</p>

@@ -302,7 +302,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     <dfn for="Credential" method export>\[[CollectFromCredentialStore]](options)</dfn> is called
     with a {{CredentialRequestOptions}}, and returns a set of {{Credential}} objects from the user
     agent's [=credential store=] that match the options provided. If no matching {{Credential}}
-    objects are available, the returned set will be empty. 
+    objects are available, the returned set will be empty.
 
     <ol class="algorithm">
       1.  Return an empty set.
@@ -335,7 +335,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     <dfn for="Credential" method export>\[[Create]](options)</dfn> is called with a
     {{CredentialCreationOptions}}, and returns either a {{Credential}}, if one can be created, 
     `null` if no credential was created, or an error if creation fails due to exceptional situations
-    (for example, incorrect options could produce a {{TypeError}}). 
+    (for example, incorrect options could produce a {{TypeError}}):
 
     <ol class="algorithm">
       1.  Return `null`.
