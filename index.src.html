@@ -52,6 +52,9 @@ spec: PSL; urlPrefix: https://publicsuffix.org/list/
 spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
   type: dfn
     text: http-network-or-cache fetch; url: http-network-or-cache-fetch 
+spec: DOM; urlPrefix: https://dom.spec.whatwg.org/
+  type: interface
+    text: AbortSignal url: https://dom.spec.whatwg.org/#abortsignal
 </pre>
 <pre class="link-defaults">
 spec:html; type:dfn; for:/; text:origin
@@ -239,6 +242,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     interface Credential {
       readonly attribute USVString id;
       readonly attribute DOMString type;
+      readonly attribute AbortSignal signal;
     };
   </pre>
   <div dfn-for="Credential">
@@ -249,6 +253,12 @@ spec:url; type:dfn; text:urlencoded byte serializer
     :   <dfn attribute>type</dfn>
     ::  This attribute's getter returns the value of the object's [=interface object=]'s
         {{[[type]]}} slot, which specifies the kind of credential represented by this object.
+
+    :   <dfn attribute>signal</dfn>
+    ::  The credential object has an associated signal (an {{AbortSignal}} object), initially 
+        a new {{AbortSignal}} object. Developers can use AbortSignal to [=terminated|terminate=] an 
+        ongoing {{PasswordCredential/[[Create]](options)}} operation or 
+        {{Credential/[[DiscoverFromExternalSource]](options)}} operation. 
 
     :   <dfn attribute>\[[type]]</dfn>
     ::  The {{Credential}} [=interface object=] has an internal slot named `[[type]]`, which
@@ -282,13 +292,17 @@ spec:url; type:dfn; text:urlencoded byte serializer
   ### `Credential` Internal Methods ### {#credential-internal-methods}
 
   Each [=interface object=] created for interfaces which [=interface/inherit=] from {{Credential}}
-  defines several internal methods that allow retrieval and storage of {{Credential}} objects:
+  defines several internal methods that allow retrieval and storage of {{Credential}} objects. The 
+  {{Credential/[[Create]](options)}} method and {{Credential/[[DiscoverFromExternalSource]](options)}}
+  method can be <dfn id="concept-credman-terminated">terminated</dfn> with flag
+  [=AbortSignal/aborted flag=], which is unset unless otherwise specificed. When methods are 
+  [=terminated=], the promise MUST be rejected with an {{AbortError}} {{DOMException}}.  
 
   <section algorithm="'collect credentials' internal method">
     <dfn for="Credential" method export>\[[CollectFromCredentialStore]](options)</dfn> is called
     with a {{CredentialRequestOptions}}, and returns a set of {{Credential}} objects from the user
     agent's [=credential store=] that match the options provided. If no matching {{Credential}}
-    objects are available, the returned set will be empty.
+    objects are available, the returned set will be empty. 
 
     <ol class="algorithm">
       1.  Return an empty set.
@@ -321,7 +335,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     <dfn for="Credential" method export>\[[Create]](options)</dfn> is called with a
     {{CredentialCreationOptions}}, and returns either a {{Credential}}, if one can be created, 
     `null` if no credential was created, or an error if creation fails due to exceptional situations
-    (for example, incorrect options could produce a {{TypeError}}):
+    (for example, incorrect options could produce a {{TypeError}}). 
 
     <ol class="algorithm">
       1.  Return `null`.
@@ -828,7 +842,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     5.  Let |p| be [=a new promise=].
 
-    6.  Run the following steps [=in parallel=]:
+    6.  Run the following steps [=in parallel=] but abort if the execution is [=terminated=]:
 
         1.  Let |r| be the result of executing |interfaces|[0] {{Credential/[[Create]](options)}}
             internal method on |options|.
