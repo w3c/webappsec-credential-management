@@ -331,14 +331,31 @@ spec:css-syntax-3;
 
   <h5 id="algorithm-create-cred" algorithm>'create a credential' internal method"</h5>
     <dfn for="Credential" method export>\[[Create]](origin, options)</dfn> is called with
-    with an [=environment settings object/origin=] and a
-    {{CredentialCreationOptions}}, and returns either a {{Credential}}, if one can be created,
-    `null` if no credential was created, or an error if creation fails due to exceptional situations
+    with an [=environment settings object/origin=] and a {{CredentialCreationOptions}},
+    and returns either a {{Credential}}, if one can be created,
+    or `null` if no credential was created,
+    or a [=constructCredential=] [=struct=],
+    or an error if creation fails due to exceptional situations
     (for example, incorrect options could produce a {{TypeError}}):
 
     <ul class="algorithm">
       1.  Return `null`.
     </ul>
+
+  <h6 id="algorithm-construct-cred-struct">constructCredential struct</h6>
+
+    <dfn>constructCredential</dfn> is a [=struct=] whose single [=item=] is a [=constructCredentialCallback=]:
+
+    :   <code><dfn>constructCredentialCallback</dfn></code>
+    ::  A Web IDL {{Function}} [=callback function type=] value, whose purpose is to construct,
+        on the main [=event loop=], an [=interface object=] derived from {{Credential}}, given
+        a [=current settings object=]'s [=environment settings object/global object=].
+
+    Note: <code>[=constructCredentialCallback=]</code>'s functionality is defined on a
+        per-[=credential=] type basis by those [=credential=] type specifications needing to
+        employ it. E.g., see [[WEBAUTHN]].
+
+
 
   ### `CredentialUserData` Mixin ### {#credentialuserdata-mixin}
 
@@ -852,22 +869,10 @@ spec:css-syntax-3;
 
         3.  If |r| is a {{Credential}}, [=resolve=] |p| with |r|, and terminate these substeps.
 
-        4.  Otherwise, |r| MUST be a [=struct=] whose single [=item=] is a [=constructCredentialCallback=].
+        4.  Assert: |r| is a <code>[=constructCredential=]</code> [=struct=].
 
-            :   <code><dfn>constructCredentialCallback</dfn></code>
-            ::  A Web IDL {{Function}} [=callback function type=] value, whose purpose is to construct,
-                on the main [=event loop=], 
-                an [=interface object=] derived from {{Credential}}, given |global|.
-
-                Note: <code>[=credentialCreationDataInstance=]</code>'s functionality is defined on a 
-                    per-[=credential=] type basis by those [=credential=] type specifications needing to
-                    employ it. E.g., see [[WEBAUTHN]].
-
-        5.  [=Queue a task=] to run <code>|r|.[=constructResultantCredentialCallback=]</code>
-            given <code>|r|.[=credentialCreationDataInstance=]</code> and |global|. 
-            Let |result| be the result.
-
-            ISSUE: my understanding is we need to specify a [=task source=] here.  Which one should we use if so?
+        5.  Let |result| be the result of [=queue a task|queuing a task=] to run
+            <code>|r|.[=constructCredentialCallback=]</code> given |global|, using the [=DOM manipulation task source=].
 
         6.  If |result| is an [=exception=], [=reject=] |p| with |result| and terminate these substeps.
 
