@@ -1176,7 +1176,7 @@ Possible extra rowspan handling
 		}
 	}
 </style>
-  <meta content="Bikeshed version aa82ed4ababc6275b796a6e8bae93f32d8a46d2d" name="generator">
+  <meta content="Bikeshed version 5834a15f311a639c0b59ff2edbf3a060391d15ff" name="generator">
   <link href="http://www.w3.org/TR/credential-management-1/" rel="canonical">
 <style>/* style-md-lists */
 
@@ -1424,7 +1424,7 @@ pre.highlight, pre > code.highlight { display: block; padding: 1em; margin: .5em
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-09-07">7 September 2017</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2017-10-02">2 October 2017</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1440,7 +1440,7 @@ pre.highlight, pre > code.highlight { display: block; padding: 1em; margin: .5em
      <dt class="editor">Editor:
      <dd class="editor p-author h-card vcard" data-editor-id="56384"><a class="p-name fn u-email email" href="mailto:mkwst@google.com">Mike West</a> (<span class="p-org org">Google Inc.</span>)
      <dt>Participate:
-     <dd><span><a href="https://github.com/w3c/webappsec-credential-management/issues/new">File an issue</a> (<a href="https://github.com/w3c/webappsec-credential-management/issues">open issues</a>)</span>
+     <dd><a href="https://github.com/w3c/webappsec-credential-management/issues/new">File an issue</a> (<a href="https://github.com/w3c/webappsec-credential-management/issues">open issues</a>)
     </dl>
    </div>
    <div data-fill-with="warning"></div>
@@ -1812,9 +1812,9 @@ store user credentials for future use.</p>
    </section>
    <h5 class="heading settled algorithm" data-algorithm="&apos;create a credential&apos; internal method&quot;" data-level="2.2.1.4" id="algorithm-create-cred"><span class="secno">2.2.1.4. </span><span class="content">'create a credential' internal method"</span><a class="self-link" href="#algorithm-create-cred"></a></h5>
     <dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="method" data-export="" id="dom-credential-create-slot"><code>[[Create]](origin, options)</code></dfn> is called with
-    with an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin②">origin</a> and a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialcreationoptions" id="ref-for-dictdef-credentialcreationoptions">CredentialCreationOptions</a></code>, 
+    with an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin②">origin</a> and a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialcreationoptions" id="ref-for-dictdef-credentialcreationoptions">CredentialCreationOptions</a></code>,
     and returns either a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential①⑦">Credential</a></code>, if one can be created,
-    or <code>null</code> if no credential was created, 
+    or <code>null</code> if no credential was created,
     or a <a data-link-type="dfn" href="#constructcredential" id="ref-for-constructcredential">constructCredential</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#struct" id="ref-for-struct">struct</a>,
     or an error if creation fails due to exceptional situations
     (for example, incorrect options could produce a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror①">TypeError</a></code>): 
@@ -1830,7 +1830,7 @@ store user credentials for future use.</p>
     <dt data-md=""><code><dfn class="dfn-paneled" data-dfn-type="dfn" data-noexport="" id="constructcredentialcallback">constructCredentialCallback</dfn></code>
     <dd data-md="">
      <p>A Web IDL <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#Function" id="ref-for-Function">Function</a></code> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#idl-callback-function" id="ref-for-idl-callback-function">callback function type</a> value, whose purpose is to construct,
-  on the main <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop" id="ref-for-event-loop">event loop</a>, an <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object" id="ref-for-dfn-interface-object⑥">interface object</a> derived from <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential①⑧">Credential</a></code>, given 
+  on the main <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#event-loop" id="ref-for-event-loop">event loop</a>, an <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object" id="ref-for-dfn-interface-object⑥">interface object</a> derived from <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential①⑧">Credential</a></code>, given
   a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object">current settings object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-global" id="ref-for-concept-settings-object-global">global object</a>.</p>
    </dl>
    <p class="note" role="note"><span>Note:</span> <code><a data-link-type="dfn" href="#constructcredentialcallback" id="ref-for-constructcredentialcallback①">constructCredentialCallback</a></code>’s functionality is defined on a
@@ -2388,7 +2388,7 @@ store user credentials for future use.</p>
     }
   });
 </pre>
-     <p>Alternatively, the website could just copy the credential data into a <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/forms.html#the-form-element" id="ref-for-the-form-element">form</a></code> and call <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/forms.html#dom-form-submit-2" id="ref-for-dom-form-submit-2">submit()</a></code> on the form:</p>
+     <p>Alternatively, the website could just copy the credential data into a <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/forms.html#the-form-element" id="ref-for-the-form-element">form</a></code> and call <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/forms.html#dom-form-submit" id="ref-for-dom-form-submit">submit()</a></code> on the form:</p>
 <pre>navigator.<a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials⑧">credentials</a>
   .<a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get①⑥">get</a>({ '<a class="idl-code" data-link-type="dict-member" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password①">password</a>': true })
   .then(credential => {
@@ -3101,7 +3101,7 @@ store user credentials for future use.</p>
   granting access to credentials for an origin other than the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context" id="ref-for-top-level-browsing-context③">top-level browsing context</a>,
   which is the only security origin which users can reasonably be expected to understand.</p>
     <p>Therefore, both <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get②③">get()</a></code> and <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store①③">store()</a></code> will result in a rejected <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise" id="ref-for-idl-promise⑤">Promise</a></code> when called from
-  a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context">nested browsing context</a>, and the API and related interfaces are not exposed inside <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#worker-2" id="ref-for-worker-2">Worker</a></code> contexts.</p>
+  a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#nested-browsing-context" id="ref-for-nested-browsing-context">nested browsing context</a>, and the API and related interfaces are not exposed inside <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/workers.html#worker" id="ref-for-worker">Worker</a></code> contexts.</p>
     <p>The algorithms in <a href="#algorithm-request">§2.5.1 Request a Credential</a> and <a href="#algorithm-store">§2.5.3 Store a Credential</a> contain more detail.</p>
     <h3 class="heading settled" data-level="6.5" id="security-timing"><span class="secno">6.5. </span><span class="content">Timing Attacks</span><a class="self-link" href="#security-timing"></a></h3>
     <p>If the user has no credentials for an origin, a call to <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get②④">get()</a></code> will
@@ -3435,7 +3435,7 @@ partial dictionary CredentialCreationOptions {
   <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
   <ul class="index">
    <li>
-    <a data-link-type="biblio">[csp-3]</a> defines the following terms:
+    <a data-link-type="biblio">[CSP]</a> defines the following terms:
     <ul>
      <li><a href="https://w3c.github.io/webappsec-csp/#child-src">child-src</a>
      <li><a href="https://w3c.github.io/webappsec-csp/#connect-src">connect-src</a>
@@ -3465,7 +3465,7 @@ partial dictionary CredentialCreationOptions {
     <ul>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">HTMLFormElement</a>
      <li><a href="https://html.spec.whatwg.org/multipage/system-state.html#navigator">Navigator</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/workers.html#worker-2">Worker</a>
+     <li><a href="https://html.spec.whatwg.org/multipage/workers.html#worker">Worker</a>
      <li><a href="https://html.spec.whatwg.org/multipage/browsers.html#active-document">active document</a>
      <li><a href="https://html.spec.whatwg.org/multipage/origin.html#ascii-serialisation-of-an-origin">ascii serialization of an origin</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete">autocomplete</a>
@@ -3491,7 +3491,7 @@ partial dictionary CredentialCreationOptions {
      <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-realm">relevant realm</a>
      <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-document">responsible document</a>
      <li><a href="https://html.spec.whatwg.org/multipage/origin.html#same-origin">same origin</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/forms.html#dom-form-submit-2">submit()</a>
+     <li><a href="https://html.spec.whatwg.org/multipage/forms.html#dom-form-submit">submit()</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#category-submit">submittable elements</a>
      <li><a href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context">top-level browsing context</a>
      <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-username">username</a>
@@ -3515,17 +3515,7 @@ partial dictionary CredentialCreationOptions {
      <li><a href="https://w3c.github.io/webappsec-mixed-content/#a-priori-authenticated-url">a priori authenticated url</a>
     </ul>
    <li>
-    <a data-link-type="biblio">[mixed-content-1]</a> defines the following terms:
-    <ul>
-     <li><a href="https://w3c.github.io/webappsec-mixed-content/#a-priori-authenticated-url">a priori authenticated url</a>
-    </ul>
-   <li>
     <a data-link-type="biblio">[promises-guide]</a> defines the following terms:
-    <ul>
-     <li><a href="https://www.w3.org/2001/tag/doc/promises-guide/#a-promise-rejected-with">a promise rejected with</a>
-    </ul>
-   <li>
-    <a data-link-type="biblio">[promises-guide-1]</a> defines the following terms:
     <ul>
      <li><a href="https://www.w3.org/2001/tag/doc/promises-guide/#a-new-promise">a new promise</a>
      <li><a href="https://www.w3.org/2001/tag/doc/promises-guide/#a-promise-rejected-with">a promise rejected with</a>
@@ -3539,11 +3529,6 @@ partial dictionary CredentialCreationOptions {
     </ul>
    <li>
     <a data-link-type="biblio">[secure-contexts]</a> defines the following terms:
-    <ul>
-     <li><a href="https://w3c.github.io/webappsec-secure-contexts/#secure-context">secure context</a>
-    </ul>
-   <li>
-    <a data-link-type="biblio">[secure-contexts-1]</a> defines the following terms:
     <ul>
      <li><a href="https://w3c.github.io/webappsec-secure-contexts/#secure-context">secure context</a>
     </ul>
@@ -3586,7 +3571,7 @@ partial dictionary CredentialCreationOptions {
   <h3 class="no-num no-ref heading settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
   <dl>
    <dt id="biblio-csp">[CSP]
-   <dd>Mike West. <a href="https://www.w3.org/TR/CSP3/">Content Security Policy Level 3</a>. URL: <a href="https://www.w3.org/TR/CSP3/">https://www.w3.org/TR/CSP3/</a>
+   <dd>Mike West. <a href="https://www.w3.org/TR/CSP3/">Content Security Policy Level 3</a>. 13 September 2016. WD. URL: <a href="https://www.w3.org/TR/CSP3/">https://www.w3.org/TR/CSP3/</a>
    <dt id="biblio-dom">[DOM]
    <dd>Anne van Kesteren. <a href="https://dom.spec.whatwg.org/">DOM Standard</a>. Living Standard. URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a>
    <dt id="biblio-fetch">[FETCH]
@@ -3596,17 +3581,19 @@ partial dictionary CredentialCreationOptions {
    <dt id="biblio-infra">[INFRA]
    <dd>Anne van Kesteren; Domenic Denicola. <a href="https://infra.spec.whatwg.org/">Infra Standard</a>. Living Standard. URL: <a href="https://infra.spec.whatwg.org/">https://infra.spec.whatwg.org/</a>
    <dt id="biblio-mixed-content">[MIXED-CONTENT]
-   <dd>Mike West. <a href="https://www.w3.org/TR/mixed-content/">Mixed Content</a>. URL: <a href="https://www.w3.org/TR/mixed-content/">https://www.w3.org/TR/mixed-content/</a>
+   <dd>Mike West. <a href="https://www.w3.org/TR/mixed-content/">Mixed Content</a>. 2 August 2016. CR. URL: <a href="https://www.w3.org/TR/mixed-content/">https://www.w3.org/TR/mixed-content/</a>
    <dt id="biblio-promises-guide">[PROMISES-GUIDE]
    <dd>Domenic Denicola. <a href="https://www.w3.org/2001/tag/doc/promises-guide">Writing Promise-Using Specifications</a>. 16 February 2016. Finding of the W3C TAG. URL: <a href="https://www.w3.org/2001/tag/doc/promises-guide">https://www.w3.org/2001/tag/doc/promises-guide</a>
    <dt id="biblio-psl">[PSL]
    <dd><cite><a href="https://publicsuffix.org/">Public Suffix List</a></cite>.    Mozilla Foundation.
    <dt id="biblio-rfc2119">[RFC2119]
    <dd>S. Bradner. <a href="https://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>. March 1997. Best Current Practice. URL: <a href="https://tools.ietf.org/html/rfc2119">https://tools.ietf.org/html/rfc2119</a>
+   <dt id="biblio-secure-contexts">[SECURE-CONTEXTS]
+   <dd>Mike West. <a href="https://www.w3.org/TR/secure-contexts/">Secure Contexts</a>. 15 September 2016. CR. URL: <a href="https://www.w3.org/TR/secure-contexts/">https://www.w3.org/TR/secure-contexts/</a>
    <dt id="biblio-url">[URL]
    <dd>Anne van Kesteren. <a href="https://url.spec.whatwg.org/">URL Standard</a>. Living Standard. URL: <a href="https://url.spec.whatwg.org/">https://url.spec.whatwg.org/</a>
    <dt id="biblio-webidl">[WebIDL]
-   <dd>Cameron McCormack; Boris Zbarsky; Tobie Langel. <a href="https://heycam.github.io/webidl/">Web IDL</a>. URL: <a href="https://heycam.github.io/webidl/">https://heycam.github.io/webidl/</a>
+   <dd>Cameron McCormack; Boris Zbarsky; Tobie Langel. <a href="https://heycam.github.io/webidl/">Web IDL</a>. 15 December 2016. ED. URL: <a href="https://heycam.github.io/webidl/">https://heycam.github.io/webidl/</a>
    <dt id="biblio-xhr">[XHR]
    <dd>Anne van Kesteren. <a href="https://xhr.spec.whatwg.org/">XMLHttpRequest Standard</a>. Living Standard. URL: <a href="https://xhr.spec.whatwg.org/">https://xhr.spec.whatwg.org/</a>
   </dl>
@@ -3614,18 +3601,16 @@ partial dictionary CredentialCreationOptions {
   <dl>
    <dt id="biblio-browserid">[BROWSERID]
    <dd>Ben Adida; et al. <a href="https://github.com/mozilla/id-specs/blob/prod/browserid/index.md">BrowserID</a>. 26 February 2013. URL: <a href="https://github.com/mozilla/id-specs/blob/prod/browserid/index.md">https://github.com/mozilla/id-specs/blob/prod/browserid/index.md</a>
-   <dt id="biblio-secure-contexts">[SECURE-CONTEXTS]
-   <dd>Mike West. <a href="https://www.w3.org/TR/secure-contexts/">Secure Contexts</a>. URL: <a href="https://www.w3.org/TR/secure-contexts/">https://www.w3.org/TR/secure-contexts/</a>
    <dt id="biblio-sri">[SRI]
-   <dd>Devdatta Akhawe; et al. <a href="https://www.w3.org/TR/SRI/">Subresource Integrity</a>. URL: <a href="https://www.w3.org/TR/SRI/">https://www.w3.org/TR/SRI/</a>
+   <dd>Devdatta Akhawe; et al. <a href="https://www.w3.org/TR/SRI/">Subresource Integrity</a>. 23 June 2016. REC. URL: <a href="https://www.w3.org/TR/SRI/">https://www.w3.org/TR/SRI/</a>
    <dt id="biblio-web-login">[WEB-LOGIN]
    <dd>Jason Denizac; Robin Berjon; Anne van Kesteren. <a href="https://github.com/jden/web-login">web-login</a>. URL: <a href="https://github.com/jden/web-login">https://github.com/jden/web-login</a>
    <dt id="biblio-webauthn">[WEBAUTHN]
-   <dd>Vijay Bharadwaj; et al. <a href="https://www.w3.org/TR/webauthn/">Web Authentication: An API for accessing Public Key Credentials Level 1</a>. URL: <a href="https://www.w3.org/TR/webauthn/">https://www.w3.org/TR/webauthn/</a>
+   <dd>Vijay Bharadwaj; et al. <a href="https://www.w3.org/TR/webauthn/">Web Authentication: An API for accessing Public Key Credentials Level 1</a>. 11 August 2017. WD. URL: <a href="https://www.w3.org/TR/webauthn/">https://www.w3.org/TR/webauthn/</a>
    <dt id="biblio-webmessaging">[WEBMESSAGING]
-   <dd>Ian Hickson. <a href="https://www.w3.org/TR/webmessaging/">HTML5 Web Messaging</a>. URL: <a href="https://www.w3.org/TR/webmessaging/">https://www.w3.org/TR/webmessaging/</a>
+   <dd>Ian Hickson. <a href="https://www.w3.org/TR/webmessaging/">HTML5 Web Messaging</a>. 19 May 2015. REC. URL: <a href="https://www.w3.org/TR/webmessaging/">https://www.w3.org/TR/webmessaging/</a>
    <dt id="biblio-xmlhttprequest">[XMLHTTPREQUEST]
-   <dd>Anne van Kesteren; et al. <a href="https://www.w3.org/TR/XMLHttpRequest/">XMLHttpRequest Level 1</a>. URL: <a href="https://www.w3.org/TR/XMLHttpRequest/">https://www.w3.org/TR/XMLHttpRequest/</a>
+   <dd>Anne van Kesteren; et al. <a href="https://www.w3.org/TR/XMLHttpRequest/">XMLHttpRequest Level 1</a>. 6 October 2016. NOTE. URL: <a href="https://www.w3.org/TR/XMLHttpRequest/">https://www.w3.org/TR/XMLHttpRequest/</a>
   </dl>
   <h2 class="no-num no-ref heading settled" id="idl-index"><span class="content">IDL Index</span><a class="self-link" href="#idl-index"></a></h2>
 <pre class="idl highlight def">[<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed④">Exposed</a>=<span class="n">Window</span>, <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext" id="ref-for-SecureContext⑥">SecureContext</a>]

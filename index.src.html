@@ -287,12 +287,12 @@ spec:css-syntax-3;
   ### `Credential` Internal Methods ### {#credential-internal-methods}
   
   The {{Credential}} [=interface object=] features several internal methods facilitating 
-  retrieval and storage of {{Credential}} objects, with default "do nothing" implementations 
+  retrieval and storage of {{Credential}} objects, with default "no-op" implementations
   as specified in this section, below.
 
   Unless otherwise specified, each [=interface object=] created for interfaces which [=interface/inherit=] 
-  from {{Credential}} MUST provide implementations for some or all of these internal methods, overriding 
-  {{Credential}}'s default implementations, as appropriate for the [=credential=] type. E.g., see
+  from {{Credential}} MUST provide implementations for at least one of these internal methods, overriding
+  {{Credential}}'s default implementations, as appropriate for the [=credential=] type. E.g.,
   [[#passwordcredential-interface]] and [[#federatedcredential-interface]].
 
   <h5 id="algorithm-collect-creds" algorithm>'collect credentials' internal method</h5>
