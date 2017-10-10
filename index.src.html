@@ -295,19 +295,21 @@ spec:css-syntax-3;
   {{Credential}}'s default implementations, as appropriate for the [=credential=] type. E.g.,
   [[#passwordcredential-interface]] and [[#federatedcredential-interface]].
 
-  <h5 id="algorithm-collect-creds" algorithm>'collect credentials' internal method</h5>
+  <h5 id="algorithm-collect-creds" algorithm>`[[CollectFromCredentialStore]]` internal method</h5>
     <dfn for="Credential" method export>\[[CollectFromCredentialStore]](origin, options)</dfn> is called
     with an [=environment settings object/origin=] and a {{CredentialRequestOptions}}, and returns
     a set of {{Credential}} objects from the user
     agent's [=credential store=] that match the options provided. If no matching {{Credential}}
     objects are available, the returned set will be empty.
 
+    {{Credential}}'s default implementation of {{Credential/[[CollectFromCredentialStore]](origin, options)}}:
+
     <ul class="algorithm">
       1.  Return an empty set.
     </ul>
 
 
-  <h5 id="algorithm-discover-creds" algorithm>'discover credentials' internal method</h5>
+  <h5 id="algorithm-discover-creds" algorithm>`[[DiscoverFromExternalSource]]` internal method</h5>
     <dfn for="Credential" method export>\[[DiscoverFromExternalSource]](origin, options)</dfn> is called
     with an [=environment settings object/origin=] and a {{CredentialRequestOptions}} object.
     It returns a {{Credential}} if one can be
@@ -316,44 +318,56 @@ spec:css-syntax-3;
     kind of {{Credential}} is only [=effective=] for a single use or a limited time, this
     method is responsible for generating new [=credentials=] using a [=credential source=].
 
+    {{Credential}}'s default implementation of {{Credential/[[DiscoverFromExternalSource]](origin, options)}}:
+
     <ul class="algorithm">
       1.  Return `null`.
     </ul>
 
-  <h5 id="algorithm-store-cred" algorithm>'store a credential' internal method</h5>
+  <h5 id="algorithm-store-cred" algorithm>`[[Store]]` internal method</h5>
     <dfn for="Credential" method export>\[[Store]](credential)</dfn> is called with a {{Credential}},
-    and returns once {{Credential}} is persisted to the [=credential store=]:
+    and returns once {{Credential}} is persisted to the [=credential store=].
+
+    {{Credential}}'s default implementation of {{Credential/[[Store]](credential)}}:
 
     <ul class="algorithm">
       1.  Return.
     </ul>
-  </section>
 
-  <h5 id="algorithm-create-cred" algorithm>'create a credential' internal method"</h5>
-    <dfn for="Credential" method export>\[[Create]](origin, options)</dfn> is called with
-    with an [=environment settings object/origin=] and a {{CredentialCreationOptions}},
-    and returns either a {{Credential}}, if one can be created,
-    or `null` if no credential was created,
-    or a [=constructCredential=] [=struct=],
-    or an error if creation fails due to exceptional situations
-    (for example, incorrect options could produce a {{TypeError}}):
+  <h5 id="algorithm-create-cred" algorithm>`[[Create]]` internal method</h5>
+    <dfn for="Credential" method export>\[[Create]](origin, options)</dfn> is called 
+    [=in parallel=] with an [=environment settings object/origin=] and a {{CredentialCreationOptions}},
+    and either:
+
+    * creates a {{Credential}}, or, 
+    * does not create a credential and returns `null`, or,
+    * returns an error if creation fails due to exceptional situations
+        (for example, incorrect options could produce a {{TypeError}}).
+
+    When creating a {{Credential}}, it will either:
+
+    * directly return a {{Credential}} (in which case it accomplished everything while
+        running [=in parallel=]), or,
+    * return a [=constructCredential=] algorithm which yields a {{Credential}} when
+        subsequently invoked from a [=task=].
+
+    {{Credential}}'s default implementation of {{Credential/[[Create]](origin, options)}}:
 
     <ul class="algorithm">
       1.  Return `null`.
     </ul>
 
-  <h6 id="algorithm-construct-cred-struct">constructCredential struct</h6>
+  <h6 id="algorithm-construct-cred">constructCredential Algorithm</h6>
 
-    <dfn>constructCredential</dfn> is a [=struct=] whose single [=item=] is a [=constructCredentialCallback=]:
+    A <dfn>constructCredential</dfn> algorithm is a [=queue=] of steps
+        to be invoked by a [=task=] from the [=DOM manipulation task source=].
+        [=constructCredential=]'s purpose is to construct an [=interface object=] derived
+        from {{Credential}}, given a [=current settings object=]'s
+        [=environment settings object/global object=].
 
-    :   <code><dfn>constructCredentialCallback</dfn></code>
-    ::  A Web IDL {{Function}} [=callback function type=] value, whose purpose is to construct,
-        on the main [=event loop=], an [=interface object=] derived from {{Credential}}, given
-        a [=current settings object=]'s [=environment settings object/global object=].
-
-    Note: <code>[=constructCredentialCallback=]</code>'s functionality is defined on a
+    Note: <code>[=constructCredential=]</code>'s algorithm steps are defined on a
         per-[=credential=] type basis by those [=credential=] type specifications needing to
-        employ it. E.g., see [[WEBAUTHN]].
+        employ it. E.g., [[WEBAUTHN]].
 
 
 
@@ -865,18 +879,17 @@ spec:css-syntax-3;
         1.  Let |r| be the result of executing |interfaces|[0]'s {{Credential/[[Create]](origin, options)}}
             internal method given |origin| and |options|.
 
-        2.  If |r| is an [=exception=], [=reject=] |p| with |r|, and terminate these substeps.
+        2.  If |r| is an [=exception=] or `null`, [=reject=] |p| with |r|, and terminate these substeps.
 
         3.  If |r| is a {{Credential}}, [=resolve=] |p| with |r|, and terminate these substeps.
 
-        4.  Assert: |r| is a <code>[=constructCredential=]</code> [=struct=].
+        4.  Assert: |r| is a <code>[=constructCredential=]</code> algorithm.
 
-        5.  Let |result| be the result of [=queue a task|queuing a task=] to run
-            <code>|r|.[=constructCredentialCallback=]</code> given |global|, using the [=DOM manipulation task source=].
+        5.  [=Queue a task=] on |global|'s [=DOM manipulation task source=] to run the following substeps:
 
-        6.  If |result| is an [=exception=], [=reject=] |p| with |result| and terminate these substeps.
-
-        7.  [=Resolve=] |p| with |result|.
+            1. Let |result| be the result of [=promise-calling=] |r| given |global|.
+            2. If |result| is an [=exception=], [=reject=] |p| with |result| and terminate these substeps.
+            3. [=Resolve=] |p| with |result|.
 
     9.  Return |p|.
   </ol>
