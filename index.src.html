@@ -1150,10 +1150,12 @@ spec:css-syntax-3;
     :   <dfn constructor>PasswordCredential(form)</dfn>
     ::  This constructor accepts an {{HTMLFormElement}} (|form|), and runs the following steps:
 
-        1.  Let |r| be the result of executing <a abstract-op>Create a `PasswordCredential` from
-            an `HTMLFormElement`</a> on |form|.
+        1.  Let |origin| be the [=current settings object=]'s [=environment settings object/origin=].
 
-        2.  If |r| is an [=exception=], [=throw=] |r|.
+        2.  Let |r| be the result of executing <a abstract-op>Create a `PasswordCredential` from
+            an `HTMLFormElement`</a> given |form| and |origin|.
+
+        3.  If |r| is an [=exception=], [=throw=] |r|.
 
             Otherwise, return |r|.
 
@@ -1177,6 +1179,7 @@ spec:css-syntax-3;
     dictionary PasswordCredentialData : CredentialData {
       USVString name;
       USVString iconURL;
+      required USVString origin;
       required USVString password;
     };
 
@@ -1224,7 +1227,7 @@ spec:css-syntax-3;
   </h4>
 
   <dfn for="PasswordCredential" method>\[[Create]](origin, options)</dfn> is called with
-  an [=environment settings object/origin=] (<var ignore>origin</var>) and a
+  an [=environment settings object/origin=] (|origin|) and a
   {{CredentialCreationOptions}} (|options|), and returns a {{PasswordCredential}} if one can be created,
   `null` otherwise. The {{CredentialCreationOptions}} dictionary must have a `password` member which
   holds either an {{HTMLFormElement}} or a {{PasswordCredentialData}}. If that member's value cannot be
@@ -1235,11 +1238,11 @@ spec:css-syntax-3;
 
     2.  If |options|["{{CredentialCreationOptions/password}}"] is an {{HTMLFormElement}}, return the
         result of executing <a abstract-op>Create a `PasswordCredential` from an
-        `HTMLFormElement`</a> on |options|["{{CredentialCreationOptions/password}}"].
+        `HTMLFormElement`</a> given |options|["{{CredentialCreationOptions/password}}"] and |origin|.
 
     3.  If |options|["{{CredentialCreationOptions/password}}"] is a {{PasswordCredentialData}}, return
         the result of executing <a abstract-op>Create a `PasswordCredential` from
-        `PasswordCredentialData`</a> on |options|["{{CredentialCreationOptions/password}}"].
+        `PasswordCredentialData`</a> given |options|["{{CredentialCreationOptions/password}}"].
 
     4.  Return a {{TypeError}} [=exception=].
   </ol>
@@ -1294,7 +1297,7 @@ spec:css-syntax-3;
   </h4>
 
   To <dfn abstract-op>Create a `PasswordCredential` from an `HTMLFormElement`</dfn>, given an
-  {{HTMLFormElement}} (|form|), run these steps.
+  {{HTMLFormElement}} (|form|) and an [=environment settings object/origin=] (|origin|), run these steps.
   
   Note: [[#examples-post-signin]] and [[#examples-change-password]] provide examples of the intended
   usage.
@@ -1302,14 +1305,16 @@ spec:css-syntax-3;
   <ol class="algorithm">
     1.  Let |data| be a new {{PasswordCredentialData}} dictionary.
 
-    2.  Let |formData| be the result of executing the {{FormData}} constructor
+    2.  Set |data|'s {{PasswordCredentialData/origin}} member's value to |origin|'s value.
+
+    3.  Let |formData| be the result of executing the {{FormData}} constructor
         on |form|.
 
-    3.  Let |elements| be a list of all the [=submittable elements=] whose [=form owner=] is |form|, in [=tree order=].
+    4.  Let |elements| be a list of all the [=submittable elements=] whose [=form owner=] is |form|, in [=tree order=].
 
-    4.  Let |newPasswordObserved| be `false`.
+    5.  Let |newPasswordObserved| be `false`.
 
-    5.  For each |field| in |elements|, run the following steps:
+    6.  For each |field| in |elements|, run the following steps:
 
         1.  If |field| does not have an <{input/autocomplete}> attribute, then skip to the next
             |field|.
@@ -1358,14 +1363,14 @@ spec:css-syntax-3;
                         result of executing |formData|'s {{FormData/get()}} method
                         on |name|.
 
-    6.  Let |c| be the result of executing <a abstract-op>Create a `PasswordCredential` from
+    7.  Let |c| be the result of executing <a abstract-op>Create a `PasswordCredential` from
         `PasswordCredentialData`</a> on |data|.
      
-    7.  If |c| is an [=exception=], return |c|.
+    8.  If |c| is an [=exception=], return |c|.
 
-    8.  Assert: |c| is a {{PasswordCredential}}.
+    9.  Assert: |c| is a {{PasswordCredential}}.
 
-    9.  Return |c|.
+    10.  Return |c|.
   </ol>
 
   <h4 algorithm id="construct-passwordcredential-data">
@@ -1381,6 +1386,7 @@ spec:css-syntax-3;
     2.  If any of the following are the empty string, return a {{TypeError}} [=exception=]:
 
         *   |data|'s {{CredentialData/id}} member's value
+        *   |data|'s {{PasswordCredentialData/origin}} member's value
         *   |data|'s {{PasswordCredentialData/password}} member's value
 
     3.  Set |c|'s properties as follows:
@@ -1394,7 +1400,7 @@ spec:css-syntax-3;
         :   {{CredentialUserData/name}}
         ::  |data|'s {{PasswordCredentialData/name}} member's value
         :   {{Credential/[[origin]]}}
-        ::  The [=environment settings object/origin=] of the [=current settings object=].
+        ::  |data|'s {{PasswordCredentialData/origin}} member's value.
 
     4.  Return |c|.
   </ol>
