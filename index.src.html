@@ -1489,6 +1489,7 @@ spec:css-syntax-3;
     dictionary FederatedCredentialInit : CredentialData {
       USVString name;
       USVString iconURL;
+      required USVString origin;
       required USVString provider;
       DOMString protocol;
     };
@@ -1560,14 +1561,17 @@ spec:css-syntax-3;
   </h4>
 
   <dfn for="FederatedCredential" method>\[[Create]](origin, options)</dfn> is called with 
-  an [=environment settings object/origin=] (<var ignore>origin</var>) and a
+  an [=environment settings object/origin=] (|origin|) and a
   {{CredentialCreationOptions}} (|options|), and returns a {{FederatedCredential}} if one can be created,
   `null` otherwise, or an [=exception=] in exceptional circumstances:
 
   <ol class="algorithm">
     1.  Assert: |options|["{{CredentialCreationOptions/federated}}"] [=map/exists=].
 
-    2.  Return the result of executing <a abstract-op>Create a `FederatedCredential` from
+    2.  Set |options|["{{CredentialCreationOptions/federated}}"]'s {{FederatedCredentialInit/origin}}
+        member's value to |origin|'s value.
+
+    3.  Return the result of executing <a abstract-op>Create a `FederatedCredential` from
         `FederatedCredentialInit`</a> on |options|["{{CredentialCreationOptions/federated}}"].
   </ol>
 
@@ -1630,7 +1634,7 @@ spec:css-syntax-3;
         :   {{CredentialUserData/name}}
         ::  |init|.{{CredentialUserData/name}}'s value
         :   {{Credential/[[origin]]}}
-        ::  The [=environment settings object/origin=] of the [=current settings object=].
+        ::  |init|.{{FederatedCredentialInit/origin}}'s value.
 
     4.  Return |c|.
   </ol>
