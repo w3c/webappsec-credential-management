@@ -335,12 +335,12 @@ spec:css-syntax-3;
     </ul>
 
   <h5 id="algorithm-create-cred" algorithm>`[[Create]]` internal method</h5>
-    <dfn for="Credential" method export>\[[Create]](origin, options)</dfn> is called 
+    <dfn for="Credential" method export>\[[Create]](origin, options)</dfn> is called
     [=in parallel=] with an [=environment settings object/origin=] and a {{CredentialCreationOptions}},
     and either:
 
-    * creates a {{Credential}}, or, 
-    * does not create a credential and returns `null`, or,
+    * creates a {{Credential}}, or
+    * does not create a credential and returns `null`, or
     * returns an error if creation fails due to exceptional situations
         (for example, incorrect options could produce a {{TypeError}}).
 
@@ -879,17 +879,15 @@ spec:css-syntax-3;
         1.  Let |r| be the result of executing |interfaces|[0]'s {{Credential/[[Create]](origin, options)}}
             internal method given |origin| and |options|.
 
-        2.  If |r| is an [=exception=] or `null`, [=reject=] |p| with |r|, and terminate these substeps.
+        2.  If |r| is an [=exception=], [=reject=] |p| with |r|, and terminate these substeps.
 
-        3.  If |r| is a {{Credential}}, [=resolve=] |p| with |r|, and terminate these substeps.
+        3.  If |r| is a {{Credential}} or `null`, [=resolve=] |p| with |r|, and terminate these substeps.
 
         4.  Assert: |r| is a <code>[=constructCredential=]</code> algorithm.
 
         5.  [=Queue a task=] on |global|'s [=DOM manipulation task source=] to run the following substeps:
 
-            1. Let |result| be the result of [=promise-calling=] |r| given |global|.
-            2. If |result| is an [=exception=], [=reject=] |p| with |result| and terminate these substeps.
-            3. [=Resolve=] |p| with |result|.
+            1. [=Resolve=] |p| with the result of [=promise-calling=] |r| given |global|.
 
     9.  Return |p|.
   </ol>
@@ -1205,7 +1203,7 @@ spec:css-syntax-3;
   </h4>
 
   <dfn for="PasswordCredential" method>\[[CollectFromCredentialStore]](origin, options)</dfn> is called
-  with an [=environment settings object/origin=] (|origin|) and a {{CredentialRequestOptions}} (|options|),
+  with an [=origin=] (|origin|) and a {{CredentialRequestOptions}} (|options|),
   and returns a set of {{Credential}} objects from
   the [=credential store=]. If no matching {{Credential}} objects are available, the returned set
   will be empty.
@@ -1297,7 +1295,7 @@ spec:css-syntax-3;
   </h4>
 
   To <dfn abstract-op>Create a `PasswordCredential` from an `HTMLFormElement`</dfn>, given an
-  {{HTMLFormElement}} (|form|) and an [=environment settings object/origin=] (|origin|), run these steps.
+  {{HTMLFormElement}} (|form|) and an [=origin=] (|origin|), run these steps.
   
   Note: [[#examples-post-signin]] and [[#examples-change-password]] provide examples of the intended
   usage.
