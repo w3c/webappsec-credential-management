@@ -792,7 +792,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
         1.  Let |r| be the result of executing |credential|'s [=interface object=]'s
             {{Credential/[[Store]](credential)}} internal method on |credential|.
 
-        2.  [=Resolve=] |p| with |r|.
+        2.  If |r| is an [=exception=], [=reject=] |p| with |r|.
+
+            Otherwise, [=resolve=] |p| with |r|.
 
     6.  Return |p|.
   </ol>
