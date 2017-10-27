@@ -452,6 +452,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   <pre class="idl">
     dictionary CredentialRequestOptions {
       CredentialMediationRequirement mediation = "optional";
+      AbortSignal signal;
     };
   </pre>
   <div dfn-for="CredentialRequestOptions" dfn-type="dict-member">
@@ -671,6 +672,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
   <pre class="idl">
     dictionary CredentialCreationOptions {
+      AbortSignal signal;
     };
   </pre>
 
