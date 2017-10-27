@@ -52,9 +52,6 @@ spec: PSL; urlPrefix: https://publicsuffix.org/list/
 spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
   type: dfn
     text: http-network-or-cache fetch; url: http-network-or-cache-fetch 
-spec: DOM; urlPrefix: https://dom.spec.whatwg.org/
-  type: interface
-    text: AbortSignal url: https://dom.spec.whatwg.org/#abortsignal
 </pre>
 <pre class="link-defaults">
 spec:html; type:dfn; for:/; text:origin
@@ -242,7 +239,6 @@ spec:url; type:dfn; text:urlencoded byte serializer
     interface Credential {
       readonly attribute USVString id;
       readonly attribute DOMString type;
-      readonly attribute AbortSignal signal;
     };
   </pre>
   <div dfn-for="Credential">
@@ -253,12 +249,6 @@ spec:url; type:dfn; text:urlencoded byte serializer
     :   <dfn attribute>type</dfn>
     ::  This attribute's getter returns the value of the object's [=interface object=]'s
         {{[[type]]}} slot, which specifies the kind of credential represented by this object.
-
-    :   <dfn attribute>signal</dfn>
-    ::  The credential object has an associated signal (an {{AbortSignal}} object), initially 
-        a new {{AbortSignal}} object. Developers can use AbortSignal to [=terminated|terminate=] an 
-        ongoing {{PasswordCredential/[[Create]](options)}} operation or 
-        {{Credential/[[DiscoverFromExternalSource]](options)}} operation. 
 
     :   <dfn attribute>\[[type]]</dfn>
     ::  The {{Credential}} [=interface object=] has an internal slot named `[[type]]`, which
