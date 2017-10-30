@@ -284,9 +284,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   Each [=interface object=] created for interfaces which [=interface/inherit=] from {{Credential}}
   defines several internal methods that allow retrieval and storage of {{Credential}} objects. The 
   {{Credential/[[Create]](options)}} method and {{Credential/[[DiscoverFromExternalSource]](options)}}
-  method can be <dfn id="concept-credman-terminated">terminated</dfn> with flag
-  [=AbortSignal/aborted flag=], which is unset unless otherwise specificed. When methods are 
-  [=terminated=], the promise MUST be rejected with an {{AbortError}} {{DOMException}}.  
+  method can be aborted. 
 
   <section algorithm="'collect credentials' internal method">
     <dfn for="Credential" method export>\[[CollectFromCredentialStore]](options)</dfn> is called
@@ -432,7 +430,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
         Note: This function was previously called `requireUserMediation()` which should be considered
         deprecated.
-  </div>
+      </div>
 
   <div algorithm="create credentialscontainer">
     When a {{Navigator}} object (|navigator|) is created, the user agent MUST create a
@@ -460,6 +458,11 @@ spec:url; type:dfn; text:urlencoded byte serializer
     ::  This property specifies the mediation requirements for a given credential request. The
         meaning of each enum value is described below in {{CredentialMediationRequirement}}.
         Processing details are defined in [[#algorithm-request]].
+    :   <dfn>signal</dfn>
+    ::  This property allow the developer to abort an ongoing 
+        {{[[DiscoverFromExternalSource]](options)}} operation and subequently all related 
+        [=authenticatorGetAssertion=] operations. Aborted romise would 
+        be rejected with an "AbortError" DOMException. 
   </div>
 
   <div class="note">
@@ -675,7 +678,14 @@ spec:url; type:dfn; text:urlencoded byte serializer
       AbortSignal signal;
     };
   </pre>
+   <div dfn-for="CredentialCreationOptions" dfn-type="dict-member">
+    :   <dfn>signal</dfn>
+    ::  This property allow the developer to abort an ongoing {{Credential/[[Create]](options)}} operation
+        and susquently all related [=authenticatorMakeCredential=] operations. Aborted romise would 
+        be rejected with an "AbortError" DOMException. 
+  </div>
 
+  
   ## Algorithms ## {#algorithms}
 
   <h4 id="algorithm-request" algorithm>Request a `Credential`</h4>
@@ -813,37 +823,37 @@ spec:url; type:dfn; text:urlencoded byte serializer
   <ol class="algorithm">
     1.  Let |settings| be the <a>current settings object</a>
 
-    2.  Assert: |settings| is a [=secure context=].
+    1.  Assert: |settings| is a [=secure context=].
 
-    3.  Let |interfaces| be the set of |options|' <a>relevant credential interface objects</a>.
+    1.  Let |interfaces| be the set of |options|' <a>relevant credential interface objects</a>.
 
-    4.  Return [=a promise rejected with=] `NotSupportedError` if any of the following statements
+    1.  Return [=a promise rejected with=] `NotSupportedError` if any of the following statements
         are true:
 
         1.  |settings| does not have a [=environment settings object/responsible document=].
 
-        2.  |settings|' [=environment settings object/responsible document=] is not the
+        1.  |settings|' [=environment settings object/responsible document=] is not the
             [=active document=] in a [=top-level browsing context=].
 
-        3.  |interfaces|' [=list/size=] is greater than 1.
+        1.  |interfaces|' [=list/size=] is greater than 1.
 
             Note: It may be reasonable at some point in the future to loosen this restriction, and
             allow the user agent to help the user choose among one of many potential credential
             types in order to support a "sign-up" use case. For the moment, though, we're punting
             on that by restricting the dictionary to a single entry.
 
-    5.  Let |p| be [=a new promise=].
+    1.  Let |p| be [=a new promise=].
 
-    6.  Run the following steps [=in parallel=] but abort if the execution is [=terminated=]:
+    1.  Run the following steps [=in parallel=]:
 
         1.  Let |r| be the result of executing |interfaces|[0] {{Credential/[[Create]](options)}}
             internal method on |options|.
 
-        2.  If |r| is an [=exception=], [=reject=] |p| with |r|.
+        1.  If |r| is an [=exception=], [=reject=] |p| with |r|.
 
             Otherwise, [=resolve=] |p| with |r|.
 
-    7.  Return |p|.
+    1.  Return |p|.
   </ol>
 
   <h4 id="algorithm-prevent-silent-access" algorithm>Prevent Silent Access</h4>
