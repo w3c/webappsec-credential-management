@@ -282,10 +282,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   ### `Credential` Internal Methods ### {#credential-internal-methods}
 
   Each [=interface object=] created for interfaces which [=interface/inherit=] from {{Credential}}
-  defines several internal methods that allow retrieval and storage of {{Credential}} objects. The
-  methods taking an `options` argument receive an {{AbortSignal}}, with which they
-  can [respond](https://dom.spec.whatwg.org/#abortcontroller-api-integration) to a caller attempting
-  to abort them.
+  defines several internal methods that allow retrieval and storage of {{Credential}} objects:
 
   <section algorithm="'collect credentials' internal method">
     <dfn for="Credential" method export>\[[CollectFromCredentialStore]](options)</dfn> is called
@@ -1923,6 +1920,11 @@ spec:url; type:dfn; text:urlencoded byte serializer
       can therefore simply be copied out of the [=credential store=], while
       {{Credential/[[DiscoverFromExternalSource]](options)}} is appropriate for
       [=credentials=] that need to be re-generated from a [=credential source=].
+
+      Long-running operations, like those in {{PublicKeyCredential}}'s
+      {{PublicKeyCredential/[[Create]](options)}} and {{PublicKeyCredential/[[DiscoverFromExternalSource]](options)}}
+      operations are encouraged to use <code>options.signal</code> to allow developers to abort
+      the operation. See [[dom#abortcontroller-api-integration]] for detailed instructions.
 
       <div class="example">
         `ExampleCredential`'s `[[CollectFromCredentialStore]](options)` internal method is called
