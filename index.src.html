@@ -58,6 +58,7 @@ spec:html; type:dfn; for:/; text:origin
 spec:fetch; type:dfn; for:/; text:request
 spec:fetch; type:dictionary; for:/; text:RequestInit
 spec:webidl; type:interface; text:Promise
+spec:dom; type:dfn; text:aborted flag
 
 <!-- These need to be exported -->
 spec:html; type:dfn; text:submittable element
@@ -282,7 +283,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
   ### `Credential` Internal Methods ### {#credential-internal-methods}
 
   Each [=interface object=] created for interfaces which [=interface/inherit=] from {{Credential}}
-  defines several internal methods that allow retrieval and storage of {{Credential}} objects:
+  defines several internal methods that allow retrieval and storage of {{Credential}} objects. The 
+  {{Credential/[[Create]](options)}} method and {{Credential/[[DiscoverFromExternalSource]](options)}}
+  method can be aborted. 
 
   <section algorithm="'collect credentials' internal method">
     <dfn for="Credential" method export>\[[CollectFromCredentialStore]](options)</dfn> is called
@@ -448,6 +451,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   <pre class="idl">
     dictionary CredentialRequestOptions {
       CredentialMediationRequirement mediation = "optional";
+      AbortSignal signal;
     };
   </pre>
   <div dfn-for="CredentialRequestOptions" dfn-type="dict-member">
@@ -455,6 +459,11 @@ spec:url; type:dfn; text:urlencoded byte serializer
     ::  This property specifies the mediation requirements for a given credential request. The
         meaning of each enum value is described below in {{CredentialMediationRequirement}}.
         Processing details are defined in [[#algorithm-request]].
+    :   <dfn>signal</dfn>
+    ::  This property lets the developer abort an ongoing 
+        {{[[DiscoverFromExternalSource]](options)}} operation and subsequently all related 
+        [=authenticatorGetAssertion=] operations. Aborted promise would 
+        be rejected with an "AbortError" DOMException. 
   </div>
 
   <div class="note">
@@ -667,9 +676,18 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
   <pre class="idl">
     dictionary CredentialCreationOptions {
+      AbortSignal signal;
     };
   </pre>
+   <div dfn-for="CredentialCreationOptions" dfn-type="dict-member">
+    :   <dfn>signal</dfn>
+    ::  This property lets the developer abort an ongoing {{Credential/[[Create]](options)}} operation
+        and susquently all related [=authenticatorMakeCredential=] operations. An aborted operation 
+        may complete successfully (if the [=aborted flag=] was set after the operation completed) 
+        or be rejected with an "{{AbortError}}" {{DOMException}}. 
+  </div>
 
+  
   ## Algorithms ## {#algorithms}
 
   <h4 id="algorithm-request" algorithm>Request a `Credential`</h4>
