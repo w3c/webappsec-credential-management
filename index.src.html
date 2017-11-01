@@ -58,7 +58,6 @@ spec:html; type:dfn; for:/; text:origin
 spec:fetch; type:dfn; for:/; text:request
 spec:fetch; type:dictionary; for:/; text:RequestInit
 spec:webidl; type:interface; text:Promise
-spec:dom; type:dfn; text:aborted flag
 
 <!-- These need to be exported -->
 spec:html; type:dfn; text:submittable element
@@ -283,9 +282,10 @@ spec:url; type:dfn; text:urlencoded byte serializer
   ### `Credential` Internal Methods ### {#credential-internal-methods}
 
   Each [=interface object=] created for interfaces which [=interface/inherit=] from {{Credential}}
-  defines several internal methods that allow retrieval and storage of {{Credential}} objects. The 
-  {{Credential/[[Create]](options)}} method and {{Credential/[[DiscoverFromExternalSource]](options)}}
-  method can be aborted. 
+  defines several internal methods that allow retrieval and storage of {{Credential}} objects. The
+  methods taking an `options` argument receive an {{AbortSignal}}, with which they
+  can [respond](https://dom.spec.whatwg.org/#abortcontroller-api-integration) to a caller attempting
+  to abort them.
 
   <section algorithm="'collect credentials' internal method">
     <dfn for="Credential" method export>\[[CollectFromCredentialStore]](options)</dfn> is called
@@ -460,10 +460,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
         meaning of each enum value is described below in {{CredentialMediationRequirement}}.
         Processing details are defined in [[#algorithm-request]].
     :   <dfn>signal</dfn>
-    ::  This property lets the developer abort an ongoing 
-        {{[[DiscoverFromExternalSource]](options)}} operation and subsequently all related 
-        [=authenticatorGetAssertion=] operations. Aborted promise would 
-        be rejected with an "AbortError" DOMException. 
+    ::  This property lets the developer abort an ongoing {{CredentialsContainer/get()}} operation.
+        An aborted operation may complete normally (generally if the abort was received after the
+        operation finished) or reject with an "{{AbortError}}" {{DOMException}}."
   </div>
 
   <div class="note">
@@ -679,15 +678,13 @@ spec:url; type:dfn; text:urlencoded byte serializer
       AbortSignal signal;
     };
   </pre>
-   <div dfn-for="CredentialCreationOptions" dfn-type="dict-member">
+  <div dfn-for="CredentialCreationOptions" dfn-type="dict-member">
     :   <dfn>signal</dfn>
-    ::  This property lets the developer abort an ongoing {{Credential/[[Create]](options)}} operation
-        and susquently all related [=authenticatorMakeCredential=] operations. An aborted operation 
-        may complete successfully (if the [=aborted flag=] was set after the operation completed) 
-        or be rejected with an "{{AbortError}}" {{DOMException}}. 
+    ::  This property lets the developer abort an ongoing {{CredentialsContainer/create()}}
+        operation. An aborted operation may complete normally (generally if the abort was received
+        after the operation finished) or reject with an "{{AbortError}}" {{DOMException}}."
   </div>
 
-  
   ## Algorithms ## {#algorithms}
 
   <h4 id="algorithm-request" algorithm>Request a `Credential`</h4>
@@ -708,6 +705,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
         2.  |settings|' [=environment settings object/responsible document=] is not the
             [=active document=] in a [=top-level browsing context=].
+
+    1.  If <code>|options|.{{CredentialRequestOptions/signal}}</code>'s [=AbortSignal/aborted flag=]
+        is set, then return [=a promise rejected with=] an "{{AbortError}}" {{DOMException}}.
 
     4.  Let |p| be [=a new promise=].
    
@@ -843,6 +843,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
             allow the user agent to help the user choose among one of many potential credential
             types in order to support a "sign-up" use case. For the moment, though, we're punting
             on that by restricting the dictionary to a single entry.
+
+    1.  If <code>|options|.{{CredentialCreationOptions/signal}}</code>'s [=AbortSignal/aborted
+        flag=] is set, then return [=a promise rejected with=] an "{{AbortError}}" {{DOMException}}.
 
     5.  Let |p| be [=a new promise=].
 
