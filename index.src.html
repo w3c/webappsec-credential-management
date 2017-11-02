@@ -448,6 +448,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   <pre class="idl">
     dictionary CredentialRequestOptions {
       CredentialMediationRequirement mediation = "optional";
+      AbortSignal signal;
     };
   </pre>
   <div dfn-for="CredentialRequestOptions" dfn-type="dict-member">
@@ -455,6 +456,10 @@ spec:url; type:dfn; text:urlencoded byte serializer
     ::  This property specifies the mediation requirements for a given credential request. The
         meaning of each enum value is described below in {{CredentialMediationRequirement}}.
         Processing details are defined in [[#algorithm-request]].
+    :   <dfn>signal</dfn>
+    ::  This property lets the developer abort an ongoing {{CredentialsContainer/get()}} operation.
+        An aborted operation may complete normally (generally if the abort was received after the
+        operation finished) or reject with an "{{AbortError}}" {{DOMException}}."
   </div>
 
   <div class="note">
@@ -667,8 +672,15 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
   <pre class="idl">
     dictionary CredentialCreationOptions {
+      AbortSignal signal;
     };
   </pre>
+  <div dfn-for="CredentialCreationOptions" dfn-type="dict-member">
+    :   <dfn>signal</dfn>
+    ::  This property lets the developer abort an ongoing {{CredentialsContainer/create()}}
+        operation. An aborted operation may complete normally (generally if the abort was received
+        after the operation finished) or reject with an "{{AbortError}}" {{DOMException}}."
+  </div>
 
   ## Algorithms ## {#algorithms}
 
@@ -690,6 +702,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
         2.  |settings|' [=environment settings object/responsible document=] is not the
             [=active document=] in a [=top-level browsing context=].
+
+    1.  If <code>|options|.{{CredentialRequestOptions/signal}}</code>'s [=AbortSignal/aborted flag=]
+        is set, then return [=a promise rejected with=] an "{{AbortError}}" {{DOMException}}.
 
     4.  Let |p| be [=a new promise=].
    
@@ -825,6 +840,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
             allow the user agent to help the user choose among one of many potential credential
             types in order to support a "sign-up" use case. For the moment, though, we're punting
             on that by restricting the dictionary to a single entry.
+
+    1.  If <code>|options|.{{CredentialCreationOptions/signal}}</code>'s [=AbortSignal/aborted
+        flag=] is set, then return [=a promise rejected with=] an "{{AbortError}}" {{DOMException}}.
 
     5.  Let |p| be [=a new promise=].
 
@@ -1862,7 +1880,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
  ██  ██     ██ ██        ██       ██       ██     ██ ██       ██   ███    ██    ██     ██    ██     ██  ██     ██ ██   ███
 ████ ██     ██ ██        ████████ ████████ ██     ██ ████████ ██    ██    ██    ██     ██    ██    ████  ███████  ██    ██
 -->
-<section>
+<section class="non-normative">
   # Implementation Considerations # {#implementation}
 
   <em>This section is non-normative.</em>
@@ -1902,6 +1920,11 @@ spec:url; type:dfn; text:urlencoded byte serializer
       can therefore simply be copied out of the [=credential store=], while
       {{Credential/[[DiscoverFromExternalSource]](options)}} is appropriate for
       [=credentials=] that need to be re-generated from a [=credential source=].
+
+      Long-running operations, like those in {{PublicKeyCredential}}'s
+      {{PublicKeyCredential/[[Create]](options)}} and {{PublicKeyCredential/[[DiscoverFromExternalSource]](options)}}
+      operations are encouraged to use <code>options.signal</code> to allow developers to abort
+      the operation. See [[dom#abortcontroller-api-integration]] for detailed instructions.
 
       <div class="example">
         `ExampleCredential`'s `[[CollectFromCredentialStore]](options)` internal method is called
