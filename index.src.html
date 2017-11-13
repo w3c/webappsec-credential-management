@@ -695,15 +695,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     2.  Assert: |settings| is a [=secure context=].
 
-    3.  Return [=a promise rejected with=] `NotSupportedError` if any of the following statements
-        are true:
-
-        1.  |settings| does not have a [=environment settings object/responsible document=].
-
-        2.  |settings|' [=environment settings object/responsible document=] is not the
-            [=active document=] in a [=top-level browsing context=].
-
-    1.  If <code>|options|.{{CredentialRequestOptions/signal}}</code>'s [=AbortSignal/aborted flag=]
+    3.  If <code>|options|.{{CredentialRequestOptions/signal}}</code>'s [=AbortSignal/aborted flag=]
         is set, then return [=a promise rejected with=] an "{{AbortError}}" {{DOMException}}.
 
     4.  Let |p| be [=a new promise=].
@@ -792,17 +784,9 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
     2.  Assert: |settings| is a [=secure context=].
 
-    3.  Return [=a promise rejected with=] `NotSupportedError` if any of the following statements
-        are true:
+    3.  Let |p| be [=a new promise=].
 
-        1.  |settings| does not have a [=environment settings object/responsible document=].
-
-        2.  |settings|' [=environment settings object/responsible document=] is not the
-            [=active document=] in a [=top-level browsing context=].
-
-    4.  Let |p| be [=a new promise=].
-
-    5.  Run the following steps [=in parallel=]:
+    4.  Run the following steps [=in parallel=]:
 
         1.  Let |r| be the result of executing |credential|'s [=interface object=]'s
             {{Credential/[[Store]](credential)}} internal method on |credential|.
@@ -811,7 +795,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
             Otherwise, [=resolve=] |p| with |r|.
 
-    6.  Return |p|.
+    5.  Return |p|.
   </ol>
 
   <h4 id="algorithm-create" algorithm>Create a `Credential`</h4>
@@ -833,10 +817,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
         1.  |settings| does not have a [=environment settings object/responsible document=].
 
-        2.  |settings|' [=environment settings object/responsible document=] is not the
-            [=active document=] in a [=top-level browsing context=].
-
-        3.  |interfaces|' [=list/size=] is greater than 1.
+        2.  |interfaces|' [=list/size=] is greater than 1.
 
             Note: It may be reasonable at some point in the future to loosen this restriction, and
             allow the user agent to help the user choose among one of many potential credential
@@ -1173,7 +1154,18 @@ spec:url; type:dfn; text:urlencoded byte serializer
   <ol class="algorithm">
     1.  Assert: |options|["{{CredentialRequestOptions/password}}"] [=map/exists=].
 
-    2.  If |options|["{{CredentialRequestOptions/password}}"] is not `true`, return the empty set.
+    2.  Return the empty set if any of the following are true:
+
+        1.  |options|["{{CredentialRequestOptions/password}}"] is not `true`.
+
+        2.  The [=current settings object=] does not have a
+            [=environment settings object/responsible document=].
+
+        3.  The [=current settings object=]'s [=environment settings object/responsible document=]
+            is not the [=active document=] in a [=top-level browsing context=].
+
+            Note: This restriction aims to address the concerns raised in
+            [[#security-origin-confusion]].
 
     3.  Return the result of <a abstract-op lt="Retrieve a list of credentials">retrieving</a>
         credentials from the [=credential store=] that match the following filter:
@@ -1216,7 +1208,15 @@ spec:url; type:dfn; text:urlencoded byte serializer
   [=credential store=].
 
   <ol class="algorithm">
-    1.  If the user agent's [=credential store=] contains a {{PasswordCredential}} (|stored|)
+    1.  Return without altering the user agent's [=credential store=] if the
+        [=current settings object=] does not have a
+        [=environment settings object/responsible document=], or if the [=current settings object=]'s
+        [=environment settings object/responsible document=] is not the [=active document=] in a
+        [=top-level browsing context=].
+
+        Note: This restriction aims to address the concern raised in [[#security-origin-confusion]].
+
+    2.  If the user agent's [=credential store=] contains a {{PasswordCredential}} (|stored|)
         whose {{Credential/id}} attribute is |credential|'s {{Credential/id}} and whose
         {{[[origin]]}} slot is the [=same origin=] as |credential|'s {{Credential/[[origin]]}},
         then:
@@ -1500,7 +1500,20 @@ spec:url; type:dfn; text:urlencoded byte serializer
   <ol class="algorithm">
     1.  Assert: |options|["{{CredentialRequestOptions/federated}}"] [=map/exists=].
 
-    2.  Return the result of <a abstract-op lt="Retrieve a list of credentials">retrieving</a>
+    2.  Return the empty set if any of the following are true:
+
+        1.  |options|["{{CredentialRequestOptions/federated}}"] is not `true`.
+
+        2.  The [=current settings object=] does not have a
+            [=environment settings object/responsible document=].
+
+        3.  The [=current settings object=]'s [=environment settings object/responsible document=]
+            is not the [=active document=] in a [=top-level browsing context=].
+
+            Note: This restriction aims to address the concerns raised in
+            [[#security-origin-confusion]].
+
+    3.  Return the result of <a abstract-op lt="Retrieve a list of credentials">retrieving</a>
         credentials from the [=credential store=] that match the following filter:
 
         1.  The credential is a {{FederatedCredential}}
@@ -1536,14 +1549,23 @@ spec:url; type:dfn; text:urlencoded byte serializer
   [=credential store=].
 
   <ol class="algorithm">
-    1.  If the user agent's [=credential store=] contains a {{FederatedCredential}} whose
+    1.  Return without altering the user agent's [=credential store=] if the
+        [=current settings object=] does not have a
+        [=environment settings object/responsible document=], or if the [=current settings object=]'s
+        [=environment settings object/responsible document=] is not the [=active document=] in a
+        [=top-level browsing context=].
+
+        Note: This restriction aims to address the concern raised in [[#security-origin-confusion]].
+
+    2.  If the user agent's [=credential store=] contains a {{FederatedCredential}} whose
         {{Credential/id}} attribute is |credential|'s {{Credential/id}} and whose {{[[origin]]}}
         slot is the [=same origin=] as |credential|'s {{Credential/[[origin]]}}, and
         whose {{FederatedCredential/provider}} is |credential|'s
         {{FederatedCredential/provider}}, then return.
 
-    2.  Store a {{FederatedCredential}} in the [=credential store=] with the following
-        properties:
+    3.  If the user grants permission to store credentials (as discussed when defining
+        [=user mediation=]), then store a {{FederatedCredential}} in the [=credential store=] with
+        the following properties:
         
         :   {{Credential/id}}
         ::  |credential|'s {{Credential/id}}
@@ -1810,11 +1832,19 @@ spec:url; type:dfn; text:urlencoded byte serializer
   granting access to credentials for an origin other than the <a>top-level browsing context</a>,
   which is the only security origin which users can reasonably be expected to understand.
 
-  Therefore, both {{get()}} and {{store()}} will result in a rejected {{Promise}} when called from
-  a [=nested browsing context=], and the API and related interfaces are not exposed inside
-  {{Worker}} contexts.
+  This document exposes the Credential Management APIs to those contexts, as it's likely that some
+  credential types will be straightforward to make available if user agents put enough thought and
+  context into their UI.
 
-  The algorithms in [[#algorithm-request]] and [[#algorithm-store]] contain more detail.
+  Specific credential types, however, will be difficult to expose in those contexts without risk.
+  Those credential types are restricted via checks in their {{Credential/[[Create]](options)}},
+  {{Credential/[[CollectFromCredentialStore]](options)}},
+  {{Credential/[[DiscoverFromExternalSource]](options)}}, and {{Credential/[[Store]](credential)}}
+  methods, as appropriate.
+
+  For example {{PasswordCredential}}'s
+  {{PasswordCredential/[[CollectFromCredentialStore]](options)}} method will return an empty set if
+  called from inside a {{Worker}}, or a non-[=top-level browsing context=].
 
   ## Timing Attacks ## {#security-timing}
 
