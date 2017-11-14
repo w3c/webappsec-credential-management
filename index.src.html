@@ -732,7 +732,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
     6.  Run the following steps [=in parallel=]: 
 
         1.  Let |credentials| be the result of <a abstract-op lt="collect local">collecting
-            `Credential`s from the credential store</a>, given |options|.
+            `Credential`s from the credential store</a>, given |options| and
+            |sameOriginWithAncestors|.
 
         2.  If |credentials| is an [=exception=], [=reject=] |p| with |credentials|.
 
@@ -778,7 +779,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
 
   <h4 id="algorithm-collect-known" algorithm>Collect `Credential`s from the credential store</h4>
 
-  Given a {{CredentialRequestOptions}} (|options|), the user agent may
+  Given a {{CredentialRequestOptions}} (|options|) and a boolean which is `true` iff the calling
+  context is [=same-origin with its ancestors=] (|sameOriginWithAncestors|), the user agent may
   <dfn abstract-op local-lt="collect local">collect `Credential`s from the credential store</dfn>,
   returning a set of {{Credential}} objects stored by the user agent locally that match |options|'
   filter. If no such {{Credential}} objects are known, the returned set will be empty:
@@ -786,10 +788,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
   <ol class="algorithm">
     1.  Let |possible matches| be an empty set.
 
-    2.  Let |sameOriginWithAncestors| be `true` if the [=current settings object=] is [=same-origin
-        with its ancestors=], and `false` otherwise.
-
-    3.  For each |interface| in |options|' <a>relevant credential interface objects</a>:
+    2.  For each |interface| in |options|' <a>relevant credential interface objects</a>:
 
         1.  Let |r| be the result of executing |interface|'s
             {{Credential/[[CollectFromCredentialStore]](options, sameOriginWithAncestors)}} internal
@@ -803,7 +802,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
        
             1.  <a for="set">Append</a> |c| to |possible matches|.
 
-    4.  Return |possible matches|.
+    3.  Return |possible matches|.
   </ol>
 
 
@@ -1196,19 +1195,18 @@ spec:url; type:dfn; text:urlencoded byte serializer
   {{Credential}} objects are available, or |sameOriginWithAncestors| is `false`, the returned set
   will be empty.
 
+  The algorithm will return a `NotAllowedError` if |sameOriginWithAncestors| is not `true`.
+
   <ol class="algorithm">
     1.  Assert: |options|["{{CredentialRequestOptions/password}}"] [=map/exists=].
 
-    2.  Return the empty set if any of the following are true:
+    2.  If |sameOriginWithAncestors is `false`, return a "{{NotAllowedError}}" {{DOMException}}.
 
-        1.  |options|["{{CredentialRequestOptions/password}}"] is not `true`.
+        Note: This restriction aims to address the concern raised in [[#security-origin-confusion]].
 
-        2.  |sameOriginWithAncestors| is `false`.
+    3.  Return the empty set if |options|["{{CredentialRequestOptions/password}}"] is not `true`.
 
-            Note: This restriction aims to address the concerns raised in
-            [[#security-origin-confusion]].
-
-    3.  Return the result of <a abstract-op lt="Retrieve a list of credentials">retrieving</a>
+    4.  Return the result of <a abstract-op lt="Retrieve a list of credentials">retrieving</a>
         credentials from the [=credential store=] that match the following filter:
 
         1.  The credential is a {{PasswordCredential}}
@@ -1252,9 +1250,11 @@ spec:url; type:dfn; text:urlencoded byte serializer
   context is [=same-origin with its ancestors=] (|sameOriginWithAncestors|). The algorithm returns
   `undefined` once |credential| is persisted to the [=credential store=].
 
+  The algorithm will return a `NotAllowedError` if |sameOriginWithAncestors| is not `true`.
+
   <ol class="algorithm">
-    1.  Return without altering the user agent's [=credential store=] if |sameOriginWithAncestors|
-        is `false`.
+    1.  Return a "{{NotAllowedError}}" {{DOMException}} without altering the user agent's
+        [=credential store=] if |sameOriginWithAncestors| is `false`.
 
         Note: This restriction aims to address the concern raised in [[#security-origin-confusion]].
 
@@ -1544,19 +1544,18 @@ spec:url; type:dfn; text:urlencoded byte serializer
   a set of {{Credential}} objects from the [=credential store=]. If no matching {{Credential}}
   objects are available, the returned set will be empty.
 
+  The algorithm will return a `NotAllowedError` if |sameOriginWithAncestors| is not `true`.
+
   <ol class="algorithm">
     1.  Assert: |options|["{{CredentialRequestOptions/federated}}"] [=map/exists=].
 
-    2.  Return the empty set if any of the following are true:
+    2.  If |sameOriginWithAncestors is `false`, return a "{{NotAllowedError}}" {{DOMException}}.
 
-        1.  |options|["{{CredentialRequestOptions/federated}}"] is not `true`.
+        Note: This restriction aims to address the concern raised in [[#security-origin-confusion]].
 
-        2.  |sameOriginWithAncestors| is `false`.
+    3.  Return the empty set if |options|["{{CredentialRequestOptions/federated}}"] is not `true`.
 
-            Note: This restriction aims to address the concerns raised in
-            [[#security-origin-confusion]].
-
-    3.  Return the result of <a abstract-op lt="Retrieve a list of credentials">retrieving</a>
+    4.  Return the result of <a abstract-op lt="Retrieve a list of credentials">retrieving</a>
         credentials from the [=credential store=] that match the following filter:
 
         1.  The credential is a {{FederatedCredential}}
@@ -1595,9 +1594,11 @@ spec:url; type:dfn; text:urlencoded byte serializer
   calling context is [=same-origin with its ancestors=] (|sameOriginWithAncestors|). The algorithm
   returns `undefined` once |credential| is persisted to the [=credential store=].
 
+  The algorithm will return a `NotAllowedError` if |sameOriginWithAncestors| is not `true`.
+
   <ol class="algorithm">
-    1.  Return without altering the user agent's [=credential store=] if |sameOriginWithAncestors|
-        is `false`.
+    1.  Return a "{{NotAllowedError}}" {{DOMException}} without altering the user agent's
+        [=credential store=] if |sameOriginWithAncestors| is `false`.
 
         Note: This restriction aims to address the concern raised in [[#security-origin-confusion]].
 

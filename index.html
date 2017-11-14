@@ -1178,7 +1178,7 @@ Possible extra rowspan handling
 </style>
   <meta content="Bikeshed version b43bcf8d18510de03d8b56c5e878eea93e955427" name="generator">
   <link href="http://www.w3.org/TR/credential-management-1/" rel="canonical">
-  <meta content="59da6f25b393e6464ba7e21e19cdc10f6bb3b65e" name="document-revision">
+  <meta content="55770d577bd1cb53b1d615099df3726169628069" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -2175,7 +2175,7 @@ store user credentials for future use.</p>
       <p>Run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel">in parallel</a>:</p>
       <ol>
        <li data-md="">
-        <p>Let <var>credentials</var> be the result of <a data-link-type="abstract-op" href="#abstract-opdef-collect-credentials-from-the-credential-store" id="ref-for-abstract-opdef-collect-credentials-from-the-credential-store">collecting <code>Credential</code>s from the credential store</a>, given <var>options</var>.</p>
+        <p>Let <var>credentials</var> be the result of <a data-link-type="abstract-op" href="#abstract-opdef-collect-credentials-from-the-credential-store" id="ref-for-abstract-opdef-collect-credentials-from-the-credential-store">collecting <code>Credential</code>s from the credential store</a>, given <var>options</var> and <var>sameOriginWithAncestors</var>.</p>
        <li data-md="">
         <p>If <var>credentials</var> is an <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-exception" id="ref-for-dfn-exception">exception</a>, <a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide/#reject-promise" id="ref-for-reject-promise">reject</a> <var>p</var> with <var>credentials</var>.</p>
        <li data-md="">
@@ -2217,15 +2217,13 @@ store user credentials for future use.</p>
       <p>Return <var>p</var>.</p>
     </ol>
     <h4 class="heading settled algorithm" data-algorithm="Collect Credentials from the credential store" data-level="2.5.2" id="algorithm-collect-known"><span class="secno">2.5.2. </span><span class="content">Collect <code>Credential</code>s from the credential store</span><a class="self-link" href="#algorithm-collect-known"></a></h4>
-    <p>Given a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions⑨">CredentialRequestOptions</a></code> (<var>options</var>), the user agent may <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export="" data-local-lt="collect local" id="abstract-opdef-collect-credentials-from-the-credential-store">collect <code>Credential</code>s from the credential store</dfn>,
+    <p>Given a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions⑨">CredentialRequestOptions</a></code> (<var>options</var>) and a boolean which is <code>true</code> iff the calling
+  context is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors⑤">same-origin with its ancestors</a> (<var>sameOriginWithAncestors</var>), the user agent may <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export="" data-local-lt="collect local" id="abstract-opdef-collect-credentials-from-the-credential-store">collect <code>Credential</code>s from the credential store</dfn>,
   returning a set of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential③⓪">Credential</a></code> objects stored by the user agent locally that match <var>options</var>’
   filter. If no such <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential③①">Credential</a></code> objects are known, the returned set will be empty:</p>
     <ol class="algorithm">
      <li data-md="">
       <p>Let <var>possible matches</var> be an empty set.</p>
-     <li data-md="">
-      <p>Let <var>sameOriginWithAncestors</var> be <code>true</code> if the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object③">current settings object</a> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors⑤">same-origin
-  with its ancestors</a>, and <code>false</code> otherwise.</p>
      <li data-md="">
       <p>For each <var>interface</var> in <var>options</var>’ <a data-link-type="dfn" href="#credentialrequestoptions-relevant-credential-interface-objects" id="ref-for-credentialrequestoptions-relevant-credential-interface-objects①">relevant credential interface objects</a>:</p>
       <ol>
@@ -2250,11 +2248,11 @@ store user credentials for future use.</p>
     <p>The <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export="" id="abstract-opdef-store-a-credential">Store a <code>Credential</code></dfn> algorithm accepts a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential③②">Credential</a></code> (<var>credential</var>), and returns a <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise" id="ref-for-idl-promise①">Promise</a></code> which resolves once the object is persisted to the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store⑨">credential store</a>.</p>
     <ol class="algorithm">
      <li data-md="">
-      <p>Let <var>settings</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object④">current settings object</a></p>
+      <p>Let <var>settings</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object③">current settings object</a></p>
      <li data-md="">
       <p class="assertion">Assert: <var>settings</var> is a <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#secure-contexts" id="ref-for-secure-contexts②">secure context</a>.</p>
      <li data-md="">
-      <p>Let <var>sameOriginWithAncestors</var> be <code>true</code> if the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object⑤">current settings object</a> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors⑥">same-origin
+      <p>Let <var>sameOriginWithAncestors</var> be <code>true</code> if the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object④">current settings object</a> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors⑥">same-origin
   with its ancestors</a>, and <code>false</code> otherwise.</p>
      <li data-md="">
       <p>Let <var>p</var> be <a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide/#a-new-promise" id="ref-for-a-new-promise①">a new promise</a>.</p>
@@ -2276,11 +2274,11 @@ store user credentials for future use.</p>
   circumstances, the <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-promise" id="ref-for-idl-promise③">Promise</a></code> may reject with an appropriate exception:</p>
     <ol class="algorithm">
      <li data-md="">
-      <p>Let <var>settings</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object⑥">current settings object</a></p>
+      <p>Let <var>settings</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object⑤">current settings object</a></p>
      <li data-md="">
       <p class="assertion">Assert: <var>settings</var> is a <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#secure-contexts" id="ref-for-secure-contexts③">secure context</a>.</p>
      <li data-md="">
-      <p>Let <var>sameOriginWithAncestors</var> be <code>true</code> if the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object⑦">current settings object</a> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors⑦">same-origin
+      <p>Let <var>sameOriginWithAncestors</var> be <code>true</code> if the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object⑥">current settings object</a> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors⑦">same-origin
   with its ancestors</a>, and <code>false</code> otherwise.</p>
      <li data-md="">
       <p>Let <var>interfaces</var> be the set of <var>options</var>’ <a data-link-type="dfn" href="#credentialrequestoptions-relevant-credential-interface-objects" id="ref-for-credentialrequestoptions-relevant-credential-interface-objects②">relevant credential interface objects</a>.</p>
@@ -2567,25 +2565,22 @@ store user credentials for future use.</p>
   calling context is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors⑧">same-origin with its ancestors</a> (<var>sameOriginWithAncestors</var>). The algorithm
   returns a set of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential③⑦">Credential</a></code> objects from the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store①③">credential store</a>. If no matching <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential③⑧">Credential</a></code> objects are available, or <var>sameOriginWithAncestors</var> is <code>false</code>, the returned set
   will be empty.</p>
+    <p>The algorithm will return a <code>NotAllowedError</code> if <var>sameOriginWithAncestors</var> is not <code>true</code>.</p>
     <ol class="algorithm">
      <li data-md="">
       <p class="assertion">Assert: <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password②">password</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists①">exists</a>.</p>
      <li data-md="">
-      <p>Return the empty set if any of the following are true:</p>
-      <ol>
-       <li data-md="">
-        <p><var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password③">password</a></code>"] is not <code>true</code>.</p>
-       <li data-md="">
-        <p><var>sameOriginWithAncestors</var> is <code>false</code>.</p>
-        <p class="note" role="note"><span>Note:</span> This restriction aims to address the concerns raised in <a href="#security-origin-confusion">§6.4 Origin Confusion</a>.</p>
-      </ol>
+      <p>If |sameOriginWithAncestors is <code>false</code>, return a "<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#notallowederror" id="ref-for-notallowederror">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMException" id="ref-for-idl-DOMException④">DOMException</a></code>.</p>
+      <p class="note" role="note"><span>Note:</span> This restriction aims to address the concern raised in <a href="#security-origin-confusion">§6.4 Origin Confusion</a>.</p>
+     <li data-md="">
+      <p>Return the empty set if <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password③">password</a></code>"] is not <code>true</code>.</p>
      <li data-md="">
       <p>Return the result of <a data-link-type="abstract-op" href="#abstract-opdef-credential-store-retrieve-a-list-of-credentials" id="ref-for-abstract-opdef-credential-store-retrieve-a-list-of-credentials">retrieving</a> credentials from the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store①④">credential store</a> that match the following filter:</p>
       <ol>
        <li data-md="">
         <p>The credential is a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential①⓪">PasswordCredential</a></code></p>
        <li data-md="">
-        <p>The credential’s <code class="idl"><a data-link-type="idl" href="#dom-credential-origin-slot" id="ref-for-dom-credential-origin-slot">[[origin]]</a></code> is the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#same-origin" id="ref-for-same-origin①">same origin</a> as the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object⑧">current settings object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin③">origin</a>.</p>
+        <p>The credential’s <code class="idl"><a data-link-type="idl" href="#dom-credential-origin-slot" id="ref-for-dom-credential-origin-slot">[[origin]]</a></code> is the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#same-origin" id="ref-for-same-origin①">same origin</a> as the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object⑦">current settings object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin③">origin</a>.</p>
       </ol>
     </ol>
     <h4 class="heading settled algorithm" data-algorithm="PasswordCredential&apos;s [[Create]](options, sameOriginWithAncestors)" data-level="3.3.2" id="create-passwordcredential"><span class="secno">3.3.2. </span><span class="content"> <code>PasswordCredential</code>'s <code>[[Create]](options, sameOriginWithAncestors)</code> </span><a class="self-link" href="#create-passwordcredential"></a></h4>
@@ -2609,9 +2604,10 @@ store user credentials for future use.</p>
     <p><dfn class="dfn-paneled idl-code" data-dfn-for="PasswordCredential" data-dfn-type="method" data-export="" id="dom-passwordcredential-store-slot"><code>[[Store]](credential, sameOriginWithAncestors)</code></dfn> is
   called with a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential①③">PasswordCredential</a></code> (<var>credential</var>), and a boolean which is <code>true</code> iff the calling
   context is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors①⓪">same-origin with its ancestors</a> (<var>sameOriginWithAncestors</var>). The algorithm returns <code>undefined</code> once <var>credential</var> is persisted to the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store①⑤">credential store</a>.</p>
+    <p>The algorithm will return a <code>NotAllowedError</code> if <var>sameOriginWithAncestors</var> is not <code>true</code>.</p>
     <ol class="algorithm">
      <li data-md="">
-      <p>Return without altering the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store①⑥">credential store</a> if <var>sameOriginWithAncestors</var> is <code>false</code>.</p>
+      <p>Return a "<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#notallowederror" id="ref-for-notallowederror①">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMException" id="ref-for-idl-DOMException⑤">DOMException</a></code> without altering the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store①⑥">credential store</a> if <var>sameOriginWithAncestors</var> is <code>false</code>.</p>
       <p class="note" role="note"><span>Note:</span> This restriction aims to address the concern raised in <a href="#security-origin-confusion">§6.4 Origin Confusion</a>.</p>
      <li data-md="">
       <p>If the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store①⑦">credential store</a> contains a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential①④">PasswordCredential</a></code> (<var>stored</var>)
@@ -2758,7 +2754,7 @@ store user credentials for future use.</p>
         <p><var>data</var>’s <code class="idl"><a data-link-type="idl" href="#dom-passwordcredentialdata-name" id="ref-for-dom-passwordcredentialdata-name">name</a></code> member’s value</p>
        <dt data-md=""><code class="idl"><a data-link-type="idl" href="#dom-credential-origin-slot" id="ref-for-dom-credential-origin-slot⑤">[[origin]]</a></code>
        <dd data-md="">
-        <p>The <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin④">origin</a> of the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object⑨">current settings object</a>.</p>
+        <p>The <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin④">origin</a> of the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object⑧">current settings object</a>.</p>
       </dl>
      <li data-md="">
       <p>Return <var>c</var>.</p>
@@ -2858,25 +2854,22 @@ store user credentials for future use.</p>
   with a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions①④">CredentialRequestOptions</a></code> (<var>options</var>), and a boolean which is <code>true</code> iff the calling
   context is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors①①">same-origin with its ancestors</a> (<var>sameOriginWithAncestors</var>). The algorithm returns
   a set of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential④①">Credential</a></code> objects from the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store①⑨">credential store</a>. If no matching <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential④②">Credential</a></code> objects are available, the returned set will be empty.</p>
+    <p>The algorithm will return a <code>NotAllowedError</code> if <var>sameOriginWithAncestors</var> is not <code>true</code>.</p>
     <ol class="algorithm">
      <li data-md="">
       <p class="assertion">Assert: <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-federated" id="ref-for-dom-credentialrequestoptions-federated">federated</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③">exists</a>.</p>
      <li data-md="">
-      <p>Return the empty set if any of the following are true:</p>
-      <ol>
-       <li data-md="">
-        <p><var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-federated" id="ref-for-dom-credentialrequestoptions-federated①">federated</a></code>"] is not <code>true</code>.</p>
-       <li data-md="">
-        <p><var>sameOriginWithAncestors</var> is <code>false</code>.</p>
-        <p class="note" role="note"><span>Note:</span> This restriction aims to address the concerns raised in <a href="#security-origin-confusion">§6.4 Origin Confusion</a>.</p>
-      </ol>
+      <p>If |sameOriginWithAncestors is <code>false</code>, return a "<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#notallowederror" id="ref-for-notallowederror②">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMException" id="ref-for-idl-DOMException⑥">DOMException</a></code>.</p>
+      <p class="note" role="note"><span>Note:</span> This restriction aims to address the concern raised in <a href="#security-origin-confusion">§6.4 Origin Confusion</a>.</p>
+     <li data-md="">
+      <p>Return the empty set if <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-federated" id="ref-for-dom-credentialrequestoptions-federated①">federated</a></code>"] is not <code>true</code>.</p>
      <li data-md="">
       <p>Return the result of <a data-link-type="abstract-op" href="#abstract-opdef-credential-store-retrieve-a-list-of-credentials" id="ref-for-abstract-opdef-credential-store-retrieve-a-list-of-credentials①">retrieving</a> credentials from the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store②⓪">credential store</a> that match the following filter:</p>
       <ol>
        <li data-md="">
         <p>The credential is a <code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential⑧">FederatedCredential</a></code></p>
        <li data-md="">
-        <p>The credential’s <code class="idl"><a data-link-type="idl" href="#dom-credential-origin-slot" id="ref-for-dom-credential-origin-slot⑥">[[origin]]</a></code> is the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#same-origin" id="ref-for-same-origin③">same origin</a> as the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object①⓪">current settings object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin⑤">origin</a>.</p>
+        <p>The credential’s <code class="idl"><a data-link-type="idl" href="#dom-credential-origin-slot" id="ref-for-dom-credential-origin-slot⑥">[[origin]]</a></code> is the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#same-origin" id="ref-for-same-origin③">same origin</a> as the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object⑨">current settings object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin⑤">origin</a>.</p>
        <li data-md="">
         <p>If <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-federated" id="ref-for-dom-credentialrequestoptions-federated②">federated</a></code>"]["<code class="idl"><a data-link-type="idl" href="#dom-federatedcredentialrequestoptions-providers" id="ref-for-dom-federatedcredentialrequestoptions-providers①">providers</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④">exists</a>, its value <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①">contains</a> the credentials’s <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-provider" id="ref-for-dom-federatedcredential-provider③">provider</a></code>.</p>
        <li data-md="">
@@ -2900,9 +2893,10 @@ store user credentials for future use.</p>
   called with a <code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential①⓪">FederatedCredential</a></code> (<var>credential</var>), and a boolean which is <code>true</code> iff the
   calling context is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors①③">same-origin with its ancestors</a> (<var>sameOriginWithAncestors</var>). The algorithm
   returns <code>undefined</code> once <var>credential</var> is persisted to the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store②①">credential store</a>.</p>
+    <p>The algorithm will return a <code>NotAllowedError</code> if <var>sameOriginWithAncestors</var> is not <code>true</code>.</p>
     <ol class="algorithm">
      <li data-md="">
-      <p>Return without altering the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store②②">credential store</a> if <var>sameOriginWithAncestors</var> is <code>false</code>.</p>
+      <p>Return a "<code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#notallowederror" id="ref-for-notallowederror③">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://heycam.github.io/webidl/#idl-DOMException" id="ref-for-idl-DOMException⑦">DOMException</a></code> without altering the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store②②">credential store</a> if <var>sameOriginWithAncestors</var> is <code>false</code>.</p>
       <p class="note" role="note"><span>Note:</span> This restriction aims to address the concern raised in <a href="#security-origin-confusion">§6.4 Origin Confusion</a>.</p>
      <li data-md="">
       <p>If the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store②③">credential store</a> contains a <code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential①①">FederatedCredential</a></code> whose <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id⑥">id</a></code> attribute is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id⑦">id</a></code> and whose <code class="idl"><a data-link-type="idl" href="#dom-credential-origin-slot" id="ref-for-dom-credential-origin-slot⑦">[[origin]]</a></code> slot is the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#same-origin" id="ref-for-same-origin④">same origin</a> as <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-origin-slot" id="ref-for-dom-credential-origin-slot⑧">[[origin]]</a></code>, and
@@ -2963,7 +2957,7 @@ store user credentials for future use.</p>
         <p><var>init</var>.<code class="idl"><a data-link-type="idl" href="#dom-credentialuserdata-name" id="ref-for-dom-credentialuserdata-name①⓪">name</a></code>'s value</p>
        <dt data-md=""><code class="idl"><a data-link-type="idl" href="#dom-credential-origin-slot" id="ref-for-dom-credential-origin-slot①①">[[origin]]</a></code>
        <dd data-md="">
-        <p>The <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin⑥">origin</a> of the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object①①">current settings object</a>.</p>
+        <p>The <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin⑥">origin</a> of the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object①⓪">current settings object</a>.</p>
       </dl>
      <li data-md="">
       <p>Return <var>c</var>.</p>
@@ -3587,6 +3581,7 @@ partial dictionary CredentialCreationOptions {
      <li><a href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a>
      <li><a href="https://heycam.github.io/webidl/#Exposed">Exposed</a>
      <li><a href="https://heycam.github.io/webidl/#NoInterfaceObject">NoInterfaceObject</a>
+     <li><a href="https://heycam.github.io/webidl/#notallowederror">NotAllowedError</a>
      <li><a href="https://heycam.github.io/webidl/#idl-promise">Promise</a>
      <li><a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>
      <li><a href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>
