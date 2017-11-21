@@ -56,13 +56,13 @@ spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
 </pre>
 <pre class="link-defaults">
 spec:html; type:dfn; for:/; text:origin
+spec:html; type:dfn; for:environment settings object; text:global object
 spec:fetch; type:dfn; for:/; text:request
 spec:fetch; type:dictionary; for:/; text:RequestInit
 spec:infra; type:dfn; for:/; text:set
 spec:infra; type:dfn; for:struct; text:item
 spec:webidl; type:idl; for:/; text:Function
 spec:webidl; type:interface; text:Promise
-
 
 spec:html; type:dfn; text:submittable element
 spec:html; type:dfn; text:form owner
@@ -378,27 +378,18 @@ spec:css-syntax-3;
 
     * directly return a {{Credential}} (in which case it accomplished everything while
         running [=in parallel=]), or
-    * return a [=constructCredential=] algorithm which yields a {{Credential}} when
-        subsequently invoked from a [=task=].
+    * return an algorithm that takes a [=global object=] and returns an instance of an interface type 
+        inheriting from {{Credential}}. This algorithm MUST be invoked from a [=task=].
+
+    Note: This algorithm's steps are defined on a
+        per-[=credential=] type basis by those [=credential=] type specifications needing to
+        employ it. E.g., [[WEBAUTHN]].
 
     {{Credential}}'s default implementation of {{Credential/[[Create]](origin, options, sameOriginWithAncestors)}}:
 
      <ol class="algorithm">
       1.  Return `null`.
     </ol>
-
-  <h6 id="algorithm-construct-cred">constructCredential Algorithm</h6>
-
-    A <dfn>constructCredential</dfn> algorithm is a [=queue=] of steps
-        to be invoked by a [=task=] from the [=DOM manipulation task source=].
-        [=constructCredential=]'s purpose is to construct an [=interface object=] derived
-        from {{Credential}}, given a [=current settings object=]'s
-        [=environment settings object/global object=].
-
-    Note: <code>[=constructCredential=]</code>'s algorithm steps are defined on a
-        per-[=credential=] type basis by those [=credential=] type specifications needing to
-        employ it. E.g., [[WEBAUTHN]].
-
 
 
   ### `CredentialUserData` Mixin ### {#credentialuserdata-mixin}
@@ -928,7 +919,7 @@ spec:css-syntax-3;
 
         3.  If |r| is a {{Credential}} or `null`, [=resolve=] |p| with |r|, and terminate these substeps.
 
-        4.  Assert: |r| is a <code>[=constructCredential=]</code> algorithm.
+        4.  Assert: |r| is a algorithm (as defined in [[#algorithm-create-cred]]).
 
         5.  [=Queue a task=] on |global|'s [=DOM manipulation task source=] to run the following substeps:
 
@@ -1279,7 +1270,7 @@ spec:css-syntax-3;
   </h4>
 
   <dfn for="PasswordCredential" method>\[[Create]](origin, options, sameOriginWithAncestors)</dfn>
-  is called with an [=environment settings object/origin=] (|origin|), a
+  is called with an [=origin=] (|origin|), a
   {{CredentialCreationOptions}} (|options|), and a boolean which is `true` iff the calling
   context is [=same-origin with its ancestors=] (|sameOriginWithAncestors|).
   The algorithm returns a {{PasswordCredential}} if one can be created,
@@ -1604,7 +1595,7 @@ spec:css-syntax-3;
   </h4>
 
   <dfn for="FederatedCredential" method>\[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)</dfn>
-  is called with an [=environment settings object/origin=] (|origin|), a {{CredentialRequestOptions}} (|options|),
+  is called with an [=origin=] (|origin|), a {{CredentialRequestOptions}} (|options|),
   and a boolean which is `true` iff the calling context is [=same-origin with its ancestors=] (|sameOriginWithAncestors|).
   The algorithm returns a set of {{Credential}} objects from
   the [=credential store=]. If no matching {{Credential}} objects are available, the returned set
@@ -1635,7 +1626,7 @@ spec:css-syntax-3;
   </h4>
 
   <dfn for="FederatedCredential" method>\[[Create]](origin, options, sameOriginWithAncestors)</dfn>
-  is called with an [=environment settings object/origin=] (|origin|), a
+  is called with an [=origin=] (|origin|), a
   {{CredentialCreationOptions}} (|options|), and a boolean which is `true` iff the
   calling context is [=same-origin with its ancestors=] (|sameOriginWithAncestors|).
   The algorithm returns a {{FederatedCredential}} if one can be created,
