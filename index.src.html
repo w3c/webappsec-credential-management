@@ -3,7 +3,7 @@
 Status: ED
 ED: https://w3c.github.io/webappsec-credential-management/
 TR: http://www.w3.org/TR/credential-management-1/
-Previous Version: http://www.w3.org/TR/2015/WD-credential-management-1-20150430/
+Previous Version: http://www.w3.org/TR/2016/WD-credential-management-1-20160425/
 Shortname: credential-management
 Level: 1
 Editor: Mike West 56384, Google Inc., mkwst@google.com
@@ -15,9 +15,10 @@ Abstract:
 Indent: 2
 Version History: https://github.com/w3c/webappsec-credential-management/commits/master/index.src.html
 Boilerplate: omit conformance, omit feedback-header
-!Participate: <a href="https://github.com/w3c/webappsec-credential-management/issues/new">File an issue</a> (<a href="https://github.com/w3c/webappsec-credential-management/issues">open issues</a>)
 Markup Shorthands: css off, markdown on
 </pre>
+<!-- bikeshed presently fatally barfs if it finds HTML comments within <pre> blocks -->
+<!-- !Participate: <a href="https://github.com/w3c/webappsec-credential-management/issues/new">File an issue</a> (<a href="https://github.com/w3c/webappsec-credential-management/issues">open issues</a>) -->
 <pre class="anchors">
 spec: ECMA262; urlPrefix: https://tc39.github.io/ecma262/
   type: dfn
@@ -60,8 +61,9 @@ spec:fetch; type:dictionary; for:/; text:RequestInit
 spec:infra; type:dfn; for:/; text:set
 spec:infra; type:dfn; for:struct; text:item
 spec:webidl; type:idl; for:/; text:Function
+spec:webidl; type:interface; text:Promise
 
-<!-- These need to be exported -->
+
 spec:html; type:dfn; text:submittable element
 spec:html; type:dfn; text:form owner
 spec:html; type:dfn; text:autofill detail tokens
@@ -237,6 +239,25 @@ spec:css-syntax-3;
   This document depends on the Infra Standard for a number of foundational concepts used in its
   algorithms and prose [[!INFRA]].
 
+  An [=environment settings object=] (|settings|) is <dfn noexport>same-origin with its
+  ancestors</dfn> if the following algorithm returns `true`:
+
+  1.  If |settings| has no [=environment settings object/responsible browsing context=],
+      return `false`.
+
+  2.  Let |origin| be |settings|' [=environment settings object/origin=].
+
+  3.  Let |current| be |settings|' [=environment settings object/responsible browsing context=].
+
+  4.  While |current| has a [=parent browsing context=]:
+
+      1.  Set |current| to |current|'s [=parent browsing context=].
+
+      2.  If |current|'s [=active document=]'s [=origin=] is not [=same origin=] with |origin|,
+          return `false`.
+
+  5.  Return `true`.
+
   ## The `Credential` Interface ## {#the-credential-interface}
 
   <pre class="idl">
@@ -246,7 +267,7 @@ spec:css-syntax-3;
       readonly attribute DOMString type;
     };
   </pre>
-  <dl dfn-for="Credential">
+  <div dfn-for="Credential">
     :   <dfn attribute>id</dfn>
     ::  The credential's identifier. The requirements for the identifier are distinct for each type
         of [=credential=]. It might represent a username for username/password tuples, for example.
@@ -274,7 +295,7 @@ spec:css-syntax-3;
         while the latter means that the user agent can discover credentials outside of those
         explicitly represented in the [=credential store=] via interaction with some external device
         or service.
-  </dl>
+  </div>
 
   ISSUE: Talk to Tobie/Dominic about the [=interface object=] bits, here and in
   [[#algorithm-request]], etc. I'm not sure I've gotten the terminology right. [=interface prototype
@@ -293,51 +314,60 @@ spec:css-syntax-3;
   Unless otherwise specified, each [=interface object=] created for interfaces which [=interface/inherit=] 
   from {{Credential}} MUST provide implementations for at least one of these internal methods, overriding
   {{Credential}}'s default implementations, as appropriate for the [=credential=] type. E.g.,
-  [[#passwordcredential-interface]] and [[#federatedcredential-interface]].
+  [[#passwordcredential-interface]], [[#federatedcredential-interface]], and [[WEBAUTHN]].
 
   <h5 id="algorithm-collect-creds" algorithm>`[[CollectFromCredentialStore]]` internal method</h5>
-    <dfn for="Credential" method export>\[[CollectFromCredentialStore]](origin, options)</dfn> is called
-    with an [=environment settings object/origin=] and a {{CredentialRequestOptions}}, and returns
-    a set of {{Credential}} objects from the user
-    agent's [=credential store=] that match the options provided. If no matching {{Credential}}
-    objects are available, the returned set will be empty.
+    <dfn for="Credential" method export>\[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)</dfn>
+    is called with an [=environment settings object/origin=], a {{CredentialRequestOptions}}, and a boolean which
+    is true iff the caller's [=environment settings object=] is [=same-origin with its ancestors=].
+    The algorithm returns a set of {{Credential}} objects from the user agent's [=credential store=] that
+    match the options provided. If no matching {{Credential}} objects are available, the
+    returned set will be empty.
 
-    {{Credential}}'s default implementation of {{Credential/[[CollectFromCredentialStore]](origin, options)}}:
+    {{Credential}}'s default implementation of
+    {{Credential/[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)}}:
 
-    <ul class="algorithm">
+    <ol class="algorithm">
       1.  Return an empty set.
-    </ul>
+    </ol>
 
 
   <h5 id="algorithm-discover-creds" algorithm>`[[DiscoverFromExternalSource]]` internal method</h5>
-    <dfn for="Credential" method export>\[[DiscoverFromExternalSource]](origin, options)</dfn> is called
-    with an [=environment settings object/origin=] and a {{CredentialRequestOptions}} object.
+    <dfn for="Credential" method export>\[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)</dfn>
+    is called with an [=environment settings object/origin=], a {{CredentialRequestOptions}} object,
+    and a boolean which is true iff the caller's [=environment settings object=] is
+    [=same-origin with its ancestors=].
     It returns a {{Credential}} if one can be
     returned given the options provided, `null` if no credential is available, or an error if
     discovery fails (for example, incorrect options could produce a {{TypeError}}). If this
     kind of {{Credential}} is only [=effective=] for a single use or a limited time, this
     method is responsible for generating new [=credentials=] using a [=credential source=].
 
-    {{Credential}}'s default implementation of {{Credential/[[DiscoverFromExternalSource]](origin, options)}}:
+    {{Credential}}'s default implementation of
+    {{Credential/[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)}}:
 
-    <ul class="algorithm">
+    <ol class="algorithm">
       1.  Return `null`.
-    </ul>
+    </ol>
 
   <h5 id="algorithm-store-cred" algorithm>`[[Store]]` internal method</h5>
-    <dfn for="Credential" method export>\[[Store]](credential)</dfn> is called with a {{Credential}},
-    and returns once {{Credential}} is persisted to the [=credential store=].
+    <dfn for="Credential" method export>\[[Store]](credential, sameOriginWithAncestors)</dfn>
+    is called with a {{Credential}}, and a boolean which is true iff the caller's
+    [=environment settings object=] is [=same-origin with its ancestors=].
+    The algorithm returns once {{Credential}} is persisted to the [=credential store=].
 
-    {{Credential}}'s default implementation of {{Credential/[[Store]](credential)}}:
+    {{Credential}}'s default implementation of {{Credential/[[Store]](credential, sameOriginWithAncestors)}}:
 
-    <ul class="algorithm">
-      1.  Return.
-    </ul>
+    <ol class="algorithm">
+      1.  Return `undefined`.
+    </ol>
 
   <h5 id="algorithm-create-cred" algorithm>`[[Create]]` internal method</h5>
-    <dfn for="Credential" method export>\[[Create]](origin, options)</dfn> is called
-    [=in parallel=] with an [=environment settings object/origin=] and a {{CredentialCreationOptions}},
-    and either:
+    <dfn for="Credential" method export>\[[Create]](origin, options, sameOriginWithAncestors)</dfn>
+    is called with an [=environment settings object/origin=], a {{CredentialCreationOptions}},
+    and a boolean which is true iff the caller's
+    [=environment settings object=] is [=same-origin with its ancestors=].
+    The algorithm either:
 
     * creates a {{Credential}}, or
     * does not create a credential and returns `null`, or
@@ -347,15 +377,15 @@ spec:css-syntax-3;
     When creating a {{Credential}}, it will either:
 
     * directly return a {{Credential}} (in which case it accomplished everything while
-        running [=in parallel=]), or,
+        running [=in parallel=]), or
     * return a [=constructCredential=] algorithm which yields a {{Credential}} when
         subsequently invoked from a [=task=].
 
-    {{Credential}}'s default implementation of {{Credential/[[Create]](origin, options)}}:
+    {{Credential}}'s default implementation of {{Credential/[[Create]](origin, options, sameOriginWithAncestors)}}:
 
-    <ul class="algorithm">
+     <ol class="algorithm">
       1.  Return `null`.
-    </ul>
+    </ol>
 
   <h6 id="algorithm-construct-cred">constructCredential Algorithm</h6>
 
@@ -383,7 +413,7 @@ spec:css-syntax-3;
       readonly attribute USVString iconURL;
     };
   </pre>
-  <dl dfn-for="CredentialUserData">
+  <div dfn-for="CredentialUserData">
     :   <dfn attribute>name</dfn>
     ::  A name associated with the credential, intended as a human-understandable public name for
         display in a [=credential chooser=].
@@ -391,7 +421,7 @@ spec:css-syntax-3;
     ::  A URL pointing to an image for the credential, intended for display in a
         [=credential chooser=]. This URL MUST be an <a><i lang="la">a priori</i> authenticated
         URL</a>.
-  </dl>
+  </div>
 
   ## `navigator.credentials` ## {#framework-credential-management}
 
@@ -426,7 +456,7 @@ spec:css-syntax-3;
     };
   </pre>
 
-  <dl dfn-for="CredentialsContainer">
+  <div dfn-for="CredentialsContainer">
     :   <dfn method>get(options)</dfn>
     ::  When {{CredentialsContainer/get()}} is called, the user agent MUST return the result of
         executing <a abstract-op>Request a `Credential`</a> on
@@ -467,7 +497,7 @@ spec:css-syntax-3;
 
         Note: This function was previously called `requireUserMediation()` which should be considered
         deprecated.
-  </dl>
+  </div>
 
   <div algorithm="create credentialscontainer">
     When a {{Navigator}} object (|navigator|) is created, the user agent MUST create a
@@ -487,14 +517,19 @@ spec:css-syntax-3;
   <pre class="idl">
     dictionary CredentialRequestOptions {
       CredentialMediationRequirement mediation = "optional";
+      AbortSignal signal;
     };
   </pre>
-  <dl dfn-for="CredentialRequestOptions" dfn-type="dict-member">
+  <div dfn-for="CredentialRequestOptions" dfn-type="dict-member">
     :   <dfn>mediation</dfn>
     ::  This property specifies the mediation requirements for a given credential request. The
         meaning of each enum value is described below in {{CredentialMediationRequirement}}.
         Processing details are defined in [[#algorithm-request]].
-  </dl>
+    :   <dfn>signal</dfn>
+    ::  This property lets the developer abort an ongoing {{CredentialsContainer/get()}} operation.
+        An aborted operation may complete normally (generally if the abort was received after the
+        operation finished) or reject with an "{{AbortError}}" {{DOMException}}."
+  </div>
 
   <div class="note">
     Earlier versions of this specification defined a boolean `unmediated` member. Setting that
@@ -510,7 +545,7 @@ spec:css-syntax-3;
     The <dfn for="CredentialRequestOptions">relevant credential interface objects</dfn> for a given
     {{CredentialRequestOptions}} (|options|) is a set of [=interface objects=], collected as follows:
 
-    <ol>
+    <ol class="algorithm">
       1.  Let |settings| be the <a>current settings object</a>
 
       2.  Let |interface objects| be the set of [=interface objects=] on |settings|'
@@ -539,7 +574,7 @@ spec:css-syntax-3;
     <dfn for="CredentialRequestOptions">matchable <i lang="la">a priori</i></dfn> if the following
     steps return `true`:
 
-    <ol>
+    <ol class="algorithm">
       1.  For each |interface| in |options|' [=relevant credential interface objects=]:
 
           1.  If |interface|'s {{Credential/[[discovery]]}} slot's value is not
@@ -570,7 +605,7 @@ spec:css-syntax-3;
       "required"
     };
   </pre>
-  <dl dfn-for="CredentialMediationRequirement" dfn-type="enum-value">
+  <div dfn-for="CredentialMediationRequirement" dfn-type="enum-value">
     :   <dfn>silent</dfn>
     ::  User mediation is suppressed for the given operation. If the operation can be performed
         without user involvement, wonderful. If user involvement is necessary, then the operation
@@ -599,7 +634,7 @@ spec:css-syntax-3;
         or [user-switching](#example-mediation-switch) scenarios. Further, the requirement is tied
         to a specific operation, and does not affect the [=prevent silent access flag=] for the
         origin. To set that flag, developers should call {{preventSilentAccess()}}.
-  </dl>
+  </div>
 
   #### Examples #### {#mediation-examples}
 
@@ -706,8 +741,15 @@ spec:css-syntax-3;
 
   <pre class="idl">
     dictionary CredentialCreationOptions {
+      AbortSignal signal;
     };
   </pre>
+  <div dfn-for="CredentialCreationOptions" dfn-type="dict-member">
+    :   <dfn>signal</dfn>
+    ::  This property lets the developer abort an ongoing {{CredentialsContainer/create()}}
+        operation. An aborted operation may complete normally (generally if the abort was received
+        after the operation finished) or reject with an "{{AbortError}}" {{DOMException}}."
+  </div>
 
   ## Algorithms ## {#algorithms}
 
@@ -722,22 +764,21 @@ spec:css-syntax-3;
 
     2.  Assert: |settings| is a [=secure context=].
 
-    3.  Return [=a promise rejected with=] `NotSupportedError` if any of the following statements
-        are true:
-
-        1.  |settings| does not have a [=environment settings object/responsible document=].
-
-        2.  |settings|' [=environment settings object/responsible document=] is not the
-            [=active document=] in a [=top-level browsing context=].
+    3.  If <code>|options|.{{CredentialRequestOptions/signal}}</code>'s [=AbortSignal/aborted flag=]
+        is set, then return [=a promise rejected with=] an "{{AbortError}}" {{DOMException}}.
 
     4.  Let |p| be [=a new promise=].
 
     5.  Let |origin| be the [=current settings object=]'s [=environment settings object/origin=].
 
-    6.  Run the following steps [=in parallel=]:
+    6.  Let |sameOriginWithAncestors| be `true` if |settings| is [=same-origin with its
+        ancestors=], and `false` otherwise.
+
+    7.  Run the following steps [=in parallel=]:
 
         1.  Let |credentials| be the result of <a abstract-op lt="collect local">collecting
-            `Credential`s from the credential store</a>, given |origin| and |options|.
+            `Credential`s from the credential store</a>, given |origin|, |options|, and
+            |sameOriginWithAncestors|.
 
         2.  If |credentials| is an [=exception=], [=reject=] |p| with |credentials|.
 
@@ -770,7 +811,8 @@ spec:css-syntax-3;
         7.  Assert: |choice| is an [=interface object=].
 
         8.  Let |result| be the result of executing |choice|'s
-            {{[[DiscoverFromExternalSource]](origin, options)}}, given |origin| and |options|.
+            {{[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)}},
+            given |origin|, |options|, and |sameOriginWithAncestors|.
 
         9.  If |result| is a {{Credential}} or `null`, resolve |p| with |result|.
 
@@ -781,8 +823,9 @@ spec:css-syntax-3;
 
   <h4 id="algorithm-collect-known" algorithm>Collect `Credential`s from the credential store</h4>
 
-  Given an [=environment settings object/origin=] (|origin|) and
-  a {{CredentialRequestOptions}} (|options|), the user agent may
+  Given an [=environment settings object/origin=] (|origin|),
+  a {{CredentialRequestOptions}} (|options|), and a boolean which is `true` iff the calling
+  context is [=same-origin with its ancestors=] (|sameOriginWithAncestors|), the user agent may
   <dfn abstract-op local-lt="collect local">collect `Credential`s from the credential store</dfn>,
   returning a set of {{Credential}} objects stored by the user agent locally that match |options|'
   filter. If no such {{Credential}} objects are known, the returned set will be empty:
@@ -793,15 +836,15 @@ spec:css-syntax-3;
     2.  For each |interface| in |options|' <a>relevant credential interface objects</a>:
 
         1.  Let |r| be the result of executing |interface|'s
-            {{Credential/[[CollectFromCredentialStore]](origin, options)}} internal method on
-            |origin| and |options|.
+            {{Credential/[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)}} internal method on
+            |origin|, |options|, and |sameOriginWithAncestors|.
 
         2.  If |r| is an [=exception=], return |r|.
 
         3.  Assert: |r| is a list of [=interface objects=].
 
         4.  For each |c| in |r|:
-       
+
             1.  <a for="set">Append</a> |c| to |possible matches|.
 
     3.  Return |possible matches|.
@@ -819,22 +862,20 @@ spec:css-syntax-3;
 
     2.  Assert: |settings| is a [=secure context=].
 
-    3.  Return [=a promise rejected with=] `NotSupportedError` if any of the following statements
-        are true:
-
-        1.  |settings| does not have a [=environment settings object/responsible document=].
-
-        2.  |settings|' [=environment settings object/responsible document=] is not the
-            [=active document=] in a [=top-level browsing context=].
+    3.  Let |sameOriginWithAncestors| be `true` if the [=current settings object=] is [=same-origin
+        with its ancestors=], and `false` otherwise.
 
     4.  Let |p| be [=a new promise=].
 
     5.  Run the following steps [=in parallel=]:
 
         1.  Let |r| be the result of executing |credential|'s [=interface object=]'s
-            {{Credential/[[Store]](credential)}} internal method on |credential|.
+            {{Credential/[[Store]](credential, sameOriginWithAncestors)}} internal method on
+            |credential| and |sameOriginWithAncestors|.
 
-        2.  [=Resolve=] |p| with |r|.
+        2.  If |r| is an [=exception=], [=reject=] |p| with |r|.
+
+            Otherwise, [=resolve=] |p| with |r|.
 
     6.  Return |p|.
   </ol>
@@ -853,31 +894,35 @@ spec:css-syntax-3;
 
     3.  Let |global| be |settings|' [=environment settings object/global object=].
 
-    4.  Let |interfaces| be the [=set=] of |options|' <a>relevant credential interface objects</a>.
+    4.  Let |sameOriginWithAncestors| be `true` if the [=current settings object=] is [=same-origin
+        with its ancestors=], and `false` otherwise.
 
-    5.  Return [=a promise rejected with=] `NotSupportedError` if any of the following statements
+    5.  Let |interfaces| be the [=set=] of |options|' <a>relevant credential interface objects</a>.
+
+    6.  Return [=a promise rejected with=] `NotSupportedError` if any of the following statements
         are true:
 
         1.  |settings| does not have a [=environment settings object/responsible document=].
 
-        2.  |settings|' [=environment settings object/responsible document=] is not the
-            [=active document=] in a [=top-level browsing context=].
-
-        3.  |interfaces|' [=list/size=] is greater than 1.
+        2.  |interfaces|' [=list/size=] is greater than 1.
 
             Note: It may be reasonable at some point in the future to loosen this restriction, and
             allow the user agent to help the user choose among one of many potential credential
             types in order to support a "sign-up" use case. For the moment, though, we're punting
             on that by restricting the dictionary to a single entry.
 
-    6.  Let |p| be [=a new promise=].
+    7.  If <code>|options|.{{CredentialCreationOptions/signal}}</code>'s [=AbortSignal/aborted
+        flag=] is set, then return [=a promise rejected with=] an "{{AbortError}}" {{DOMException}}.
 
-    7.  Let |origin| be |settings|'s [=environment settings object/origin=].
+    8.  Let |p| be [=a new promise=].
 
-    8.  Run the following substeps [=in parallel=]:
+    9.  Let |origin| be |settings|'s [=environment settings object/origin=].
 
-        1.  Let |r| be the result of executing |interfaces|[0]'s {{Credential/[[Create]](origin, options)}}
-            internal method given |origin| and |options|.
+    10.  Run the following steps [=in parallel=]:
+
+        1.  Let |r| be the result of executing |interfaces|[0]
+            {{Credential/[[Create]](origin, options, sameOriginWithAncestors)}} internal method on
+            |origin|, |options|, and |sameOriginWithAncestors|.
 
         2.  If |r| is an [=exception=], [=reject=] |p| with |r|, and terminate these substeps.
 
@@ -889,7 +934,7 @@ spec:css-syntax-3;
 
             1. [=Resolve=] |p| with the result of [=promise-calling=] |r| given |global|.
 
-    9.  Return |p|.
+    11.  Return |p|.
   </ol>
 
   <h4 id="algorithm-prevent-silent-access" algorithm>Prevent Silent Access</h4>
@@ -1133,7 +1178,7 @@ spec:css-syntax-3;
       boolean password = false;
     };
   </pre>
-  <dl dfn-for="PasswordCredential">
+  <div dfn-for="PasswordCredential">
     :   <dfn attribute>password</dfn>
     ::  This attribute represents the password of the credential.
 
@@ -1166,7 +1211,7 @@ spec:css-syntax-3;
         2.  If |r| is an [=exception=], [=throw=] |r|.
 
             Otherwise, return |r|.
-  </dl>
+  </div>
  
   {{PasswordCredential}} objects can be created via
   {{CredentialsContainer/create()|navigator.credentials.create()}}
@@ -1191,29 +1236,38 @@ spec:css-syntax-3;
   {{PasswordCredential}} objects are [=Credential/origin bound=].
 
   {{PasswordCredential}}'s [=interface object=] inherits {{Credential}}'s implementation of
-  {{Credential/[[DiscoverFromExternalSource]](origin, options)}}, and defines its own implementation of
-  {{PasswordCredential/[[CollectFromCredentialStore]](origin, options)}},
-  {{PasswordCredential/[[Create]](origin, options)}}, and
-  {{PasswordCredential/[[Store]](credential)}}.
+  {{Credential/[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)}}, and defines
+  its own implementation of
+  {{PasswordCredential/[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)}},
+  {{PasswordCredential/[[Create]](origin, options, sameOriginWithAncestors)}}, and
+  {{PasswordCredential/[[Store]](credential, sameOriginWithAncestors)}}.
 
   ## Algorithms ## {#passwordcredential-algorithms}
 
   <h4 algorithm id="collectfromcredentialstore-passwordcredential">
-    `PasswordCredential`'s `[[CollectFromCredentialStore]](origin, options)`
+    `PasswordCredential`'s `[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)`
   </h4>
 
-  <dfn for="PasswordCredential" method>\[[CollectFromCredentialStore]](origin, options)</dfn> is called
-  with an [=origin=] (|origin|) and a {{CredentialRequestOptions}} (|options|),
-  and returns a set of {{Credential}} objects from
+  <dfn for="PasswordCredential" method>\[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)</dfn>
+  is called with an [=origin=] (|origin|), a {{CredentialRequestOptions}} (|options|),
+  and a boolean which is `true` iff the calling context is [=same-origin with its ancestors=]
+  (|sameOriginWithAncestors|).
+  The algorithm returns a set of {{Credential}} objects from
   the [=credential store=]. If no matching {{Credential}} objects are available, the returned set
   will be empty.
+
+  The algorithm will return a `NotAllowedError` if |sameOriginWithAncestors| is not `true`.
 
   <ol class="algorithm">
     1.  Assert: |options|["{{CredentialRequestOptions/password}}"] [=map/exists=].
 
-    2.  If |options|["{{CredentialRequestOptions/password}}"] is not `true`, return the empty set.
+    2.  If |sameOriginWithAncestors is `false`, return a "{{NotAllowedError}}" {{DOMException}}.
 
-    3.  Return the result of <a abstract-op lt="Retrieve a list of credentials">retrieving</a>
+        Note: This restriction aims to address the concern raised in [[#security-origin-confusion]].
+
+    3.  Return the empty set if |options|["{{CredentialRequestOptions/password}}"] is not `true`.
+
+    4.  Return the result of <a abstract-op lt="Retrieve a list of credentials">retrieving</a>
         credentials from the [=credential store=] that match the following filter:
 
         1.  The credential is a {{PasswordCredential}}
@@ -1221,18 +1275,21 @@ spec:css-syntax-3;
   </ol>
 
   <h4 algorithm id="create-passwordcredential">
-    `PasswordCredential`'s `[[Create]](origin, options)`
+    `PasswordCredential`'s `[[Create]](origin, options, sameOriginWithAncestors)`
   </h4>
 
-  <dfn for="PasswordCredential" method>\[[Create]](origin, options)</dfn> is called with
-  an [=environment settings object/origin=] (|origin|) and a
-  {{CredentialCreationOptions}} (|options|), and returns a {{PasswordCredential}} if one can be created,
+  <dfn for="PasswordCredential" method>\[[Create]](origin, options, sameOriginWithAncestors)</dfn>
+  is called with an [=environment settings object/origin=] (|origin|), a
+  {{CredentialCreationOptions}} (|options|), and a boolean which is `true` iff the calling
+  context is [=same-origin with its ancestors=] (|sameOriginWithAncestors|).
+  The algorithm returns a {{PasswordCredential}} if one can be created,
   `null` otherwise. The {{CredentialCreationOptions}} dictionary must have a `password` member which
   holds either an {{HTMLFormElement}} or a {{PasswordCredentialData}}. If that member's value cannot be
   used to create a {{PasswordCredential}}, this algorithm will return a {{TypeError}} [=exception=].
 
   <ol class="algorithm">
-    1.  Assert: |options|["{{CredentialCreationOptions/password}}"] [=map/exists=].
+    1.  Assert: |options|["{{CredentialCreationOptions/password}}"] [=map/exists=], and
+        |sameOriginWithAncestors| is unused.
 
     2.  If |options|["{{CredentialCreationOptions/password}}"] is an {{HTMLFormElement}}, return the
         result of executing <a abstract-op>Create a `PasswordCredential` from an
@@ -1246,15 +1303,23 @@ spec:css-syntax-3;
   </ol>
 
   <h4 algorithm id="store-passwordcredential">
-    `PasswordCredential`'s `[[Store]](credential)`
+    `PasswordCredential`'s `[[Store]](credential, sameOriginWithAncestors)`
   </h4>
 
-  <dfn for="PasswordCredential" method>\[[Store]](credential)</dfn> is called with a
-  {{PasswordCredential}} (|credential|), and returns once |credential| is persisted to the
-  [=credential store=].
+  <dfn for="PasswordCredential" method>\[[Store]](credential, sameOriginWithAncestors)</dfn> is
+  called with a {{PasswordCredential}} (|credential|), and a boolean which is `true` iff the calling
+  context is [=same-origin with its ancestors=] (|sameOriginWithAncestors|). The algorithm returns
+  `undefined` once |credential| is persisted to the [=credential store=].
+
+  The algorithm will return a `NotAllowedError` if |sameOriginWithAncestors| is not `true`.
 
   <ol class="algorithm">
-    1.  If the user agent's [=credential store=] contains a {{PasswordCredential}} (|stored|)
+    1.  Return a "{{NotAllowedError}}" {{DOMException}} without altering the user agent's
+        [=credential store=] if |sameOriginWithAncestors| is `false`.
+
+        Note: This restriction aims to address the concern raised in [[#security-origin-confusion]].
+
+    2.  If the user agent's [=credential store=] contains a {{PasswordCredential}} (|stored|)
         whose {{Credential/id}} attribute is |credential|'s {{Credential/id}} and whose
         {{[[origin]]}} slot is the [=same origin=] as |credential|'s {{Credential/[[origin]]}},
         then:
@@ -1287,6 +1352,8 @@ spec:css-syntax-3;
             ::  |credential|'s {{Credential/[[origin]]}}
             :   <a attribute for="PasswordCredential">`password`</a>
             ::  |credential|'s <a attribute for="PasswordCredential">`password`</a>
+
+    3.  Return `undefined`.
 
   </ol>
 
@@ -1451,7 +1518,7 @@ spec:css-syntax-3;
       FederatedCredentialRequestOptions federated;
     };
   </pre>
-  <dl dfn-for="FederatedCredential">
+  <div dfn-for="FederatedCredential">
     :   <dfn attribute>provider</dfn>
     ::  The credential's federated identity provider. See [[#provider-identification]] for
         details regarding valid formats.
@@ -1478,7 +1545,7 @@ spec:css-syntax-3;
         2.  If |r| is an [=exception=], [=throw=] |r|.
 
             Otherwise, return |r|.
-  </dl>
+  </div>
 
   {{FederatedCredential}} objects can be created by passing a {{FederatedCredentialInit}} dictionary
   into {{CredentialsContainer/create()|navigator.credentials.create()}}.
@@ -1500,13 +1567,15 @@ spec:css-syntax-3;
   {{FederatedCredential}} objects are [=Credential/origin bound=].
 
   {{FederatedCredential}}'s [=interface object=] inherits {{Credential}}'s implementation of
-  {{Credential/[[DiscoverFromExternalSource]](origin, options)}}, and defines its own implementation of
-  {{FederatedCredential/[[CollectFromCredentialStore]](origin, options)}},
-  {{FederatedCredential/[[Create]](origin, options)}}, and
-  {{FederatedCredential/[[Store]](credential)}}.
+  {{Credential/[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)}},
+  and defines its own implementation of
+  {{FederatedCredential/[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)}},
+  {{FederatedCredential/[[Create]](origin, options, sameOriginWithAncestors)}}, and
+  {{FederatedCredential/[[Store]](credential, sameOriginWithAncestors)}}.
 
   Note: If, in the future, we teach the user agent to obtain authentication tokens on a user's
-  behalf, we could do so by building an implementation of `[[DiscoverFromExternalSource]](origin, options)`.
+  behalf, we could do so by building an implementation of
+  `[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)`.
 
   ### Identifying Providers ### {#provider-identification}
 
@@ -1531,19 +1600,26 @@ spec:css-syntax-3;
   ## Algorithms ## {#federatedcredential-algorithms}
 
   <h4 algorithm id="collectfromcredentialstore-federatedcredential">
-    `FederatedCredential`'s `[[CollectFromCredentialStore]](origin, options)`
+    `FederatedCredential`'s `[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)`
   </h4>
 
-  <dfn for="FederatedCredential" method>\[[CollectFromCredentialStore]](origin, options)</dfn> is called
-  with an [=environment settings object/origin=] (|origin|) and a {{CredentialRequestOptions}} (|options|),
-  and returns a set of {{Credential}} objects from
+  <dfn for="FederatedCredential" method>\[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)</dfn>
+  is called with an [=environment settings object/origin=] (|origin|), a {{CredentialRequestOptions}} (|options|),
+  and a boolean which is `true` iff the calling context is [=same-origin with its ancestors=] (|sameOriginWithAncestors|).
+  The algorithm returns a set of {{Credential}} objects from
   the [=credential store=]. If no matching {{Credential}} objects are available, the returned set
   will be empty.
 
   <ol class="algorithm">
     1.  Assert: |options|["{{CredentialRequestOptions/federated}}"] [=map/exists=].
 
-    2.  Return the result of <a abstract-op lt="Retrieve a list of credentials">retrieving</a>
+    2.  If <var ignore>sameOriginWithAncestors</var> is `false`, return a "{{NotAllowedError}}" {{DOMException}}.
+
+        Note: This restriction aims to address the concern raised in [[#security-origin-confusion]].
+
+    3.  Return the empty set if |options|["{{CredentialRequestOptions/federated}}"] is not `true`.
+
+    4.  Return the result of <a abstract-op lt="Retrieve a list of credentials">retrieving</a>
         credentials from the [=credential store=] that match the following filter:
 
         1.  The credential is a {{FederatedCredential}}
@@ -1555,16 +1631,19 @@ spec:css-syntax-3;
   </ol>
 
   <h4 algorithm id="create-federatedcredential">
-    `FederatedCredential`'s `[[Create]](origin, options)`
+    `FederatedCredential`'s `[[Create]](origin, options, sameOriginWithAncestors)`
   </h4>
 
-  <dfn for="FederatedCredential" method>\[[Create]](origin, options)</dfn> is called with 
-  an [=environment settings object/origin=] (|origin|) and a
-  {{CredentialCreationOptions}} (|options|), and returns a {{FederatedCredential}} if one can be created,
+  <dfn for="FederatedCredential" method>\[[Create]](origin, options, sameOriginWithAncestors)</dfn>
+  is called with an [=environment settings object/origin=] (|origin|), a
+  {{CredentialCreationOptions}} (|options|), and a boolean which is `true` iff the
+  calling context is [=same-origin with its ancestors=] (|sameOriginWithAncestors|).
+  The algorithm returns a {{FederatedCredential}} if one can be created,
   `null` otherwise, or an [=exception=] in exceptional circumstances:
 
   <ol class="algorithm">
-    1.  Assert: |options|["{{CredentialCreationOptions/federated}}"] [=map/exists=].
+    1.  Assert: |options|["{{CredentialCreationOptions/federated}}"] [=map/exists=], and
+        <var ignore>sameOriginWithAncestors</var> is unused.
 
     2.  Set |options|["{{CredentialCreationOptions/federated}}"]'s {{FederatedCredentialInit/origin}}
         member's value to |origin|'s value.
@@ -1574,22 +1653,31 @@ spec:css-syntax-3;
   </ol>
 
   <h4 algorithm id="store-federatedcredential">
-    `FederatedCredential`'s `[[Store]](credential)`
+    `FederatedCredential`'s `[[Store]](credential, sameOriginWithAncestors)`
   </h4>
 
-  <dfn for="FederatedCredential" method>\[[Store]](credential)</dfn> is called with a
-  {{FederatedCredential}} (|credential|), and returns once |credential| is persisted to the
-  [=credential store=].
+  <dfn for="FederatedCredential" method>\[[Store]](credential, sameOriginWithAncestors)</dfn> is
+  called with a {{FederatedCredential}} (|credential|), and a boolean which is `true` iff the
+  calling context is [=same-origin with its ancestors=] (|sameOriginWithAncestors|). The algorithm
+  returns `undefined` once |credential| is persisted to the [=credential store=].
+
+  The algorithm will return a `NotAllowedError` if |sameOriginWithAncestors| is not `true`.
 
   <ol class="algorithm">
-    1.  If the user agent's [=credential store=] contains a {{FederatedCredential}} whose
+    1.  Return a "{{NotAllowedError}}" {{DOMException}} without altering the user agent's
+        [=credential store=] if <var ignore>sameOriginWithAncestors</var> is `false`.
+
+        Note: This restriction aims to address the concern raised in [[#security-origin-confusion]].
+
+    2.  If the user agent's [=credential store=] contains a {{FederatedCredential}} whose
         {{Credential/id}} attribute is |credential|'s {{Credential/id}} and whose {{[[origin]]}}
         slot is the [=same origin=] as |credential|'s {{Credential/[[origin]]}}, and
         whose {{FederatedCredential/provider}} is |credential|'s
         {{FederatedCredential/provider}}, then return.
 
-    2.  Store a {{FederatedCredential}} in the [=credential store=] with the following
-        properties:
+    3.  If the user grants permission to store credentials (as discussed when defining
+        [=user mediation=]), then store a {{FederatedCredential}} in the [=credential store=] with
+        the following properties:
         
         :   {{Credential/id}}
         ::  |credential|'s {{Credential/id}}
@@ -1603,6 +1691,8 @@ spec:css-syntax-3;
         ::  |credential|'s {{FederatedCredential/provider}}
         :   {{FederatedCredential/protocol}}
         ::  |credential|'s {{FederatedCredential/protocol}}
+
+    4.  Return `undefined`.
   </ol>
 
   <h4 algorithm id="construct-federatedcredential-data">
@@ -1856,11 +1946,22 @@ spec:css-syntax-3;
   granting access to credentials for an origin other than the <a>top-level browsing context</a>,
   which is the only security origin which users can reasonably be expected to understand.
 
-  Therefore, both {{get()}} and {{store()}} will result in a rejected {{Promise}} when called from
-  a [=nested browsing context=], and the API and related interfaces are not exposed inside
-  {{Worker}} contexts.
+  This document exposes the Credential Management APIs to those contexts, as it's likely that some
+  credential types will be straightforward to make available if user agents put enough thought and
+  context into their UI.
 
-  The algorithms in [[#algorithm-request]] and [[#algorithm-store]] contain more detail.
+  Specific credential types, however, will be difficult to expose in those contexts without risk.
+  Those credential types are restricted via checks in their
+  {{Credential/[[Create]](origin, options, sameOriginWithAncestors)}},
+  {{Credential/[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)}},
+  {{Credential/[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)}}, and
+  {{Credential/[[Store]](credential, sameOriginWithAncestors)}}
+  methods, as appropriate.
+
+  For example {{PasswordCredential}}'s
+  {{PasswordCredential/[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)}} method
+  will immedietely return an empty set if called from inside a {{Worker}}, or a non-[=top-level
+  browsing context=].
 
   ## Timing Attacks ## {#security-timing}
 
@@ -1928,7 +2029,7 @@ spec:css-syntax-3;
  ██  ██     ██ ██        ██       ██       ██     ██ ██       ██   ███    ██    ██     ██    ██     ██  ██     ██ ██   ███
 ████ ██     ██ ██        ████████ ████████ ██     ██ ████████ ██    ██    ██    ██     ██    ██    ████  ███████  ██    ██
 -->
-<section>
+<section class="non-normative">
   # Implementation Considerations # {#implementation}
 
   <em>This section is non-normative.</em>
@@ -1959,20 +2060,28 @@ spec:css-syntax-3;
         </pre>
       </div>
 
-  2.  Define appropriate {{Credential/[[Create]](origin, options)}},
-      {{Credential/[[CollectFromCredentialStore]](origin, options)}},
-      {{Credential/[[DiscoverFromExternalSource]](origin, options)}}, and
-      {{Credential/[[Store]](credential)}} methods on `ExampleCredential`'s
-      [=interface object=]. {{Credential/[[CollectFromCredentialStore]](origin, options)}}
+  2.  Define appropriate {{Credential/[[Create]](origin, options, sameOriginWithAncestors)}},
+      {{Credential/[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)}},
+      {{Credential/[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)}}, and
+      {{Credential/[[Store]](credential, sameOriginWithAncestors)}} methods on `ExampleCredential`'s
+      [=interface object=]. {{Credential/[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)}}
       is appropriate for [=credentials=] that remain [=effective=] forever and
       can therefore simply be copied out of the [=credential store=], while
-      {{Credential/[[DiscoverFromExternalSource]](origin, options)}} is appropriate for
+      {{Credential/[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)}} is appropriate for
       [=credentials=] that need to be re-generated from a [=credential source=].
 
+      Long-running operations, like those in {{PublicKeyCredential}}'s
+      {{PublicKeyCredential/[[Create]](origin, options, sameOriginWithAncestors)}} and
+      {{PublicKeyCredential/[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)}}
+      operations are encouraged to use <code>options.signal</code> to allow developers to abort
+      the operation. See [[dom#abortcontroller-api-integration]] for detailed instructions.
+
       <div class="example">
-        `ExampleCredential`'s `[[CollectFromCredentialStore]](origin, options)` internal method is called
-        with an [=environment settings object/origin=] (`origin`) and a CredentialRequestOptions
-        object (`options`), and returns a set of {{Credential}}
+        `ExampleCredential`'s `[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)`
+        internal method is called
+        with an [=environment settings object/origin=] (`origin`), a CredentialRequestOptions
+        object (`options`), and a boolean which is `true` iff the calling context is [=same-origin with its ancestors=].
+        The algorithm returns a set of {{Credential}}
         objects that match the options provided. If no matching {{Credential}} objects are
         available, the returned set will be empty.
 
