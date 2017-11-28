@@ -18,11 +18,13 @@ Boilerplate: omit conformance, omit feedback-header
 Markup Shorthands: css off, markdown on
 </pre>
 <!-- bikeshed presently fatally barfs if it finds HTML comments within <pre> blocks -->
-<!-- !Participate: <a href="https://github.com/w3c/webappsec-credential-management/issues/new">File an issue</a> (<a href="https://github.com/w3c/webappsec-credential-management/issues">open issues</a>) -->
+<!-- BS also did not like this:
+!Participate: <a href="https://github.com/w3c/webappsec-credential-management/issues/new">File an issue</a> (<a href="https://github.com/w3c/webappsec-credential-management/issues">open issues</a>) -->
 <pre class="anchors">
 spec: ECMA262; urlPrefix: https://tc39.github.io/ecma262/
   type: dfn
     text: JavaScript realm; url: sec-code-realms
+    text: internal method; url: sec-ordinary-object-internal-methods-and-internal-slots
 spec: HTML; urlPrefix: https://html.spec.whatwg.org/multipage/
   urlPrefix: forms.html
     type: element-attr
@@ -276,11 +278,11 @@ spec:css-syntax-3;
 
     :   <dfn attribute>type</dfn>
     ::  This attribute's getter returns the value of the object's [=interface object=]'s
-        {{[[type]]}} slot, which specifies the kind of credential represented by this object.
+        {{[[type]]}} slot, which specifies the [=credential type=] represented by this object.
 
     :   <dfn attribute>\[[type]]</dfn>
     ::  The {{Credential}} [=interface object=] has an internal slot named `[[type]]`, which
-        unsurprisingly contains a string representing the type of the credential. The slot's value
+        unsurprisingly contains a string representing the <dfn>credential type</dfn>. The slot's value
         is the empty string unless otherwise specified.
 
         Note: The {{[[type]]}} slot's value will be the same for all credentials implementing a
@@ -309,7 +311,7 @@ spec:css-syntax-3;
 
   ### `Credential` Internal Methods ### {#credential-internal-methods}
   
-  The {{Credential}} [=interface object=] features several internal methods facilitating 
+  The {{Credential}} [=interface object=] features several [=internal methods=] facilitating 
   retrieval and storage of {{Credential}} objects, with default "no-op" implementations
   as specified in this section, below.
 
@@ -376,16 +378,11 @@ spec:css-syntax-3;
     * returns an error if creation fails due to exceptional situations
         (for example, incorrect options could produce a {{TypeError}}).
 
-    When creating a {{Credential}}, it will either:
-
-    * directly return a {{Credential}} (in which case it accomplished everything while
-        running [=in parallel=]), or
-    * return an algorithm that takes a [=global object=] and returns an instance of an interface type 
+    When creating a {{Credential}}, it will return an algorithm that takes a [=global object=]
+        and returns an [=interface object=]
         inheriting from {{Credential}}. This algorithm MUST be invoked from a [=task=].
 
-    Note: This algorithm's steps are defined on a
-        per-[=credential=] type basis by those [=credential=] type specifications needing to
-        employ it. E.g., [[WEBAUTHN]].
+    Note: This algorithm's steps are defined on a per-[=credential type=] basis.
 
     {{Credential}}'s default implementation of {{Credential/[[Create]](origin, options, sameOriginWithAncestors)}}:
 
