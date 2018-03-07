@@ -66,6 +66,7 @@ spec:infra; type:dfn; for:/; text:set
 spec:infra; type:dfn; for:struct; text:item
 spec:webidl; type:idl; for:/; text:Function
 spec:webidl; type:interface; text:Promise
+spec:promises-guide-1; type:dfn; text:resolve
 
 
 spec:html; type:dfn; text:submittable element
@@ -1071,7 +1072,7 @@ spec:css-syntax-3;
 
     <pre>
       document.querySelector('#theForm').addEventListener('submit', e =&gt; {
-          if (<a attribute lt="credentials">navigator.credentials</a>) {
+          if (<a interface lt="PasswordCredential">window.PasswordCredential</a>) {
             e.preventDefault();
 
             // Construct a new <a idl>PasswordCredential</a> from the <a idl>HTMLFormElement</a>
@@ -1124,7 +1125,7 @@ spec:css-syntax-3;
 
     <pre>
       document.querySelector('#theForm').addEventListener('submit', e =&gt; {
-        if (<a attribute lt="credentials">navigator.credentials</a>) {
+        if (<a interface lt="PasswordCredential">window.PasswordCredential</a>) {
           e.preventDefault();
 
           // Construct a new <a idl>PasswordCredential</a> from the <a idl>HTMLFormElement</a>
@@ -2031,6 +2032,13 @@ spec:css-syntax-3;
 
   ISSUE: Describe encoding restrictions of submitting credentials by {{fetch()}} with
   a {{FormData}} body.
+
+  When performing feature detection for a given credential type, developers are encouraged to verify
+  that the relevant {{Credential}} specialization is present, rather than relying on the presence of
+  `navigator.credentals`. The latter verifies the existence of the API itself, but does not ensure
+  that the specific kind of credential necessary for a given site is supported. For example, if a
+  given site requires passwords, checking `if (window.PasswordCredential)` is the most effective
+  verification of support.
 
   ## Extension Points ## {#implementation-extension}
 
