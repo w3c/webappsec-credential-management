@@ -1424,7 +1424,7 @@ pre.highlight, pre > code.highlight { display: block; padding: 1em; margin: .5em
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2018-03-07">7 March 2018</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2018-03-08">8 March 2018</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1439,6 +1439,8 @@ pre.highlight, pre > code.highlight { display: block; padding: 1em; margin: .5em
      <dd><span><a href="mailto:public-webappsec@w3.org?subject=%5Bcredential-management%5D%20YOUR%20TOPIC%20HERE">public-webappsec@w3.org</a> with subject line “<kbd>[credential-management] <i data-lt="">… message topic …</i></kbd>” (<a href="https://lists.w3.org/Archives/Public/public-webappsec/" rel="discussion">archives</a>)</span>
      <dt class="editor">Editor:
      <dd class="editor p-author h-card vcard" data-editor-id="56384"><a class="p-name fn u-email email" href="mailto:mkwst@google.com">Mike West</a> (<span class="p-org org">Google Inc.</span>)
+     <dt>Participate:
+     <dd><a href="https://github.com/w3c/webappsec-credential-management/issues/new">File an issue</a> (<a href="https://github.com/w3c/webappsec-credential-management/issues">open issues</a>)
     </dl>
    </div>
    <div data-fill-with="warning"></div>
@@ -1805,7 +1807,7 @@ store user credentials for future use.</p>
       <p>Return an empty set.</p>
     </ol>
     <h5 class="heading settled algorithm" data-algorithm="[[DiscoverFromExternalSource]] internal method" data-level="2.2.1.2" id="algorithm-discover-creds"><span class="secno">2.2.1.2. </span><span class="content"><code>[[DiscoverFromExternalSource]]</code> internal method</span><a class="self-link" href="#algorithm-discover-creds"></a></h5>
-     <dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="method" data-export="" id="dom-credential-discoverfromexternalsource-slot"><code>[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)</code></dfn> is called with an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin②">origin</a>, a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions①">CredentialRequestOptions</a></code> object,
+     <dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="method" data-export="" id="dom-credential-discoverfromexternalsource-slot"><code>[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)</code></dfn> is called <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel">in parallel</a> with an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin②">origin</a>, a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions①">CredentialRequestOptions</a></code> object,
     and a boolean which is true iff the caller’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object②">environment settings object</a> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors①">same-origin with its ancestors</a>.
     It returns a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential①④">Credential</a></code> if one can be
     returned given the options provided, <code>null</code> if no credential is available, or an error if
@@ -1818,7 +1820,7 @@ store user credentials for future use.</p>
       <p>Return <code>null</code>.</p>
     </ol>
     <h5 class="heading settled algorithm" data-algorithm="[[Store]] internal method" data-level="2.2.1.3" id="algorithm-store-cred"><span class="secno">2.2.1.3. </span><span class="content"><code>[[Store]]</code> internal method</span><a class="self-link" href="#algorithm-store-cred"></a></h5>
-     <dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="method" data-export="" id="dom-credential-store-slot"><code>[[Store]](credential, sameOriginWithAncestors)</code></dfn> is called with a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential①⑦">Credential</a></code>, and a boolean which is true iff the caller’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object③">environment settings object</a> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors②">same-origin with its ancestors</a>.
+     <dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="method" data-export="" id="dom-credential-store-slot"><code>[[Store]](credential, sameOriginWithAncestors)</code></dfn> is called <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①">in parallel</a> with a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential①⑦">Credential</a></code>, and a boolean which is true iff the caller’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object③">environment settings object</a> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors②">same-origin with its ancestors</a>.
     The algorithm returns once <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential①⑧">Credential</a></code> is persisted to the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store⑦">credential store</a>. 
     <p><code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential①⑨">Credential</a></code>'s default implementation of <code class="idl"><a data-link-type="idl" href="#dom-credential-store-slot" id="ref-for-dom-credential-store-slot">[[Store]](credential, sameOriginWithAncestors)</a></code>:</p>
     <ol class="algorithm">
@@ -1826,7 +1828,7 @@ store user credentials for future use.</p>
       <p>Return <code>undefined</code>.</p>
     </ol>
     <h5 class="heading settled algorithm" data-algorithm="[[Create]] internal method" data-level="2.2.1.4" id="algorithm-create-cred"><span class="secno">2.2.1.4. </span><span class="content"><code>[[Create]]</code> internal method</span><a class="self-link" href="#algorithm-create-cred"></a></h5>
-     <dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="method" data-export="" id="dom-credential-create-slot"><code>[[Create]](origin, options, sameOriginWithAncestors)</code></dfn> is called with an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin③">origin</a>, a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialcreationoptions" id="ref-for-dictdef-credentialcreationoptions">CredentialCreationOptions</a></code>,
+     <dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="method" data-export="" id="dom-credential-create-slot"><code>[[Create]](origin, options, sameOriginWithAncestors)</code></dfn> is called <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②">in parallel</a> with an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin③">origin</a>, a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialcreationoptions" id="ref-for-dictdef-credentialcreationoptions">CredentialCreationOptions</a></code>,
     and a boolean which is true iff the caller’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object④">environment settings object</a> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors③">same-origin with its ancestors</a>.
     The algorithm either: 
     <ul>
@@ -2192,7 +2194,7 @@ store user credentials for future use.</p>
       <p>Let <var>sameOriginWithAncestors</var> be <code>true</code> if <var>settings</var> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors④">same-origin with its
   ancestors</a>, and <code>false</code> otherwise.</p>
      <li data-md="">
-      <p>Run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel">in parallel</a>:</p>
+      <p>Run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel③">in parallel</a>:</p>
       <ol>
        <li data-md="">
         <p>Let <var>credentials</var> be the result of <a data-link-type="abstract-op" href="#abstract-opdef-collect-credentials-from-the-credential-store" id="ref-for-abstract-opdef-collect-credentials-from-the-credential-store">collecting <code>Credential</code>s from the credential store</a>, given <var>origin</var>, <var>options</var>, and <var>sameOriginWithAncestors</var>.</p>
@@ -2278,7 +2280,7 @@ store user credentials for future use.</p>
      <li data-md="">
       <p>Let <var>p</var> be <a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide/#a-new-promise" id="ref-for-a-new-promise①">a new promise</a>.</p>
      <li data-md="">
-      <p>Run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①">in parallel</a>:</p>
+      <p>Run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel④">in parallel</a>:</p>
       <ol>
        <li data-md="">
         <p>Let <var>r</var> be the result of executing <var>credential</var>’s <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object" id="ref-for-dfn-interface-object①①">interface object</a>'s <code class="idl"><a data-link-type="idl" href="#dom-credential-store-slot" id="ref-for-dom-credential-store-slot①">[[Store]](credential, sameOriginWithAncestors)</a></code> internal method on <var>credential</var> and <var>sameOriginWithAncestors</var>.</p>
@@ -2326,7 +2328,7 @@ store user credentials for future use.</p>
      <li data-md="">
       <p>Let <var>origin</var> be <var>settings</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin⑥">origin</a>.</p>
      <li data-md="">
-      <p>Run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②">in parallel</a>:</p>
+      <p>Run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel⑤">in parallel</a>:</p>
       <ol>
        <li data-md="">
         <p>Let <var>r</var> be the result of executing <var>interfaces</var>[0] <code class="idl"><a data-link-type="idl" href="#dom-credential-create-slot" id="ref-for-dom-credential-create-slot①">[[Create]](origin, options, sameOriginWithAncestors)</a></code> internal method on <var>origin</var>, <var>options</var>, and <var>sameOriginWithAncestors</var>.</p>
@@ -2355,7 +2357,7 @@ store user credentials for future use.</p>
      <li data-md="">
       <p>Let <var>p</var> be <a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide/#a-new-promise" id="ref-for-a-new-promise③">a new promise</a></p>
      <li data-md="">
-      <p>Run the following seps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel③">in parallel</a>:</p>
+      <p>Run the following seps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel⑥">in parallel</a>:</p>
       <ol>
        <li data-md="">
         <p>Set <var>origin</var>’s <a data-link-type="dfn" href="#origin-prevent-silent-access-flag" id="ref-for-origin-prevent-silent-access-flag③"><code>prevent silent access</code> flag</a> in the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store①①">credential store</a>.</p>

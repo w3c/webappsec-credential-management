@@ -338,7 +338,7 @@ spec:css-syntax-3;
 
   <h5 id="algorithm-discover-creds" algorithm>`[[DiscoverFromExternalSource]]` internal method</h5>
     <dfn for="Credential" method export>\[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)</dfn>
-    is called with an [=environment settings object/origin=], a {{CredentialRequestOptions}} object,
+    is called [=in parallel=] with an [=environment settings object/origin=], a {{CredentialRequestOptions}} object,
     and a boolean which is true iff the caller's [=environment settings object=] is
     [=same-origin with its ancestors=].
     It returns a {{Credential}} if one can be
@@ -356,7 +356,7 @@ spec:css-syntax-3;
 
   <h5 id="algorithm-store-cred" algorithm>`[[Store]]` internal method</h5>
     <dfn for="Credential" method export>\[[Store]](credential, sameOriginWithAncestors)</dfn>
-    is called with a {{Credential}}, and a boolean which is true iff the caller's
+    is called [=in parallel=] with a {{Credential}}, and a boolean which is true iff the caller's
     [=environment settings object=] is [=same-origin with its ancestors=].
     The algorithm returns once {{Credential}} is persisted to the [=credential store=].
 
@@ -368,7 +368,7 @@ spec:css-syntax-3;
 
   <h5 id="algorithm-create-cred" algorithm>`[[Create]]` internal method</h5>
     <dfn for="Credential" method export>\[[Create]](origin, options, sameOriginWithAncestors)</dfn>
-    is called with an [=environment settings object/origin=], a {{CredentialCreationOptions}},
+    is called [=in parallel=] with an [=environment settings object/origin=], a {{CredentialCreationOptions}},
     and a boolean which is true iff the caller's
     [=environment settings object=] is [=same-origin with its ancestors=].
     The algorithm either:
