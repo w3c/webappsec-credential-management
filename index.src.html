@@ -365,8 +365,8 @@ spec:url; type:dfn; text:urlencoded byte serializer
   mechanism in the [=credential chooser=] by providing a friendly name and icon:
 
   <pre class="idl">
-    [NoInterfaceObject, SecureContext]
-    interface CredentialUserData {
+    [SecureContext]
+    interface mixin CredentialUserData {
       readonly attribute USVString name;
       readonly attribute USVString iconURL;
     };
@@ -1116,7 +1116,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
     interface PasswordCredential : Credential {
       readonly attribute USVString password;
     };
-    PasswordCredential implements CredentialUserData;
+    PasswordCredential includes CredentialUserData;
 
     partial dictionary CredentialRequestOptions {
       boolean password = false;
@@ -1444,7 +1444,7 @@ spec:url; type:dfn; text:urlencoded byte serializer
       readonly attribute USVString provider;
       readonly attribute DOMString? protocol;
     };
-    FederatedCredential implements CredentialUserData;
+    FederatedCredential includes CredentialUserData;
 
     dictionary FederatedCredentialRequestOptions {
       sequence&lt;USVString&gt; providers;
