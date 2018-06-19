@@ -992,57 +992,92 @@ Possible extra rowspan handling
 	.toc > li li          { font-weight: normal; }
 	.toc > li li li       { font-size:   95%;    }
 	.toc > li li li li    { font-size:   90%;    }
+	.toc > li li li li .secno { font-size: 85%; }
 	.toc > li li li li li { font-size:   85%;    }
+	.toc > li li li li li .secno { font-size: 100%; }
 
-	.toc > li             { margin: 1.5rem 0;    }
-	.toc > li li          { margin: 0.3rem 0;    }
-	.toc > li li li       { margin-left: 2rem;   }
+	/* @supports not (display:grid) { */
+		.toc > li             { margin: 1.5rem 0;    }
+		.toc > li li          { margin: 0.3rem 0;    }
+		.toc > li li li       { margin-left: 2rem;   }
 
-	/* Section numbers in a column of their own */
-	.toc .secno {
-		float: left;
-		width: 4rem;
-		white-space: nowrap;
-	}
-	.toc > li li li li .secno {
-		font-size: 85%;
-	}
-	.toc > li li li li li .secno {
-		font-size: 100%;
-	}
+		/* Section numbers in a column of their own */
+		.toc .secno {
+			float: left;
+			width: 4rem;
+			white-space: nowrap;
+		}
 
-	:not(li) > .toc              { margin-left:  5rem; }
-	.toc .secno                  { margin-left: -5rem; }
-	.toc > li li li .secno       { margin-left: -7rem; }
-	.toc > li li li li .secno    { margin-left: -9rem; }
-	.toc > li li li li li .secno { margin-left: -11rem; }
+		.toc li {
+			clear: both;
+		}
 
-	/* Tighten up indentation in narrow ToCs */
-	@media (max-width: 30em) {
-		:not(li) > .toc              { margin-left:  4rem; }
-		.toc .secno                  { margin-left: -4rem; }
-		.toc > li li li              { margin-left:  1rem; }
-		.toc > li li li .secno       { margin-left: -5rem; }
-		.toc > li li li li .secno    { margin-left: -6rem; }
-		.toc > li li li li li .secno { margin-left: -7rem; }
-	}
-	@media screen and (min-width: 78em) {
-		body:not(.toc-inline) :not(li) > .toc              { margin-left:  4rem; }
-		body:not(.toc-inline) .toc .secno                  { margin-left: -4rem; }
-		body:not(.toc-inline) .toc > li li li              { margin-left:  1rem; }
-		body:not(.toc-inline) .toc > li li li .secno       { margin-left: -5rem; }
-		body:not(.toc-inline) .toc > li li li li .secno    { margin-left: -6rem; }
-		body:not(.toc-inline) .toc > li li li li li .secno { margin-left: -7rem; }
-	}
-	body.toc-sidebar #toc :not(li) > .toc              { margin-left:  4rem; }
-	body.toc-sidebar #toc .toc .secno                  { margin-left: -4rem; }
-	body.toc-sidebar #toc .toc > li li li              { margin-left:  1rem; }
-	body.toc-sidebar #toc .toc > li li li .secno       { margin-left: -5rem; }
-	body.toc-sidebar #toc .toc > li li li li .secno    { margin-left: -6rem; }
-	body.toc-sidebar #toc .toc > li li li li li .secno { margin-left: -7rem; }
+		:not(li) > .toc              { margin-left:  5rem; }
+		.toc .secno                  { margin-left: -5rem; }
+		.toc > li li li .secno       { margin-left: -7rem; }
+		.toc > li li li li .secno    { margin-left: -9rem; }
+		.toc > li li li li li .secno { margin-left: -11rem; }
 
-	.toc li {
-		clear: both;
+		/* Tighten up indentation in narrow ToCs */
+		@media (max-width: 30em) {
+			:not(li) > .toc              { margin-left:  4rem; }
+			.toc .secno                  { margin-left: -4rem; }
+			.toc > li li li              { margin-left:  1rem; }
+			.toc > li li li .secno       { margin-left: -5rem; }
+			.toc > li li li li .secno    { margin-left: -6rem; }
+			.toc > li li li li li .secno { margin-left: -7rem; }
+		}
+	/* } */
+
+	@supports (display:grid) {
+		/* Use #toc over .toc to override non-@supports rules. */
+		#toc {
+			display: grid;
+			align-content: start;
+			grid-template-columns: auto 1fr;
+			grid-column-gap: 1rem;
+			column-gap: 1rem;
+			grid-row-gap: .6rem;
+			row-gap: .6rem;
+		}
+		#toc h2 {
+			grid-column: 1 / -1;
+			margin-bottom: 0;
+		}
+		#toc ol,
+		#toc li,
+		#toc a {
+			display: contents;
+			/* Switch <a> to subgrid when supported */
+		}
+		#toc span {
+			margin: 0;
+		}
+		#toc > .toc > li > a > span {
+			/* The spans of the top-level list,
+			   comprising the first items of each top-level section. */
+			margin-top: 1.1rem;
+		}
+		#toc .secno {
+			grid-column: 1;
+			width: auto;
+		}
+		#toc .content {
+			grid-column: 2;
+			width: auto;
+			margin-right: 1rem;
+		}
+		#toc .content:hover {
+			background: rgba(75%, 75%, 75%, .25);
+			border-bottom: 3px solid #054572;
+			margin-bottom: -3px;
+		}
+		#toc li li li .content {
+			margin-left: 1rem;
+		}
+		#toc li li li li .content {
+			margin-left: 2rem;
+		}
 	}
 
 
@@ -1176,9 +1211,9 @@ Possible extra rowspan handling
 		}
 	}
 </style>
-  <meta content="Bikeshed version ae5d415446a9edf0c07d32303ac1d21767d86d57" name="generator">
+  <meta content="Bikeshed version 6bebf68aed1298eb5349b6cdea3fab1e79551a6f" name="generator">
   <link href="http://www.w3.org/TR/credential-management-1/" rel="canonical">
-  <meta content="685e7c50c2bc00de2f04a9020d7c4dd81c0079bc" name="document-revision">
+  <meta content="6851e69d938259cb80b2eacb8b2d54c4df381be6" name="document-revision">
 <style>/* style-md-lists */
 
 /* This is a weird hack for me not yet following the commonmark spec
@@ -1264,6 +1299,17 @@ figcaption {
 figcaption:not(.no-marker)::before {
     content: "Figure " counter(figure) " ";
 }</style>
+<style>/* style-var-click-highlighting */
+
+    var { cursor: pointer; }
+    var.selected0 { background-color: #F4D200; box-shadow: 0 0 0 2px #F4D200; }
+    var.selected1 { background-color: #FF87A2; box-shadow: 0 0 0 2px #FF87A2; }
+    var.selected2 { background-color: #96E885; box-shadow: 0 0 0 2px #96E885; }
+    var.selected3 { background-color: #3EEED2; box-shadow: 0 0 0 2px #3EEED2; }
+    var.selected4 { background-color: #EACFB6; box-shadow: 0 0 0 2px #EACFB6; }
+    var.selected5 { background-color: #82DDFF; box-shadow: 0 0 0 2px #82DDFF; }
+    var.selected6 { background-color: #FFBCF2; box-shadow: 0 0 0 2px #FFBCF2; }
+    </style>
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -1328,41 +1374,41 @@ pre .property::before, pre .property::after {
 }</style>
 <style>/* style-dfn-panel */
 
-        .dfn-panel {
-            position: absolute;
-            z-index: 35;
-            height: auto;
-            width: -webkit-fit-content;
-            width: fit-content;
-            max-width: 300px;
-            max-height: 500px;
-            overflow: auto;
-            padding: 0.5em 0.75em;
-            font: small Helvetica Neue, sans-serif, Droid Sans Fallback;
-            background: #DDDDDD;
-            color: black;
-            border: outset 0.2em;
-        }
-        .dfn-panel:not(.on) { display: none; }
-        .dfn-panel * { margin: 0; padding: 0; text-indent: 0; }
-        .dfn-panel > b { display: block; }
-        .dfn-panel a { color: black; }
-        .dfn-panel a:not(:hover) { text-decoration: none !important; border-bottom: none !important; }
-        .dfn-panel > b + b { margin-top: 0.25em; }
-        .dfn-panel ul { padding: 0; }
-        .dfn-panel li { list-style: inside; }
-        .dfn-panel.activated {
-            display: inline-block;
-            position: fixed;
-            left: .5em;
-            bottom: 2em;
-            margin: 0 auto;
-            max-width: calc(100vw - 1.5em - .4em - .5em);
-            max-height: 30vh;
-        }
+.dfn-panel {
+    position: absolute;
+    z-index: 35;
+    height: auto;
+    width: -webkit-fit-content;
+    width: fit-content;
+    max-width: 300px;
+    max-height: 500px;
+    overflow: auto;
+    padding: 0.5em 0.75em;
+    font: small Helvetica Neue, sans-serif, Droid Sans Fallback;
+    background: #DDDDDD;
+    color: black;
+    border: outset 0.2em;
+}
+.dfn-panel:not(.on) { display: none; }
+.dfn-panel * { margin: 0; padding: 0; text-indent: 0; }
+.dfn-panel > b { display: block; }
+.dfn-panel a { color: black; }
+.dfn-panel a:not(:hover) { text-decoration: none !important; border-bottom: none !important; }
+.dfn-panel > b + b { margin-top: 0.25em; }
+.dfn-panel ul { padding: 0; }
+.dfn-panel li { list-style: inside; }
+.dfn-panel.activated {
+    display: inline-block;
+    position: fixed;
+    left: .5em;
+    bottom: 2em;
+    margin: 0 auto;
+    max-width: calc(100vw - 1.5em - .4em - .5em);
+    max-height: 30vh;
+}
 
-        .dfn-paneled { cursor: pointer; }
-        </style>
+.dfn-paneled { cursor: pointer; }
+</style>
 <style>/* style-syntax-highlighting */
 pre.idl.highlight { color: #708090; }
 .highlight:not(.idl) { background: hsl(24, 20%, 95%); }
@@ -1425,7 +1471,7 @@ pre.highlight, pre > code.highlight { display: block; padding: 1em; margin: .5em
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2018-02-19">19 February 2018</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2018-06-19">19 June 2018</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1780,7 +1826,7 @@ store user credentials for future use.</p>
   or service.</p>
      </dl>
     </div>
-    <p class="issue" id="issue-23f9e3fa"><a class="self-link" href="#issue-23f9e3fa"></a> Talk to Tobie/Dominic about the <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object" id="ref-for-dfn-interface-object③">interface object</a> bits, here and in <a href="#algorithm-request">§2.5.1 Request a Credential</a>, etc. I’m not sure I’ve gotten the terminology right. <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-prototype-object" id="ref-for-dfn-interface-prototype-object">interface prototype
+    <p class="issue" id="issue-47fed4d0"><a class="self-link" href="#issue-47fed4d0"></a> Talk to Tobie/Dominic about the <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object" id="ref-for-dfn-interface-object③">interface object</a> bits, here and in <a href="#algorithm-request">§2.5.1 Request a Credential</a>, etc. I’m not sure I’ve gotten the terminology right. <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-prototype-object" id="ref-for-dfn-interface-prototype-object">interface prototype
   object</a>, maybe?</p>
     <p>Some <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential⑤">Credential</a></code> objects are <dfn class="dfn-paneled" data-dfn-for="Credential" data-dfn-type="dfn" data-noexport="" id="credential-origin-bound">origin bound</dfn>: these contain an
   internal slot named <dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="attribute" data-export="" id="dom-credential-origin-slot"><code>[[origin]]</code></dfn>, which stores the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin③">origin</a> for which the <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential⑥">Credential</a></code> may be <a data-link-type="dfn" href="#credential-effective" id="ref-for-credential-effective①">effective</a>.</p>
@@ -1830,8 +1876,8 @@ store user credentials for future use.</p>
     <h4 class="heading settled" data-level="2.2.2" id="credentialuserdata-mixin"><span class="secno">2.2.2. </span><span class="content"><code>CredentialUserData</code> Mixin</span><a class="self-link" href="#credentialuserdata-mixin"></a></h4>
     <p>Some <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential①⑧">Credential</a></code> objects contain data which aims to give users a human-readable disambiguation
   mechanism in the <a data-link-type="dfn" href="#credential-chooser" id="ref-for-credential-chooser">credential chooser</a> by providing a friendly name and icon:</p>
-<pre class="idl highlight def">[<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#NoInterfaceObject" id="ref-for-NoInterfaceObject">NoInterfaceObject</a>, <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext" id="ref-for-SecureContext①">SecureContext</a>]
-<span class="kt">interface</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="credentialuserdata"><code>CredentialUserData</code></dfn> {
+<pre class="idl highlight def">[<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext" id="ref-for-SecureContext①">SecureContext</a>]
+<span class="kt">interface</span> <span class="kt">mixin</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="credentialuserdata"><code>CredentialUserData</code></dfn> {
   <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString" id="ref-for-idl-USVString②"><span class="kt">USVString</span></a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="USVString" href="#dom-credentialuserdata-name" id="ref-for-dom-credentialuserdata-name">name</a>;
   <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString" id="ref-for-idl-USVString③"><span class="kt">USVString</span></a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="USVString" href="#dom-credentialuserdata-iconurl" id="ref-for-dom-credentialuserdata-iconurl">iconURL</a>;
 };
@@ -2002,7 +2048,7 @@ store user credentials for future use.</p>
          <p>If <var>options</var>[<var>key</var>] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists">exists</a>, <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-append" id="ref-for-set-append">append</a> <var>object</var> to <var>relevant interface objects</var>.</p>
        </ol>
      </ol>
-     <p class="issue" id="issue-1542b290"><a class="self-link" href="#issue-1542b290"></a> jyasskin@ suggests replacing the iteration through the interface objects with a registry.
+     <p class="issue" id="issue-962f77e2"><a class="self-link" href="#issue-962f77e2"></a> jyasskin@ suggests replacing the iteration through the interface objects with a registry.
     I’m not sure which is less clear, honestly. I’ll leave it like this for the moment, and we can
     argue about whether this is too much of a <code>COMEFROM</code> interface.</p>
     </div>
@@ -2192,7 +2238,7 @@ store user credentials for future use.</p>
           <p><var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-mediation" id="ref-for-dom-credentialrequestoptions-mediation①②">mediation</a></code> is not
   "<code class="idl"><a data-link-type="idl" href="#dom-credentialmediationrequirement-required" id="ref-for-dom-credentialmediationrequirement-required⑤">required</a></code>".</p>
         </ol>
-        <p class="issue" id="issue-d9160978"><a class="self-link" href="#issue-d9160978"></a> This might be the wrong model. It would be nice to support a site that wished
+        <p class="issue" id="issue-e720ed3b"><a class="self-link" href="#issue-e720ed3b"></a> This might be the wrong model. It would be nice to support a site that wished
   to accept either username/passwords or webauthn-style credentials without forcing
   a chooser for those users who use the former, and who wish to remain signed in.</p>
        <li data-md="">
@@ -2340,8 +2386,8 @@ store user credentials for future use.</p>
   from within a <a data-link-type="dfn" href="#credential-chooser" id="ref-for-credential-chooser⑥">credential chooser</a>.</p>
     <h3 class="heading settled" data-level="3.1" id="password-examples"><span class="secno">3.1. </span><span class="content">Examples</span><a class="self-link" href="#password-examples"></a></h3>
     <h4 class="heading settled" data-level="3.1.1" id="examples-password-signin"><span class="secno">3.1.1. </span><span class="content">Password-based Sign-in</span><a class="self-link" href="#examples-password-signin"></a></h4>
-    <div class="example" id="example-579e607a">
-     <a class="self-link" href="#example-579e607a"></a> MegaCorp, Inc. supports passwords, and can use <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get①⑤">navigator.credentials.get()</a></code> to obtain
+    <div class="example" id="example-77cfb89a">
+     <a class="self-link" href="#example-77cfb89a"></a> MegaCorp, Inc. supports passwords, and can use <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get①⑤">navigator.credentials.get()</a></code> to obtain
     username/password pairs from a user’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store①②">credential store</a>: 
 <pre>navigator.<a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials⑥">credentials</a>
   .<a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get①⑥">get</a>({ '<a class="idl-code" data-link-type="dict-member" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password">password</a>': true })
@@ -2408,8 +2454,8 @@ store user credentials for future use.</p>
     <h4 class="heading settled" data-level="3.1.2" id="examples-post-signin"><span class="secno">3.1.2. </span><span class="content">Post-sign-in Confirmation</span><a class="self-link" href="#examples-post-signin"></a></h4>
     <p>To ensure that users are offered to store new credentials after a successful sign-in, they can
   to be passed to <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store⑧">store()</a></code>.</p>
-    <div class="example" id="example-9e3a8241">
-     <a class="self-link" href="#example-9e3a8241"></a> If a user is signed in by submitting the credentials to a sign-in endpoint via <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch" id="ref-for-dom-global-fetch">fetch()</a></code>,
+    <div class="example" id="example-c7eaa6aa">
+     <a class="self-link" href="#example-c7eaa6aa"></a> If a user is signed in by submitting the credentials to a sign-in endpoint via <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch" id="ref-for-dom-global-fetch">fetch()</a></code>,
     we can check the response to determine whether the user
     was signed in successfully, and notify the user agent accordingly. Given a sign-in form like the
     following: 
@@ -2452,8 +2498,8 @@ store user credentials for future use.</p>
     <p>This same storage mechanism can be reused for "password change" with no modifications: if the
   user changes their credentials, the website can notify the user agent that they’ve successfully
   signed in with new credentials. The user agent can then update the credentials it stores:</p>
-    <div class="example" id="example-cc3efb43">
-     <a class="self-link" href="#example-cc3efb43"></a> MegaCorp Inc. allows users to change their passwords by POSTing data to
+    <div class="example" id="example-640da6a4">
+     <a class="self-link" href="#example-640da6a4"></a> MegaCorp Inc. allows users to change their passwords by POSTing data to
     a backend server asynchronously. After doing so successfully, they can
     update the user’s credentials by calling <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store①⓪">store()</a></code> with the new information. 
      <p>Given a password change form like the following:</p>
@@ -2501,7 +2547,7 @@ store user credentials for future use.</p>
 <span class="kt">interface</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="interface" data-export="" id="passwordcredential"><code>PasswordCredential</code></dfn> : <a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential③⑤">Credential</a> {
   <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString" id="ref-for-idl-USVString⑦"><span class="kt">USVString</span></a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="USVString" href="#dom-passwordcredential-password" id="ref-for-dom-passwordcredential-password">password</a>;
 };
-<a class="n" data-link-type="idl-name" href="#passwordcredential" id="ref-for-passwordcredential⑥">PasswordCredential</a> <span class="kt">implements</span> <a class="n" data-link-type="idl-name" href="#credentialuserdata" id="ref-for-credentialuserdata">CredentialUserData</a>;
+<a class="n" data-link-type="idl-name" href="#passwordcredential" id="ref-for-passwordcredential⑥">PasswordCredential</a> <span class="kt">includes</span> <a class="n" data-link-type="idl-name" href="#credentialuserdata" id="ref-for-credentialuserdata">CredentialUserData</a>;
 
 <span class="kt">partial</span> <span class="kt">dictionary</span> <a class="nv idl-code" data-link-type="dictionary" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions①⓪">CredentialRequestOptions</a> {
   <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-boolean" id="ref-for-idl-boolean"><span class="kt">boolean</span></a> <dfn class="nv dfn-paneled idl-code" data-default="false" data-dfn-for="CredentialRequestOptions" data-dfn-type="dict-member" data-export="" data-type="boolean " id="dom-credentialrequestoptions-password"><code>password</code></dfn> = <span class="kt">false</span>;
@@ -2780,7 +2826,7 @@ store user credentials for future use.</p>
   <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString" id="ref-for-idl-USVString①②"><span class="kt">USVString</span></a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="USVString" href="#dom-federatedcredential-provider" id="ref-for-dom-federatedcredential-provider">provider</a>;
   <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString②"><span class="kt">DOMString</span></a>? <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="DOMString?" href="#dom-federatedcredential-protocol" id="ref-for-dom-federatedcredential-protocol">protocol</a>;
 };
-<a class="n" data-link-type="idl-name" href="#federatedcredential" id="ref-for-federatedcredential①">FederatedCredential</a> <span class="kt">implements</span> <a class="n" data-link-type="idl-name" href="#credentialuserdata" id="ref-for-credentialuserdata①">CredentialUserData</a>;
+<a class="n" data-link-type="idl-name" href="#federatedcredential" id="ref-for-federatedcredential①">FederatedCredential</a> <span class="kt">includes</span> <a class="n" data-link-type="idl-name" href="#credentialuserdata" id="ref-for-credentialuserdata①">CredentialUserData</a>;
 
 <span class="kt">dictionary</span> <dfn class="nv dfn-paneled idl-code" data-dfn-type="dictionary" data-export="" id="dictdef-federatedcredentialrequestoptions"><code>FederatedCredentialRequestOptions</code></dfn> {
   <span class="kt">sequence</span>&lt;<a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString" id="ref-for-idl-USVString①③"><span class="kt">USVString</span></a>> <dfn class="nv dfn-paneled idl-code" data-dfn-for="FederatedCredentialRequestOptions" data-dfn-type="dict-member" data-export="" data-type="sequence<USVString> " id="dom-federatedcredentialrequestoptions-providers"><code>providers</code></dfn>;
@@ -3084,7 +3130,7 @@ store user credentials for future use.</p>
   secure transport), but the inverse would be dangerous.</p>
      <li data-md="">
       <p>MAY use the Public Suffix List <a data-link-type="biblio" href="#biblio-psl">[PSL]</a> to determine the effective scope of a credential by
-  comparing the <a data-link-type="dfn" href="https://publicsuffix.org/list/#">registerable domain</a> of the credential’s <code class="idl"><a data-link-type="idl" href="#dom-credential-origin-slot" id="ref-for-dom-credential-origin-slot①②">[[origin]]</a></code> with the
+  comparing the <a data-link-type="dfn" href="https://publicsuffix.org/list/#" id="termref-for-">registerable domain</a> of the credential’s <code class="idl"><a data-link-type="idl" href="#dom-credential-origin-slot" id="ref-for-dom-credential-origin-slot①②">[[origin]]</a></code> with the
   origin in which <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get②①">get()</a></code> is called. That is: credentials saved on <code>https://admin.example.com/</code> and <code>https://example.com/</code> MAY be offered to users when <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get②②">get()</a></code> is called from <code>https://www.example.com/</code>, and vice versa.</p>
      <li data-md="">
       <p>MUST NOT offer credentials to an origin in response to <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get②③">get()</a></code> without <a data-link-type="dfn" href="#user-mediated" id="ref-for-user-mediated①⑤">user mediation</a> if the credential’s origin is not an exact match for the calling origin.
@@ -3172,9 +3218,9 @@ store user credentials for future use.</p>
     <h2 class="heading settled" data-level="7" id="implementation"><span class="secno">7. </span><span class="content">Implementation Considerations</span><a class="self-link" href="#implementation"></a></h2>
     <p><em>This section is non-normative.</em></p>
     <h3 class="heading settled" data-level="7.1" id="implementation-authors"><span class="secno">7.1. </span><span class="content">Website Authors</span><a class="self-link" href="#implementation-authors"></a></h3>
-    <p class="issue" id="issue-32401d92"><a class="self-link" href="#issue-32401d92"></a> Add some thoughts here about when and how the API
+    <p class="issue" id="issue-84808a53"><a class="self-link" href="#issue-84808a53"></a> Add some thoughts here about when and how the API
   should be used, especially with regard to <code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-mediation" id="ref-for-dom-credentialrequestoptions-mediation①④">mediation</a></code>. <a href="https://github.com/w3c/webappsec/issues/290">&lt;https://github.com/w3c/webappsec/issues/290></a></p>
-    <p class="issue" id="issue-d0f045e0"><a class="self-link" href="#issue-d0f045e0"></a> Describe encoding restrictions of submitting credentials by <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch" id="ref-for-dom-global-fetch②">fetch()</a></code> with
+    <p class="issue" id="issue-19b3ffaf"><a class="self-link" href="#issue-19b3ffaf"></a> Describe encoding restrictions of submitting credentials by <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch" id="ref-for-dom-global-fetch②">fetch()</a></code> with
   a <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata" id="ref-for-interface-formdata②">FormData</a></code> body.</p>
     <p>When performing feature detection for a given credential type, developers are encouraged to verify
   that the relevant <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential⑤②">Credential</a></code> specialization is present, rather than relying on the presence of <code>navigator.credentals</code>. The latter verifies the existence of the API itself, but does not ensure
@@ -3188,8 +3234,8 @@ store user credentials for future use.</p>
     <ol>
      <li data-md="">
       <p>Define a new interface that inherits from <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential⑤③">Credential</a></code>:</p>
-      <div class="example" id="example-8cda5b28">
-       <a class="self-link" href="#example-8cda5b28"></a> 
+      <div class="example" id="example-99055e03">
+       <a class="self-link" href="#example-99055e03"></a> 
 <pre>[Exposed=Window,
  SecureContext]
 interface ExampleCredential : Credential {
@@ -3203,8 +3249,8 @@ interface ExampleCredential : Credential {
   appropriate for <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential①⑧">credentials</a> that need to be re-generated from a <a data-link-type="dfn" href="#credential-source" id="ref-for-credential-source①">credential source</a>.</p>
       <p>Long-running operations, like those in <code class="idl"><a data-link-type="idl" href="https://w3c.github.io/webauthn/#publickeycredential" id="ref-for-publickeycredential">PublicKeyCredential</a></code>'s <code class="idl"><a data-link-type="idl">[[Create]](options, sameOriginWithAncestors)</a></code> and <code class="idl"><a data-link-type="idl">[[DiscoverFromExternalSource]](options, sameOriginWithAncestors)</a></code> operations are encouraged to use <code>options.signal</code> to allow developers to abort
   the operation. See <a href="https://dom.spec.whatwg.org/#abortcontroller-api-integration">DOM §3.3 Using AbortController and AbortSignal objects in APIs</a> for detailed instructions.</p>
-      <div class="example" id="example-90ef70f8">
-       <a class="self-link" href="#example-90ef70f8"></a> <code>ExampleCredential</code>'s <code>[[CollectFromCredentialStore]](options, sameOriginWithAncestors)</code> internal method is called with a CredentialRequestOptions object (<code>options</code>), and a boolean
+      <div class="example" id="example-7780cf3b">
+       <a class="self-link" href="#example-7780cf3b"></a> <code>ExampleCredential</code>'s <code>[[CollectFromCredentialStore]](options, sameOriginWithAncestors)</code> internal method is called with a CredentialRequestOptions object (<code>options</code>), and a boolean
     which is <code>true</code> iff the calling context is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors①④">same-origin with its ancestors</a>. The algorithm
     returns a set of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential⑤④">Credential</a></code> objects that match the options provided. If no matching <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential⑤⑤">Credential</a></code> objects are available, the returned set will be empty. 
        <ol>
@@ -3222,17 +3268,17 @@ interface ExampleCredential : Credential {
       </div>
      <li data-md="">
       <p>Define the value of the <code>ExampleCredential</code> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object" id="ref-for-dfn-interface-object①⑨">interface object</a>'s <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot⑤">[[type]]</a></code> slot:</p>
-      <div class="example" id="example-77673536"><a class="self-link" href="#example-77673536"></a> The <code>ExampleCredential</code> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object" id="ref-for-dfn-interface-object②⓪">interface object</a> has an internal slot named <code>[[type]]</code> whose
+      <div class="example" id="example-b9aa85d8"><a class="self-link" href="#example-b9aa85d8"></a> The <code>ExampleCredential</code> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object" id="ref-for-dfn-interface-object②⓪">interface object</a> has an internal slot named <code>[[type]]</code> whose
     value is the string "<code>example</code>". </div>
      <li data-md="">
       <p>Define the value of the <code>ExampleCredential</code> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object" id="ref-for-dfn-interface-object②①">interface object</a>'s <code class="idl"><a data-link-type="idl" href="#dom-credential-discovery-slot" id="ref-for-dom-credential-discovery-slot③">[[discovery]]</a></code> slot:</p>
-      <div class="example" id="example-c435950d"><a class="self-link" href="#example-c435950d"></a> The <code>ExampleCredential</code> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object" id="ref-for-dfn-interface-object②②">interface object</a> has an internal slot named <code>[[type]]</code> whose
+      <div class="example" id="example-1ee7dd92"><a class="self-link" href="#example-1ee7dd92"></a> The <code>ExampleCredential</code> <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object" id="ref-for-dfn-interface-object②②">interface object</a> has an internal slot named <code>[[type]]</code> whose
     value is "<code class="idl"><a data-link-type="idl" href="#dom-credential-discovery-credential-store" id="ref-for-dom-credential-discovery-credential-store③">credential store</a></code>". </div>
      <li data-md="">
       <p>Extend <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions①⑥">CredentialRequestOptions</a></code> with the options the new credential type needs to respond
   reasonably to <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get②⑤">get()</a></code>:</p>
-      <div class="example" id="example-f0110d62">
-       <a class="self-link" href="#example-f0110d62"></a> 
+      <div class="example" id="example-b76ecbfb">
+       <a class="self-link" href="#example-b76ecbfb"></a> 
 <pre>dictionary ExampleCredentialRequestOptions {
   // Definition goes here.
 };
@@ -3244,8 +3290,8 @@ partial dictionary CredentialRequestOptions {
       </div>
      <li data-md="">
       <p>Extend <code class="idl"><a data-link-type="idl" href="#dictdef-credentialcreationoptions" id="ref-for-dictdef-credentialcreationoptions①⓪">CredentialCreationOptions</a></code> with the data the new credential type needs to create <code>Credential</code> objects in response to <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-create" id="ref-for-dom-credentialscontainer-create⑦">create()</a></code>:</p>
-      <div class="example" id="example-17ce7fc3">
-       <a class="self-link" href="#example-17ce7fc3"></a> 
+      <div class="example" id="example-a3c18cc7">
+       <a class="self-link" href="#example-a3c18cc7"></a> 
 <pre>dictionary ExampleCredentialInit {
   // Definition goes here.
 };
@@ -3305,8 +3351,8 @@ partial dictionary CredentialCreationOptions {
   <p>Examples in this specification are introduced with the words “for example”
     or are set apart from the normative text with <code>class="example"</code>,
     like this: </p>
-  <div class="example" id="example-f839f6c8">
-   <a class="self-link" href="#example-f839f6c8"></a> 
+  <div class="example" id="example-ae2b6bc0">
+   <a class="self-link" href="#example-ae2b6bc0"></a> 
    <p>This is an example of an informative example.</p>
   </div>
   <p>Informative notes begin with the word “Note” and are set apart from the
@@ -3333,8 +3379,8 @@ partial dictionary CredentialCreationOptions {
     [[CollectFromCredentialStore]](options, sameOriginWithAncestors)
     <ul>
      <li><a href="#dom-credential-collectfromcredentialstore-slot">method for Credential</a><span>, in §2.2.1</span>
-     <li><a href="#dom-passwordcredential-collectfromcredentialstore-slot">method for PasswordCredential</a><span>, in §3.3.1</span>
      <li><a href="#dom-federatedcredential-collectfromcredentialstore-slot">method for FederatedCredential</a><span>, in §4.2.1</span>
+     <li><a href="#dom-passwordcredential-collectfromcredentialstore-slot">method for PasswordCredential</a><span>, in §3.3.1</span>
     </ul>
    <li><a href="#abstract-opdef-collect-credentials-from-the-credential-store">collect local</a><span>, in §2.5.2</span>
    <li><a href="#dom-credentialscontainer-create">create()</a><span>, in §2.3</span>
@@ -3347,8 +3393,8 @@ partial dictionary CredentialCreationOptions {
     [[Create]](options, sameOriginWithAncestors)
     <ul>
      <li><a href="#dom-credential-create-slot">method for Credential</a><span>, in §2.2.1</span>
-     <li><a href="#dom-passwordcredential-create-slot">method for PasswordCredential</a><span>, in §3.3.2</span>
      <li><a href="#dom-federatedcredential-create-slot">method for FederatedCredential</a><span>, in §4.2.2</span>
+     <li><a href="#dom-passwordcredential-create-slot">method for PasswordCredential</a><span>, in §3.3.2</span>
     </ul>
    <li><a href="#credential">Credential</a><span>, in §2.2</span>
    <li><a href="#concept-credential">credential</a><span>, in §2</span>
@@ -3374,9 +3420,9 @@ partial dictionary CredentialCreationOptions {
    <li>
     federated
     <ul>
-     <li><a href="#dom-credentialrequestoptions-federated">dict-member for CredentialRequestOptions</a><span>, in §4.1</span>
      <li><a href="#dom-federatedcredential-federated">const for FederatedCredential</a><span>, in §4.1</span>
      <li><a href="#dom-credentialcreationoptions-federated">dict-member for CredentialCreationOptions</a><span>, in §4.1</span>
+     <li><a href="#dom-credentialrequestoptions-federated">dict-member for CredentialRequestOptions</a><span>, in §4.1</span>
     </ul>
    <li><a href="#federatedcredential">FederatedCredential</a><span>, in §4.1</span>
    <li><a href="#dom-federatedcredential-federatedcredential">FederatedCredential(data)</a><span>, in §4.1</span>
@@ -3388,8 +3434,8 @@ partial dictionary CredentialCreationOptions {
     iconURL
     <ul>
      <li><a href="#dom-credentialuserdata-iconurl">attribute for CredentialUserData</a><span>, in §2.2.2</span>
-     <li><a href="#dom-passwordcredentialdata-iconurl">dict-member for PasswordCredentialData</a><span>, in §3.2</span>
      <li><a href="#dom-federatedcredentialinit-iconurl">dict-member for FederatedCredentialInit</a><span>, in §4.1</span>
+     <li><a href="#dom-passwordcredentialdata-iconurl">dict-member for PasswordCredentialData</a><span>, in §3.2</span>
     </ul>
    <li>
     id
@@ -3404,8 +3450,8 @@ partial dictionary CredentialCreationOptions {
     name
     <ul>
      <li><a href="#dom-credentialuserdata-name">attribute for CredentialUserData</a><span>, in §2.2.2</span>
-     <li><a href="#dom-passwordcredentialdata-name">dict-member for PasswordCredentialData</a><span>, in §3.2</span>
      <li><a href="#dom-federatedcredentialinit-name">dict-member for FederatedCredentialInit</a><span>, in §4.1</span>
+     <li><a href="#dom-passwordcredentialdata-name">dict-member for PasswordCredentialData</a><span>, in §3.2</span>
     </ul>
    <li><a href="#dom-credentialmediationrequirement-optional">optional</a><span>, in §2.3.2</span>
    <li><a href="#dom-credential-origin-slot">[[origin]]</a><span>, in §2.2</span>
@@ -3413,11 +3459,11 @@ partial dictionary CredentialCreationOptions {
    <li>
     password
     <ul>
-     <li><a href="#dom-credentialrequestoptions-password">dict-member for CredentialRequestOptions</a><span>, in §3.2</span>
      <li><a href="#dom-passwordcredential-password">attribute for PasswordCredential</a><span>, in §3.2</span>
      <li><a href="#dom-credential-type-password">const for Credential/[[type]]</a><span>, in §3.2</span>
-     <li><a href="#dom-passwordcredentialdata-password">dict-member for PasswordCredentialData</a><span>, in §3.2</span>
      <li><a href="#dom-credentialcreationoptions-password">dict-member for CredentialCreationOptions</a><span>, in §3.2</span>
+     <li><a href="#dom-credentialrequestoptions-password">dict-member for CredentialRequestOptions</a><span>, in §3.2</span>
+     <li><a href="#dom-passwordcredentialdata-password">dict-member for PasswordCredentialData</a><span>, in §3.2</span>
     </ul>
    <li><a href="#passwordcredential">PasswordCredential</a><span>, in §3.2</span>
    <li><a href="#dom-passwordcredential-passwordcredential-data">PasswordCredential(data)</a><span>, in §3.2</span>
@@ -3451,8 +3497,8 @@ partial dictionary CredentialCreationOptions {
    <li>
     signal
     <ul>
-     <li><a href="#dom-credentialrequestoptions-signal">dict-member for CredentialRequestOptions</a><span>, in §2.3.1</span>
      <li><a href="#dom-credentialcreationoptions-signal">dict-member for CredentialCreationOptions</a><span>, in §2.4</span>
+     <li><a href="#dom-credentialrequestoptions-signal">dict-member for CredentialRequestOptions</a><span>, in §2.3.1</span>
     </ul>
    <li><a href="#dom-credentialmediationrequirement-silent">silent</a><span>, in §2.3.2</span>
    <li><a href="#dom-credentialscontainer-store">store()</a><span>, in §2.3</span>
@@ -3463,151 +3509,801 @@ partial dictionary CredentialCreationOptions {
     [[Store]](credential, sameOriginWithAncestors)
     <ul>
      <li><a href="#dom-credential-store-slot">method for Credential</a><span>, in §2.2.1</span>
-     <li><a href="#dom-passwordcredential-store-slot">method for PasswordCredential</a><span>, in §3.3.3</span>
      <li><a href="#dom-federatedcredential-store-slot">method for FederatedCredential</a><span>, in §4.2.3</span>
+     <li><a href="#dom-passwordcredential-store-slot">method for PasswordCredential</a><span>, in §3.3.3</span>
     </ul>
    <li><a href="#dom-credential-type">type</a><span>, in §2.2</span>
    <li><a href="#dom-credential-type-slot">[[type]]</a><span>, in §2.2</span>
    <li><a href="#user-mediated">user mediated</a><span>, in §5</span>
    <li><a href="#user-mediated">user mediation</a><span>, in §5</span>
   </ul>
+  <aside class="dfn-panel" data-for="term-for-child-src">
+   <a href="https://w3c.github.io/webappsec-csp/#child-src">https://w3c.github.io/webappsec-csp/#child-src</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-child-src">6.2. Credential Leakage</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-connect-src">
+   <a href="https://w3c.github.io/webappsec-csp/#connect-src">https://w3c.github.io/webappsec-csp/#connect-src</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-connect-src">6.2. Credential Leakage</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-form-action">
+   <a href="https://w3c.github.io/webappsec-csp/#form-action">https://w3c.github.io/webappsec-csp/#form-action</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-form-action">6.2. Credential Leakage</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-object-src">
+   <a href="https://w3c.github.io/webappsec-csp/#object-src">https://w3c.github.io/webappsec-csp/#object-src</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-object-src">6.2. Credential Leakage</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-script-src">
+   <a href="https://w3c.github.io/webappsec-csp/#script-src">https://w3c.github.io/webappsec-csp/#script-src</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-script-src">6.2. Credential Leakage</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-abortsignal">
+   <a href="https://dom.spec.whatwg.org/#abortsignal">https://dom.spec.whatwg.org/#abortsignal</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-abortsignal">2.3.1. The CredentialRequestOptions Dictionary</a> <a href="#ref-for-abortsignal①">(2)</a>
+    <li><a href="#ref-for-abortsignal②">2.4. The CredentialCreationOptions Dictionary</a> <a href="#ref-for-abortsignal③">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-abortsignal-aborted-flag">
+   <a href="https://dom.spec.whatwg.org/#abortsignal-aborted-flag">https://dom.spec.whatwg.org/#abortsignal-aborted-flag</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-abortsignal-aborted-flag">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-abortsignal-aborted-flag①">2.5.4. Create a Credential</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-context-object">
+   <a href="https://dom.spec.whatwg.org/#context-object">https://dom.spec.whatwg.org/#context-object</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-context-object">2.3. navigator.credentials</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-tree-order">
+   <a href="https://dom.spec.whatwg.org/#concept-tree-order">https://dom.spec.whatwg.org/#concept-tree-order</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-tree-order">3.3.4. 
+    Create a PasswordCredential from an HTMLFormElement </a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-response">
+   <a href="https://fetch.spec.whatwg.org/#response">https://fetch.spec.whatwg.org/#response</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-response">3.1.2. Post-sign-in Confirmation</a>
+    <li><a href="#ref-for-response①">3.1.3. Change Password</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-request-client">
+   <a href="https://fetch.spec.whatwg.org/#concept-request-client">https://fetch.spec.whatwg.org/#concept-request-client</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-request-client">6.7. Chooser Leakage</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-request-credentials-mode">
+   <a href="https://fetch.spec.whatwg.org/#concept-request-credentials-mode">https://fetch.spec.whatwg.org/#concept-request-credentials-mode</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-request-credentials-mode">6.7. Chooser Leakage</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-request-destination">
+   <a href="https://fetch.spec.whatwg.org/#concept-request-destination">https://fetch.spec.whatwg.org/#concept-request-destination</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-request-destination">6.7. Chooser Leakage</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-dom-global-fetch">
+   <a href="https://fetch.spec.whatwg.org/#dom-global-fetch">https://fetch.spec.whatwg.org/#dom-global-fetch</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dom-global-fetch">3.1.2. Post-sign-in Confirmation</a>
+    <li><a href="#ref-for-dom-global-fetch①">6.2. Credential Leakage</a>
+    <li><a href="#ref-for-dom-global-fetch②">7.1. Website Authors</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-request-initiator">
+   <a href="https://fetch.spec.whatwg.org/#concept-request-initiator">https://fetch.spec.whatwg.org/#concept-request-initiator</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-request-initiator">6.7. Chooser Leakage</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-request-service-workers-mode">
+   <a href="https://fetch.spec.whatwg.org/#request-service-workers-mode">https://fetch.spec.whatwg.org/#request-service-workers-mode</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-request-service-workers-mode">6.7. Chooser Leakage</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-htmlformelement">
+   <a href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">https://html.spec.whatwg.org/multipage/forms.html#htmlformelement</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-htmlformelement">3.1.2. Post-sign-in Confirmation</a>
+    <li><a href="#ref-for-htmlformelement①">3.1.3. Change Password</a>
+    <li><a href="#ref-for-htmlformelement②">3.2. The PasswordCredential Interface</a> <a href="#ref-for-htmlformelement③">(2)</a> <a href="#ref-for-htmlformelement④">(3)</a> <a href="#ref-for-htmlformelement⑤">(4)</a>
+    <li><a href="#ref-for-htmlformelement⑥">3.3.2. 
+    PasswordCredential's [[Create]](options, sameOriginWithAncestors) </a> <a href="#ref-for-htmlformelement⑦">(2)</a>
+    <li><a href="#ref-for-htmlformelement⑧">3.3.4. 
+    Create a PasswordCredential from an HTMLFormElement </a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-navigator">
+   <a href="https://html.spec.whatwg.org/multipage/system-state.html#navigator">https://html.spec.whatwg.org/multipage/system-state.html#navigator</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-navigator">2.3. navigator.credentials</a> <a href="#ref-for-navigator①">(2)</a> <a href="#ref-for-navigator②">(3)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-worker">
+   <a href="https://html.spec.whatwg.org/multipage/workers.html#worker">https://html.spec.whatwg.org/multipage/workers.html#worker</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-worker">6.4. Origin Confusion</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-active-document">
+   <a href="https://html.spec.whatwg.org/multipage/browsers.html#active-document">https://html.spec.whatwg.org/multipage/browsers.html#active-document</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-active-document">2.1. Infrastructure</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-ascii-serialisation-of-an-origin">
+   <a href="https://html.spec.whatwg.org/multipage/origin.html#ascii-serialisation-of-an-origin">https://html.spec.whatwg.org/multipage/origin.html#ascii-serialisation-of-an-origin</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-ascii-serialisation-of-an-origin">4.1.1. Identifying Providers</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-attr-fe-autocomplete">
+   <a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete">https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-attr-fe-autocomplete">1. Introduction</a>
+    <li><a href="#ref-for-attr-fe-autocomplete①">3.1.2. Post-sign-in Confirmation</a> <a href="#ref-for-attr-fe-autocomplete②">(2)</a> <a href="#ref-for-attr-fe-autocomplete③">(3)</a>
+    <li><a href="#ref-for-attr-fe-autocomplete④">3.1.3. Change Password</a> <a href="#ref-for-attr-fe-autocomplete⑤">(2)</a> <a href="#ref-for-attr-fe-autocomplete⑥">(3)</a>
+    <li><a href="#ref-for-attr-fe-autocomplete⑦">3.3.4. 
+    Create a PasswordCredential from an HTMLFormElement </a> <a href="#ref-for-attr-fe-autocomplete⑧">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-autofill-detail-tokens">
+   <a href="https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill-detail-tokens">https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill-detail-tokens</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-autofill-detail-tokens">3.3.4. 
+    Create a PasswordCredential from an HTMLFormElement </a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-current-settings-object">
+   <a href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object">https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-current-settings-object">2.3. navigator.credentials</a>
+    <li><a href="#ref-for-current-settings-object①">2.3.1. The CredentialRequestOptions Dictionary</a>
+    <li><a href="#ref-for-current-settings-object②">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-current-settings-object③">2.5.3. Store a Credential</a> <a href="#ref-for-current-settings-object④">(2)</a>
+    <li><a href="#ref-for-current-settings-object⑤">2.5.4. Create a Credential</a> <a href="#ref-for-current-settings-object⑥">(2)</a>
+    <li><a href="#ref-for-current-settings-object⑦">3.3.1. 
+    PasswordCredential's [[CollectFromCredentialStore]](options, sameOriginWithAncestors) </a>
+    <li><a href="#ref-for-current-settings-object⑧">3.3.5. 
+    Create a PasswordCredential from PasswordCredentialData </a>
+    <li><a href="#ref-for-current-settings-object⑨">4.2.1. 
+    FederatedCredential's [[CollectFromCredentialStore]](options, sameOriginWithAncestors) </a>
+    <li><a href="#ref-for-current-settings-object①⓪">4.2.4. 
+    Create a FederatedCredential from FederatedCredentialInit </a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-attr-fe-autocomplete-current-password">
+   <a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-current-password">https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-current-password</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-attr-fe-autocomplete-current-password">3.1.2. Post-sign-in Confirmation</a>
+    <li><a href="#ref-for-attr-fe-autocomplete-current-password①">3.3.4. 
+    Create a PasswordCredential from an HTMLFormElement </a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-environment-settings-object">
+   <a href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object">https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-environment-settings-object">2.1. Infrastructure</a>
+    <li><a href="#ref-for-environment-settings-object①">2.2.1. Credential Internal Methods</a> <a href="#ref-for-environment-settings-object②">(2)</a> <a href="#ref-for-environment-settings-object③">(3)</a> <a href="#ref-for-environment-settings-object④">(4)</a>
+    <li><a href="#ref-for-environment-settings-object⑤">2.5.5. Prevent Silent Access</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-the-form-element">
+   <a href="https://html.spec.whatwg.org/multipage/forms.html#the-form-element">https://html.spec.whatwg.org/multipage/forms.html#the-form-element</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-the-form-element">3.1.1. Password-based Sign-in</a> <a href="#ref-for-the-form-element①">(2)</a>
+    <li><a href="#ref-for-the-form-element②">6.2. Credential Leakage</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-form-owner">
+   <a href="https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#form-owner">https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#form-owner</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-form-owner">3.3.4. 
+    Create a PasswordCredential from an HTMLFormElement </a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-settings-object-global">
+   <a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-global">https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-global</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-settings-object-global">2.3.1. The CredentialRequestOptions Dictionary</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-in-parallel">
+   <a href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel">https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-in-parallel">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-in-parallel①">2.5.3. Store a Credential</a>
+    <li><a href="#ref-for-in-parallel②">2.5.4. Create a Credential</a>
+    <li><a href="#ref-for-in-parallel③">2.5.5. Prevent Silent Access</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-attr-fe-name">
+   <a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-name">https://html.spec.whatwg.org/multipage/forms.html#attr-fe-name</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-attr-fe-name">3.3.4. 
+    Create a PasswordCredential from an HTMLFormElement </a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-attr-fe-autocomplete-new-password">
+   <a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-new-password">https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-new-password</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-attr-fe-autocomplete-new-password">3.1.3. Change Password</a>
+    <li><a href="#ref-for-attr-fe-autocomplete-new-password①">3.3.4. 
+    Create a PasswordCredential from an HTMLFormElement </a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-attr-fe-autocomplete-nickname">
+   <a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-nickname">https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-nickname</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-attr-fe-autocomplete-nickname">3.3.4. 
+    Create a PasswordCredential from an HTMLFormElement </a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-settings-object-origin">
+   <a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin">https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-settings-object-origin">2.1. Infrastructure</a>
+    <li><a href="#ref-for-concept-settings-object-origin①">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-concept-settings-object-origin②">2.5.5. Prevent Silent Access</a>
+    <li><a href="#ref-for-concept-settings-object-origin③">3.3.1. 
+    PasswordCredential's [[CollectFromCredentialStore]](options, sameOriginWithAncestors) </a>
+    <li><a href="#ref-for-concept-settings-object-origin④">3.3.5. 
+    Create a PasswordCredential from PasswordCredentialData </a>
+    <li><a href="#ref-for-concept-settings-object-origin⑤">4.2.1. 
+    FederatedCredential's [[CollectFromCredentialStore]](options, sameOriginWithAncestors) </a>
+    <li><a href="#ref-for-concept-settings-object-origin⑥">4.2.4. 
+    Create a FederatedCredential from FederatedCredentialInit </a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-parent-browsing-context">
+   <a href="https://html.spec.whatwg.org/multipage/browsers.html#parent-browsing-context">https://html.spec.whatwg.org/multipage/browsers.html#parent-browsing-context</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-parent-browsing-context">2.1. Infrastructure</a> <a href="#ref-for-parent-browsing-context①">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-attr-fe-autocomplete-photo">
+   <a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-photo">https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-photo</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-attr-fe-autocomplete-photo">3.3.4. 
+    Create a PasswordCredential from an HTMLFormElement </a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-relevant-realm">
+   <a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-realm">https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-realm</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-relevant-realm">2.3. navigator.credentials</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-responsible-browsing-context">
+   <a href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-browsing-context">https://html.spec.whatwg.org/multipage/webappapis.html#responsible-browsing-context</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-responsible-browsing-context">2.1. Infrastructure</a> <a href="#ref-for-responsible-browsing-context①">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-responsible-document">
+   <a href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-document">https://html.spec.whatwg.org/multipage/webappapis.html#responsible-document</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-responsible-document">2.5.4. Create a Credential</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-same-origin">
+   <a href="https://html.spec.whatwg.org/multipage/origin.html#same-origin">https://html.spec.whatwg.org/multipage/origin.html#same-origin</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-same-origin">2.1. Infrastructure</a>
+    <li><a href="#ref-for-same-origin①">3.3.1. 
+    PasswordCredential's [[CollectFromCredentialStore]](options, sameOriginWithAncestors) </a>
+    <li><a href="#ref-for-same-origin②">3.3.3. 
+    PasswordCredential's [[Store]](credential, sameOriginWithAncestors) </a>
+    <li><a href="#ref-for-same-origin③">4.2.1. 
+    FederatedCredential's [[CollectFromCredentialStore]](options, sameOriginWithAncestors) </a>
+    <li><a href="#ref-for-same-origin④">4.2.3. 
+    FederatedCredential's [[Store]](credential, sameOriginWithAncestors) </a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-dom-form-submit">
+   <a href="https://html.spec.whatwg.org/multipage/forms.html#dom-form-submit">https://html.spec.whatwg.org/multipage/forms.html#dom-form-submit</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dom-form-submit">3.1.1. Password-based Sign-in</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-category-submit">
+   <a href="https://html.spec.whatwg.org/multipage/forms.html#category-submit">https://html.spec.whatwg.org/multipage/forms.html#category-submit</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-category-submit">3.2. The PasswordCredential Interface</a>
+    <li><a href="#ref-for-category-submit①">3.3.4. 
+    Create a PasswordCredential from an HTMLFormElement </a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-top-level-browsing-context">
+   <a href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context">https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-top-level-browsing-context">6.4. Origin Confusion</a> <a href="#ref-for-top-level-browsing-context①">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-attr-fe-autocomplete-username">
+   <a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-username">https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-username</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-attr-fe-autocomplete-username">3.1.2. Post-sign-in Confirmation</a>
+    <li><a href="#ref-for-attr-fe-autocomplete-username①">3.1.3. Change Password</a>
+    <li><a href="#ref-for-attr-fe-autocomplete-username②">3.3.4. 
+    Create a PasswordCredential from an HTMLFormElement </a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-set-append">
+   <a href="https://infra.spec.whatwg.org/#set-append">https://infra.spec.whatwg.org/#set-append</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-set-append">2.3.1. The CredentialRequestOptions Dictionary</a>
+    <li><a href="#ref-for-set-append①">2.5.2. Collect Credentials from the credential store</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-ascii-case-insensitive">
+   <a href="https://infra.spec.whatwg.org/#ascii-case-insensitive">https://infra.spec.whatwg.org/#ascii-case-insensitive</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-ascii-case-insensitive">3.3.4. 
+    Create a PasswordCredential from an HTMLFormElement </a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-list-contain">
+   <a href="https://infra.spec.whatwg.org/#list-contain">https://infra.spec.whatwg.org/#list-contain</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-list-contain">2.3.1. The CredentialRequestOptions Dictionary</a>
+    <li><a href="#ref-for-list-contain①">4.2.1. 
+    FederatedCredential's [[CollectFromCredentialStore]](options, sameOriginWithAncestors) </a> <a href="#ref-for-list-contain②">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-iteration-continue">
+   <a href="https://infra.spec.whatwg.org/#iteration-continue">https://infra.spec.whatwg.org/#iteration-continue</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-iteration-continue">2.3.1. The CredentialRequestOptions Dictionary</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-map-exists">
+   <a href="https://infra.spec.whatwg.org/#map-exists">https://infra.spec.whatwg.org/#map-exists</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-map-exists">2.3.1. The CredentialRequestOptions Dictionary</a>
+    <li><a href="#ref-for-map-exists①">3.3.1. 
+    PasswordCredential's [[CollectFromCredentialStore]](options, sameOriginWithAncestors) </a>
+    <li><a href="#ref-for-map-exists②">3.3.2. 
+    PasswordCredential's [[Create]](options, sameOriginWithAncestors) </a>
+    <li><a href="#ref-for-map-exists③">4.2.1. 
+    FederatedCredential's [[CollectFromCredentialStore]](options, sameOriginWithAncestors) </a> <a href="#ref-for-map-exists④">(2)</a> <a href="#ref-for-map-exists⑤">(3)</a>
+    <li><a href="#ref-for-map-exists⑥">4.2.2. 
+    FederatedCredential's [[Create]](options, sameOriginWithAncestors) </a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-list-size">
+   <a href="https://infra.spec.whatwg.org/#list-size">https://infra.spec.whatwg.org/#list-size</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-list-size">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-list-size①">2.5.4. Create a Credential</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-a-priori-authenticated-url">
+   <a href="https://w3c.github.io/webappsec-mixed-content/#a-priori-authenticated-url">https://w3c.github.io/webappsec-mixed-content/#a-priori-authenticated-url</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-a-priori-authenticated-url">2.2.2. CredentialUserData Mixin</a>
+    <li><a href="#ref-for-a-priori-authenticated-url①">6.3. Insecure Sites</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-a-new-promise">
+   <a href="https://www.w3.org/2001/tag/doc/promises-guide/#a-new-promise">https://www.w3.org/2001/tag/doc/promises-guide/#a-new-promise</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-a-new-promise">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-a-new-promise①">2.5.3. Store a Credential</a>
+    <li><a href="#ref-for-a-new-promise②">2.5.4. Create a Credential</a>
+    <li><a href="#ref-for-a-new-promise③">2.5.5. Prevent Silent Access</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-a-promise-rejected-with">
+   <a href="https://www.w3.org/2001/tag/doc/promises-guide/#a-promise-rejected-with">https://www.w3.org/2001/tag/doc/promises-guide/#a-promise-rejected-with</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-a-promise-rejected-with">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-a-promise-rejected-with①">2.5.4. Create a Credential</a> <a href="#ref-for-a-promise-rejected-with②">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-reject-promise">
+   <a href="https://www.w3.org/2001/tag/doc/promises-guide/#reject-promise">https://www.w3.org/2001/tag/doc/promises-guide/#reject-promise</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-reject-promise">2.5.1. Request a Credential</a> <a href="#ref-for-reject-promise①">(2)</a>
+    <li><a href="#ref-for-reject-promise②">2.5.3. Store a Credential</a>
+    <li><a href="#ref-for-reject-promise③">2.5.4. Create a Credential</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-resolve-promise">
+   <a href="https://www.w3.org/2001/tag/doc/promises-guide/#resolve-promise">https://www.w3.org/2001/tag/doc/promises-guide/#resolve-promise</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-resolve-promise">2.5.1. Request a Credential</a> <a href="#ref-for-resolve-promise①">(2)</a>
+    <li><a href="#ref-for-resolve-promise②">2.5.3. Store a Credential</a>
+    <li><a href="#ref-for-resolve-promise③">2.5.4. Create a Credential</a>
+    <li><a href="#ref-for-resolve-promise④">2.5.5. Prevent Silent Access</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-">
+   <a href="https://publicsuffix.org/list/#">https://publicsuffix.org/list/#</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#termref-for-">6.1. Cross-domain credential access</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-secure-contexts">
+   <a href="https://w3c.github.io/webappsec-secure-contexts/#secure-contexts">https://w3c.github.io/webappsec-secure-contexts/#secure-contexts</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-secure-contexts">2.3. navigator.credentials</a>
+    <li><a href="#ref-for-secure-contexts①">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-secure-contexts②">2.5.3. Store a Credential</a>
+    <li><a href="#ref-for-secure-contexts③">2.5.4. Create a Credential</a>
+    <li><a href="#ref-for-secure-contexts④">6.3. Insecure Sites</a> <a href="#ref-for-secure-contexts⑤">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-urlsearchparams">
+   <a href="https://url.spec.whatwg.org/#urlsearchparams">https://url.spec.whatwg.org/#urlsearchparams</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-urlsearchparams">3.2. The PasswordCredential Interface</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-publickeycredential">
+   <a href="https://w3c.github.io/webauthn/#publickeycredential">https://w3c.github.io/webauthn/#publickeycredential</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-publickeycredential">7.2. Extension Points</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-aborterror">
+   <a href="https://heycam.github.io/webidl/#aborterror">https://heycam.github.io/webidl/#aborterror</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-aborterror">2.3.1. The CredentialRequestOptions Dictionary</a>
+    <li><a href="#ref-for-aborterror①">2.4. The CredentialCreationOptions Dictionary</a>
+    <li><a href="#ref-for-aborterror②">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-aborterror③">2.5.4. Create a Credential</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-idl-DOMException">
+   <a href="https://heycam.github.io/webidl/#idl-DOMException">https://heycam.github.io/webidl/#idl-DOMException</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-idl-DOMException">2.3.1. The CredentialRequestOptions Dictionary</a>
+    <li><a href="#ref-for-idl-DOMException①">2.4. The CredentialCreationOptions Dictionary</a>
+    <li><a href="#ref-for-idl-DOMException②">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-idl-DOMException③">2.5.4. Create a Credential</a>
+    <li><a href="#ref-for-idl-DOMException④">3.3.1. 
+    PasswordCredential's [[CollectFromCredentialStore]](options, sameOriginWithAncestors) </a>
+    <li><a href="#ref-for-idl-DOMException⑤">3.3.3. 
+    PasswordCredential's [[Store]](credential, sameOriginWithAncestors) </a>
+    <li><a href="#ref-for-idl-DOMException⑥">4.2.1. 
+    FederatedCredential's [[CollectFromCredentialStore]](options, sameOriginWithAncestors) </a>
+    <li><a href="#ref-for-idl-DOMException⑦">4.2.3. 
+    FederatedCredential's [[Store]](credential, sameOriginWithAncestors) </a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-idl-DOMString">
+   <a href="https://heycam.github.io/webidl/#idl-DOMString">https://heycam.github.io/webidl/#idl-DOMString</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-idl-DOMString">2.2. The Credential Interface</a> <a href="#ref-for-idl-DOMString①">(2)</a>
+    <li><a href="#ref-for-idl-DOMString②">4.1. The FederatedCredential Interface</a> <a href="#ref-for-idl-DOMString③">(2)</a> <a href="#ref-for-idl-DOMString④">(3)</a> <a href="#ref-for-idl-DOMString⑤">(4)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-Exposed">
+   <a href="https://heycam.github.io/webidl/#Exposed">https://heycam.github.io/webidl/#Exposed</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-Exposed">2.2. The Credential Interface</a>
+    <li><a href="#ref-for-Exposed①">2.3. navigator.credentials</a>
+    <li><a href="#ref-for-Exposed②">3.2. The PasswordCredential Interface</a>
+    <li><a href="#ref-for-Exposed③">4.1. The FederatedCredential Interface</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-notallowederror">
+   <a href="https://heycam.github.io/webidl/#notallowederror">https://heycam.github.io/webidl/#notallowederror</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-notallowederror">3.3.1. 
+    PasswordCredential's [[CollectFromCredentialStore]](options, sameOriginWithAncestors) </a>
+    <li><a href="#ref-for-notallowederror①">3.3.3. 
+    PasswordCredential's [[Store]](credential, sameOriginWithAncestors) </a>
+    <li><a href="#ref-for-notallowederror②">4.2.1. 
+    FederatedCredential's [[CollectFromCredentialStore]](options, sameOriginWithAncestors) </a>
+    <li><a href="#ref-for-notallowederror③">4.2.3. 
+    FederatedCredential's [[Store]](credential, sameOriginWithAncestors) </a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-idl-promise">
+   <a href="https://heycam.github.io/webidl/#idl-promise">https://heycam.github.io/webidl/#idl-promise</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-idl-promise">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-idl-promise①">2.5.3. Store a Credential</a>
+    <li><a href="#ref-for-idl-promise②">2.5.4. Create a Credential</a> <a href="#ref-for-idl-promise③">(2)</a>
+    <li><a href="#ref-for-idl-promise④">2.5.5. Prevent Silent Access</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-SameObject">
+   <a href="https://heycam.github.io/webidl/#SameObject">https://heycam.github.io/webidl/#SameObject</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-SameObject">2.3. navigator.credentials</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-SecureContext">
+   <a href="https://heycam.github.io/webidl/#SecureContext">https://heycam.github.io/webidl/#SecureContext</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-SecureContext">2.2. The Credential Interface</a>
+    <li><a href="#ref-for-SecureContext①">2.2.2. CredentialUserData Mixin</a>
+    <li><a href="#ref-for-SecureContext②">2.3. navigator.credentials</a> <a href="#ref-for-SecureContext③">(2)</a>
+    <li><a href="#ref-for-SecureContext④">3.2. The PasswordCredential Interface</a>
+    <li><a href="#ref-for-SecureContext⑤">4.1. The FederatedCredential Interface</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-exceptiondef-typeerror">
+   <a href="https://heycam.github.io/webidl/#exceptiondef-typeerror">https://heycam.github.io/webidl/#exceptiondef-typeerror</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-exceptiondef-typeerror">2.2.1. Credential Internal Methods</a> <a href="#ref-for-exceptiondef-typeerror①">(2)</a>
+    <li><a href="#ref-for-exceptiondef-typeerror②">3.3.2. 
+    PasswordCredential's [[Create]](options, sameOriginWithAncestors) </a> <a href="#ref-for-exceptiondef-typeerror③">(2)</a>
+    <li><a href="#ref-for-exceptiondef-typeerror④">3.3.5. 
+    Create a PasswordCredential from PasswordCredentialData </a>
+    <li><a href="#ref-for-exceptiondef-typeerror⑤">4.2.4. 
+    Create a FederatedCredential from FederatedCredentialInit </a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-idl-USVString">
+   <a href="https://heycam.github.io/webidl/#idl-USVString">https://heycam.github.io/webidl/#idl-USVString</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-idl-USVString">2.2. The Credential Interface</a> <a href="#ref-for-idl-USVString①">(2)</a>
+    <li><a href="#ref-for-idl-USVString②">2.2.2. CredentialUserData Mixin</a> <a href="#ref-for-idl-USVString③">(2)</a> <a href="#ref-for-idl-USVString④">(3)</a> <a href="#ref-for-idl-USVString⑤">(4)</a>
+    <li><a href="#ref-for-idl-USVString⑥">2.3. navigator.credentials</a>
+    <li><a href="#ref-for-idl-USVString⑦">3.2. The PasswordCredential Interface</a> <a href="#ref-for-idl-USVString⑧">(2)</a> <a href="#ref-for-idl-USVString⑨">(3)</a> <a href="#ref-for-idl-USVString①⓪">(4)</a> <a href="#ref-for-idl-USVString①①">(5)</a>
+    <li><a href="#ref-for-idl-USVString①②">4.1. The FederatedCredential Interface</a> <a href="#ref-for-idl-USVString①③">(2)</a> <a href="#ref-for-idl-USVString①④">(3)</a> <a href="#ref-for-idl-USVString①⑤">(4)</a> <a href="#ref-for-idl-USVString①⑥">(5)</a> <a href="#ref-for-idl-USVString①⑦">(6)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-idl-boolean">
+   <a href="https://heycam.github.io/webidl/#idl-boolean">https://heycam.github.io/webidl/#idl-boolean</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-idl-boolean">3.2. The PasswordCredential Interface</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-dfn-exception">
+   <a href="https://heycam.github.io/webidl/#dfn-exception">https://heycam.github.io/webidl/#dfn-exception</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dfn-exception">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-dfn-exception①">2.5.2. Collect Credentials from the credential store</a>
+    <li><a href="#ref-for-dfn-exception②">2.5.3. Store a Credential</a>
+    <li><a href="#ref-for-dfn-exception③">2.5.4. Create a Credential</a>
+    <li><a href="#ref-for-dfn-exception④">3.2. The PasswordCredential Interface</a> <a href="#ref-for-dfn-exception⑤">(2)</a>
+    <li><a href="#ref-for-dfn-exception⑥">3.3.2. 
+    PasswordCredential's [[Create]](options, sameOriginWithAncestors) </a> <a href="#ref-for-dfn-exception⑦">(2)</a>
+    <li><a href="#ref-for-dfn-exception⑧">3.3.4. 
+    Create a PasswordCredential from an HTMLFormElement </a>
+    <li><a href="#ref-for-dfn-exception⑨">3.3.5. 
+    Create a PasswordCredential from PasswordCredentialData </a>
+    <li><a href="#ref-for-dfn-exception①⓪">4.1. The FederatedCredential Interface</a>
+    <li><a href="#ref-for-dfn-exception①①">4.2.2. 
+    FederatedCredential's [[Create]](options, sameOriginWithAncestors) </a>
+    <li><a href="#ref-for-dfn-exception①②">4.2.4. 
+    Create a FederatedCredential from FederatedCredentialInit </a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-dfn-inherit">
+   <a href="https://heycam.github.io/webidl/#dfn-inherit">https://heycam.github.io/webidl/#dfn-inherit</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dfn-inherit">2. Core API</a>
+    <li><a href="#ref-for-dfn-inherit①">2.2.1. Credential Internal Methods</a> <a href="#ref-for-dfn-inherit②">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-dfn-inherited-interfaces">
+   <a href="https://heycam.github.io/webidl/#dfn-inherited-interfaces">https://heycam.github.io/webidl/#dfn-inherited-interfaces</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dfn-inherited-interfaces">2.3.1. The CredentialRequestOptions Dictionary</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-dfn-interface">
+   <a href="https://heycam.github.io/webidl/#dfn-interface">https://heycam.github.io/webidl/#dfn-interface</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dfn-interface">2.2.1. Credential Internal Methods</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-dfn-interface-object">
+   <a href="https://heycam.github.io/webidl/#dfn-interface-object">https://heycam.github.io/webidl/#dfn-interface-object</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dfn-interface-object">2.2. The Credential Interface</a> <a href="#ref-for-dfn-interface-object①">(2)</a> <a href="#ref-for-dfn-interface-object②">(3)</a> <a href="#ref-for-dfn-interface-object③">(4)</a>
+    <li><a href="#ref-for-dfn-interface-object④">2.2.1. Credential Internal Methods</a> <a href="#ref-for-dfn-interface-object⑤">(2)</a>
+    <li><a href="#ref-for-dfn-interface-object⑥">2.3.1. The CredentialRequestOptions Dictionary</a> <a href="#ref-for-dfn-interface-object⑦">(2)</a>
+    <li><a href="#ref-for-dfn-interface-object⑧">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-dfn-interface-object⑨">2.5.2. Collect Credentials from the credential store</a>
+    <li><a href="#ref-for-dfn-interface-object①⓪">2.5.3. Store a Credential</a>
+    <li><a href="#ref-for-dfn-interface-object①①">3.2. The PasswordCredential Interface</a> <a href="#ref-for-dfn-interface-object①②">(2)</a> <a href="#ref-for-dfn-interface-object①③">(3)</a>
+    <li><a href="#ref-for-dfn-interface-object①④">4.1. The FederatedCredential Interface</a> <a href="#ref-for-dfn-interface-object①⑤">(2)</a> <a href="#ref-for-dfn-interface-object①⑥">(3)</a>
+    <li><a href="#ref-for-dfn-interface-object①⑦">5.3. Credential Selection</a>
+    <li><a href="#ref-for-dfn-interface-object①⑧">7.2. Extension Points</a> <a href="#ref-for-dfn-interface-object①⑨">(2)</a> <a href="#ref-for-dfn-interface-object②⓪">(3)</a> <a href="#ref-for-dfn-interface-object②①">(4)</a> <a href="#ref-for-dfn-interface-object②②">(5)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-dfn-interface-prototype-object">
+   <a href="https://heycam.github.io/webidl/#dfn-interface-prototype-object">https://heycam.github.io/webidl/#dfn-interface-prototype-object</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dfn-interface-prototype-object">2.2. The Credential Interface</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-dfn-throw">
+   <a href="https://heycam.github.io/webidl/#dfn-throw">https://heycam.github.io/webidl/#dfn-throw</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dfn-throw">3.2. The PasswordCredential Interface</a> <a href="#ref-for-dfn-throw①">(2)</a>
+    <li><a href="#ref-for-dfn-throw②">4.1. The FederatedCredential Interface</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-interface-formdata">
+   <a href="https://xhr.spec.whatwg.org/#interface-formdata">https://xhr.spec.whatwg.org/#interface-formdata</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-interface-formdata">3.2. The PasswordCredential Interface</a>
+    <li><a href="#ref-for-interface-formdata①">3.3.4. 
+    Create a PasswordCredential from an HTMLFormElement </a>
+    <li><a href="#ref-for-interface-formdata②">7.1. Website Authors</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-xmlhttprequest">
+   <a href="https://xhr.spec.whatwg.org/#xmlhttprequest">https://xhr.spec.whatwg.org/#xmlhttprequest</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-xmlhttprequest">1. Introduction</a>
+    <li><a href="#ref-for-xmlhttprequest①">1.1. Use Cases</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-dom-formdata-get">
+   <a href="https://xhr.spec.whatwg.org/#dom-formdata-get">https://xhr.spec.whatwg.org/#dom-formdata-get</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dom-formdata-get">3.3.4. 
+    Create a PasswordCredential from an HTMLFormElement </a> <a href="#ref-for-dom-formdata-get①">(2)</a> <a href="#ref-for-dom-formdata-get②">(3)</a> <a href="#ref-for-dom-formdata-get③">(4)</a> <a href="#ref-for-dom-formdata-get④">(5)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-dom-formdata-has">
+   <a href="https://xhr.spec.whatwg.org/#dom-formdata-has">https://xhr.spec.whatwg.org/#dom-formdata-has</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dom-formdata-has">3.3.4. 
+    Create a PasswordCredential from an HTMLFormElement </a>
+   </ul>
+  </aside>
   <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
   <ul class="index">
    <li>
     <a data-link-type="biblio">[CSP]</a> defines the following terms:
     <ul>
-     <li><a href="https://w3c.github.io/webappsec-csp/#child-src">child-src</a>
-     <li><a href="https://w3c.github.io/webappsec-csp/#connect-src">connect-src</a>
-     <li><a href="https://w3c.github.io/webappsec-csp/#form-action">form-action</a>
-     <li><a href="https://w3c.github.io/webappsec-csp/#object-src">object-src</a>
-     <li><a href="https://w3c.github.io/webappsec-csp/#script-src">script-src</a>
+     <li><span class="dfn-paneled" id="term-for-child-src" style="color:initial">child-src</span>
+     <li><span class="dfn-paneled" id="term-for-connect-src" style="color:initial">connect-src</span>
+     <li><span class="dfn-paneled" id="term-for-form-action" style="color:initial">form-action</span>
+     <li><span class="dfn-paneled" id="term-for-object-src" style="color:initial">object-src</span>
+     <li><span class="dfn-paneled" id="term-for-script-src" style="color:initial">script-src</span>
     </ul>
    <li>
     <a data-link-type="biblio">[DOM]</a> defines the following terms:
     <ul>
-     <li><a href="https://dom.spec.whatwg.org/#abortsignal">AbortSignal</a>
-     <li><a href="https://dom.spec.whatwg.org/#abortsignal-aborted-flag">aborted flag</a>
-     <li><a href="https://dom.spec.whatwg.org/#context-object">context object</a>
-     <li><a href="https://dom.spec.whatwg.org/#concept-tree-order">tree order</a>
+     <li><span class="dfn-paneled" id="term-for-abortsignal" style="color:initial">AbortSignal</span>
+     <li><span class="dfn-paneled" id="term-for-abortsignal-aborted-flag" style="color:initial">aborted flag</span>
+     <li><span class="dfn-paneled" id="term-for-context-object" style="color:initial">context object</span>
+     <li><span class="dfn-paneled" id="term-for-concept-tree-order" style="color:initial">tree order</span>
     </ul>
    <li>
     <a data-link-type="biblio">[FETCH]</a> defines the following terms:
     <ul>
-     <li><a href="https://fetch.spec.whatwg.org/#response">Response</a>
-     <li><a href="https://fetch.spec.whatwg.org/#concept-request-client">client</a>
-     <li><a href="https://fetch.spec.whatwg.org/#concept-request-credentials-mode">credentials mode</a>
-     <li><a href="https://fetch.spec.whatwg.org/#concept-request-destination">destination</a>
-     <li><a href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch(input)</a>
-     <li><a href="https://fetch.spec.whatwg.org/#concept-request-initiator">initiator</a>
-     <li><a href="https://fetch.spec.whatwg.org/#request-service-workers-mode">service-workers mode</a>
+     <li><span class="dfn-paneled" id="term-for-response" style="color:initial">Response</span>
+     <li><span class="dfn-paneled" id="term-for-concept-request-client" style="color:initial">client</span>
+     <li><span class="dfn-paneled" id="term-for-concept-request-credentials-mode" style="color:initial">credentials mode</span>
+     <li><span class="dfn-paneled" id="term-for-concept-request-destination" style="color:initial">destination</span>
+     <li><span class="dfn-paneled" id="term-for-dom-global-fetch" style="color:initial">fetch(input)</span>
+     <li><span class="dfn-paneled" id="term-for-concept-request-initiator" style="color:initial">initiator</span>
+     <li><span class="dfn-paneled" id="term-for-request-service-workers-mode" style="color:initial">service-workers mode</span>
     </ul>
    <li>
     <a data-link-type="biblio">[HTML]</a> defines the following terms:
     <ul>
-     <li><a href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement">HTMLFormElement</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/system-state.html#navigator">Navigator</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/workers.html#worker">Worker</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/browsers.html#active-document">active document</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/origin.html#ascii-serialisation-of-an-origin">ascii serialization of an origin</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete">autocomplete</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill-detail-tokens">autofill detail tokens</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object">current settings object</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-current-password">current-password</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object">environment settings object</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/forms.html#the-form-element">form</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#form-owner">form owner</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-global">global object</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel">in parallel</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-name">name <small>(for autocomplete)</small></a>
-     <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-name">name <small>(for input)</small></a>
-     <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-new-password">new-password</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-nickname">nickname</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin">origin</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin">origin <small>(for environment settings object)</small></a>
-     <li><a href="https://html.spec.whatwg.org/multipage/browsers.html#parent-browsing-context">parent browsing context</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-photo">photo</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-realm">relevant realm</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-browsing-context">responsible browsing context</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-document">responsible document</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/origin.html#same-origin">same origin</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/forms.html#dom-form-submit">submit()</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/forms.html#category-submit">submittable elements</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/browsers.html#top-level-browsing-context">top-level browsing context</a>
-     <li><a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-username">username</a>
+     <li><span class="dfn-paneled" id="term-for-htmlformelement" style="color:initial">HTMLFormElement</span>
+     <li><span class="dfn-paneled" id="term-for-navigator" style="color:initial">Navigator</span>
+     <li><span class="dfn-paneled" id="term-for-worker" style="color:initial">Worker</span>
+     <li><span class="dfn-paneled" id="term-for-active-document" style="color:initial">active document</span>
+     <li><span class="dfn-paneled" id="term-for-ascii-serialisation-of-an-origin" style="color:initial">ascii serialization of an origin</span>
+     <li><span class="dfn-paneled" id="term-for-attr-fe-autocomplete" style="color:initial">autocomplete</span>
+     <li><span class="dfn-paneled" id="term-for-autofill-detail-tokens" style="color:initial">autofill detail tokens</span>
+     <li><span class="dfn-paneled" id="term-for-current-settings-object" style="color:initial">current settings object</span>
+     <li><span class="dfn-paneled" id="term-for-attr-fe-autocomplete-current-password" style="color:initial">current-password</span>
+     <li><span class="dfn-paneled" id="term-for-environment-settings-object" style="color:initial">environment settings object</span>
+     <li><span class="dfn-paneled" id="term-for-the-form-element" style="color:initial">form</span>
+     <li><span class="dfn-paneled" id="term-for-form-owner" style="color:initial">form owner</span>
+     <li><span class="dfn-paneled" id="term-for-concept-settings-object-global" style="color:initial">global object</span>
+     <li><span class="dfn-paneled" id="term-for-in-parallel" style="color:initial">in parallel</span>
+     <li><span class="dfn-paneled" id="term-for-attr-fe-name" style="color:initial">name <small>(for input)</small></span>
+     <li><span class="dfn-paneled" id="term-for-attr-fe-autocomplete-new-password" style="color:initial">new-password</span>
+     <li><span class="dfn-paneled" id="term-for-attr-fe-autocomplete-nickname" style="color:initial">nickname</span>
+     <li><span class="dfn-paneled" id="term-for-concept-settings-object-origin" style="color:initial">origin <small>(for environment settings object)</small></span>
+     <li><span class="dfn-paneled" id="term-for-parent-browsing-context" style="color:initial">parent browsing context</span>
+     <li><span class="dfn-paneled" id="term-for-attr-fe-autocomplete-photo" style="color:initial">photo</span>
+     <li><span class="dfn-paneled" id="term-for-concept-relevant-realm" style="color:initial">relevant realm</span>
+     <li><span class="dfn-paneled" id="term-for-responsible-browsing-context" style="color:initial">responsible browsing context</span>
+     <li><span class="dfn-paneled" id="term-for-responsible-document" style="color:initial">responsible document</span>
+     <li><span class="dfn-paneled" id="term-for-same-origin" style="color:initial">same origin</span>
+     <li><span class="dfn-paneled" id="term-for-dom-form-submit" style="color:initial">submit()</span>
+     <li><span class="dfn-paneled" id="term-for-category-submit" style="color:initial">submittable elements</span>
+     <li><span class="dfn-paneled" id="term-for-top-level-browsing-context" style="color:initial">top-level browsing context</span>
+     <li><span class="dfn-paneled" id="term-for-attr-fe-autocomplete-username" style="color:initial">username</span>
     </ul>
    <li>
     <a data-link-type="biblio">[INFRA]</a> defines the following terms:
     <ul>
-     <li><a href="https://infra.spec.whatwg.org/#set-append">append</a>
-     <li><a href="https://infra.spec.whatwg.org/#ascii-case-insensitive">ascii case-insensitive</a>
-     <li><a href="https://infra.spec.whatwg.org/#list-contain">contain</a>
-     <li><a href="https://infra.spec.whatwg.org/#iteration-continue">continue</a>
-     <li><a href="https://infra.spec.whatwg.org/#map-exists">exist</a>
-     <li><a href="https://infra.spec.whatwg.org/#list-size">size</a>
+     <li><span class="dfn-paneled" id="term-for-set-append" style="color:initial">append</span>
+     <li><span class="dfn-paneled" id="term-for-ascii-case-insensitive" style="color:initial">ascii case-insensitive</span>
+     <li><span class="dfn-paneled" id="term-for-list-contain" style="color:initial">contain</span>
+     <li><span class="dfn-paneled" id="term-for-iteration-continue" style="color:initial">continue</span>
+     <li><span class="dfn-paneled" id="term-for-map-exists" style="color:initial">exist</span>
+     <li><span class="dfn-paneled" id="term-for-list-size" style="color:initial">size</span>
     </ul>
    <li>
     <a data-link-type="biblio">[mixed-content]</a> defines the following terms:
     <ul>
-     <li><a href="https://w3c.github.io/webappsec-mixed-content/#a-priori-authenticated-url">a priori authenticated url</a>
+     <li><span class="dfn-paneled" id="term-for-a-priori-authenticated-url" style="color:initial">a priori authenticated url</span>
     </ul>
    <li>
     <a data-link-type="biblio">[promises-guide]</a> defines the following terms:
     <ul>
-     <li><a href="https://www.w3.org/2001/tag/doc/promises-guide/#a-new-promise">a new promise</a>
-     <li><a href="https://www.w3.org/2001/tag/doc/promises-guide/#a-promise-rejected-with">a promise rejected with</a>
-     <li><a href="https://www.w3.org/2001/tag/doc/promises-guide/#reject-promise">reject</a>
-     <li><a href="https://www.w3.org/2001/tag/doc/promises-guide/#resolve-promise">resolve</a>
+     <li><span class="dfn-paneled" id="term-for-a-new-promise" style="color:initial">a new promise</span>
+     <li><span class="dfn-paneled" id="term-for-a-promise-rejected-with" style="color:initial">a promise rejected with</span>
+     <li><span class="dfn-paneled" id="term-for-reject-promise" style="color:initial">reject</span>
+     <li><span class="dfn-paneled" id="term-for-resolve-promise" style="color:initial">resolve</span>
     </ul>
    <li>
     <a data-link-type="biblio">[PSL]</a> defines the following terms:
     <ul>
-     <li><a href="https://publicsuffix.org/list/#">registerable domain</a>
+     <li><span class="dfn-paneled" id="term-for-" style="color:initial">registerable domain</span>
     </ul>
    <li>
     <a data-link-type="biblio">[secure-contexts]</a> defines the following terms:
     <ul>
-     <li><a href="https://w3c.github.io/webappsec-secure-contexts/#secure-contexts">secure contexts</a>
+     <li><span class="dfn-paneled" id="term-for-secure-contexts" style="color:initial">secure contexts</span>
     </ul>
    <li>
     <a data-link-type="biblio">[URL]</a> defines the following terms:
     <ul>
-     <li><a href="https://url.spec.whatwg.org/#urlsearchparams">URLSearchParams</a>
+     <li><span class="dfn-paneled" id="term-for-urlsearchparams" style="color:initial">URLSearchParams</span>
     </ul>
    <li>
     <a data-link-type="biblio">[WEBAUTHN]</a> defines the following terms:
     <ul>
-     <li><a href="https://w3c.github.io/webauthn/#publickeycredential">PublicKeyCredential</a>
+     <li><span class="dfn-paneled" id="term-for-publickeycredential" style="color:initial">PublicKeyCredential</span>
     </ul>
    <li>
     <a data-link-type="biblio">[WebIDL]</a> defines the following terms:
     <ul>
-     <li><a href="https://heycam.github.io/webidl/#aborterror">AbortError</a>
-     <li><a href="https://heycam.github.io/webidl/#idl-DOMException">DOMException</a>
-     <li><a href="https://heycam.github.io/webidl/#idl-DOMString">DOMString</a>
-     <li><a href="https://heycam.github.io/webidl/#Exposed">Exposed</a>
-     <li><a href="https://heycam.github.io/webidl/#NoInterfaceObject">NoInterfaceObject</a>
-     <li><a href="https://heycam.github.io/webidl/#notallowederror">NotAllowedError</a>
-     <li><a href="https://heycam.github.io/webidl/#idl-promise">Promise</a>
-     <li><a href="https://heycam.github.io/webidl/#SameObject">SameObject</a>
-     <li><a href="https://heycam.github.io/webidl/#SecureContext">SecureContext</a>
-     <li><a href="https://heycam.github.io/webidl/#exceptiondef-typeerror">TypeError</a>
-     <li><a href="https://heycam.github.io/webidl/#idl-USVString">USVString</a>
-     <li><a href="https://heycam.github.io/webidl/#idl-boolean">boolean</a>
-     <li><a href="https://heycam.github.io/webidl/#dfn-exception">exception</a>
-     <li><a href="https://heycam.github.io/webidl/#dfn-inherit">inherit</a>
-     <li><a href="https://heycam.github.io/webidl/#dfn-inherited-interfaces">inherited interfaces</a>
-     <li><a href="https://heycam.github.io/webidl/#dfn-interface">interface</a>
-     <li><a href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a>
-     <li><a href="https://heycam.github.io/webidl/#dfn-interface-prototype-object">interface prototype object</a>
-     <li><a href="https://heycam.github.io/webidl/#dfn-throw">throw</a>
+     <li><span class="dfn-paneled" id="term-for-aborterror" style="color:initial">AbortError</span>
+     <li><span class="dfn-paneled" id="term-for-idl-DOMException" style="color:initial">DOMException</span>
+     <li><span class="dfn-paneled" id="term-for-idl-DOMString" style="color:initial">DOMString</span>
+     <li><span class="dfn-paneled" id="term-for-Exposed" style="color:initial">Exposed</span>
+     <li><span class="dfn-paneled" id="term-for-notallowederror" style="color:initial">NotAllowedError</span>
+     <li><span class="dfn-paneled" id="term-for-idl-promise" style="color:initial">Promise</span>
+     <li><span class="dfn-paneled" id="term-for-SameObject" style="color:initial">SameObject</span>
+     <li><span class="dfn-paneled" id="term-for-SecureContext" style="color:initial">SecureContext</span>
+     <li><span class="dfn-paneled" id="term-for-exceptiondef-typeerror" style="color:initial">TypeError</span>
+     <li><span class="dfn-paneled" id="term-for-idl-USVString" style="color:initial">USVString</span>
+     <li><span class="dfn-paneled" id="term-for-idl-boolean" style="color:initial">boolean</span>
+     <li><span class="dfn-paneled" id="term-for-dfn-exception" style="color:initial">exception</span>
+     <li><span class="dfn-paneled" id="term-for-dfn-inherit" style="color:initial">inherit</span>
+     <li><span class="dfn-paneled" id="term-for-dfn-inherited-interfaces" style="color:initial">inherited interfaces</span>
+     <li><span class="dfn-paneled" id="term-for-dfn-interface" style="color:initial">interface</span>
+     <li><span class="dfn-paneled" id="term-for-dfn-interface-object" style="color:initial">interface object</span>
+     <li><span class="dfn-paneled" id="term-for-dfn-interface-prototype-object" style="color:initial">interface prototype object</span>
+     <li><span class="dfn-paneled" id="term-for-dfn-throw" style="color:initial">throw</span>
     </ul>
    <li>
     <a data-link-type="biblio">[XHR]</a> defines the following terms:
     <ul>
-     <li><a href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a>
-     <li><a href="https://xhr.spec.whatwg.org/#xmlhttprequest">XMLHttpRequest</a>
-     <li><a href="https://xhr.spec.whatwg.org/#dom-formdata-get">get(name)</a>
-     <li><a href="https://xhr.spec.whatwg.org/#dom-formdata-has">has(name)</a>
+     <li><span class="dfn-paneled" id="term-for-interface-formdata" style="color:initial">FormData</span>
+     <li><span class="dfn-paneled" id="term-for-xmlhttprequest" style="color:initial">XMLHttpRequest</span>
+     <li><span class="dfn-paneled" id="term-for-dom-formdata-get" style="color:initial">get(name)</span>
+     <li><span class="dfn-paneled" id="term-for-dom-formdata-has" style="color:initial">has(name)</span>
     </ul>
   </ul>
   <h2 class="no-num no-ref heading settled" id="references"><span class="content">References</span><a class="self-link" href="#references"></a></h2>
@@ -3649,7 +4345,7 @@ partial dictionary CredentialCreationOptions {
    <dt id="biblio-web-login">[WEB-LOGIN]
    <dd>Jason Denizac; Robin Berjon; Anne van Kesteren. <a href="https://github.com/jden/web-login">web-login</a>. URL: <a href="https://github.com/jden/web-login">https://github.com/jden/web-login</a>
    <dt id="biblio-webauthn">[WEBAUTHN]
-   <dd>Vijay Bharadwaj; et al. <a href="https://www.w3.org/TR/webauthn/">Web Authentication: An API for accessing Public Key Credentials - Level 1</a>. 5 December 2017. WD. URL: <a href="https://www.w3.org/TR/webauthn/">https://www.w3.org/TR/webauthn/</a>
+   <dd>Dirk Balfanz; et al. <a href="https://www.w3.org/TR/webauthn/">Web Authentication: An API for accessing Public Key Credentials Level 1</a>. 20 March 2018. CR. URL: <a href="https://www.w3.org/TR/webauthn/">https://www.w3.org/TR/webauthn/</a>
    <dt id="biblio-webmessaging">[WEBMESSAGING]
    <dd>Ian Hickson. <a href="https://www.w3.org/TR/webmessaging/">HTML5 Web Messaging</a>. 19 May 2015. REC. URL: <a href="https://www.w3.org/TR/webmessaging/">https://www.w3.org/TR/webmessaging/</a>
    <dt id="biblio-xmlhttprequest">[XMLHTTPREQUEST]
@@ -3662,8 +4358,8 @@ partial dictionary CredentialCreationOptions {
   <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString⑥"><span class="kt">DOMString</span></a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="DOMString" href="#dom-credential-type" id="ref-for-dom-credential-type③">type</a>;
 };
 
-[<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#NoInterfaceObject" id="ref-for-NoInterfaceObject①">NoInterfaceObject</a>, <a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext" id="ref-for-SecureContext①①">SecureContext</a>]
-<span class="kt">interface</span> <a class="nv" href="#credentialuserdata"><code>CredentialUserData</code></a> {
+[<a class="nv idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext" id="ref-for-SecureContext①①">SecureContext</a>]
+<span class="kt">interface</span> <span class="kt">mixin</span> <a class="nv" href="#credentialuserdata"><code>CredentialUserData</code></a> {
   <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString" id="ref-for-idl-USVString②①"><span class="kt">USVString</span></a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="USVString" href="#dom-credentialuserdata-name" id="ref-for-dom-credentialuserdata-name①①">name</a>;
   <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString" id="ref-for-idl-USVString③①"><span class="kt">USVString</span></a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="USVString" href="#dom-credentialuserdata-iconurl" id="ref-for-dom-credentialuserdata-iconurl①①">iconURL</a>;
 };
@@ -3708,7 +4404,7 @@ partial dictionary CredentialCreationOptions {
 <span class="kt">interface</span> <a class="nv" href="#passwordcredential"><code>PasswordCredential</code></a> : <a class="n" data-link-type="idl-name" href="#credential" id="ref-for-credential③⑤①">Credential</a> {
   <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString" id="ref-for-idl-USVString⑦①"><span class="kt">USVString</span></a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="USVString" href="#dom-passwordcredential-password" id="ref-for-dom-passwordcredential-password⑥">password</a>;
 };
-<a class="n" data-link-type="idl-name" href="#passwordcredential" id="ref-for-passwordcredential⑥①">PasswordCredential</a> <span class="kt">implements</span> <a class="n" data-link-type="idl-name" href="#credentialuserdata" id="ref-for-credentialuserdata②">CredentialUserData</a>;
+<a class="n" data-link-type="idl-name" href="#passwordcredential" id="ref-for-passwordcredential⑥①">PasswordCredential</a> <span class="kt">includes</span> <a class="n" data-link-type="idl-name" href="#credentialuserdata" id="ref-for-credentialuserdata②">CredentialUserData</a>;
 
 <span class="kt">partial</span> <span class="kt">dictionary</span> <a class="nv idl-code" data-link-type="dictionary" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions①⓪①">CredentialRequestOptions</a> {
   <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-boolean" id="ref-for-idl-boolean①"><span class="kt">boolean</span></a> <a class="nv" data-default="false" data-type="boolean " href="#dom-credentialrequestoptions-password"><code>password</code></a> = <span class="kt">false</span>;
@@ -3733,7 +4429,7 @@ partial dictionary CredentialCreationOptions {
   <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString" id="ref-for-idl-USVString①②①"><span class="kt">USVString</span></a> <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="USVString" href="#dom-federatedcredential-provider" id="ref-for-dom-federatedcredential-provider⑨">provider</a>;
   <span class="kt">readonly</span> <span class="kt">attribute</span> <a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-DOMString" id="ref-for-idl-DOMString②①"><span class="kt">DOMString</span></a>? <a class="nv idl-code" data-link-type="attribute" data-readonly="" data-type="DOMString?" href="#dom-federatedcredential-protocol" id="ref-for-dom-federatedcredential-protocol④">protocol</a>;
 };
-<a class="n" data-link-type="idl-name" href="#federatedcredential" id="ref-for-federatedcredential①⑤">FederatedCredential</a> <span class="kt">implements</span> <a class="n" data-link-type="idl-name" href="#credentialuserdata" id="ref-for-credentialuserdata①①">CredentialUserData</a>;
+<a class="n" data-link-type="idl-name" href="#federatedcredential" id="ref-for-federatedcredential①⑤">FederatedCredential</a> <span class="kt">includes</span> <a class="n" data-link-type="idl-name" href="#credentialuserdata" id="ref-for-credentialuserdata①①">CredentialUserData</a>;
 
 <span class="kt">dictionary</span> <a class="nv" href="#dictdef-federatedcredentialrequestoptions"><code>FederatedCredentialRequestOptions</code></a> {
   <span class="kt">sequence</span>&lt;<a class="n idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-USVString" id="ref-for-idl-USVString①③①"><span class="kt">USVString</span></a>> <a class="nv" data-type="sequence<USVString> " href="#dom-federatedcredentialrequestoptions-providers"><code>providers</code></a>;
@@ -3759,17 +4455,17 @@ partial dictionary CredentialCreationOptions {
   <h2 class="no-num no-ref heading settled" id="issues-index"><span class="content">Issues Index</span><a class="self-link" href="#issues-index"></a></h2>
   <div style="counter-reset:issue">
    <div class="issue"> Talk to Tobie/Dominic about the <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-object">interface object</a> bits, here and in <a href="#algorithm-request">§2.5.1 Request a Credential</a>, etc. I’m not sure I’ve gotten the terminology right. <a data-link-type="dfn" href="https://heycam.github.io/webidl/#dfn-interface-prototype-object">interface prototype
-  object</a>, maybe?<a href="#issue-23f9e3fa"> ↵ </a></div>
+  object</a>, maybe?<a href="#issue-47fed4d0"> ↵ </a></div>
    <div class="issue"> jyasskin@ suggests replacing the iteration through the interface objects with a registry.
     I’m not sure which is less clear, honestly. I’ll leave it like this for the moment, and we can
-    argue about whether this is too much of a <code>COMEFROM</code> interface.<a href="#issue-1542b290"> ↵ </a></div>
+    argue about whether this is too much of a <code>COMEFROM</code> interface.<a href="#issue-962f77e2"> ↵ </a></div>
    <div class="issue"> This might be the wrong model. It would be nice to support a site that wished
   to accept either username/passwords or webauthn-style credentials without forcing
-  a chooser for those users who use the former, and who wish to remain signed in.<a href="#issue-d9160978"> ↵ </a></div>
+  a chooser for those users who use the former, and who wish to remain signed in.<a href="#issue-e720ed3b"> ↵ </a></div>
    <div class="issue"> Add some thoughts here about when and how the API
-  should be used, especially with regard to <code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-mediation">mediation</a></code>. <a href="https://github.com/w3c/webappsec/issues/290">&lt;https://github.com/w3c/webappsec/issues/290></a><a href="#issue-32401d92"> ↵ </a></div>
+  should be used, especially with regard to <code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-mediation">mediation</a></code>. <a href="https://github.com/w3c/webappsec/issues/290">&lt;https://github.com/w3c/webappsec/issues/290></a><a href="#issue-84808a53"> ↵ </a></div>
    <div class="issue"> Describe encoding restrictions of submitting credentials by <code class="idl"><a data-link-type="idl" href="https://fetch.spec.whatwg.org/#dom-global-fetch">fetch()</a></code> with
-  a <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> body.<a href="#issue-d0f045e0"> ↵ </a></div>
+  a <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> body.<a href="#issue-19b3ffaf"> ↵ </a></div>
   </div>
   <aside class="dfn-panel" data-for="concept-credential">
    <b><a href="#concept-credential">#concept-credential</a></b><b>Referenced in:</b>
@@ -4591,60 +5287,143 @@ partial dictionary CredentialCreationOptions {
     <li><a href="#ref-for-abstract-opdef-ask-the-user-to-choose-a-credential">2.5.1. Request a Credential</a>
    </ul>
   </aside>
+<script>/* script-var-click-highlighting */
+
+    document.addEventListener("click", e=>{
+        if(e.target.nodeName == "VAR") {
+            highlightSameAlgoVars(e.target);
+        }
+    });
+    {
+        const indexCounts = new Map();
+        const indexNames = new Map();
+        function highlightSameAlgoVars(v) {
+            // Find the algorithm container.
+            let algoContainer = null;
+            let searchEl = v;
+            while(algoContainer == null && searchEl != document.body) {
+                searchEl = searchEl.parentNode;
+                if(searchEl.hasAttribute("data-algorithm")) {
+                    algoContainer = searchEl;
+                }
+            }
+
+            // Not highlighting document-global vars,
+            // too likely to be unrelated.
+            if(algoContainer == null) return;
+
+            const algoName = algoContainer.getAttribute("data-algorithm");
+            const varName = getVarName(v);
+            const addClass = !v.classList.contains("selected");
+            let highlightClass = null;
+            if(addClass) {
+                const index = chooseHighlightIndex(algoName, varName);
+                indexCounts.get(algoName)[index] += 1;
+                indexNames.set(algoName+"///"+varName, index);
+                highlightClass = nameFromIndex(index);
+            } else {
+                const index = previousHighlightIndex(algoName, varName);
+                indexCounts.get(algoName)[index] -= 1;
+                highlightClass = nameFromIndex(index);
+            }
+
+            // Find all same-name vars, and toggle their class appropriately.
+            for(const el of algoContainer.querySelectorAll("var")) {
+                if(getVarName(el) == varName) {
+                    el.classList.toggle("selected", addClass);
+                    el.classList.toggle(highlightClass, addClass);
+                }
+            }
+        }
+        function getVarName(el) {
+            return el.textContent.replace(/(\s| )+/, " ").trim();
+        }
+        function chooseHighlightIndex(algoName, varName) {
+            let indexes = null;
+            if(indexCounts.has(algoName)) {
+                indexes = indexCounts.get(algoName);
+            } else {
+                // 7 classes right now
+                indexes = [0,0,0,0,0,0,0];
+                indexCounts.set(algoName, indexes);
+            }
+
+            // If the element was recently unclicked,
+            // *and* that color is still unclaimed,
+            // give it back the same color.
+            const lastIndex = previousHighlightIndex(algoName, varName);
+            if(indexes[lastIndex] === 0) return lastIndex;
+
+            // Find the earliest index with the lowest count.
+            const minCount = Math.min.apply(null, indexes);
+            let index = null;
+            for(var i = 0; i < indexes.length; i++) {
+                if(indexes[i] == minCount) {
+                    return i;
+                }
+            }
+        }
+        function previousHighlightIndex(algoName, varName) {
+            return indexNames.get(algoName+"///"+varName);
+        }
+        function nameFromIndex(index) {
+            return "selected" + index;
+        }
+    }
+    </script>
 <script>/* script-dfn-panel */
 
-        document.body.addEventListener("click", function(e) {
-            var queryAll = function(sel) { return [].slice.call(document.querySelectorAll(sel)); }
-            // Find the dfn element or panel, if any, that was clicked on.
-            var el = e.target;
-            var target;
-            var hitALink = false;
-            while(el.parentElement) {
-                if(el.tagName == "A") {
-                    // Clicking on a link in a <dfn> shouldn't summon the panel
-                    hitALink = true;
-                }
-                if(el.classList.contains("dfn-paneled")) {
-                    target = "dfn";
-                    break;
-                }
-                if(el.classList.contains("dfn-panel")) {
-                    target = "dfn-panel";
-                    break;
-                }
-                el = el.parentElement;
-            }
-            if(target != "dfn-panel") {
-                // Turn off any currently "on" or "activated" panels.
-                queryAll(".dfn-panel.on, .dfn-panel.activated").forEach(function(el){
-                    el.classList.remove("on");
-                    el.classList.remove("activated");
-                });
-            }
-            if(target == "dfn" && !hitALink) {
-                // open the panel
-                var dfnPanel = document.querySelector(".dfn-panel[data-for='" + el.id + "']");
-                if(dfnPanel) {
-                    console.log(dfnPanel);
-                    dfnPanel.classList.add("on");
-                    var rect = el.getBoundingClientRect();
-                    dfnPanel.style.left = window.scrollX + rect.right + 5 + "px";
-                    dfnPanel.style.top = window.scrollY + rect.top + "px";
-                    var panelRect = dfnPanel.getBoundingClientRect();
-                    var panelWidth = panelRect.right - panelRect.left;
-                    if(panelRect.right > document.body.scrollWidth && (rect.left - (panelWidth + 5)) > 0) {
-                        // Reposition, because the panel is overflowing
-                        dfnPanel.style.left = window.scrollX + rect.left - (panelWidth + 5) + "px";
-                    }
-                } else {
-                    console.log("Couldn't find .dfn-panel[data-for='" + el.id + "']");
-                }
-            } else if(target == "dfn-panel") {
-                // Switch it to "activated" state, which pins it.
-                el.classList.add("activated");
-                el.style.left = null;
-                el.style.top = null;
-            }
-
+document.body.addEventListener("click", function(e) {
+    var queryAll = function(sel) { return [].slice.call(document.querySelectorAll(sel)); }
+    // Find the dfn element or panel, if any, that was clicked on.
+    var el = e.target;
+    var target;
+    var hitALink = false;
+    while(el.parentElement) {
+        if(el.tagName == "A") {
+            // Clicking on a link in a <dfn> shouldn't summon the panel
+            hitALink = true;
+        }
+        if(el.classList.contains("dfn-paneled")) {
+            target = "dfn";
+            break;
+        }
+        if(el.classList.contains("dfn-panel")) {
+            target = "dfn-panel";
+            break;
+        }
+        el = el.parentElement;
+    }
+    if(target != "dfn-panel") {
+        // Turn off any currently "on" or "activated" panels.
+        queryAll(".dfn-panel.on, .dfn-panel.activated").forEach(function(el){
+            el.classList.remove("on");
+            el.classList.remove("activated");
         });
-        </script>
+    }
+    if(target == "dfn" && !hitALink) {
+        // open the panel
+        var dfnPanel = document.querySelector(".dfn-panel[data-for='" + el.id + "']");
+        if(dfnPanel) {
+            dfnPanel.classList.add("on");
+            var rect = el.getBoundingClientRect();
+            dfnPanel.style.left = window.scrollX + rect.right + 5 + "px";
+            dfnPanel.style.top = window.scrollY + rect.top + "px";
+            var panelRect = dfnPanel.getBoundingClientRect();
+            var panelWidth = panelRect.right - panelRect.left;
+            if(panelRect.right > document.body.scrollWidth && (rect.left - (panelWidth + 5)) > 0) {
+                // Reposition, because the panel is overflowing
+                dfnPanel.style.left = window.scrollX + rect.left - (panelWidth + 5) + "px";
+            }
+        } else {
+            console.log("Couldn't find .dfn-panel[data-for='" + el.id + "']");
+        }
+    } else if(target == "dfn-panel") {
+        // Switch it to "activated" state, which pins it.
+        el.classList.add("activated");
+        el.style.left = null;
+        el.style.top = null;
+    }
+
+});
+</script>
