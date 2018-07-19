@@ -974,12 +974,12 @@ spec:url; type:dfn; text:urlencoded byte serializer
           if (!credential) {
             return; // as above...
           }
-          if (credential.<a attribute for="Credential">type</a> == '<a const href="#password-literal">password</a>') {
-            document.getQuerySelector('input[name=username_field]').value =
-                credential.id;
-            document.getQuerySelector('input[name=password_field]').value =
-                credential.password;
-            document.getQuerySelector('#myform').submit();
+          if (credential.<a attribute for="Credential">type</a> === '<a const href="#password-literal">password</a>') {
+            document.querySelector('input[name=username_field]').value =
+              credential.id;
+            document.querySelector('input[name=password_field]').value =
+              credential.password;
+            document.getElementById('myform').submit();
           }
         });
     </pre>
