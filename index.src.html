@@ -397,8 +397,8 @@ spec:css-syntax-3;
   mechanism in the [=credential chooser=] by providing a friendly name and icon:
 
   <pre class="idl">
-    [NoInterfaceObject, SecureContext]
-    interface CredentialUserData {
+    [SecureContext]
+    interface mixin CredentialUserData {
       readonly attribute USVString name;
       readonly attribute USVString iconURL;
     };
@@ -639,7 +639,7 @@ spec:css-syntax-3;
 
     <pre>
       window.addEventListener('load', async () =&gt; {
-        const credentials = await navigatior.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
+        const credentials = await navigator.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
           ...,
           <a for="CredentialRequestOptions" dict-member>mediation</a>: '<a for="CredentialMediationRequirement" enum-value>silent</a>'
         });
@@ -658,7 +658,7 @@ spec:css-syntax-3;
 
     <pre>
       document.querySelector('#sign-in').addEventListener('click', async () =&gt; {
-        const credentials = await navigatior.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
+        const credentials = await navigator.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
           ...,
           <a for="CredentialRequestOptions" dict-member>mediation</a>: '<a for="CredentialMediationRequirement" enum-value>optional</a>'
         });
@@ -685,7 +685,7 @@ spec:css-syntax-3;
 
     <pre>
       document.querySelector('#important-form').addEventListener('submit', async () =&gt; {
-        const credentials = await navigatior.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
+        const credentials = await navigator.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
           ...,
           <a for="CredentialRequestOptions" dict-member>mediation</a>: '<a for="CredentialMediationRequirement" enum-value>required</a>'
         });
@@ -708,7 +708,7 @@ spec:css-syntax-3;
 
     <pre>
       document.querySelector('#switch-button').addEventListener('click', e =&gt; {
-        var c = await navigatior.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
+        var c = await navigator.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
           ...,
           <a for="CredentialRequestOptions" dict-member>mediation</a>: '<a for="CredentialMediationRequirement" enum-value>required</a>'
         });
@@ -1020,12 +1020,12 @@ spec:css-syntax-3;
           if (!credential) {
             return; // as above...
           }
-          if (credential.<a attribute for="Credential">type</a> == '<a const href="#password-literal">password</a>') {
-            document.getQuerySelector('input[name=username_field]').value =
-                credential.id;
-            document.getQuerySelector('input[name=password_field]').value =
-                credential.password;
-            document.getQuerySelector('#myform').submit();
+          if (credential.<a attribute for="Credential">type</a> === '<a const href="#password-literal">password</a>') {
+            document.querySelector('input[name=username_field]').value =
+              credential.id;
+            document.querySelector('input[name=password_field]').value =
+              credential.password;
+            document.getElementById('myform').submit();
           }
         });
     </pre>
@@ -1153,8 +1153,6 @@ spec:css-syntax-3;
   ## The `PasswordCredential` Interface ## {#passwordcredential-interface}
 
   <pre class="idl">
-    typedef (FormData or URLSearchParams) CredentialBodyType;
-
     [Constructor(HTMLFormElement form),
      Constructor(PasswordCredentialData data),
      Exposed=Window,
@@ -1162,7 +1160,7 @@ spec:css-syntax-3;
     interface PasswordCredential : Credential {
       readonly attribute USVString password;
     };
-    PasswordCredential implements CredentialUserData;
+    PasswordCredential includes CredentialUserData;
 
     partial dictionary CredentialRequestOptions {
       boolean password = false;
@@ -1497,7 +1495,7 @@ spec:css-syntax-3;
       readonly attribute USVString provider;
       readonly attribute DOMString? protocol;
     };
-    FederatedCredential implements CredentialUserData;
+    FederatedCredential includes CredentialUserData;
 
     dictionary FederatedCredentialRequestOptions {
       sequence&lt;USVString&gt; providers;
