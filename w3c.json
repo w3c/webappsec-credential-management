@@ -1,5 +1,10 @@
- {
-    "group":      ["49309"]
-,   "contacts":   ["wseltzer"]
-,   "shortName":  "credential-management-1"
+{
+  "group": [
+    "49309"
+  ],
+  "contacts": [
+    "wseltzer"
+  ],
+  "shortName": "credential-management-1",
+  "repo-type": "rec-track"
 }
