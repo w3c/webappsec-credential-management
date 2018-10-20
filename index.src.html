@@ -910,7 +910,7 @@ spec:css-syntax-3;
 
     10.  Run the following steps [=in parallel=]:
 
-        1.  Let |r| be the result of executing |interfaces|[0]
+        1.  Let |r| be the result of executing |interfaces|[0]'s
             {{Credential/[[Create]](origin, options, sameOriginWithAncestors)}} internal method on
             |origin|, |options|, and |sameOriginWithAncestors|.
 
@@ -1637,7 +1637,7 @@ spec:css-syntax-3;
         member's value to |origin|'s value.
 
     3.  Return the result of executing <a abstract-op>Create a `FederatedCredential` from
-        `FederatedCredentialInit`</a> on |options|["{{CredentialCreationOptions/federated}}"].
+        `FederatedCredentialInit`</a> given |options|["{{CredentialCreationOptions/federated}}"].
   </ol>
 
   <h4 algorithm id="store-federatedcredential">
