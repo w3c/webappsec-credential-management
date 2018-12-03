@@ -1210,7 +1210,6 @@ spec:css-syntax-3;
     dictionary PasswordCredentialData : CredentialData {
       USVString name;
       USVString iconURL;
-      required USVString origin;
       required USVString password;
     };
 
@@ -1285,7 +1284,7 @@ spec:css-syntax-3;
 
     3.  If |options|["{{CredentialCreationOptions/password}}"] is a {{PasswordCredentialData}}, return
         the result of executing <a abstract-op>Create a `PasswordCredential` from
-        `PasswordCredentialData`</a> given |options|["{{CredentialCreationOptions/password}}"].
+        `PasswordCredentialData`</a> given |options|["{{CredentialCreationOptions/password}}"] and |origin|.
 
     4.  Return a {{TypeError}} [=exception=].
   </ol>
@@ -1358,16 +1357,14 @@ spec:css-syntax-3;
   <ol class="algorithm">
     1.  Let |data| be a new {{PasswordCredentialData}} dictionary.
 
-    2.  Set |data|'s {{PasswordCredentialData/origin}} member's value to |origin|'s value.
-
-    3.  Let |formData| be the result of executing the {{FormData}} constructor
+    2.  Let |formData| be the result of executing the {{FormData}} constructor
         on |form|.
 
-    4.  Let |elements| be a list of all the [=submittable elements=] whose [=form owner=] is |form|, in [=tree order=].
+    3.  Let |elements| be a list of all the [=submittable elements=] whose [=form owner=] is |form|, in [=tree order=].
 
-    5.  Let |newPasswordObserved| be `false`.
+    4.  Let |newPasswordObserved| be `false`.
 
-    6.  For each |field| in |elements|, run the following steps:
+    5.  For each |field| in |elements|, run the following steps:
 
         1.  If |field| does not have an <{input/autocomplete}> attribute, then skip to the next
             |field|.
@@ -1416,14 +1413,14 @@ spec:css-syntax-3;
                         result of executing |formData|'s {{FormData/get()}} method
                         on |name|.
 
-    7.  Let |c| be the result of executing <a abstract-op>Create a `PasswordCredential` from
-        `PasswordCredentialData`</a> on |data|.
+    6.  Let |c| be the result of executing <a abstract-op>Create a `PasswordCredential` from
+        `PasswordCredentialData`</a> on |data| and |origin|.
      
-    8.  If |c| is an [=exception=], return |c|.
+    7.  If |c| is an [=exception=], return |c|.
 
-    9.  Assert: |c| is a {{PasswordCredential}}.
+    8.  Assert: |c| is a {{PasswordCredential}}.
 
-    10.  Return |c|.
+    9.  Return |c|.
   </ol>
 
   <h4 algorithm id="construct-passwordcredential-data">
@@ -1431,7 +1428,7 @@ spec:css-syntax-3;
   </h4>
 
   To <dfn abstract-op>Create a `PasswordCredential` from `PasswordCredentialData`</dfn>, given an
-  {{PasswordCredentialData}} (|data|), run these steps.
+  {{PasswordCredentialData}} (|data|) and an [=origin=] (|origin|), run these steps.
 
   <ol class="algorithm">
     1.  Let |c| be a new {{PasswordCredential}} object.
@@ -1439,7 +1436,6 @@ spec:css-syntax-3;
     2.  If any of the following are the empty string, return a {{TypeError}} [=exception=]:
 
         *   |data|'s {{CredentialData/id}} member's value
-        *   |data|'s {{PasswordCredentialData/origin}} member's value
         *   |data|'s {{PasswordCredentialData/password}} member's value
 
     3.  Set |c|'s properties as follows:
@@ -1453,7 +1449,7 @@ spec:css-syntax-3;
         :   {{CredentialUserData/name}}
         ::  |data|'s {{PasswordCredentialData/name}} member's value
         :   {{Credential/[[origin]]}}
-        ::  |data|'s {{PasswordCredentialData/origin}} member's value.
+        ::  |origin|
 
     4.  Return |c|.
   </ol>
@@ -1542,7 +1538,6 @@ spec:css-syntax-3;
     dictionary FederatedCredentialInit : CredentialData {
       USVString name;
       USVString iconURL;
-      required USVString origin;
       required USVString provider;
       DOMString protocol;
     };
@@ -1601,7 +1596,7 @@ spec:css-syntax-3;
   <ol class="algorithm">
     1.  Assert: |options|["{{CredentialRequestOptions/federated}}"] [=map/exists=].
 
-    2.  If <var ignore>sameOriginWithAncestors</var> is `false`, return a "{{NotAllowedError}}" {{DOMException}}.
+    2.  If |sameOriginWithAncestors| is `false`, return a "{{NotAllowedError}}" {{DOMException}}.
 
         Note: This restriction aims to address the concern raised in [[#security-origin-confusion]].
 
@@ -1631,13 +1626,10 @@ spec:css-syntax-3;
 
   <ol class="algorithm">
     1.  Assert: |options|["{{CredentialCreationOptions/federated}}"] [=map/exists=], and
-        <var ignore>sameOriginWithAncestors</var> is unused.
+        |sameOriginWithAncestors| is unused.
 
-    2.  Set |options|["{{CredentialCreationOptions/federated}}"]'s {{FederatedCredentialInit/origin}}
-        member's value to |origin|'s value.
-
-    3.  Return the result of executing <a abstract-op>Create a `FederatedCredential` from
-        `FederatedCredentialInit`</a> given |options|["{{CredentialCreationOptions/federated}}"].
+    2.  Return the result of executing <a abstract-op>Create a `FederatedCredential` from
+        `FederatedCredentialInit`</a> given |options|["{{CredentialCreationOptions/federated}}"] and |origin|.
   </ol>
 
   <h4 algorithm id="store-federatedcredential">
@@ -1653,7 +1645,7 @@ spec:css-syntax-3;
 
   <ol class="algorithm">
     1.  Return a "{{NotAllowedError}}" {{DOMException}} without altering the user agent's
-        [=credential store=] if <var ignore>sameOriginWithAncestors</var> is `false`.
+        [=credential store=] if |sameOriginWithAncestors| is `false`.
 
         Note: This restriction aims to address the concern raised in [[#security-origin-confusion]].
 
@@ -1689,7 +1681,7 @@ spec:css-syntax-3;
 
 
   To <dfn abstract-op>Create a `FederatedCredential` from `FederatedCredentialInit`</dfn>, given a
-  {{FederatedCredentialInit}} (|init|), run these steps.
+  {{FederatedCredentialInit}} (|init|) and an [=origin=] (|origin|), run these steps.
 
   <ol class="algorithm">
     1.  Let |c| be a new {{FederatedCredential}} object.
@@ -1710,7 +1702,7 @@ spec:css-syntax-3;
         :   {{CredentialUserData/name}}
         ::  |init|.{{CredentialUserData/name}}'s value
         :   {{Credential/[[origin]]}}
-        ::  |init|.{{FederatedCredentialInit/origin}}'s value.
+        ::  |origin|
 
     4.  Return |c|.
   </ol>
