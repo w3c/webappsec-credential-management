@@ -761,8 +761,26 @@ spec:css-syntax-3;
 
     5.  Let |origin| be the [=current settings object=]'s [=environment settings object/origin=].
 
-    6.  Let |sameOriginWithAncestors| be `true` if |settings| is [=same-origin with its
-        ancestors=], and `false` otherwise.
+    4.  If |settings|'s [=responsible document=] is [=allowed to use=] any of these features:
+
+        <dl class="switch">
+            :   <a data-lt="webauthn-feature">webauthn</a>,
+        </dl>
+
+        let |sameOriginWithAncestors| be `true`, and `false` otherwise.
+
+            ISSUE(w3c/webappsec-credential-management#135): Do we wish to additionally define
+            feature policy tokens for `password` and `federated`? The approach taken above makes 
+            it simple to just add them to the list with the `webauthn` feature policy token. 
+            Do we wish to additionally have a main "credman" feature-policy "all-included" on-off switch?
+
+
+	    ISSUE: This re-purposes |sameOriginWithAncestors| to be something more akin to 
+	    |sameOriginWithAncestorsAndOrAllowedByFeaturePolicy|. Also, the above approach now tacitly includes 
+	    cross-origin checking (rather than it being explicit) by relying on each feature's 
+	    [=default allowlist=] in combination with [[Feature-Policy]]'s algorithms to make cross-origin 
+	    permission determination. Do we wish to rename |sameOriginWithAncestors| or just leave it alone 
+	    and rely on "Note:"s to call out it's new awesomeness?
 
     7.  Run the following steps [=in parallel=]:
 
@@ -884,8 +902,26 @@ spec:css-syntax-3;
 
     3.  Let |global| be |settings|' [=environment settings object/global object=].
 
-    4.  Let |sameOriginWithAncestors| be `true` if the [=current settings object=] is [=same-origin
-        with its ancestors=], and `false` otherwise.
+    4.  If |settings|'s [=responsible document=] is [=allowed to use=] any of these features:
+
+        <dl class="switch">
+            :   <a data-lt="webauthn-feature">webauthn</a>,
+        </dl>
+
+        let |sameOriginWithAncestors| be `true`, and `false` otherwise.
+
+            ISSUE(w3c/webappsec-credential-management#135): Do we wish to additionally define
+            feature policy tokens for `password` and `federated`? The approach taken above makes 
+            it simple to just add them to the list with the `webauthn` feature policy token. 
+            Do we wish to additionally have a main "credman" feature-policy "all-included" on-off switch?
+
+
+	    ISSUE: This re-purposes |sameOriginWithAncestors| to be something more akin to 
+	    |sameOriginWithAncestorsAndOrAllowedByFeaturePolicy|. Also, the above approach now tacitly includes 
+	    cross-origin checking (rather than it being explicit) by relying on each feature's 
+	    [=default allowlist=] in combination with [[Feature-Policy]]'s algorithms to make cross-origin 
+	    permission determination. Do we wish to rename |sameOriginWithAncestors| or just leave it alone 
+	    and rely on "Note:"s to call out it's new awesomeness?
 
     5.  Let |interfaces| be the [=set=] of |options|' <a>relevant credential interface objects</a>.
 
