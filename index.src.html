@@ -231,9 +231,10 @@ spec:css-syntax-3;
 
   Additionally, the [=credential store=] should maintain a <dfn for="origin">`prevent silent
   access` flag</dfn> for [=origins=] (which is set to `true` unless otherwise specified).
-  An origin <dfn for="origin">requires user mediation</dfn> if its flag is set to `true`.
+  An origin <dfn for="origin">requires user mediation</dfn> if its [=prevent silent access flag=]
+  is set to `true`.
 
-  Note: The importance of user mediation is discussed in more detail in [[#user-mediation]].
+  Note: The importance of [=user mediation=] is discussed in more detail in [[#user-mediation]].
 
   Note: The [=credential store=] is an internal implementation detail of a user agent's
   implementation of the API specified in this document, and is not exposed to the web directly.
@@ -243,13 +244,14 @@ spec:css-syntax-3;
   This document depends on the Infra Standard for a number of foundational concepts used in its
   algorithms and prose [[!INFRA]].
 
-  An [=environment settings object=] (|settings|) is <dfn noexport>cross-origin from its
+  An [=environment settings object=] (|settings|) is <dfn noexport>same-origin with its
   ancestors</dfn> if the following algorithm returns `true`:
 
   1.  If |settings| has no [=environment settings object/responsible browsing context=],
       return `false`.
 
-ISSUE: the above check (which is apparently to see if we are in a [=Worker=] context or a non-[=top-level browsing context=], see Section [[#security-origin-confusion]]) has the semantic of overloading the returned boolean to _also_ signal whether there is a [=responsible browsing context=] or not.  This seemed ok when a return value of `false` would essentially terminate any operation -- because if samOriginWithAncestors was `false` for any reason the operation was terminatged. `[=crossOrigin=]` has a different semantic -- it's simply informational. whether any operation continues is gated on [[feature-policy]] via the [=allowed to use=] algorithm (and all Credential Management credential types must have a default feature policy allowlist of `'self'`, which mean by defualt they must at least be running in a sameOriginWithAncestors context, or the [=allowed to use=] check returns `false`.  So, if we need the above browsing context check in this alg, perhaps it ought to not be in this alg, or perhaps it ought to throw?  At this time, I'm thinking it ought to be separated from this alg given our flipping this alg's semantic to not necessarily terminate the operation.
+      Note: the above check ascertains whether we are in a [=Worker=] context or a 
+      non-[=top-level browsing context=], see Section [[#security-origin-confusion]]).
 
   2.  Let |origin| be |settings|' [=environment settings object/origin=].
 
@@ -260,9 +262,9 @@ ISSUE: the above check (which is apparently to see if we are in a [=Worker=] con
       1.  Set |current| to |current|'s [=parent browsing context=].
 
       2.  If |current|'s [=active document=]'s [=origin=] is not [=same origin=] with |origin|,
-          return `true`.
+          return `false`.
 
-  5.  Return `false`.
+  5.  Return `true`.
 
   ## The `Credential` Interface ## {#the-credential-interface}
 
@@ -905,6 +907,9 @@ ISSUE: the above check (which is apparently to see if we are in a [=Worker=] con
     2.  Assert: |settings| is a [=secure context=].
 
     3.  Let |global| be |settings|' [=environment settings object/global object=].
+
+    4.  Let |crossOrigin| be `false` if the [=current settings object=] is [=same-origin
+        with its ancestors=], and `true` otherwise.
 
     4.  If |settings|'s [=responsible document=] is [=allowed to use=] any of these features:
 
