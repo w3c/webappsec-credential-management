@@ -435,9 +435,9 @@ spec:css-syntax-3;
   <pre class="idl">
     [Exposed=Window, SecureContext]
     interface CredentialsContainer {
-      Promise&lt;Credential?&gt; get(optional CredentialRequestOptions options);
+      Promise&lt;Credential?&gt; get(optional CredentialRequestOptions options = {});
       Promise&lt;Credential&gt; store(Credential credential);
-      Promise&lt;Credential?&gt; create(optional CredentialCreationOptions options);
+      Promise&lt;Credential?&gt; create(optional CredentialCreationOptions options = {});
       Promise&lt;void&gt; preventSilentAccess();
     };
 
@@ -1153,11 +1153,11 @@ spec:css-syntax-3;
   ## The `PasswordCredential` Interface ## {#passwordcredential-interface}
 
   <pre class="idl">
-    [Constructor(HTMLFormElement form),
-     Constructor(PasswordCredentialData data),
-     Exposed=Window,
+    [Exposed=Window,
      SecureContext]
     interface PasswordCredential : Credential {
+      constructor(HTMLFormElement form);
+      constructor(PasswordCredentialData data);
       readonly attribute USVString password;
     };
     PasswordCredential includes CredentialUserData;
@@ -1488,10 +1488,10 @@ spec:css-syntax-3;
   ## The `FederatedCredential` Interface ## {#federatedcredential-interface}
 
   <pre class="idl">
-    [Constructor(FederatedCredentialInit data),
-     Exposed=Window,
+    [Exposed=Window,
      SecureContext]
     interface FederatedCredential : Credential {
+      constructor(FederatedCredentialInit data);
       readonly attribute USVString provider;
       readonly attribute DOMString? protocol;
     };
