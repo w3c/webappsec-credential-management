@@ -65,7 +65,7 @@ spec:infra; type:dfn; for:/; text:set
 spec:infra; type:dfn; for:struct; text:item
 spec:webidl; type:idl; for:/; text:Function
 spec:webidl; type:interface; text:Promise
-spec:promises-guide-1; type:dfn; text:resolve
+spec:webidl; type:dfn; text:resolve
 
 <!-- These need to be exported -->
 spec:html; type:dfn; text:submittable element
@@ -755,7 +755,7 @@ spec:css-syntax-3;
   <h4 id="algorithm-request" algorithm>Request a `Credential`</h4>
 
   The <dfn abstract-op>Request a `Credential`</dfn> algorithm accepts a {{CredentialRequestOptions}}
-  (|options|), and returns a {{Promise}} that resolves with a {{Credential}} if one can be
+  (|options|), and returns a {{Promise}} that [=resolves=] with a {{Credential}} if one can be
   unambigiously obtained, or with `null` if not.
 
   <ol class="algorithm">
@@ -804,7 +804,7 @@ spec:css-syntax-3;
 
         2.  If |credentials| is an [=exception=], [=reject=] |p| with |credentials|.
 
-        3.  If all of the following statements are true, resolve |p| with |credentials|[0] and
+        3.  If all of the following statements are true, [=resolve=] |p| with |credentials|[0] and
             skip the remaining steps:
 
             1.  |credentials|' [=set/size=] is 1
@@ -836,7 +836,7 @@ spec:css-syntax-3;
             {{[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)}},
             given |origin|, |options|, and |sameOriginWithAncestors|.
 
-        9.  If |result| is a {{Credential}} or `null`, resolve |p| with |result|.
+        9.  If |result| is a {{Credential}} or `null`, [=resolve=] |p| with |result|.
 
             Otherwise, [=reject=] |p| with |result|.
 
@@ -876,7 +876,7 @@ spec:css-syntax-3;
   <h4 id="algorithm-store" algorithm>Store a `Credential`</h4>
 
   The <dfn abstract-op>Store a `Credential`</dfn> algorithm accepts a {{Credential}}
-  (|credential|), and returns a {{Promise}} which resolves once the object is persisted to the
+  (|credential|), and returns a {{Promise}} which [=resolves=] once the object is persisted to the
   [=credential store=].
 
   <ol class="algorithm">
@@ -905,7 +905,7 @@ spec:css-syntax-3;
   <h4 id="algorithm-create" algorithm>Create a `Credential`</h4>
 
   The <dfn abstract-op>Create a `Credential`</dfn> algorithm accepts a {{CredentialCreationOptions}}
-  (|options|), and returns a {{Promise}} which resolves with a {{Credential}} if one can be created
+  (|options|), and returns a {{Promise}} which [=resolves=] with a {{Credential}} if one can be created
   using the options provided, or `null` if no {{Credential}} can be created. In exceptional
   circumstances, the {{Promise}} may reject with an appropriate exception:
 
@@ -985,7 +985,7 @@ spec:css-syntax-3;
   <h4 id="algorithm-prevent-silent-access" algorithm>Prevent Silent Access</h4>
 
   The <dfn abstract-op>Prevent Silent Access</dfn> algorithm accepts an [=environment settings
-  object=] (|settings|), and returns a {{Promise}} which resolves once the `prevent silent access`
+  object=] (|settings|), and returns a {{Promise}} which [=resolves=] once the `prevent silent access`
   flag is persisted to the [=credential store=].
 
   <ol class="algorithm">
@@ -2009,7 +2009,7 @@ spec:css-syntax-3;
   ## Timing Attacks ## {#security-timing}
 
   If the user has no credentials for an origin, a call to {{CredentialsContainer/get()}} will
-  resolve very quickly indeed. A malicious website could distinguish between a user with no
+  [=resolve=] very quickly indeed. A malicious website could distinguish between a user with no
   credentials and a user with credentials who chooses not to share them.
 
   User agents SHOULD also rate-limit credential requests. It's almost certainly abusive for a page
@@ -2241,7 +2241,7 @@ spec:css-syntax-3;
   interaction, perhaps with websites other than the one which requested credentials. We hope that
   the Promise-based system we've settled on is extensible enough to support these kinds of
   asynchronous flows which could require some level of interaction between multiple browsing
-  contexts (e.g. mediated activity on <code>idp.com</code> might resolve a Promise handed back to
+  contexts (e.g. mediated activity on <code>idp.com</code> might [=resolve=] a Promise handed back to
   <code>rp.com</code>) or between devices and user agents (e.g. [[WEBAUTHN]]) in the future without
   redesigning the API from the ground up.
 
