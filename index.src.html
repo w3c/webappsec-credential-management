@@ -250,7 +250,7 @@ spec:css-syntax-3;
   1.  If |settings| has no [=environment settings object/responsible browsing context=],
       return `false`.
 
-      Note: the above check ascertains whether we are in either a [=Worker=] context or a
+      Note: the above check ascertains whether we are in either a {{Worker}} context or a
       non-[=top-level browsing context=], see Section [[#security-origin-confusion]]).
 
   2.  Let |origin| be |settings|' [=environment settings object/origin=].
@@ -1654,7 +1654,7 @@ spec:css-syntax-3;
   <ol class="algorithm">
     1.  Assert: |options|["{{CredentialRequestOptions/federated}}"] [=map/exists=].
 
-    2.  If <var ignore>sameOriginWithAncestors</var> is `false`, return a "{{NotAllowedError}}" {{DOMException}}.
+    2.  If |sameOriginWithAncestors| is `false`, return a "{{NotAllowedError}}" {{DOMException}}.
 
         Note: This restriction aims to address the concern raised in [[#security-origin-confusion]].
 
@@ -1684,7 +1684,7 @@ spec:css-syntax-3;
 
   <ol class="algorithm">
     1.  Assert: |options|["{{CredentialCreationOptions/federated}}"] [=map/exists=], and
-        <var ignore>sameOriginWithAncestors</var> is unused.
+        |sameOriginWithAncestors| is unused.
 
     2.  Set |options|["{{CredentialCreationOptions/federated}}"]'s {{FederatedCredentialInit/origin}}
         member's value to |origin|'s value.
