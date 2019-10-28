@@ -250,7 +250,7 @@ spec:css-syntax-3;
   1.  If |settings| has no [=environment settings object/responsible browsing context=],
       return `false`.
 
-      Note: the above check ascertains whether we are in a [=Worker=] context or a 
+      Note: the above check ascertains whether we are in either a [=Worker=] context or a
       non-[=top-level browsing context=], see Section [[#security-origin-confusion]]).
 
   2.  Let |origin| be |settings|' [=environment settings object/origin=].
@@ -325,15 +325,15 @@ spec:css-syntax-3;
   [[#passwordcredential-interface]], [[#federatedcredential-interface]], and [[WEBAUTHN]].
 
   <h5 id="algorithm-collect-creds" algorithm>`[[CollectFromCredentialStore]]` internal method</h5>
-    <dfn for="Credential" method export>\[[CollectFromCredentialStore]](origin, options, crossOrigin)</dfn>
+    <dfn for="Credential" method export>\[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)</dfn>
     is called with an [=environment settings object/origin=], a {{CredentialRequestOptions}}, and a boolean which
-    is true iff the caller's [=environment settings object=] is [=cross-origin with its ancestors=].
+    is true iff the caller's [=environment settings object=] is [=same-origin with its ancestors=].
     The algorithm returns a set of {{Credential}} objects from the user agent's [=credential store=] that
     match the options provided. If no matching {{Credential}} objects are available, the
     returned set will be empty.
 
     {{Credential}}'s default implementation of
-    {{Credential/[[CollectFromCredentialStore]](origin, options, crossOrigin)}}:
+    {{Credential/[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)}}:
 
     <ol class="algorithm">
       1.  Return an empty set.
@@ -341,10 +341,10 @@ spec:css-syntax-3;
 
 
   <h5 id="algorithm-discover-creds" algorithm>`[[DiscoverFromExternalSource]]` internal method</h5>
-    <dfn for="Credential" method export>\[[DiscoverFromExternalSource]](origin, options, crossOrigin)</dfn>
+    <dfn for="Credential" method export>\[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)</dfn>
     is called [=in parallel=] with an [=environment settings object/origin=], a {{CredentialRequestOptions}} object,
     and a boolean which is true iff the caller's [=environment settings object=] is
-    [=cross-origin with its ancestors=].
+    [=same-origin with its ancestors=].
     It returns a {{Credential}} if one can be
     returned given the options provided, `null` if no credential is available, or an error if
     discovery fails (for example, incorrect options could produce a {{TypeError}}). If this
@@ -352,29 +352,29 @@ spec:css-syntax-3;
     method is responsible for generating new [=credentials=] using a [=credential source=].
 
     {{Credential}}'s default implementation of
-    {{Credential/[[DiscoverFromExternalSource]](origin, options, crossOrigin)}}:
+    {{Credential/[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)}}:
 
     <ol class="algorithm">
       1.  Return `null`.
     </ol>
 
   <h5 id="algorithm-store-cred" algorithm>`[[Store]]` internal method</h5>
-    <dfn for="Credential" method export>\[[Store]](credential, crossOrigin)</dfn>
+    <dfn for="Credential" method export>\[[Store]](credential, sameOriginWithAncestors)</dfn>
     is called [=in parallel=] with a {{Credential}}, and a boolean which is true iff the caller's
-    [=environment settings object=] is [=cross-origin with its ancestors=].
+    [=environment settings object=] is [=same-origin with its ancestors=].
     The algorithm returns once {{Credential}} is persisted to the [=credential store=].
 
-    {{Credential}}'s default implementation of {{Credential/[[Store]](credential, crossOrigin)}}:
+    {{Credential}}'s default implementation of {{Credential/[[Store]](credential, sameOriginWithAncestors)}}:
 
     <ol class="algorithm">
       1.  Return `undefined`.
     </ol>
 
   <h5 id="algorithm-create-cred" algorithm>`[[Create]]` internal method</h5>
-    <dfn for="Credential" method export>\[[Create]](origin, options, crossOrigin)</dfn>
+    <dfn for="Credential" method export>\[[Create]](origin, options, sameOriginWithAncestors)</dfn>
     is called [=in parallel=] with an [=environment settings object/origin=], a {{CredentialCreationOptions}},
     and a boolean which is true iff the caller's
-    [=environment settings object=] is [=cross-origin with its ancestors=].
+    [=environment settings object=] is [=same-origin with its ancestors=].
     The algorithm either:
 
     * creates a {{Credential}}, or
@@ -388,7 +388,7 @@ spec:css-syntax-3;
 
     Note: This algorithm's steps are defined on a per-[=credential type=] basis.
 
-    {{Credential}}'s default implementation of {{Credential/[[Create]](origin, options, crossOrigin)}}:
+    {{Credential}}'s default implementation of {{Credential/[[Create]](origin, options, sameOriginWithAncestors)}}:
 
      <ol class="algorithm">
       1.  Return `null`.
@@ -768,7 +768,10 @@ spec:css-syntax-3;
 
     5.  Let |origin| be the [=current settings object=]'s [=environment settings object/origin=].
 
-    4.  If |settings|'s [=responsible document=] is [=allowed to use=] any of these features:
+    6.  Let |sameOriginWithAncestors| be `true` if |settings| is [=same-origin with
+        its ancestors=], and `false` otherwise.
+
+    ?.  If |settings|'s [=responsible document=] is [=allowed to use=] any of these features:
 
         <dl class="switch">
             :   <a data-lt="publickey-credentials-feature">publickey-credentials</a>,
@@ -795,7 +798,7 @@ spec:css-syntax-3;
 
         1.  Let |credentials| be the result of <a abstract-op lt="collect local">collecting
             `Credential`s from the credential store</a>, given |origin|, |options|, and
-            |crossOrigin|.
+            |sameOriginWithAncestors|.
 
         2.  If |credentials| is an [=exception=], [=reject=] |p| with |credentials|.
 
@@ -828,8 +831,8 @@ spec:css-syntax-3;
         7.  Assert: |choice| is an [=interface object=].
 
         8.  Let |result| be the result of executing |choice|'s
-            {{[[DiscoverFromExternalSource]](origin, options, crossOrigin)}},
-            given |origin|, |options|, and |crossOrigin|.
+            {{[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)}},
+            given |origin|, |options|, and |sameOriginWithAncestors|.
 
         9.  If |result| is a {{Credential}} or `null`, resolve |p| with |result|.
 
@@ -842,7 +845,7 @@ spec:css-syntax-3;
 
   Given an [=environment settings object/origin=] (|origin|),
   a {{CredentialRequestOptions}} (|options|), and a boolean which is `true` iff the calling
-  context is [=cross-origin with its ancestors=] (|crossOrigin|), the user agent may
+  context is [=same-origin with its ancestors=] (|sameOriginWithAncestors|), the user agent may
   <dfn abstract-op local-lt="collect local">collect `Credential`s from the credential store</dfn>,
   returning a set of {{Credential}} objects stored by the user agent locally that match |options|'
   filter. If no such {{Credential}} objects are known, the returned set will be empty:
@@ -853,8 +856,8 @@ spec:css-syntax-3;
     2.  For each |interface| in |options|' <a>relevant credential interface objects</a>:
 
         1.  Let |r| be the result of executing |interface|'s
-            {{Credential/[[CollectFromCredentialStore]](origin, options, crossOrigin)}} internal method on
-            |origin|, |options|, and |crossOrigin|.
+            {{Credential/[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)}} internal method on
+            |origin|, |options|, and |sameOriginWithAncestors|.
 
         2.  If |r| is an [=exception=], return |r|.
 
@@ -879,7 +882,7 @@ spec:css-syntax-3;
 
     2.  Assert: |settings| is a [=secure context=].
 
-    3.  Let |crossOrigin| be `true` if the [=current settings object=] is [=cross-origin
+    3.  Let |sameOriginWithAncestors| be `true` if the [=current settings object=] is [=same-origin
         with its ancestors=], and `false` otherwise.
 
     4.  Let |p| be [=a new promise=].
@@ -887,8 +890,8 @@ spec:css-syntax-3;
     5.  Run the following steps [=in parallel=]:
 
         1.  Let |r| be the result of executing |credential|'s [=interface object=]'s
-            {{Credential/[[Store]](credential, crossOrigin)}} internal method on
-            |credential| and |crossOrigin|.
+            {{Credential/[[Store]](credential, sameOriginWithAncestors)}} internal method on
+            |credential| and |sameOriginWithAncestors|.
 
         2.  If |r| is an [=exception=], [=reject=] |p| with |r|.
 
@@ -911,10 +914,10 @@ spec:css-syntax-3;
 
     3.  Let |global| be |settings|' [=environment settings object/global object=].
 
-    4.  Let |crossOrigin| be `false` if the [=current settings object=] is [=same-origin
-        with its ancestors=], and `true` otherwise.
+    4.  Let |sameOriginWithAncestors| be `true` if the [=current settings object=] is [=same-origin
+        with its ancestors=], and `false` otherwise.
 
-    4.  If |settings|'s [=responsible document=] is [=allowed to use=] any of these features:
+    ?.  If |settings|'s [=responsible document=] is [=allowed to use=] any of these features:
 
         <dl class="switch">
             :   <a data-lt="webauthn-feature">webauthn</a>,
@@ -961,8 +964,8 @@ spec:css-syntax-3;
     10.  Run the following steps [=in parallel=]:
 
         1.  Let |r| be the result of executing |interfaces|[0]'s
-            {{Credential/[[Create]](origin, options, crossOrigin)}} internal method on
-            |origin|, |options|, and |crossOrigin|.
+            {{Credential/[[Create]](origin, options, sameOriginWithAncestors)}} internal method on
+            |origin|, |options|, and |sameOriginWithAncestors|.
 
         2.  If |r| is an [=exception=], [=reject=] |p| with |r|, and terminate these substeps.
 
@@ -1274,32 +1277,32 @@ spec:css-syntax-3;
   {{PasswordCredential}} objects are [=Credential/origin bound=].
 
   {{PasswordCredential}}'s [=interface object=] inherits {{Credential}}'s implementation of
-  {{Credential/[[DiscoverFromExternalSource]](origin, options, crossOrigin)}}, and defines
+  {{Credential/[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)}}, and defines
   its own implementation of
-  {{PasswordCredential/[[CollectFromCredentialStore]](origin, options, crossOrigin)}},
-  {{PasswordCredential/[[Create]](origin, options, crossOrigin)}}, and
-  {{PasswordCredential/[[Store]](credential, crossOrigin)}}.
+  {{PasswordCredential/[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)}},
+  {{PasswordCredential/[[Create]](origin, options, sameOriginWithAncestors)}}, and
+  {{PasswordCredential/[[Store]](credential, sameOriginWithAncestors)}}.
 
   ## Algorithms ## {#passwordcredential-algorithms}
 
   <h4 algorithm id="collectfromcredentialstore-passwordcredential">
-    `PasswordCredential`'s `[[CollectFromCredentialStore]](origin, options, crossOrigin)`
+    `PasswordCredential`'s `[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)`
   </h4>
 
-  <dfn for="PasswordCredential" method>\[[CollectFromCredentialStore]](origin, options, crossOrigin)</dfn>
+  <dfn for="PasswordCredential" method>\[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)</dfn>
   is called with an [=origin=] (|origin|), a {{CredentialRequestOptions}} (|options|),
-  and a boolean which is `true` iff the calling context is [=cross-origin with its ancestors=]
-  (|crossOrigin|).
+  and a boolean which is `true` iff the calling context is [=same-origin with its ancestors=]
+  (|sameOriginWithAncestors|).
   The algorithm returns a set of {{Credential}} objects from
   the [=credential store=]. If no matching {{Credential}} objects are available, the returned set
   will be empty.
 
-  The algorithm will return a `NotAllowedError` if |crossOrigin| is not `true`.
+  The algorithm will return a `NotAllowedError` if |sameOriginWithAncestors| is not `true`.
 
   <ol class="algorithm">
     1.  Assert: |options|["{{CredentialRequestOptions/password}}"] [=map/exists=].
 
-    2.  If |crossOrigin is `false`, return a "{{NotAllowedError}}" {{DOMException}}.
+    2.  If |sameOriginWithAncestors is `false`, return a "{{NotAllowedError}}" {{DOMException}}.
 
         Note: This restriction aims to address the concern raised in [[#security-origin-confusion]].
 
@@ -1313,13 +1316,13 @@ spec:css-syntax-3;
   </ol>
 
   <h4 algorithm id="create-passwordcredential">
-    `PasswordCredential`'s `[[Create]](origin, options, crossOrigin)`
+    `PasswordCredential`'s `[[Create]](origin, options, sameOriginWithAncestors)`
   </h4>
 
-  <dfn for="PasswordCredential" method>\[[Create]](origin, options, crossOrigin)</dfn>
+  <dfn for="PasswordCredential" method>\[[Create]](origin, options, sameOriginWithAncestors)</dfn>
   is called with an [=origin=] (|origin|), a
   {{CredentialCreationOptions}} (|options|), and a boolean which is `true` iff the calling
-  context is [=cross-origin with its ancestors=] (|crossOrigin|).
+  context is [=same-origin with its ancestors=] (|sameOriginWithAncestors|).
   The algorithm returns a {{PasswordCredential}} if one can be created,
   `null` otherwise. The {{CredentialCreationOptions}} dictionary must have a `password` member which
   holds either an {{HTMLFormElement}} or a {{PasswordCredentialData}}. If that member's value cannot be
@@ -1327,7 +1330,7 @@ spec:css-syntax-3;
 
   <ol class="algorithm">
     1.  Assert: |options|["{{CredentialCreationOptions/password}}"] [=map/exists=], and
-        |crossOrigin| is unused.
+        |sameOriginWithAncestors| is unused.
 
     2.  If |options|["{{CredentialCreationOptions/password}}"] is an {{HTMLFormElement}}, return the
         result of executing <a abstract-op>Create a `PasswordCredential` from an
@@ -1341,19 +1344,19 @@ spec:css-syntax-3;
   </ol>
 
   <h4 algorithm id="store-passwordcredential">
-    `PasswordCredential`'s `[[Store]](credential, crossOrigin)`
+    `PasswordCredential`'s `[[Store]](credential, sameOriginWithAncestors)`
   </h4>
 
-  <dfn for="PasswordCredential" method>\[[Store]](credential, crossOrigin)</dfn> is
+  <dfn for="PasswordCredential" method>\[[Store]](credential, sameOriginWithAncestors)</dfn> is
   called with a {{PasswordCredential}} (|credential|), and a boolean which is `true` iff the calling
-  context is [=cross-origin with its ancestors=] (|crossOrigin|). The algorithm returns
+  context is [=same-origin with its ancestors=] (|sameOriginWithAncestors|). The algorithm returns
   `undefined` once |credential| is persisted to the [=credential store=].
 
-  The algorithm will return a `NotAllowedError` if |crossOrigin| is not `true`.
+  The algorithm will return a `NotAllowedError` if |sameOriginWithAncestors| is not `true`.
 
   <ol class="algorithm">
     1.  Return a "{{NotAllowedError}}" {{DOMException}} without altering the user agent's
-        [=credential store=] if |crossOrigin| is `false`.
+        [=credential store=] if |sameOriginWithAncestors| is `false`.
 
         Note: This restriction aims to address the concern raised in [[#security-origin-confusion]].
 
@@ -1605,15 +1608,15 @@ spec:css-syntax-3;
   {{FederatedCredential}} objects are [=Credential/origin bound=].
 
   {{FederatedCredential}}'s [=interface object=] inherits {{Credential}}'s implementation of
-  {{Credential/[[DiscoverFromExternalSource]](origin, options, crossOrigin)}},
+  {{Credential/[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)}},
   and defines its own implementation of
-  {{FederatedCredential/[[CollectFromCredentialStore]](origin, options, crossOrigin)}},
-  {{FederatedCredential/[[Create]](origin, options, crossOrigin)}}, and
-  {{FederatedCredential/[[Store]](credential, crossOrigin)}}.
+  {{FederatedCredential/[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)}},
+  {{FederatedCredential/[[Create]](origin, options, sameOriginWithAncestors)}}, and
+  {{FederatedCredential/[[Store]](credential, sameOriginWithAncestors)}}.
 
   Note: If, in the future, we teach the user agent to obtain authentication tokens on a user's
   behalf, we could do so by building an implementation of
-  `[[DiscoverFromExternalSource]](origin, options, crossOrigin)`.
+  `[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)`.
 
   ### Identifying Providers ### {#provider-identification}
 
@@ -1638,12 +1641,12 @@ spec:css-syntax-3;
   ## Algorithms ## {#federatedcredential-algorithms}
 
   <h4 algorithm id="collectfromcredentialstore-federatedcredential">
-    `FederatedCredential`'s `[[CollectFromCredentialStore]](origin, options, crossOrigin)`
+    `FederatedCredential`'s `[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)`
   </h4>
 
-  <dfn for="FederatedCredential" method>\[[CollectFromCredentialStore]](origin, options, crossOrigin)</dfn>
+  <dfn for="FederatedCredential" method>\[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)</dfn>
   is called with an [=origin=] (|origin|), a {{CredentialRequestOptions}} (|options|),
-  and a boolean which is `true` iff the calling context is [=cross-origin with its ancestors=] (|crossOrigin|).
+  and a boolean which is `true` iff the calling context is [=same-origin with its ancestors=] (|sameOriginWithAncestors|).
   The algorithm returns a set of {{Credential}} objects from
   the [=credential store=]. If no matching {{Credential}} objects are available, the returned set
   will be empty.
@@ -1651,7 +1654,7 @@ spec:css-syntax-3;
   <ol class="algorithm">
     1.  Assert: |options|["{{CredentialRequestOptions/federated}}"] [=map/exists=].
 
-    2.  If <var ignore>crossOrigin</var> is `false`, return a "{{NotAllowedError}}" {{DOMException}}.
+    2.  If <var ignore>sameOriginWithAncestors</var> is `false`, return a "{{NotAllowedError}}" {{DOMException}}.
 
         Note: This restriction aims to address the concern raised in [[#security-origin-confusion]].
 
@@ -1669,19 +1672,19 @@ spec:css-syntax-3;
   </ol>
 
   <h4 algorithm id="create-federatedcredential">
-    `FederatedCredential`'s `[[Create]](origin, options, crossOrigin)`
+    `FederatedCredential`'s `[[Create]](origin, options, sameOriginWithAncestors)`
   </h4>
 
-  <dfn for="FederatedCredential" method>\[[Create]](origin, options, crossOrigin)</dfn>
+  <dfn for="FederatedCredential" method>\[[Create]](origin, options, sameOriginWithAncestors)</dfn>
   is called with an [=origin=] (|origin|), a
   {{CredentialCreationOptions}} (|options|), and a boolean which is `true` iff the
-  calling context is [=cross-origin with its ancestors=] (|crossOrigin|).
+  calling context is [=same-origin with its ancestors=] (|sameOriginWithAncestors|).
   The algorithm returns a {{FederatedCredential}} if one can be created,
   `null` otherwise, or an [=exception=] in exceptional circumstances:
 
   <ol class="algorithm">
     1.  Assert: |options|["{{CredentialCreationOptions/federated}}"] [=map/exists=], and
-        <var ignore>crossOrigin</var> is unused.
+        <var ignore>sameOriginWithAncestors</var> is unused.
 
     2.  Set |options|["{{CredentialCreationOptions/federated}}"]'s {{FederatedCredentialInit/origin}}
         member's value to |origin|'s value.
@@ -1691,19 +1694,19 @@ spec:css-syntax-3;
   </ol>
 
   <h4 algorithm id="store-federatedcredential">
-    `FederatedCredential`'s `[[Store]](credential, crossOrigin)`
+    `FederatedCredential`'s `[[Store]](credential, sameOriginWithAncestors)`
   </h4>
 
-  <dfn for="FederatedCredential" method>\[[Store]](credential, crossOrigin)</dfn> is
+  <dfn for="FederatedCredential" method>\[[Store]](credential, sameOriginWithAncestors)</dfn> is
   called with a {{FederatedCredential}} (|credential|), and a boolean which is `true` iff the
-  calling context is [=cross-origin with its ancestors=] (|crossOrigin|). The algorithm
+  calling context is [=same-origin with its ancestors=] (|sameOriginWithAncestors|). The algorithm
   returns `undefined` once |credential| is persisted to the [=credential store=].
 
-  The algorithm will return a `NotAllowedError` if |crossOrigin| is not `true`.
+  The algorithm will return a `NotAllowedError` if |sameOriginWithAncestors| is not `true`.
 
   <ol class="algorithm">
     1.  Return a "{{NotAllowedError}}" {{DOMException}} without altering the user agent's
-        [=credential store=] if <var ignore>crossOrigin</var> is `false`.
+        [=credential store=] if <var ignore>sameOriginWithAncestors</var> is `false`.
 
         Note: This restriction aims to address the concern raised in [[#security-origin-confusion]].
 
@@ -1990,14 +1993,14 @@ spec:css-syntax-3;
 
   Specific credential types, however, will be difficult to expose in those contexts without risk.
   Those credential types are restricted via checks in their
-  {{Credential/[[Create]](origin, options, crossOrigin)}},
-  {{Credential/[[CollectFromCredentialStore]](origin, options, crossOrigin)}},
-  {{Credential/[[DiscoverFromExternalSource]](origin, options, crossOrigin)}}, and
-  {{Credential/[[Store]](credential, crossOrigin)}}
+  {{Credential/[[Create]](origin, options, sameOriginWithAncestors)}},
+  {{Credential/[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)}},
+  {{Credential/[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)}}, and
+  {{Credential/[[Store]](credential, sameOriginWithAncestors)}}
   methods, as appropriate.
 
   For example {{PasswordCredential}}'s
-  {{PasswordCredential/[[CollectFromCredentialStore]](origin, options, crossOrigin)}} method
+  {{PasswordCredential/[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)}} method
   will immedietely return an empty set if called from inside a {{Worker}}, or a non-[=top-level
   browsing context=].
 
@@ -2105,27 +2108,27 @@ spec:css-syntax-3;
         </pre>
       </div>
 
-  2.  Define appropriate {{Credential/[[Create]](origin, options, crossOrigin)}},
-      {{Credential/[[CollectFromCredentialStore]](origin, options, crossOrigin)}},
-      {{Credential/[[DiscoverFromExternalSource]](origin, options, crossOrigin)}}, and
-      {{Credential/[[Store]](credential, crossOrigin)}} methods on `ExampleCredential`'s
-      [=interface object=]. {{Credential/[[CollectFromCredentialStore]](origin, options, crossOrigin)}}
+  2.  Define appropriate {{Credential/[[Create]](origin, options, sameOriginWithAncestors)}},
+      {{Credential/[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)}},
+      {{Credential/[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)}}, and
+      {{Credential/[[Store]](credential, sameOriginWithAncestors)}} methods on `ExampleCredential`'s
+      [=interface object=]. {{Credential/[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)}}
       is appropriate for [=credentials=] that remain [=effective=] forever and
       can therefore simply be copied out of the [=credential store=], while
-      {{Credential/[[DiscoverFromExternalSource]](origin, options, crossOrigin)}} is appropriate for
+      {{Credential/[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)}} is appropriate for
       [=credentials=] that need to be re-generated from a [=credential source=].
 
       Long-running operations, like those in {{PublicKeyCredential}}'s
-      {{PublicKeyCredential/[[Create]](origin, options, crossOrigin)}} and
-      {{PublicKeyCredential/[[DiscoverFromExternalSource]](origin, options, crossOrigin)}}
+      {{PublicKeyCredential/[[Create]](origin, options, sameOriginWithAncestors)}} and
+      {{PublicKeyCredential/[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)}}
       operations are encouraged to use <code>options.signal</code> to allow developers to abort
       the operation. See [[dom#abortcontroller-api-integration]] for detailed instructions.
 
       <div class="example">
-        `ExampleCredential`'s `[[CollectFromCredentialStore]](origin, options, crossOrigin)`
+        `ExampleCredential`'s `[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)`
         internal method is called
         with an [=environment settings object/origin=] (`origin`), a CredentialRequestOptions
-        object (`options`), and a boolean which is `true` iff the calling context is [=cross-origin with its ancestors=].
+        object (`options`), and a boolean which is `true` iff the calling context is [=same-origin with its ancestors=].
         The algorithm returns a set of {{Credential}}
         objects that match the options provided. If no matching {{Credential}} objects are
         available, the returned set will be empty.
