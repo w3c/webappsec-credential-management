@@ -439,6 +439,7 @@ spec:css-syntax-3;
       Promise&lt;Credential&gt; store(Credential credential);
       Promise&lt;Credential?&gt; create(optional CredentialCreationOptions options = {});
       Promise&lt;void&gt; preventSilentAccess();
+      readonly attribute boolean conditionalMediationSupported;
     };
 
     dictionary CredentialData {
@@ -487,6 +488,11 @@ spec:css-syntax-3;
 
         Note: This function was previously called `requireUserMediation()` which should be considered
         deprecated.
+
+    :   <dfn attribute>conditionalMediationSupported</dfn>
+    ::  {{conditionalMediationSupported}} indicates whether the user agent supports the [=conditional=]
+        approach to [[#mediation-requirements|mediation of credential requests]]. If supported,
+        {{conditionalMediationSupported}} MUST return `true`, otherwise it MUST return `false`.
   </div>
 
   <div algorithm="create credentialscontainer">
@@ -592,6 +598,7 @@ spec:css-syntax-3;
     enum CredentialMediationRequirement {
       "silent",
       "optional",
+      "conditional",
       "required"
     };
   </pre>
@@ -615,6 +622,15 @@ spec:css-syntax-3;
         developer has reasonable confidence that a user expects to start a sign-in operation. If
         a user has just clicked "sign-in" for example, then they won't be surprised or confused to
         see a [=credential chooser=] if necessary.
+
+    :   <dfn>conditional</dfn>
+    ::  Discovered credentials are presented to the user in a non-modal dialog along with an
+        indication of the origin which is requesting credentials. If the user makes a gesture
+        outside of the dialog, it closes and the `get()` method returns to the caller empty-handed
+        without causing a user-visible error condition. If the user makes a gesture that selects
+        a credential, that credential is returned to the caller. [=Requires user mediation=] is
+        treated as being `true` regardless of its actual value: the [=conditional=] behavior
+        always involves user mediation of some sort if applicable credentials are discovered.
 
     :   <dfn>required</dfn>
     ::  The user agent will not hand over credentials without [=user mediation=], even if the
