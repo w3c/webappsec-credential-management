@@ -12,8 +12,6 @@ jobs:
       - uses: actions/checkout@v2
       - uses: w3c/spec-prod@v2
         with:
-          SOURCE: index.src.html
-          TOOLCHAIN: bikeshed
           GH_PAGES_BRANCH: gh-pages
           BUILD_FAIL_ON: nothing
           VALIDATE_LINKS: false
