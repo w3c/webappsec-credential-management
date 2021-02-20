@@ -25,6 +25,9 @@ spec: ECMA262; urlPrefix: https://tc39.github.io/ecma262/
   type: dfn
     text: JavaScript realm; url: sec-code-realms
     text: internal method; url: sec-ordinary-object-internal-methods-and-internal-slots
+spec: Feature-Policy; urlPrefix: https://w3c.github.io/webappsec-feature-policy/
+  type: dfn
+    text: policy-controlled feature; url: policy-controlled-feature
 spec: HTML; urlPrefix: https://html.spec.whatwg.org/multipage/
   urlPrefix: forms.html
     type: element-attr
@@ -66,7 +69,7 @@ spec:infra; type:dfn; for:/; text:set
 spec:infra; type:dfn; for:struct; text:item
 spec:webidl; type:idl; for:/; text:Function
 spec:webidl; type:interface; text:Promise
-spec:promises-guide-1; type:dfn; text:resolve
+spec:webidl; type:dfn; text:resolve
 
 <!-- These need to be exported -->
 spec:html; type:dfn; text:submittable element
@@ -232,9 +235,10 @@ spec:css-syntax-3;
 
   Additionally, the [=credential store=] should maintain a <dfn for="origin">`prevent silent
   access` flag</dfn> for [=origins=] (which is set to `true` unless otherwise specified).
-  An origin <dfn for="origin">requires user mediation</dfn> if its flag is set to `true`.
+  An origin <dfn for="origin">requires user mediation</dfn> if its [=prevent silent access flag=]
+  is set to `true`.
 
-  Note: The importance of user mediation is discussed in more detail in [[#user-mediation]].
+  Note: The importance of [=user mediation=] is discussed in more detail in [[#user-mediation]].
 
   Note: The [=credential store=] is an internal implementation detail of a user agent's
   implementation of the API specified in this document, and is not exposed to the web directly.
@@ -249,6 +253,9 @@ spec:css-syntax-3;
 
   1.  If |settings| has no [=environment settings object/responsible browsing context=],
       return `false`.
+
+      Note: the above check ascertains whether we are in either a {{Worker}} context or a
+      non-[=top-level browsing context=], see Section [[#security-origin-confusion]]).
 
   2.  Let |origin| be |settings|' [=environment settings object/origin=].
 
@@ -532,54 +539,6 @@ spec:css-syntax-3;
     {{CredentialRequestOptions/mediation}}.
   </div>
 
-  <div algorithm="relevant credential interfaces">
-    The <dfn for="CredentialRequestOptions">relevant credential interface objects</dfn> for a given
-    {{CredentialRequestOptions}} (|options|) is a set of [=interface objects=], collected as follows:
-
-    <ol class="algorithm">
-      1.  Let |settings| be the <a>current settings object</a>
-
-      2.  Let |interface objects| be the set of [=interface objects=] on |settings|'
-          [=environment settings object/global object=].
-         
-      3.  Let |relevant interface objects| be an empty set.
-      
-      4.  For each |object| in |interface objects|:
-
-          1.  If |object|'s [=inherited interfaces=] do not <a for="set">contain</a> {{Credential}},
-              <a for="iteration">continue</a>.
-
-          2.  Let |key| be |object|'s {{Credential/[[type]]}} slot's value.
-
-          3.  If |options|[|key|] <a for="map">exists</a>, <a for="set">append</a> |object| to
-              |relevant interface objects|.
-    </ol>
-
-    ISSUE: jyasskin@ suggests replacing the iteration through the interface objects with a registry.
-    I'm not sure which is less clear, honestly. I'll leave it like this for the moment, and we can
-    argue about whether this is too much of a `COMEFROM` interface.
-  </div>
-
-  <div algorithm="can collect locally">
-    A given {{CredentialRequestOptions}} |options| is
-    <dfn for="CredentialRequestOptions">matchable <i lang="la">a priori</i></dfn> if the following
-    steps return `true`:
-
-    <ol class="algorithm">
-      1.  For each |interface| in |options|' [=relevant credential interface objects=]:
-
-          1.  If |interface|'s {{Credential/[[discovery]]}} slot's value is not
-              "{{Credential/[[discovery]]/credential store}}", return `false`.
-
-      2.  Return `true`.
-    </ol>
-
-    Note: When executing {{get(options)}}, we only return credentials without [=user mediation=] if
-    the provided {{CredentialRequestOptions}} is <a>matchable <i lang="la">a priori</i></a>. If any
-    credential types are requested that could require discovery from some external service (OAuth
-    tokens, security key authenticators, etc.), then [=user mediation=] will be required in order
-    to guide the discovery process (by choosing a federated identity provider, BTLE device, etc).
-  </div>
 
   ### Mediation Requirements ### {#mediation-requirements}
 
@@ -720,7 +679,9 @@ spec:css-syntax-3;
     </pre>
  
   </div>
-  ## The `CredentialCreationOptions` Dictionary ## {#credentialcreationoptions-dictionary}
+  
+  
+  ### The `CredentialCreationOptions` Dictionary ### {#credentialcreationoptions-dictionary}
 
   In order to create a {{Credential}} via {{CredentialsContainer/create()}}, the caller specifies a
   few parameters in a {{CredentialCreationOptions}} object.
@@ -739,7 +700,7 @@ spec:css-syntax-3;
     :   <dfn>signal</dfn>
     ::  This property lets the developer abort an ongoing {{CredentialsContainer/create()}}
         operation. An aborted operation may complete normally (generally if the abort was received
-        after the operation finished) or reject with an "{{AbortError}}" {{DOMException}}."
+        after the operation finished) or reject with an "{{AbortError}}" {{DOMException}}.
   </div>
 
   ## Algorithms ## {#algorithms}
@@ -747,7 +708,7 @@ spec:css-syntax-3;
   <h4 id="algorithm-request" algorithm>Request a `Credential`</h4>
 
   The <dfn abstract-op>Request a `Credential`</dfn> algorithm accepts a {{CredentialRequestOptions}}
-  (|options|), and returns a {{Promise}} that resolves with a {{Credential}} if one can be
+  (|options|), and returns a {{Promise}} that [=resolves=] with a {{Credential}} if one can be
   unambigiously obtained, or with `null` if not.
 
   <ol class="algorithm">
@@ -762,10 +723,26 @@ spec:css-syntax-3;
 
     5.  Let |origin| be the [=current settings object=]'s [=environment settings object/origin=].
 
-    6.  Let |sameOriginWithAncestors| be `true` if |settings| is [=same-origin with its
-        ancestors=], and `false` otherwise.
+    6.  Let |sameOriginWithAncestors| be `true` if |settings| is [=same-origin with
+        its ancestors=], and `false` otherwise.
 
-    7.  Run the following steps [=in parallel=]:
+    7.  Let |key| be the result of [=map/getting the key=] of |options|.
+    
+        Issue: do we need to in this algo get the [=set=] of
+        |options|' <a>relevant credential interface objects</a> and ensure the latter as well
+        as |options| contain only 1 item/member referring to the same credential type, as is
+        done in steps 5, 6, 7 of [[#algorithm-create]].
+
+    8.  If |key| is "{{PublicKeyCredentialType/public-key}}" then
+        if |settings|' [=responsible document=] is **not** [=allowed to use=] the
+        <a data-lt="publickey-credentials-feature">publickey-credentials</a>
+        [=policy-controlled feature=] return [=a promise rejected with=] `NotSupportedError`.
+
+        Note: <a const>password</a> and
+        <a const>federated</a> [=credential types=] are not presently
+        treated as [=policy-controlled features=], although this may change in the future.
+
+    9.  Run the following steps [=in parallel=]:
 
         1.  Let |credentials| be the result of <a abstract-op lt="collect local">collecting
             `Credential`s from the credential store</a>, given |origin|, |options|, and
@@ -773,7 +750,7 @@ spec:css-syntax-3;
 
         2.  If |credentials| is an [=exception=], [=reject=] |p| with |credentials|.
 
-        3.  If all of the following statements are true, resolve |p| with |credentials|[0] and
+        3.  If all of the following statements are true, [=resolve=] |p| with |credentials|[0] and
             skip the remaining steps:
 
             1.  |credentials|' [=set/size=] is 1
@@ -805,11 +782,11 @@ spec:css-syntax-3;
             {{[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)}},
             given |origin|, |options|, and |sameOriginWithAncestors|.
 
-        9.  If |result| is a {{Credential}} or `null`, resolve |p| with |result|.
+        9.  If |result| is a {{Credential}} or `null`, [=resolve=] |p| with |result|.
 
             Otherwise, [=reject=] |p| with |result|.
 
-    7.  Return |p|.
+    10.  Return |p|.
   </ol>
 
   <h4 id="algorithm-collect-known" algorithm>Collect `Credential`s from the credential store</h4>
@@ -845,7 +822,7 @@ spec:css-syntax-3;
   <h4 id="algorithm-store" algorithm>Store a `Credential`</h4>
 
   The <dfn abstract-op>Store a `Credential`</dfn> algorithm accepts a {{Credential}}
-  (|credential|), and returns a {{Promise}} which resolves once the object is persisted to the
+  (|credential|), and returns a {{Promise}} which [=resolves=] once the object is persisted to the
   [=credential store=].
 
   <ol class="algorithm">
@@ -874,7 +851,7 @@ spec:css-syntax-3;
   <h4 id="algorithm-create" algorithm>Create a `Credential`</h4>
 
   The <dfn abstract-op>Create a `Credential`</dfn> algorithm accepts a {{CredentialCreationOptions}}
-  (|options|), and returns a {{Promise}} which resolves with a {{Credential}} if one can be created
+  (|options|), and returns a {{Promise}} which [=resolves=] with a {{Credential}} if one can be created
   using the options provided, or `null` if no {{Credential}} can be created. In exceptional
   circumstances, the {{Promise}} may reject with an appropriate exception:
 
@@ -890,26 +867,38 @@ spec:css-syntax-3;
 
     5.  Let |interfaces| be the [=set=] of |options|' <a>relevant credential interface objects</a>.
 
-    6.  Return [=a promise rejected with=] `NotSupportedError` if any of the following statements
-        are true:
+    6.  Return [=a promise rejected with=] `NotSupportedError` if any of the statements are true:
 
         1.  |settings| does not have a [=environment settings object/responsible document=].
 
-        2.  |interfaces|' [=list/size=] is greater than 1.
+        2.  |interfaces|' [=list/size=] is other than 1.
 
             Note: It may be reasonable at some point in the future to loosen this restriction, and
             allow the user agent to help the user choose among one of many potential credential
             types in order to support a "sign-up" use case. For the moment, though, we're punting
             on that by restricting the dictionary to a single entry.
 
-    7.  If <code>|options|.{{CredentialCreationOptions/signal}}</code>'s [=AbortSignal/aborted
+    7.  Let |key| be the result of [=map/getting the key=] of |options|.
+
+        Note: |options| has been shown to have exactly one |key| due to steps 5 and 6.2.
+
+    8.  If |key| is "{{PublicKeyCredentialType/public-key}}" then
+        if |settings|' [=responsible document=] is **not** [=allowed to use=] the
+        <a data-lt="publickey-credentials-feature">publickey-credentials</a>
+        [=policy-controlled feature=] return [=a promise rejected with=] `NotSupportedError`.
+
+        Note: <a const>password</a> and
+        <a const>federated</a> [=credential types=] are not presently
+        treated as [=policy-controlled features=], although this may change in the future.
+
+    8.  If <code>|options|.{{CredentialCreationOptions/signal}}</code>'s [=AbortSignal/aborted
         flag=] is set, then return [=a promise rejected with=] an "{{AbortError}}" {{DOMException}}.
 
-    8.  Let |p| be [=a new promise=].
+    9.  Let |p| be [=a new promise=].
 
-    9.  Let |origin| be |settings|'s [=environment settings object/origin=].
+    10.  Let |origin| be |settings|'s [=environment settings object/origin=].
 
-    10.  Run the following steps [=in parallel=]:
+    11.  Run the following steps [=in parallel=]:
 
         1.  Let |r| be the result of executing |interfaces|[0]'s
             {{Credential/[[Create]](origin, options, sameOriginWithAncestors)}} internal method on
@@ -923,15 +912,15 @@ spec:css-syntax-3;
 
         5.  [=Queue a task=] on |global|'s [=DOM manipulation task source=] to run the following substeps:
 
-            1. [=Resolve=] |p| with the result of [=promise-calling=] |r| given |global|.
+            1. [=Resolve=] |p| with the result of [promise-calling](https://www.w3.org/2001/tag/doc/promises-guide#should-promise-call) |r| given |global|.
 
-    11.  Return |p|.
+    12.  Return |p|.
   </ol>
 
   <h4 id="algorithm-prevent-silent-access" algorithm>Prevent Silent Access</h4>
 
   The <dfn abstract-op>Prevent Silent Access</dfn> algorithm accepts an [=environment settings
-  object=] (|settings|), and returns a {{Promise}} which resolves once the `prevent silent access`
+  object=] (|settings|), and returns a {{Promise}} which [=resolves=] once the `prevent silent access`
   flag is persisted to the [=credential store=].
 
   <ol class="algorithm">
@@ -948,6 +937,63 @@ spec:css-syntax-3;
     4.  Retun |p|.
   </ol>
 
+  ### Collect Relevant Credential Interface Objects ### {#sctn-alg-relevantcredentialinterfaces}
+
+  <div algorithm="relevant credential interfaces">
+    The <dfn for="CredentialRequestOptions">relevant credential interface objects</dfn> for a given
+    {{CredentialRequestOptions}} or a given {{CredentialCreationOptions}} (either known herein as
+    |options|) is a set of [=interface objects=], collected as follows:
+
+    <ol class="algorithm">
+      1.  Let |settings| be the <a>current settings object</a>
+
+      2.  Let |interface objects| be the set of [=interface objects=] on |settings|'
+          [=environment settings object/global object=].
+
+      3.  Let |relevant credential interface objects| be an empty set.
+
+      4.  For each |object| in |interface objects|:
+
+          1.  If |object|'s [=inherited interfaces=] do not <a for="set">contain</a> {{Credential}},
+              <a for="iteration">continue</a>.
+
+          2.  Let |key| be |object|'s {{Credential/[[type]]}} slot's value.
+
+          3.  If |options|[|key|] <a for="map">exists</a>, <a for="set">append</a> |object| to
+              |relevant credential interface objects|.
+
+      5.  Return |relevant credential interface objects|.
+    </ol>
+
+    ISSUE: jyasskin@ suggests replacing the iteration through the interface objects with a registry.
+    I'm not sure which is less clear, honestly. I'll leave it like this for the moment, and we can
+    argue about whether this is too much of a `COMEFROM` interface.
+  </div>
+
+  ### Options are Matchable <i lang="la">a priori</i> ### {#sctn-alg-matchable-a-priori}
+
+  <div algorithm="can collect locally">
+    A given {{CredentialRequestOptions}} |options| is
+    <dfn for="CredentialRequestOptions">matchable <i lang="la">a priori</i></dfn>
+    (see Note below) if the following
+    steps return `true`:
+
+    <ol class="algorithm">
+      1.  For each |interface| in |options|' [=relevant credential interface objects=]:
+
+          1.  If |interface|'s {{Credential/[[discovery]]}} slot's value is not
+              "{{Credential/[[discovery]]/credential store}}", return `false`.
+
+      2.  Return `true`.
+    </ol>
+
+    Note: When executing {{get(options)}}, we only return credentials without [=user mediation=] if
+    the provided {{CredentialRequestOptions}} is <a>matchable <i lang="la">a priori</i></a>,
+    i.e., locally from the [=credential store=]. If any
+    credential types are requested that could require discovery from some external service (e.g., OAuth
+    tokens, FIDO security key, etc.), then [=user mediation=] will be required in order
+    to guide the discovery process (by choosing a federated identity provider, security key, etc).
+  </div>
 
 </section>
 
@@ -1173,7 +1219,7 @@ spec:css-syntax-3;
 
     :   {{Credential/[[type]]}}
     ::  The {{PasswordCredential}} [=interface object=] has an internal slot named `[[type]]` whose
-        value is "<dfn const for="Credential/[[type]]">`password`</dfn>".
+        value is "<code><dfn const for="Credential/[[type]]">password</dfn></code>".
 
     :   {{Credential/[[discovery]]}}
     ::  The {{PasswordCredential}} [=interface object=] has an internal slot named `[[discovery]]`
@@ -1602,7 +1648,7 @@ spec:css-syntax-3;
   <ol class="algorithm">
     1.  Assert: |options|["{{CredentialRequestOptions/federated}}"] [=map/exists=].
 
-    2.  If <var ignore>sameOriginWithAncestors</var> is `false`, return a "{{NotAllowedError}}" {{DOMException}}.
+    2.  If |sameOriginWithAncestors| is `false`, return a "{{NotAllowedError}}" {{DOMException}}.
 
         Note: This restriction aims to address the concern raised in [[#security-origin-confusion]].
 
@@ -1632,7 +1678,7 @@ spec:css-syntax-3;
 
   <ol class="algorithm">
     1.  Assert: |options|["{{CredentialCreationOptions/federated}}"] [=map/exists=], and
-        <var ignore>sameOriginWithAncestors</var> is unused.
+        |sameOriginWithAncestors| is unused.
 
     2.  Set |options|["{{CredentialCreationOptions/federated}}"]'s {{FederatedCredentialInit/origin}}
         member's value to |origin|'s value.
@@ -1955,7 +2001,7 @@ spec:css-syntax-3;
   ## Timing Attacks ## {#security-timing}
 
   If the user has no credentials for an origin, a call to {{CredentialsContainer/get()}} will
-  resolve very quickly indeed. A malicious website could distinguish between a user with no
+  [=resolve=] very quickly indeed. A malicious website could distinguish between a user with no
   credentials and a user with credentials who chooses not to share them.
 
   User agents SHOULD also rate-limit credential requests. It's almost certainly abusive for a page
@@ -2187,7 +2233,7 @@ spec:css-syntax-3;
   interaction, perhaps with websites other than the one which requested credentials. We hope that
   the Promise-based system we've settled on is extensible enough to support these kinds of
   asynchronous flows which could require some level of interaction between multiple browsing
-  contexts (e.g. mediated activity on <code>idp.com</code> might resolve a Promise handed back to
+  contexts (e.g. mediated activity on <code>idp.com</code> might [=resolve=] a Promise handed back to
   <code>rp.com</code>) or between devices and user agents (e.g. [[WEBAUTHN]]) in the future without
   redesigning the API from the ground up.
 
