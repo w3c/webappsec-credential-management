@@ -4,9 +4,9 @@
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <title>Credential Management Level 1</title>
   <link href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED" rel="stylesheet">
-  <meta content="Bikeshed version b94c7e755, updated Fri Feb 19 16:28:59 2021 -0800" name="generator">
+  <meta content="Bikeshed version c5fd42b86, updated Mon Apr 5 16:27:33 2021 -0700" name="generator">
   <link href="http://www.w3.org/TR/credential-management-1/" rel="canonical">
-  <meta content="8583aae185e03f9fb546406e1a7dc4c2fe443916" name="document-revision">
+  <meta content="b173c075a018357df48209bc95c9336a8715f6f5" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -634,7 +634,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2021-02-20">20 February 2021</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2021-04-13">13 April 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1128,7 +1128,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-promise" id="ref-for-idl-promise"><c- b>Promise</c-></a>&lt;<a data-link-type="idl-name" href="#credential" id="ref-for-credential②⑥"><c- n>Credential</c-></a>?> <a class="idl-code" data-link-type="method" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get"><c- g>get</c-></a>(<c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions②"><c- n>CredentialRequestOptions</c-></a> <a class="idl-code" data-link-type="argument" href="#dom-credentialscontainer-get-options-options" id="ref-for-dom-credentialscontainer-get-options-options"><c- g>options</c-></a> = {});
   <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-promise" id="ref-for-idl-promise①"><c- b>Promise</c-></a>&lt;<a data-link-type="idl-name" href="#credential" id="ref-for-credential②⑦"><c- n>Credential</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-credentialscontainer-store" id="ref-for-dom-credentialscontainer-store①"><c- g>store</c-></a>(<a data-link-type="idl-name" href="#credential" id="ref-for-credential②⑧"><c- n>Credential</c-></a> <a class="idl-code" data-link-type="argument" href="#dom-credentialscontainer-store-credential-credential" id="ref-for-dom-credentialscontainer-store-credential-credential"><c- g>credential</c-></a>);
   <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-promise" id="ref-for-idl-promise②"><c- b>Promise</c-></a>&lt;<a data-link-type="idl-name" href="#credential" id="ref-for-credential②⑨"><c- n>Credential</c-></a>?> <a class="idl-code" data-link-type="method" href="#dom-credentialscontainer-create" id="ref-for-dom-credentialscontainer-create"><c- g>create</c-></a>(<c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-credentialcreationoptions" id="ref-for-dictdef-credentialcreationoptions①"><c- n>CredentialCreationOptions</c-></a> <a class="idl-code" data-link-type="argument" href="#dom-credentialscontainer-create-options-options" id="ref-for-dom-credentialscontainer-create-options-options"><c- g>options</c-></a> = {});
-  <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-promise" id="ref-for-idl-promise③"><c- b>Promise</c-></a>&lt;<a data-link-type="idl-name"><c- n>void</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-credentialscontainer-preventsilentaccess" id="ref-for-dom-credentialscontainer-preventsilentaccess"><c- g>preventSilentAccess</c-></a>();
+  <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-promise" id="ref-for-idl-promise③"><c- b>Promise</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-undefined" id="ref-for-idl-undefined"><c- b>undefined</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-credentialscontainer-preventsilentaccess" id="ref-for-dom-credentialscontainer-preventsilentaccess"><c- g>preventSilentAccess</c-></a>();
 };
 
 <c- b>dictionary</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="dictionary" data-export id="dictdef-credentialdata"><code><c- g>CredentialData</c-></code></dfn> {
@@ -3500,6 +3500,12 @@ partial dictionary CredentialCreationOptions {
     <li><a href="#ref-for-dfn-throw②">4.1. The FederatedCredential Interface</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-idl-undefined">
+   <a href="https://heycam.github.io/webidl/#idl-undefined">https://heycam.github.io/webidl/#idl-undefined</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-idl-undefined">2.3. navigator.credentials</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-interface-formdata">
    <a href="https://xhr.spec.whatwg.org/#interface-formdata">https://xhr.spec.whatwg.org/#interface-formdata</a><b>Referenced in:</b>
    <ul>
@@ -3650,6 +3656,7 @@ partial dictionary CredentialCreationOptions {
      <li><span class="dfn-paneled" id="term-for-reject">reject</span>
      <li><span class="dfn-paneled" id="term-for-idl-sequence">sequence</span>
      <li><span class="dfn-paneled" id="term-for-dfn-throw">throw</span>
+     <li><span class="dfn-paneled" id="term-for-idl-undefined">undefined</span>
     </ul>
    <li>
     <a data-link-type="biblio">[XHR]</a> defines the following terms:
@@ -3664,7 +3671,7 @@ partial dictionary CredentialCreationOptions {
   <h3 class="no-num no-ref heading settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
   <dl>
    <dt id="biblio-csp">[CSP]
-   <dd>Mike West. <a href="https://www.w3.org/TR/CSP3/">Content Security Policy Level 3</a>. 15 October 2018. WD. URL: <a href="https://www.w3.org/TR/CSP3/">https://www.w3.org/TR/CSP3/</a>
+   <dd>Mike West. <a href="https://www.w3.org/TR/CSP3/">Content Security Policy Level 3</a>. 24 March 2021. WD. URL: <a href="https://www.w3.org/TR/CSP3/">https://www.w3.org/TR/CSP3/</a>
    <dt id="biblio-dom">[DOM]
    <dd>Anne van Kesteren. <a href="https://dom.spec.whatwg.org/">DOM Standard</a>. Living Standard. URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a>
    <dt id="biblio-fetch">[FETCH]
@@ -3719,7 +3726,7 @@ partial dictionary CredentialCreationOptions {
   <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-promise"><c- b>Promise</c-></a>&lt;<a data-link-type="idl-name" href="#credential"><c- n>Credential</c-></a>?> <a class="idl-code" data-link-type="method" href="#dom-credentialscontainer-get"><c- g>get</c-></a>(<c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-credentialrequestoptions"><c- n>CredentialRequestOptions</c-></a> <a class="idl-code" data-link-type="argument" href="#dom-credentialscontainer-get-options-options"><c- g>options</c-></a> = {});
   <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-promise"><c- b>Promise</c-></a>&lt;<a data-link-type="idl-name" href="#credential"><c- n>Credential</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-credentialscontainer-store"><c- g>store</c-></a>(<a data-link-type="idl-name" href="#credential"><c- n>Credential</c-></a> <a class="idl-code" data-link-type="argument" href="#dom-credentialscontainer-store-credential-credential"><c- g>credential</c-></a>);
   <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-promise"><c- b>Promise</c-></a>&lt;<a data-link-type="idl-name" href="#credential"><c- n>Credential</c-></a>?> <a class="idl-code" data-link-type="method" href="#dom-credentialscontainer-create"><c- g>create</c-></a>(<c- b>optional</c-> <a data-link-type="idl-name" href="#dictdef-credentialcreationoptions"><c- n>CredentialCreationOptions</c-></a> <a class="idl-code" data-link-type="argument" href="#dom-credentialscontainer-create-options-options"><c- g>options</c-></a> = {});
-  <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-promise"><c- b>Promise</c-></a>&lt;<a data-link-type="idl-name"><c- n>void</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-credentialscontainer-preventsilentaccess"><c- g>preventSilentAccess</c-></a>();
+  <a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-promise"><c- b>Promise</c-></a>&lt;<a class="idl-code" data-link-type="interface" href="https://heycam.github.io/webidl/#idl-undefined"><c- b>undefined</c-></a>> <a class="idl-code" data-link-type="method" href="#dom-credentialscontainer-preventsilentaccess"><c- g>preventSilentAccess</c-></a>();
 };
 
 <c- b>dictionary</c-> <a href="#dictdef-credentialdata"><code><c- g>CredentialData</c-></code></a> {
