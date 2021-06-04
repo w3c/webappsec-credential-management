@@ -4,9 +4,9 @@
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <title>Credential Management Level 1</title>
   <link href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED" rel="stylesheet">
-  <meta content="Bikeshed version c5fd42b86, updated Mon Apr 5 16:27:33 2021 -0700" name="generator">
+  <meta content="Bikeshed version 800b43329, updated Tue May 25 14:13:32 2021 -0700" name="generator">
   <link href="http://www.w3.org/TR/credential-management-1/" rel="canonical">
-  <meta content="b173c075a018357df48209bc95c9336a8715f6f5" name="document-revision">
+  <meta content="cabe7dc0ea7207232209f6e6ca3f1913cd5bf109" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -113,9 +113,9 @@ pre .property::before, pre .property::after {
     --ins-bg: transparent;
 
     --a-normal-text: #034575;
-    --a-normal-underline: #707070;
+    --a-normal-underline: #bbb;
     --a-visited-text: var(--a-normal-text);
-    --a-visited-underline: #bbb;
+    --a-visited-underline: #707070;
     --a-hover-bg: rgba(75%, 75%, 75%, .25);
     --a-active-text: #c00;
     --a-active-underline: #c00;
@@ -634,7 +634,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="subtitle"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2021-04-13">13 April 2021</time></span></h2>
+   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2021-06-04">4 June 2021</time></span></h2>
    <div data-fill-with="spec-metadata">
     <dl>
      <dt>This version:
@@ -1121,7 +1121,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   [<a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext" id="ref-for-SecureContext②"><c- g>SecureContext</c-></a>, <a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SameObject" id="ref-for-SameObject"><c- g>SameObject</c-></a>] <c- b>readonly</c-> <c- b>attribute</c-> <a data-link-type="idl-name" href="#credentialscontainer" id="ref-for-credentialscontainer②"><c- n>CredentialsContainer</c-></a> <a class="idl-code" data-link-type="attribute" data-readonly data-type="CredentialsContainer" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials①"><c- g>credentials</c-></a>;
 };
 </pre>
-    <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Navigator" data-dfn-type="attribute" data-export id="dom-navigator-credentials"><code>credentials</code></dfn> attribute MUST return the <code class="idl"><a data-link-type="idl" href="#credentialscontainer" id="ref-for-credentialscontainer③">CredentialsContainer</a></code> associated with the <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#context-object" id="ref-for-context-object">context object</a>.</p>
+    <p>The <dfn class="dfn-paneled idl-code" data-dfn-for="Navigator" data-dfn-type="attribute" data-export id="dom-navigator-credentials"><code>credentials</code></dfn> attribute MUST return the <code class="idl"><a data-link-type="idl" href="#credentialscontainer" id="ref-for-credentialscontainer③">CredentialsContainer</a></code> associated with the <a data-link-type="dfn">context object</a>.</p>
     <p class="note" role="note"><span>Note:</span> As discussed in <a href="#insecure-sites">§ 6.3 Insecure Sites</a>, the credential management API is exposed only in <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context">Secure Contexts</a>.</p>
 <pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#Exposed" id="ref-for-Exposed①"><c- g>Exposed</c-></a>=<c- n>Window</c->, <a class="idl-code" data-link-type="extended-attribute" href="https://heycam.github.io/webidl/#SecureContext" id="ref-for-SecureContext③"><c- g>SecureContext</c-></a>]
 <c- b>interface</c-> <dfn class="dfn-paneled idl-code" data-dfn-type="interface" data-export id="credentialscontainer"><code><c- g>CredentialsContainer</c-></code></dfn> {
@@ -2424,7 +2424,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
      <div class="note" role="note">
        It seems reasonable for the chooser interface to display the list of <var>locally discovered
       credentials</var> to the user, perhaps something like this exceptionally non-normative mock: 
-      <p><img alt="A mockup of what a chooser might look like." src="./mock-chooser.png"></p>
+      <p><img alt="A mockup of what a chooser might look like." height="400" src="./mock-chooser.png" width="450"></p>
       <p>If the <var>options</var> provided is not <a data-link-type="dfn" href="#credentialrequestoptions-matchable-a-priori" id="ref-for-credentialrequestoptions-matchable-a-priori②">matchable <i lang="la">a priori</i></a>, then it might
       also make sense for the chooser interface to list the <a data-link-type="dfn" href="#credentialrequestoptions-relevant-credential-interface-objects" id="ref-for-credentialrequestoptions-relevant-credential-interface-objects③">relevant credential interface
       objects</a> for <var>options</var> that aren’t covered by the list of explicit credentials. If, for
@@ -2901,12 +2901,6 @@ partial dictionary CredentialCreationOptions {
    <ul>
     <li><a href="#ref-for-abortsignal-aborted-flag">2.5.1. Request a Credential</a>
     <li><a href="#ref-for-abortsignal-aborted-flag①">2.5.4. Create a Credential</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-context-object">
-   <a href="https://dom.spec.whatwg.org/#context-object">https://dom.spec.whatwg.org/#context-object</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-context-object">2.3. navigator.credentials</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-tree-order">
@@ -3551,7 +3545,6 @@ partial dictionary CredentialCreationOptions {
     <ul>
      <li><span class="dfn-paneled" id="term-for-abortsignal">AbortSignal</span>
      <li><span class="dfn-paneled" id="term-for-abortsignal-aborted-flag">aborted flag</span>
-     <li><span class="dfn-paneled" id="term-for-context-object">context object</span>
      <li><span class="dfn-paneled" id="term-for-concept-tree-order">tree order</span>
     </ul>
    <li>
@@ -3671,7 +3664,7 @@ partial dictionary CredentialCreationOptions {
   <h3 class="no-num no-ref heading settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
   <dl>
    <dt id="biblio-csp">[CSP]
-   <dd>Mike West. <a href="https://www.w3.org/TR/CSP3/">Content Security Policy Level 3</a>. 24 March 2021. WD. URL: <a href="https://www.w3.org/TR/CSP3/">https://www.w3.org/TR/CSP3/</a>
+   <dd>Mike West. <a href="https://www.w3.org/TR/CSP3/">Content Security Policy Level 3</a>. 12 May 2021. WD. URL: <a href="https://www.w3.org/TR/CSP3/">https://www.w3.org/TR/CSP3/</a>
    <dt id="biblio-dom">[DOM]
    <dd>Anne van Kesteren. <a href="https://dom.spec.whatwg.org/">DOM Standard</a>. Living Standard. URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a>
    <dt id="biblio-fetch">[FETCH]
