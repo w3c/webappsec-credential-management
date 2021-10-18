@@ -3,14 +3,13 @@ all: index.html
 new: base.html sitebound.html
 
 force:
-	bikeshed -f spec ./index.src.html
+	bikeshed -f spec ./index.bs
 
-%.html: %.src.html
+%.html: %.bs
 	bikeshed -f spec $^ $@
 
 WD:
-	bikeshed -f spec --md-status=WD ./index.src.html ./WD.html
+	bikeshed -f spec --md-status=WD ./index.bs ./WD.html
 
-publish:
-	git push origin master
-
+clean:
+	$(RM) index.html

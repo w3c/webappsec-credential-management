@@ -6,14 +6,15 @@ TR: http://www.w3.org/TR/credential-management-1/
 Previous Version: http://www.w3.org/TR/2016/WD-credential-management-1-20160425/
 Shortname: credential-management
 Level: 1
-Editor: Mike West 56384, Google Inc., mkwst@google.com
+Editor: Jeff Hodges, w3cid 43843, Google Inc., jdhodges@google.com
+Former Editor: Mike West 56384, Google Inc., mkwst@google.com
 Group: webappsec
 Abstract:
   This specification describes an imperative API enabling a website to request a
   user's credentials from a user agent, and to help the user agent correctly
   store user credentials for future use.
 Indent: 2
-Version History: https://github.com/w3c/webappsec-credential-management/commits/master/index.src.html
+Version History: https://github.com/w3c/webappsec-credential-management/commits/main/index.src.html
 Boilerplate: omit conformance, omit feedback-header
 !Participate: <a href="https://github.com/w3c/webappsec-credential-management/issues/new">File an issue</a> (<a href="https://github.com/w3c/webappsec-credential-management/issues">open issues</a>)
 Markup Shorthands: css off, markdown on
@@ -438,7 +439,7 @@ spec:css-syntax-3;
       Promise&lt;Credential?&gt; get(optional CredentialRequestOptions options = {});
       Promise&lt;Credential&gt; store(Credential credential);
       Promise&lt;Credential?&gt; create(optional CredentialCreationOptions options = {});
-      Promise&lt;void&gt; preventSilentAccess();
+      Promise&lt;undefined&gt; preventSilentAccess();
       readonly attribute boolean conditionalMediationSupported;
     };
 
@@ -1927,7 +1928,7 @@ spec:css-syntax-3;
       mitigates the risk that credentials could be exfiltrated to `evil.com`.
 
   *   <a>`child-src`</a> restricts the nested browsing contexts which may be embedded in a page,
-      making it more difficult to inject a malicious `postMessage()` target. [[WEBMESSAGING]]
+      making it more difficult to inject a malicious `postMessage()` target. [[HTML]]
 
   Developers should, of course, also properly escape input and output, and consider using other
   layers of defense, such as Subresource Integrity [[SRI]] to further reduce risk.
