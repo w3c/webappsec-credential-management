@@ -507,7 +507,7 @@ spec:css-syntax-3;
         deprecated.
 
     :   <dfn attribute>conditionalMediationSupported</dfn>
-    ::  {{conditionalMediationSupported}} indicates whether the user agent supports the {{conditional}}
+    ::  {{conditionalMediationSupported}} indicates whether the user agent supports the {{CredentialMediationRequirement/conditional}}
         approach to [[#mediation-requirements|mediation of credential requests]]. If supported,
         {{conditionalMediationSupported}} MUST return `true`, otherwise it MUST return `false`.
   </div>
@@ -646,7 +646,7 @@ spec:css-syntax-3;
         outside of the dialog, it closes and the `get()` method returns to the caller empty-handed
         without causing a user-visible error condition. If the user makes a gesture that selects
         a credential, that credential is returned to the caller. [=Requires user mediation=] is
-        treated as being `true` regardless of its actual value: the {{conditional}} behavior
+        treated as being `true` regardless of its actual value: the {{CredentialMediationRequirement/conditional}} behavior
         always involves user mediation of some sort if applicable credentials are discovered.
 
     :   <dfn>required</dfn>
