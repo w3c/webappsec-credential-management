@@ -858,17 +858,15 @@ spec:css-syntax-3;
             {{[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)}},
             given |origin|, |options|, and |sameOriginWithAncestors|.
 
-        9.  If |result| is a {{Credential}}, resolve |p| with |result|.
+        9.  If |result| is a {{Credential}}, [=resolve=] |p| with |result|.
 
-            If |options|.{{CredentialRequestOptions/mediation}} is not
-            {{CredentialMediationRequirement/conditional}}:
+            If |result| is an [=exception=], [=reject=] |p| with |result|.
 
-            1.  If |result| is `null`, resolve |p| with |result|.
-
-            2.  Otherwise, [=reject=] |p| with |result|.
+            If |result| is `null` and |options|.{{CredentialRequestOptions/mediation}} is not
+            {{CredentialMediationRequirement/conditional}}, [=resolve=] |p| with |result|.
 
             Note: if |options|.{{CredentialRequestOptions/mediation}} is
-            {{CredentialMediationRequirement/conditional}} and a credential is not discovered,
+            {{CredentialMediationRequirement/conditional}} and a `null` credential is discovered,
             promise |p| is not resolved.
 
     7.  Return |p|.
