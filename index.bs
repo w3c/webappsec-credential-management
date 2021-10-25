@@ -286,6 +286,7 @@ spec:css-syntax-3;
     interface Credential {
       readonly attribute USVString id;
       readonly attribute DOMString type;
+      static boolean isConditionalMediationAvailable();
     };
   </pre>
   <div dfn-for="Credential">
@@ -296,6 +297,21 @@ spec:css-syntax-3;
     :   <dfn attribute>type</dfn>
     ::  This attribute's getter returns the value of the object's [=interface object=]'s
         {{[[type]]}} slot, which specifies the [=credential type=] represented by this object.
+
+    :   <dfn method>isConditionalMediationAvailable()</dfn>
+    ::  Returns `true` if and only if the user agent supports the
+        {{CredentialMediationRequirement/conditional}} approach to
+        [[#mediation-requirements|mediation of credential requests]] for the [=credential type=],
+        `false` otherwise.
+
+        {{Credential}}'s default implementation of {{Credential/isConditionalMediationAvailable()}}:
+
+        <ol class="algorithm">
+            1.  Return `false`.
+        </ol>
+
+        Note: If this function is not present, {{CredentialMediationRequirement/conditional}}
+        mediation is not supported for the [=credential type=].
 
     :   <dfn attribute>\[[type]]</dfn>
     ::  The {{Credential}} [=interface object=] has an internal slot named `[[type]]`, which
@@ -456,7 +472,6 @@ spec:css-syntax-3;
       Promise&lt;Credential&gt; store(Credential credential);
       Promise&lt;Credential?&gt; create(optional CredentialCreationOptions options = {});
       Promise&lt;undefined&gt; preventSilentAccess();
-      readonly attribute boolean conditionalMediationSupported;
     };
 
     dictionary CredentialData {
@@ -505,11 +520,6 @@ spec:css-syntax-3;
 
         Note: This function was previously called `requireUserMediation()` which should be considered
         deprecated.
-
-    :   <dfn attribute>conditionalMediationSupported</dfn>
-    ::  {{conditionalMediationSupported}} indicates whether the user agent supports the {{CredentialMediationRequirement/conditional}}
-        approach to [[#mediation-requirements|mediation of credential requests]]. If supported,
-        {{conditionalMediationSupported}} MUST return `true`, otherwise it MUST return `false`.
   </div>
 
   <div algorithm="create credentialscontainer">
@@ -643,11 +653,20 @@ spec:css-syntax-3;
     :   <dfn>conditional</dfn>
     ::  Discovered credentials are presented to the user in a non-modal dialog along with an
         indication of the origin which is requesting credentials. If the user makes a gesture
-        outside of the dialog, it closes and the `get()` method returns to the caller empty-handed
-        without causing a user-visible error condition. If the user makes a gesture that selects
-        a credential, that credential is returned to the caller. [=Requires user mediation=] is
-        treated as being `true` regardless of its actual value: the {{CredentialMediationRequirement/conditional}} behavior
-        always involves user mediation of some sort if applicable credentials are discovered.
+        outside of the dialog, the dialog closes without having the {{CredentialsContainer/get()}}
+        method return to the caller and without causing a user-visible error condition. If the user
+        makes a gesture that selects a credential, that credential is returned to the caller.  The
+        [=prevent silent access flag=] is treated as being `true` regardless of its actual value:
+        the {{CredentialMediationRequirement/conditional}} behavior always involves [=user
+        mediation=] of some sort if applicable credentials are discovered.
+
+        If no credentials are discovered, the user agent MAY prompt the user to take action in a way
+        that depends on the type of credential (e.g. to insert a device containing credentials).
+        Either way, the `get()` method MUST NOT return immediately with `null` to avoid revealing
+        the lack of applicable credentials to the website.
+
+        Websites can discover the availability of {{CredentialMediationRequirement/conditional}}
+        mediation by querying {{Credential/isConditionalMediationAvailable()}}.
 
     :   <dfn>required</dfn>
     ::  The user agent will not hand over credentials without [=user mediation=], even if the
@@ -817,6 +836,9 @@ spec:css-syntax-3;
             4.  |options|.{{CredentialRequestOptions/mediation}} is not
                 "{{CredentialMediationRequirement/required}}".
 
+            5.  |options|.{{CredentialRequestOptions/mediation}} is not
+                "{{CredentialMediationRequirement/conditional}}".
+
             ISSUE: This might be the wrong model. It would be nice to support a site that wished
             to accept either username/passwords or webauthn-style credentials without forcing
             a chooser for those users who use the former, and who wish to remain signed in.
@@ -828,8 +850,7 @@ spec:css-syntax-3;
         5.  Let |choice| be the result of <a abstract-op lt="ask to choose">asking the user to
             choose a `Credential`</a>, given |options| and |credentials|.
 
-        6.  If |choice| is `null` or a {{Credential}}, [=resolve=] |p| with |choice| and skip the
-            remaining steps.
+        6.  If |choice| is `null` or a {{Credential}}, let |result| be |choice| and go to step 9.
 
         7.  Assert: |choice| is an [=interface object=].
 
@@ -837,9 +858,18 @@ spec:css-syntax-3;
             {{[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)}},
             given |origin|, |options|, and |sameOriginWithAncestors|.
 
-        9.  If |result| is a {{Credential}} or `null`, resolve |p| with |result|.
+        9.  If |result| is a {{Credential}}, resolve |p| with |result|.
 
-            Otherwise, [=reject=] |p| with |result|.
+            If |options|.{{CredentialRequestOptions/mediation}} is not
+            {{CredentialMediationRequirement/conditional}}:
+
+            1.  If |result| is `null`, resolve |p| with |result|.
+
+            2.  Otherwise, [=reject=] |p| with |result|.
+
+            Note: if |options|.{{CredentialRequestOptions/mediation}} is
+            {{CredentialMediationRequirement/conditional}} and a credential is not discovered,
+            promise |p| is not resolved.
 
     7.  Return |p|.
   </ol>
@@ -2136,7 +2166,7 @@ spec:css-syntax-3;
         value is "{{Credential/[[discovery]]/credential store}}".
       </div>
 
-  4.  Extend {{CredentialRequestOptions}} with the options the new credential type needs to respond
+  5.  Extend {{CredentialRequestOptions}} with the options the new credential type needs to respond
       reasonably to {{get()}}:
 
       <div class="example">
@@ -2151,7 +2181,7 @@ spec:css-syntax-3;
         </pre>
       </div>
 
-  5.  Extend {{CredentialCreationOptions}} with the data the new credential type needs to create
+  6.  Extend {{CredentialCreationOptions}} with the data the new credential type needs to create
       `Credential` objects in response to {{create()}}:
 
       <div class="example">
@@ -2165,6 +2195,9 @@ spec:css-syntax-3;
           };
         </pre>
       </div>
+
+  7.  If the new credential type supports {{CredentialMediationRequirement/conditional}} [=user
+      mediation=], overload {{Credential/isConditionalMediationAvailable()}} and return `true`.
 
   You might also find that new primitives are necessary. For instance, you might want to return
   many {{Credential}} objects rather than just one in some sort of complicated, multi-factor
