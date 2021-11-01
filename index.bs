@@ -310,6 +310,7 @@ spec:css-syntax-3;
             1.  Return `false`.
         </ol>
 
+        The specification for any [=credential type=] supporting {{CredentialMediationRequirement/conditional}} mediation must explicitly override this function to return `true`. 
         Note: If this function is not present, {{CredentialMediationRequirement/conditional}}
         mediation is not supported for the [=credential type=].
 
@@ -666,7 +667,7 @@ spec:css-syntax-3;
         the lack of applicable credentials to the website.
 
         Websites can discover the availability of {{CredentialMediationRequirement/conditional}}
-        mediation by querying {{Credential/isConditionalMediationAvailable()}}.
+        mediation by querying {{Credential/isConditionalMediationAvailable()}} for the [=credential type=] of interest.
 
     :   <dfn>required</dfn>
     ::  The user agent will not hand over credentials without [=user mediation=], even if the
@@ -860,9 +861,9 @@ spec:css-syntax-3;
 
         9.  If |result| is a {{Credential}}, [=resolve=] |p| with |result|.
 
-            If |result| is an [=exception=], [=reject=] |p| with |result|.
+        10. If |result| is an [=exception=], [=reject=] |p| with |result|.
 
-            If |result| is `null` and |options|.{{CredentialRequestOptions/mediation}} is not
+        11. If |result| is `null` and |options|.{{CredentialRequestOptions/mediation}} is not
             {{CredentialMediationRequirement/conditional}}, [=resolve=] |p| with |result|.
 
             Note: if |options|.{{CredentialRequestOptions/mediation}} is
