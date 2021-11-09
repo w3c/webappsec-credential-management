@@ -860,26 +860,22 @@ spec:css-syntax-3;
             "{{CredentialMediationRequirement/silent}}", [=resolve=] |p| with `null`, and skip
             the remaining steps.
 
-        1.  Let |choice| be the result of <a abstract-op lt="ask to choose">asking the user to
+        1.  Let |result| be the result of <a abstract-op lt="ask to choose">asking the user to
             choose a `Credential`</a>, given |options| and |credentials|.
 
-        1.  If |choice| is not `null` and is not a {{Credential}}:
+        1.  If |result| is an [=interface object=]:
 
-            1.  Assert: |choice| is an [=interface object=].
-
-            1.  Let |result| be the result of executing |choice|'s
+            1.  Set |result| to the result of executing |result|'s
                 {{[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)}},
                 given |origin|, |options|, and |sameOriginWithAncestors|.
 
-        1.  Else:
-
-            1.  Let |result| be |choice| and go to step 9.
+        1.  Assert: |result| is `null`, a {{Credential}}, or an [=exception=].
 
         1.  If |result| is a {{Credential}}, [=resolve=] |p| with |result|.
 
-        1. If |result| is an [=exception=], [=reject=] |p| with |result|.
+        1.  If |result| is an [=exception=], [=reject=] |p| with |result|.
 
-        1. If |result| is `null` and |options|.{{CredentialRequestOptions/mediation}} is not
+        1.  If |result| is `null` and |options|.{{CredentialRequestOptions/mediation}} is not
             {{CredentialMediationRequirement/conditional}}, [=resolve=] |p| with |result|.
 
             Note: if |options|.{{CredentialRequestOptions/mediation}} is
@@ -2212,7 +2208,7 @@ spec:css-syntax-3;
       </div>
 
   1.  If the new credential type supports {{CredentialMediationRequirement/conditional}} [=user
-      mediation=], define {{ExampleCredential/isConditionalMediationAvailable()}} to return `true`.
+      mediation=], define `ExampleCredential/isConditionalMediationAvailable()` to return `true`.
 
   You might also find that new primitives are necessary. For instance, you might want to return
   many {{Credential}} objects rather than just one in some sort of complicated, multi-factor
