@@ -669,8 +669,8 @@ spec:css-syntax-3;
         the lack of applicable credentials to the website.
 
         Websites can only pass {{CredentialMediationRequirement/conditional}} into the
-        {{CredentialsContainer/get()}} method if all of the passed [=relevant credential
-        interfaces=] have overridden {{Credential/isConditionalMediationAvailable()}} to return
+        {{CredentialsContainer/get()}} method if all of the [=relevant credential interface objects|credential
+        interfaces it refers to=] have overridden {{Credential/isConditionalMediationAvailable()}} to return
         `true`.
 
     :   <dfn>required</dfn>
@@ -820,7 +820,7 @@ spec:css-syntax-3;
         1.  For each |interface| in |options|' [=relevant credential interface objects=]:
 
             1.  If |interface| does not support {{CredentialMediationRequirement/conditional}}
-                [=user mediation=], return a "{{TypeError}}" {{DOMException}}.
+                [=user mediation=], return [=a promise rejected with=] a "{{TypeError}}" {{DOMException}}.
 
     1.  Let |p| be [=a new promise=].
 
@@ -2212,7 +2212,7 @@ spec:css-syntax-3;
       </div>
 
   1.  If the new credential type supports {{CredentialMediationRequirement/conditional}} [=user
-      mediation=], overload {{Credential/isConditionalMediationAvailable()}} and return `true`.
+      mediation=], define {{ExampleCredential/isConditionalMediationAvailable()}} to return `true`.
 
   You might also find that new primitives are necessary. For instance, you might want to return
   many {{Credential}} objects rather than just one in some sort of complicated, multi-factor
