@@ -535,7 +535,7 @@ spec:css-syntax-3;
     :   <dfn>signal</dfn>
     ::  This property lets the developer abort an ongoing {{CredentialsContainer/get()}} operation.
         An aborted operation may complete normally (generally if the abort was received after the
-        operation finished) or reject with an "{{AbortError}}" {{DOMException}}."
+        operation finished) or reject with an [=AbortSignal/abort reason=].
   </div>
 
   <div class="note">
@@ -755,7 +755,7 @@ spec:css-syntax-3;
     :   <dfn>signal</dfn>
     ::  This property lets the developer abort an ongoing {{CredentialsContainer/create()}}
         operation. An aborted operation may complete normally (generally if the abort was received
-        after the operation finished) or reject with an "{{AbortError}}" {{DOMException}}."
+        after the operation finished) or reject with an [=AbortSignal/abort reason=].
   </div>
 
   ## Algorithms ## {#algorithms}
@@ -771,8 +771,9 @@ spec:css-syntax-3;
 
     2.  Assert: |settings| is a [=secure context=].
 
-    3.  If <code>|options|.{{CredentialRequestOptions/signal}}</code>'s [=AbortSignal/aborted flag=]
-        is set, then return [=a promise rejected with=] an "{{AbortError}}" {{DOMException}}.
+    3.  If <code>|options|.{{CredentialRequestOptions/signal}}</code> is [=AbortSignal/aborted=],
+        then return [=a promise rejected with=]
+        <code>|options|.{{CredentialRequestOptions/signal}}</code>'s [=AbortSignal/abort reason=].
 
     4.  Let |p| be [=a new promise=].
 
@@ -918,8 +919,9 @@ spec:css-syntax-3;
             types in order to support a "sign-up" use case. For the moment, though, we're punting
             on that by restricting the dictionary to a single entry.
 
-    7.  If <code>|options|.{{CredentialCreationOptions/signal}}</code>'s [=AbortSignal/aborted
-        flag=] is set, then return [=a promise rejected with=] an "{{AbortError}}" {{DOMException}}.
+    3.  If <code>|options|.{{CredentialRequestOptions/signal}}</code> is [=AbortSignal/aborted=],
+        then return [=a promise rejected with=]
+        <code>|options|.{{CredentialRequestOptions/signal}}</code>'s [=AbortSignal/abort reason=].
 
     8.  Let |p| be [=a new promise=].
 
