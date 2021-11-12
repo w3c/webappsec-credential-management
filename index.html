@@ -3,10 +3,10 @@
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <title>Credential Management Level 1</title>
-  <link href="https://www.w3.org/StyleSheets/TR/2016/W3C-ED" rel="stylesheet">
-  <meta content="Bikeshed version 83b904c2e, updated Wed Nov 3 17:20:53 2021 -0700" name="generator">
+  <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED" rel="stylesheet">
+  <meta content="Bikeshed version dfbc2b297, updated Thu Nov 11 15:52:32 2021 -0800" name="generator">
   <link href="http://www.w3.org/TR/credential-management-1/" rel="canonical">
-  <meta content="96170339dc3843bc901945b2f403050c896e7a7b" name="document-revision">
+  <meta content="68a9134396a8f288d218a6b9c0f483f5c0acdf4e" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -642,9 +642,9 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
 </style>
  <body class="h-entry">
   <div class="head">
-   <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2016/logos/W3C" width="72"> </a> </p>
+   <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <h2 class="no-num no-toc no-ref heading settled" id="profile-and-date"><span class="content">Editor’s Draft, <time class="dt-updated" datetime="2021-11-04">4 November 2021</time></span></h2>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2021-11-12">12 November 2021</time></p>
    <details>
     <summary>Specification Metadata</summary>
     <div data-fill-with="spec-metadata">
@@ -692,13 +692,13 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
 	please put the text “credential-management” in the subject,
 	preferably like this:
 	“[credential-management] <em>…summary of comment…</em>” </p>
-   <p> This document was produced by the <a href="https://www.w3.org/2011/webappsec/">Web Application Security Working Group</a>. </p>
+   <p> This document was produced by the <a href="https://www.w3.org/groups/wg/webappsec">Web Application Security Working Group</a>. </p>
    <p> This document was produced by a group operating under
 	the <a href="https://www.w3.org/Consortium/Patent-Policy/">W3C Patent Policy</a>.
 	W3C maintains a <a href="https://www.w3.org/groups/wg/webappsec/ipr" rel="disclosure">public list of any patent disclosures</a> made in connection with the deliverables of the group;
 	that page also includes instructions for disclosing a patent.
 	An individual who has actual knowledge of a patent which the individual believes contains <a href="https://www.w3.org/Consortium/Patent-Policy/#def-essential">Essential Claim(s)</a> must disclose the information in accordance with <a href="https://www.w3.org/Consortium/Patent-Policy/#sec-Disclosure">section 6 of the W3C Patent Policy</a>. </p>
-   <p> This document is governed by the <a href="https://www.w3.org/2020/Process-20200915/" id="w3c_process_revision">15 September 2020 W3C Process Document</a>. </p>
+   <p> This document is governed by the <a href="https://www.w3.org/2021/Process-20211102/" id="w3c_process_revision">2 November 2021 W3C Process Document</a>. </p>
    <p></p>
   </div>
   <div data-fill-with="at-risk"></div>
@@ -1302,7 +1302,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
       <dd data-md>
        <p>This property lets the developer abort an ongoing <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get④">get()</a></code> operation.
   An aborted operation may complete normally (generally if the abort was received after the
-  operation finished) or reject with an "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#aborterror" id="ref-for-aborterror">AbortError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException">DOMException</a></code>."</p>
+  operation finished) or reject with an <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#abortsignal-abort-reason" id="ref-for-abortsignal-abort-reason">abort reason</a>.</p>
      </dl>
     </div>
     <div class="note" role="note">
@@ -1482,7 +1482,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
       <dt data-md><dfn class="dfn-paneled idl-code" data-dfn-for="CredentialCreationOptions" data-dfn-type="dict-member" data-export id="dom-credentialcreationoptions-signal"><code>signal</code></dfn>, <span> of type <a data-link-type="idl-name" href="https://dom.spec.whatwg.org/#abortsignal" id="ref-for-abortsignal③">AbortSignal</a></span>
       <dd data-md>
        <p>This property lets the developer abort an ongoing <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-create" id="ref-for-dom-credentialscontainer-create④">create()</a></code> operation. An aborted operation may complete normally (generally if the abort was received
-  after the operation finished) or reject with an "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#aborterror" id="ref-for-aborterror①">AbortError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException①">DOMException</a></code>."</p>
+  after the operation finished) or reject with an <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#abortsignal-abort-reason" id="ref-for-abortsignal-abort-reason①">abort reason</a>.</p>
      </dl>
     </div>
     <h3 class="heading settled" data-level="2.5" id="algorithms"><span class="secno">2.5. </span><span class="content">Algorithms</span><a class="self-link" href="#algorithms"></a></h3>
@@ -1495,7 +1495,8 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
      <li data-md>
       <p class="assertion">Assert: <var>settings</var> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context①">secure context</a>.</p>
      <li data-md>
-      <p>If <code><var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-signal" id="ref-for-dom-credentialrequestoptions-signal①">signal</a></code></code>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#abortsignal-aborted-flag" id="ref-for-abortsignal-aborted-flag">aborted flag</a> is set, then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with">a promise rejected with</a> an "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#aborterror" id="ref-for-aborterror②">AbortError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException②">DOMException</a></code>.</p>
+      <p>If <code><var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-signal" id="ref-for-dom-credentialrequestoptions-signal①">signal</a></code></code> is <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#abortsignal-aborted" id="ref-for-abortsignal-aborted">aborted</a>,
+  then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with">a promise rejected with</a> <code><var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-signal" id="ref-for-dom-credentialrequestoptions-signal②">signal</a></code></code>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#abortsignal-abort-reason" id="ref-for-abortsignal-abort-reason②">abort reason</a>.</p>
      <li data-md>
       <p>Let <var>p</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise">a new promise</a>.</p>
      <li data-md>
@@ -1631,8 +1632,8 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   on that by restricting the dictionary to a single entry.</p>
       </ol>
      <li data-md>
-      <p>If <code><var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-signal" id="ref-for-dom-credentialcreationoptions-signal①">signal</a></code></code>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#abortsignal-aborted-flag" id="ref-for-abortsignal-aborted-flag①">aborted
-  flag</a> is set, then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with②">a promise rejected with</a> an "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#aborterror" id="ref-for-aborterror③">AbortError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException③">DOMException</a></code>.</p>
+      <p>If <code><var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-signal" id="ref-for-dom-credentialrequestoptions-signal③">signal</a></code></code> is <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#abortsignal-aborted" id="ref-for-abortsignal-aborted①">aborted</a>,
+  then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with②">a promise rejected with</a> <code><var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-signal" id="ref-for-dom-credentialrequestoptions-signal④">signal</a></code></code>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#abortsignal-abort-reason" id="ref-for-abortsignal-abort-reason③">abort reason</a>.</p>
      <li data-md>
       <p>Let <var>p</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise②">a new promise</a>.</p>
      <li data-md>
@@ -1935,7 +1936,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
      <li data-md>
       <p class="assertion">Assert: <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password②">password</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists①">exists</a>.</p>
      <li data-md>
-      <p>If <var>sameOriginWithAncestors</var> is <code>false</code>, return a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException④">DOMException</a></code>.</p>
+      <p>If <var>sameOriginWithAncestors</var> is <code>false</code>, return a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException">DOMException</a></code>.</p>
       <p class="note" role="note"><span>Note:</span> This restriction aims to address the concern raised in <a href="#security-origin-confusion">§ 6.4 Origin Confusion</a>.</p>
      <li data-md>
       <p>Return the empty set if <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password③">password</a></code>"] is not <code>true</code>.</p>
@@ -1973,7 +1974,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     <p>The algorithm will return a <code>NotAllowedError</code> if <var>sameOriginWithAncestors</var> is not <code>true</code>.</p>
     <ol class="algorithm">
      <li data-md>
-      <p>Return a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror①">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑤">DOMException</a></code> without altering the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store①⑥">credential store</a> if <var>sameOriginWithAncestors</var> is <code>false</code>.</p>
+      <p>Return a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror①">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException①">DOMException</a></code> without altering the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store①⑥">credential store</a> if <var>sameOriginWithAncestors</var> is <code>false</code>.</p>
       <p class="note" role="note"><span>Note:</span> This restriction aims to address the concern raised in <a href="#security-origin-confusion">§ 6.4 Origin Confusion</a>.</p>
      <li data-md>
       <p>If the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store①⑦">credential store</a> contains a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential①⑥">PasswordCredential</a></code> (<var>stored</var>)
@@ -2247,7 +2248,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
      <li data-md>
       <p class="assertion">Assert: <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-federated" id="ref-for-dom-credentialrequestoptions-federated">federated</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③">exists</a>.</p>
      <li data-md>
-      <p>If <var>sameOriginWithAncestors</var> is <code>false</code>, return a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror②">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑥">DOMException</a></code>.</p>
+      <p>If <var>sameOriginWithAncestors</var> is <code>false</code>, return a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror②">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException②">DOMException</a></code>.</p>
       <p class="note" role="note"><span>Note:</span> This restriction aims to address the concern raised in <a href="#security-origin-confusion">§ 6.4 Origin Confusion</a>.</p>
      <li data-md>
       <p>Return the empty set if <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-federated" id="ref-for-dom-credentialrequestoptions-federated①">federated</a></code>"] is not <code>true</code>.</p>
@@ -2284,7 +2285,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     <p>The algorithm will return a <code>NotAllowedError</code> if <var>sameOriginWithAncestors</var> is not <code>true</code>.</p>
     <ol class="algorithm">
      <li data-md>
-      <p>Return a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror③">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑦">DOMException</a></code> without altering the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store②②">credential store</a> if <var>sameOriginWithAncestors</var> is <code>false</code>.</p>
+      <p>Return a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror③">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException③">DOMException</a></code> without altering the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store②②">credential store</a> if <var>sameOriginWithAncestors</var> is <code>false</code>.</p>
       <p class="note" role="note"><span>Note:</span> This restriction aims to address the concern raised in <a href="#security-origin-confusion">§ 6.4 Origin Confusion</a>.</p>
      <li data-md>
       <p>If the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store②③">credential store</a> contains a <code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential①①">FederatedCredential</a></code> whose <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id⑥">id</a></code> attribute is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id⑦">id</a></code> and whose <code class="idl"><a data-link-type="idl" href="#dom-credential-origin-slot" id="ref-for-dom-credential-origin-slot⑦">[[origin]]</a></code> slot is the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#same-origin" id="ref-for-same-origin④">same origin</a> as <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-origin-slot" id="ref-for-dom-credential-origin-slot⑧">[[origin]]</a></code>, and
@@ -2711,7 +2712,7 @@ partial dictionary CredentialCreationOptions {
     particular, the algorithms defined in this specification are intended to
     be easy to understand and are not intended to be performant. Implementers
     are encouraged to optimize.</p>
-<script src="https://www.w3.org/scripts/TR/2016/fixup.js"></script>
+<script src="https://www.w3.org/scripts/TR/2021/fixup.js"></script>
   <h2 class="no-num no-ref heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
   <h3 class="no-num no-ref heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="index">
@@ -2913,11 +2914,20 @@ partial dictionary CredentialCreationOptions {
     <li><a href="#ref-for-abortsignal②">2.4. The CredentialCreationOptions Dictionary</a> <a href="#ref-for-abortsignal③">(2)</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-abortsignal-aborted-flag">
-   <a href="https://dom.spec.whatwg.org/#abortsignal-aborted-flag">https://dom.spec.whatwg.org/#abortsignal-aborted-flag</a><b>Referenced in:</b>
+  <aside class="dfn-panel" data-for="term-for-abortsignal-abort-reason">
+   <a href="https://dom.spec.whatwg.org/#abortsignal-abort-reason">https://dom.spec.whatwg.org/#abortsignal-abort-reason</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-abortsignal-aborted-flag">2.5.1. Request a Credential</a>
-    <li><a href="#ref-for-abortsignal-aborted-flag①">2.5.4. Create a Credential</a>
+    <li><a href="#ref-for-abortsignal-abort-reason">2.3.1. The CredentialRequestOptions Dictionary</a>
+    <li><a href="#ref-for-abortsignal-abort-reason①">2.4. The CredentialCreationOptions Dictionary</a>
+    <li><a href="#ref-for-abortsignal-abort-reason②">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-abortsignal-abort-reason③">2.5.4. Create a Credential</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-abortsignal-aborted">
+   <a href="https://dom.spec.whatwg.org/#abortsignal-aborted">https://dom.spec.whatwg.org/#abortsignal-aborted</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-abortsignal-aborted">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-abortsignal-aborted①">2.5.4. Create a Credential</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-tree-order">
@@ -3335,29 +3345,16 @@ partial dictionary CredentialCreationOptions {
     <li><a href="#ref-for-dom-publickeycredential-discoverfromexternalsource-slot">7.2. Extension Points</a>
    </ul>
   </aside>
-  <aside class="dfn-panel" data-for="term-for-aborterror">
-   <a href="https://webidl.spec.whatwg.org/#aborterror">https://webidl.spec.whatwg.org/#aborterror</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-aborterror">2.3.1. The CredentialRequestOptions Dictionary</a>
-    <li><a href="#ref-for-aborterror①">2.4. The CredentialCreationOptions Dictionary</a>
-    <li><a href="#ref-for-aborterror②">2.5.1. Request a Credential</a>
-    <li><a href="#ref-for-aborterror③">2.5.4. Create a Credential</a>
-   </ul>
-  </aside>
   <aside class="dfn-panel" data-for="term-for-idl-DOMException">
    <a href="https://webidl.spec.whatwg.org/#idl-DOMException">https://webidl.spec.whatwg.org/#idl-DOMException</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-idl-DOMException">2.3.1. The CredentialRequestOptions Dictionary</a>
-    <li><a href="#ref-for-idl-DOMException①">2.4. The CredentialCreationOptions Dictionary</a>
-    <li><a href="#ref-for-idl-DOMException②">2.5.1. Request a Credential</a>
-    <li><a href="#ref-for-idl-DOMException③">2.5.4. Create a Credential</a>
-    <li><a href="#ref-for-idl-DOMException④">3.3.1. 
+    <li><a href="#ref-for-idl-DOMException">3.3.1. 
     PasswordCredential's [[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors) </a>
-    <li><a href="#ref-for-idl-DOMException⑤">3.3.3. 
+    <li><a href="#ref-for-idl-DOMException①">3.3.3. 
     PasswordCredential's [[Store]](credential, sameOriginWithAncestors) </a>
-    <li><a href="#ref-for-idl-DOMException⑥">4.2.1. 
+    <li><a href="#ref-for-idl-DOMException②">4.2.1. 
     FederatedCredential's [[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors) </a>
-    <li><a href="#ref-for-idl-DOMException⑦">4.2.3. 
+    <li><a href="#ref-for-idl-DOMException③">4.2.3. 
     FederatedCredential's [[Store]](credential, sameOriginWithAncestors) </a>
    </ul>
   </aside>
@@ -3597,7 +3594,8 @@ partial dictionary CredentialCreationOptions {
     <a data-link-type="biblio">[DOM]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="term-for-abortsignal">AbortSignal</span>
-     <li><span class="dfn-paneled" id="term-for-abortsignal-aborted-flag">aborted flag</span>
+     <li><span class="dfn-paneled" id="term-for-abortsignal-abort-reason">abort reason</span>
+     <li><span class="dfn-paneled" id="term-for-abortsignal-aborted">aborted</span>
      <li><span class="dfn-paneled" id="term-for-concept-tree-order">tree order</span>
     </ul>
    <li>
@@ -3688,7 +3686,6 @@ partial dictionary CredentialCreationOptions {
    <li>
     <a data-link-type="biblio">[WEBIDL]</a> defines the following terms:
     <ul>
-     <li><span class="dfn-paneled" id="term-for-aborterror">AbortError</span>
      <li><span class="dfn-paneled" id="term-for-idl-DOMException">DOMException</span>
      <li><span class="dfn-paneled" id="term-for-idl-DOMString">DOMString</span>
      <li><span class="dfn-paneled" id="term-for-Exposed">Exposed</span>
@@ -4305,7 +4302,8 @@ partial dictionary CredentialCreationOptions {
    <b><a href="#dom-credentialrequestoptions-signal">#dom-credentialrequestoptions-signal</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-credentialrequestoptions-signal">2.3.1. The CredentialRequestOptions Dictionary</a>
-    <li><a href="#ref-for-dom-credentialrequestoptions-signal①">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-dom-credentialrequestoptions-signal①">2.5.1. Request a Credential</a> <a href="#ref-for-dom-credentialrequestoptions-signal②">(2)</a>
+    <li><a href="#ref-for-dom-credentialrequestoptions-signal③">2.5.4. Create a Credential</a> <a href="#ref-for-dom-credentialrequestoptions-signal④">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="credentialrequestoptions-relevant-credential-interface-objects">
@@ -4377,7 +4375,6 @@ partial dictionary CredentialCreationOptions {
    <b><a href="#dom-credentialcreationoptions-signal">#dom-credentialcreationoptions-signal</a></b><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-credentialcreationoptions-signal">2.4. The CredentialCreationOptions Dictionary</a>
-    <li><a href="#ref-for-dom-credentialcreationoptions-signal①">2.5.4. Create a Credential</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="abstract-opdef-request-a-credential">
