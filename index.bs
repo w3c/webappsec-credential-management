@@ -257,6 +257,9 @@ spec:css-syntax-3;
   This document depends on the Infra Standard for a number of foundational concepts used in its
   algorithms and prose [[!INFRA]].
 
+
+  ### The Same-Origin with its Ancestors Algorithm ### {#sctn-same-origin-with-ancestors}
+
   An [=environment settings object=] (|settings|) is <dfn noexport>same-origin with its
   ancestors</dfn> if the following algorithm returns `true`:
 
@@ -279,6 +282,34 @@ spec:css-syntax-3;
           return `false`.
 
   7.  Return `true`.
+
+
+  ### The Credential Type to CredentialRequestOptions Member Name Mapping Registry ### {#sctn-cred-type-to-options-member-name}
+
+<table class="complex data longlastcol">
+<tr>
+  <th>Credential Type</th>
+  <th>Options Member name</th>
+  <th>Specification</th>
+</tr>
+<tr>
+  <td>federated</td>
+  <td>federated</td>
+  <td>This specification.</td>
+</tr>
+<tr>
+  <td>password</td>
+  <td>password</td>
+  <td>This specification.</td>
+</tr>
+<tr>
+  <td>public-key</td>
+  <td>publicKey</td>
+  <td>[[WEBAUTHN]]</td>
+</tr>
+
+
+
 
   ## The `Credential` Interface ## {#the-credential-interface}
 
@@ -551,25 +582,32 @@ spec:css-syntax-3;
 
   <div algorithm="relevant credential interfaces">
     The <dfn for="CredentialRequestOptions">relevant credential interface objects</dfn> for a given
-    {{CredentialRequestOptions}} (|options|) is a set of [=interface objects=], collected as follows:
+    {{CredentialRequestOptions}} or {{CredentialRequestOptions}} (|options|) is a set of [=interface objects=], collected as follows:
 
     <ol class="algorithm">
-      1.  Let |settings| be the <a>current settings object</a>
+        1.  Let |settings| be the <a>current settings object</a>
 
-      2.  Let |interface objects| be the set of [=interface objects=] on |settings|'
-          [=environment settings object/global object=].
-         
-      3.  Let |relevant interface objects| be an empty set.
-      
-      4.  For each |object| in |interface objects|:
+        1.  Let |interface objects| be the set of [=interface objects=] on |settings|'
+            [=environment settings object/global object=].
 
-          1.  If |object|'s [=inherited interfaces=] do not <a for="set">contain</a> {{Credential}},
-              <a for="iteration">continue</a>.
+        1.  Let |relevant interface objects| be an [=set/empty=] [=set=].
 
-          2.  Let |key| be |object|'s {{Credential/[[type]]}} slot's value.
+        1.  For each |object| in |interface objects|:
 
-          3.  If |options|[|key|] <a for="map">exists</a>, <a for="set">append</a> |object| to
-              |relevant interface objects|.
+            1.  If |object| is not a {{Credential}} interface object, and |object|'s [=inherited interfaces=]
+                do not <a for="set">contain</a> {{Credential}}, then
+                <a for="iteration">continue</a>.
+
+            1.  Let |credentialType| be |object|'s {{Credential/[[type]]}} slot's value.
+
+            1.  Let |key| be the result of looking up the |credentialType|'s {{CredentialRequestOptions}}'s
+                member name in the Credential Type to CredentialRequestOptions Member Name
+                Mapping registry.
+
+            1.  If |options|[|key|] <a for="map">exists</a>, <a for="set">append</a> |object| to
+                |relevant interface objects|.
+
+        1.  Return |relevant interface objects|.
     </ol>
 
     ISSUE: jyasskin@ suggests replacing the iteration through the interface objects with a registry.
@@ -578,7 +616,7 @@ spec:css-syntax-3;
   </div>
 
   <div algorithm="can collect locally">
-    A given {{CredentialRequestOptions}} |options| is
+    A given {{CredentialRequestOptions}} (|options|) is
     <dfn for="CredentialRequestOptions">matchable <i lang="la">a priori</i></dfn> if the following
     steps return `true`:
 
@@ -588,7 +626,7 @@ spec:css-syntax-3;
           1.  If |interface|'s {{Credential/[[discovery]]}} slot's value is not
               "{{Credential/[[discovery]]/credential store}}", return `false`.
 
-      2.  Return `true`.
+      1.  Return `true`.
     </ol>
 
     Note: When executing {{get(options)}}, we only return credentials without [=user mediation=] if
