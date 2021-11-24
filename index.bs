@@ -78,6 +78,7 @@ spec:fetch; type:dictionary; for:/; text:RequestInit
 spec:infra; type:dfn; for:/; text:set
 spec:infra; type:dfn; for:struct; text:item
 spec:webidl; type:idl; for:/; text:Function
+spec:webidl; type:dfn; text:identifier
 spec:webidl; type:interface; text:Promise
 spec:webidl; type:dfn; text:resolve
 
@@ -116,8 +117,8 @@ spec:css-syntax-3;
 
   Signing into websites is more difficult than it should be. The user agent is in a unique position
   to improve the experience in a number of ways, and most modern user agents have recognized this by
-  providing some measure of  credential management natively in the browser. Users can save usernames
-  and passwords for websites, and those [=credentials=] are autofilled into sign-in forms with
+  providing some measure of <i>credential management</i> natively in the browser. For example, users can save usernames
+  and passwords for websites; those [=credentials=] are later autofilled into sign-in forms, albeit with
   varying degrees of success.
 
   The <{input/autocomplete}> attribute offers a declarative mechanism by which websites can work
@@ -200,9 +201,10 @@ spec:css-syntax-3;
   hanging off of {{CredentialsContainer|navigator.credentials.*}} which enable developers to
   obtain them.
 
-  Various types of [=credentials=] are represented to JavaScript as an interface which
+  Various <dfn>credential types</dfn> are each represented to JavaScript as an interface which
   [=interface/inherits=], either directly or indirectly, from the {{Credential}} interface. This
-  document defines two such interfaces, {{PasswordCredential}} and {{FederatedCredential}}.
+  document defines two such interfaces, {{PasswordCredential}} and {{FederatedCredential}}. Other
+  specifications, for example [[WEBAUTHN]], define other credential types.
 
   A [=credential=] is <dfn export for="credential">effective</dfn> for a particular [=origin=] if it
   is accepted as authentication on that origin. Even if a credential is effective at a particular
@@ -258,56 +260,69 @@ spec:css-syntax-3;
   algorithms and prose [[!INFRA]].
 
 
-  ### The Same-Origin with its Ancestors Algorithm ### {#sctn-same-origin-with-ancestors}
+  ### Infrastructure Algorithms ### {#sctn-infra-algorithms}
+
+  <!-- NOTE: '<h4>' maps to the same heading level as three hashs '###', thus using '<h5>' for the next section -->
+  <h5 id="algorithm-same-origin-with-ancestors" algorithm>Same-Origin with its Ancestors</h5>
 
   An [=environment settings object=] (|settings|) is <dfn noexport>same-origin with its
   ancestors</dfn> if the following algorithm returns `true`:
 
-  1.  If |settings| has no [=environment settings object/responsible document=],
-      return `false`.
+  <ol class="algorithm">
+    1.  If |settings| has no [=environment settings object/responsible document=],
+        return `false`.
 
-  2.  Let |document| be |settings|' [=environment settings object/responsible document=].
+    2.  Let |document| be |settings|' [=environment settings object/responsible document=].
 
-  3.  If |document| has no [=document/browsing context=], return `false`.
+    3.  If |document| has no [=document/browsing context=], return `false`.
 
-  4.  Let |origin| be |settings|' [=environment settings object/origin=].
+    4.  Let |origin| be |settings|' [=environment settings object/origin=].
 
-  5.  Let |current| be |document|'s [=document/browsing context=].
+    5.  Let |current| be |document|'s [=document/browsing context=].
 
-  6.  While |current| has a [=parent browsing context=]:
+    6.  While |current| has a [=parent browsing context=]:
 
-      1.  Set |current| to |current|'s [=parent browsing context=].
+        1.  Set |current| to |current|'s [=parent browsing context=].
 
-      2.  If |current|'s [=active document=]'s [=origin=] is not [=same origin=] with |origin|,
-          return `false`.
+        2.  If |current|'s [=active document=]'s [=origin=] is not [=same origin=] with |origin|,
+            return `false`.
 
-  7.  Return `true`.
+    7.  Return `true`.
+  </ol>
+
+  ### Registry: Credential Type to Options Member Identifier Mappings ### {#sctn-registry-cred-type-to-options-member-identifier}
+
+  This registry maps [=credential types=] (i.e., {{Credential/[[type]]}} values) to the
+  [=dictionary member=] [=identifiers=] used in
+  {{CredentialCreationOptions}} and {{CredentialRequestOptions}} (i.e., "Options")
+  by their specifications.
+
+  Note: This registry is used by the [=relevant credential interface objects=] algorithm.
 
 
-  ### The Credential Type to CredentialRequestOptions Member Name Mapping Registry ### {#sctn-cred-type-to-options-member-name}
-
-<table class="complex data longlastcol">
-<tr>
-  <th>Credential Type</th>
-  <th>Options Member name</th>
-  <th>Specification</th>
-</tr>
-<tr>
-  <td>federated</td>
-  <td>federated</td>
-  <td>This specification.</td>
-</tr>
-<tr>
-  <td>password</td>
-  <td>password</td>
-  <td>This specification.</td>
-</tr>
-<tr>
-  <td>public-key</td>
-  <td>publicKey</td>
-  <td>[[WEBAUTHN]]</td>
-</tr>
-
+  <table class="complex data longlastcol">
+    <tr>
+        <th>Credential Type<br>
+        (in alphabetical order)</th>
+        <th>Options Member Identifier</th>
+        <th>Specification</th>
+    </tr>
+    <tr>
+        <td>federated</td>
+        <td>federated</td>
+        <td>This specification: [[#federated]]</td>
+    </tr>
+    <tr>
+        <td>password</td>
+        <td>password</td>
+        <td>This specification: [[#passwords]]</td>
+    </tr>
+    <tr>
+        <td>public-key</td>
+        <td>publicKey</td>
+        <td>[[WEBAUTHN]]</td>
+    </tr>
+  </table>
 
 
 
@@ -600,9 +615,9 @@ spec:css-syntax-3;
 
             1.  Let |credentialType| be |object|'s {{Credential/[[type]]}} slot's value.
 
-            1.  Let |key| be the result of looking up the |credentialType|'s {{CredentialRequestOptions}}'s
-                member name in the Credential Type to CredentialRequestOptions Member Name
-                Mapping registry.
+            1.  Let |key| be the result of looking up the |credentialType|'s |options|'s
+                [=dictionary member|member=] [=identifier=] in the registry of
+                [[#sctn-registry-cred-type-to-options-member-identifier|Credential Type to Options Member Identifier Mappings]].
 
             1.  If |options|[|key|] <a for="map">exists</a>, <a for="set">append</a> |object| to
                 |relevant interface objects|.
@@ -1801,7 +1816,7 @@ spec:css-syntax-3;
   if a user configures their browser to grant persistent credential access to a particular origin,
   credentials may be provided without presenting the user with a UI requesting a decision.
 
-  Here we'll spell out a few requirements that hold for all credential types, but note that there's
+  Here we'll spell out a few requirements that hold for all [=credential types=], but note that there's
   a good deal of latitude left up to the user agent (which is in a priviliged position to assist
   the user). Moreover, specific credential types may have distinct requirements that exceed the
   requirements laid out more generally here.
