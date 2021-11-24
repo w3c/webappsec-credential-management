@@ -97,6 +97,11 @@ spec:css-syntax-3;
     "authors": [ "Jason Denizac", "Robin Berjon", "Anne van Kesteren" ],
     "href": "https://github.com/jden/web-login",
     "title": "web-login"
+  },
+  "WEB-OTP": {
+    "authors": [ "Sam Goto" ],
+    "href": "https://wicg.github.io/web-otp/",
+    "title": "WebOTP API"
   }
 }
 </pre>
@@ -311,6 +316,11 @@ spec:css-syntax-3;
         <td>federated</td>
         <td>federated</td>
         <td>This specification: [[#federated]]</td>
+    </tr>
+    <tr>
+        <td>otp</td>
+        <td>otp</td>
+        <td>[[WEB-OTP]]</td>
     </tr>
     <tr>
         <td>password</td>
