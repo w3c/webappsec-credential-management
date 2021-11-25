@@ -206,7 +206,7 @@ spec:css-syntax-3;
   hanging off of {{CredentialsContainer|navigator.credentials.*}} which enable developers to
   obtain them.
 
-  Various <dfn>credential types</dfn> are each represented to JavaScript as an interface which
+  Various [=credential types=] are each represented to JavaScript as an interface which
   [=interface/inherits=], either directly or indirectly, from the {{Credential}} interface. This
   document defines two such interfaces, {{PasswordCredential}} and {{FederatedCredential}}. Other
   specifications, for example [[WEBAUTHN]], define other credential types.
@@ -298,8 +298,8 @@ spec:css-syntax-3;
   ### Registry: Credential Type to Options Member Identifier Mappings ### {#sctn-registry-cred-type-to-options-member-identifier}
 
   This registry maps [=credential types=] (i.e., {{Credential/[[type]]}} values) to the
-  [=dictionary member=] [=identifiers=] used in
-  {{CredentialCreationOptions}} and {{CredentialRequestOptions}} (i.e., "Options")
+  [=dictionary member=] [=identifier=] used in
+  {{CredentialCreationOptions}} and {{CredentialRequestOptions}} (i.e., "options dictionaries")
   by their specifications.
 
   Note: This registry is used by the [=relevant credential interface objects=] algorithm.
@@ -339,7 +339,7 @@ spec:css-syntax-3;
     </tr>
   </table>
 
-  <!-- NOTE: The below Registration Entry Requirements and Update Process is taken from
+  <!-- NOTE: The below Registration Entry Requirements and Update Process is based on
   https://www.w3.org/TR/timing-entrytypes-registry/, and is similar to other W3C
   "registry" specs. I.e., this Requirements and Update Process is typical for
   W3C registries. -->
@@ -391,7 +391,7 @@ spec:css-syntax-3;
 
     :   <dfn attribute>\[[type]]</dfn>
     ::  The {{Credential}} [=interface object=] has an internal slot named `[[type]]`, which
-        unsurprisingly contains a string representing the <dfn>credential type</dfn>. The slot's value
+        unsurprisingly contains a <dfn lt="credential type">string representing the credential type</dfn>. The slot's value
         is the empty string unless otherwise specified.
 
         Note: The {{[[type]]}} slot's value will be the same for all credentials implementing a
@@ -2251,7 +2251,16 @@ spec:css-syntax-3;
         </pre>
       </div>
 
-  7.
+  7.  Following the procedure in [[#sctn-registry-requirements]], add an entry for the new
+      "example" [=credential type=] and its corresponding {{CredentialCreationOptions}}' and
+      {{CredentialRequestOptions}}' [=dictionary member=] [=identifier=]&mdash;in this case it
+      is "example"&mdash;to the
+      [[#sctn-registry-cred-type-to-options-member-identifier|Credential Type to Options Member Identifier Mappings]]
+      registry:
+
+      Note: The [=credential type=]'s options dictionaries' [=dictionary member|member=] [=identifier=] must be the
+      same in both {{CredentialCreationOptions}} and {{CredentialRequestOptions}}, and should be
+      the same as the [=credential type=].
 
   You might also find that new primitives are necessary. For instance, you might want to return
   many {{Credential}} objects rather than just one in some sort of complicated, multi-factor
