@@ -311,28 +311,63 @@ spec:css-syntax-3;
         (in alphabetical order)</th>
         <th>Options Member Identifier</th>
         <th>Specification</th>
+        <th>Requestor Contact</th>
     </tr>
     <tr>
         <td>federated</td>
         <td>federated</td>
         <td>This specification: [[#federated]]</td>
+        <td><a href="https://www.w3.org/2011/webappsec/">W3C</a></td>
     </tr>
     <tr>
         <td>otp</td>
         <td>otp</td>
         <td>[[WEB-OTP]]</td>
+        <td><a href="https://wicg.io/">WICG</a></td>
     </tr>
     <tr>
         <td>password</td>
         <td>password</td>
         <td>This specification: [[#passwords]]</td>
+        <td><a href="https://www.w3.org/2011/webappsec/">W3C</a></td>
     </tr>
     <tr>
         <td>public-key</td>
         <td>publicKey</td>
         <td>[[WEBAUTHN]]</td>
+        <td><a href="https://www.w3.org/blog/webauthn/">W3C</a></td>
     </tr>
   </table>
+
+  <!-- NOTE: The below Registration Entry Requirements and Update Process is taken from
+  https://www.w3.org/TR/timing-entrytypes-registry/, and is similar to other W3C
+  "registry" specs. I.e., this Requirements and Update Process is typical for
+  W3C registries. -->
+
+  #### Registration Entry Requirements and Update Process #### {#sctn-registry-requirements}
+
+  * Each [=credential type=] must be unique amongst the set of [=credential types=].
+
+  * Each registry entry must state the [=dictionary member=] [=identifier=] used in the
+    credential specification's extentions of {{CredentialCreationOptions}} and
+    {{CredentialRequestOptions}}.
+
+  * Each registry entry must include a link that references a publicly available specification (PAS)
+    defining the [=credential type=] and the [=dictionary member=] [=identifier=].
+
+  * Each registry entry must include the requestor's contact information.
+
+  An update to this registry is an addition, change or deletion of a [=credential type=]'s registry entry.
+  Any person can request an update to this registry by pull requests to the
+  <a href="https://github.com/w3c/webappsec-credential-management">webappsec-credential-management</a>
+  repository.
+  The Web Applications Security Working Group will place it on an upcoming meeting agenda
+  and notify the requestor.
+  Consideration and disposition of the request is by consensus of the W3C Web Applications
+  Security Working Group.
+  The Chair will then notify the requestor of the outcome and update the registry accordingly.
+
+
 
 
 
@@ -2182,11 +2217,11 @@ spec:css-syntax-3;
   4.  Define the value of the `ExampleCredential` [=interface object=]'s {{[[discovery]]}} slot:
 
       <div class="example">
-        The `ExampleCredential` [=interface object=] has an internal slot named `[[type]]` whose
+        The `ExampleCredential` [=interface object=] has an internal slot named `[[discovery]]` whose
         value is "{{Credential/[[discovery]]/credential store}}".
       </div>
 
-  4.  Extend {{CredentialRequestOptions}} with the options the new credential type needs to respond
+  5.  Extend {{CredentialRequestOptions}} with the options the new credential type needs to respond
       reasonably to {{get()}}:
 
       <div class="example">
@@ -2201,7 +2236,7 @@ spec:css-syntax-3;
         </pre>
       </div>
 
-  5.  Extend {{CredentialCreationOptions}} with the data the new credential type needs to create
+  6.  Extend {{CredentialCreationOptions}} with the data the new credential type needs to create
       `Credential` objects in response to {{create()}}:
 
       <div class="example">
@@ -2215,6 +2250,8 @@ spec:css-syntax-3;
           };
         </pre>
       </div>
+
+  7.
 
   You might also find that new primitives are necessary. For instance, you might want to return
   many {{Credential}} objects rather than just one in some sort of complicated, multi-factor
