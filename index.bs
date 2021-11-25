@@ -642,7 +642,7 @@ spec:css-syntax-3;
 
   <div algorithm="relevant credential interfaces">
     The <dfn for="CredentialRequestOptions">relevant credential interface objects</dfn> for a given
-    {{CredentialRequestOptions}} or {{CredentialRequestOptions}} (|options|) is a set of [=interface objects=], collected as follows:
+    {{CredentialCreationOptions}} or {{CredentialRequestOptions}} (|options|) is a set of [=interface objects=], collected as follows:
 
     <ol class="algorithm">
         1.  Let |settings| be the <a>current settings object</a>
@@ -654,8 +654,7 @@ spec:css-syntax-3;
 
         1.  For each |object| in |interface objects|:
 
-            1.  If |object| is not a {{Credential}} interface object, and |object|'s [=inherited interfaces=]
-                do not <a for="set">contain</a> {{Credential}}, then
+            1.  If |object|'s [=inherited interfaces=] do not <a for="set">contain</a> {{Credential}},
                 <a for="iteration">continue</a>.
 
             1.  Let |credentialType| be |object|'s {{Credential/[[type]]}} slot's value.
@@ -672,7 +671,9 @@ spec:css-syntax-3;
 
     ISSUE: jyasskin@ suggests replacing the iteration through the interface objects with a registry.
     I'm not sure which is less clear, honestly. I'll leave it like this for the moment, and we can
-    argue about whether this is too much of a `COMEFROM` interface.
+    argue about whether this is too much of a `COMEFROM` interface. (The addition of the
+    [[#sctn-registry-cred-type-to-options-member-identifier|Credential Type to Options Member Identifier Mappings]]
+    registry does not obviate this issue.)
   </div>
 
   <div algorithm="can collect locally">
