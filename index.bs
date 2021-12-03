@@ -305,14 +305,16 @@ spec:css-syntax-3;
   Note: This registry is used by the [=relevant credential interface objects=] algorithm.
 
 
-  <table class="complex data longlastcol">
-    <tr>
+  <table class="data">
+    <thead>
+      <tr>
         <th>Credential Type<br>
         (in alphabetical order)</th>
         <th>Options Member Identifier</th>
         <th>Specification</th>
         <th>Requestor Contact</th>
-    </tr>
+      </tr>
+    </thead>
     <tr>
         <td>federated</td>
         <td>federated</td>
