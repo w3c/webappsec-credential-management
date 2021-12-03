@@ -370,9 +370,6 @@ spec:css-syntax-3;
   The Chair will then notify the requestor of the outcome and update the registry accordingly.
 
 
-
-
-
   ## The `Credential` Interface ## {#the-credential-interface}
 
   <pre class="idl">
