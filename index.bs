@@ -8,7 +8,7 @@ Shortname: credential-management
 Level: 1
 Editor: Jeff Hodges, w3cid 43843, Google Inc., jdhodges@google.com
 Editor: Nina Satragno, w3cid 116344, Google Inc., nsatragno@google.com
-Former Editor: Mike West 56384, Google Inc., mkwst@google.co
+Former Editor: Mike West 56384, Google Inc., mkwst@google.com
 Group: webappsec
 Abstract:
   This specification describes an imperative API enabling a website to request a
@@ -68,6 +68,9 @@ spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
 spec: promises-guide-1; urlPrefix: https://www.w3.org/2001/tag/doc/promises-guide
   type: dfn
     text: promise-calling; url: should-promise-call
+spec: infra; urlPrefix: https://infra.spec.whatwg.org/
+  type: dfn
+    text: exists; url: map-exists
 </pre>
 
 <pre class="link-defaults">
@@ -783,22 +786,15 @@ spec:css-syntax-3;
     6.  Let |sameOriginWithAncestors| be `true` if |settings| is [=same-origin with its
         ancestors=], and `false` otherwise.
 
-    7.  Let |key| be the result of [=map/getting the key=] of |options|.
-
-    8.  If |key| is {{CredentialRequestOptions/publicKey}} then
+    7.  If |options|[{{CredentialRequestOptions/publicKey}}] [=exists=] then
         if |settings|' [=responsible document=] is **not** [=allowed to use=] the
         <a data-lt="publickey-credentials-get-feature">publickey-credentials-get</a>
-        [=policy-controlled feature=] [[PERMISSIONS-POLICY]] return [=a promise rejected with=] `NotSupportedError`.
+        [=policy-controlled feature=] return [=a promise rejected with=] a "{{NotAllowedError}}" {{DOMException}}.
 
-        <!-- the below does not link directly to the "password" or "federated" `[[type]]` slot's values'
-        `<dfn>`s because Bikeshed does not (yet) yield future-proof id's for such "tokens" (according to
-        Tab Atkins) and thus using a brute-force `<a href="#dom-credential-type-password">password</a>`
-        link here will break at some point in the future when Bikeshed does handle this properly. -->
-        Note: <code>[[#passwords|password]]</code> and
-        <code>[[#federated|federated]]</code> [=credential types=] are not presently
+        Note: '<a const>password</a>' and '<a const>federated</a>' [=credential types=] are not presently
         treated as [=policy-controlled features=], although this may change in the future.
 
-    9.  Run the following steps [=in parallel=]:
+    8.  Run the following steps [=in parallel=]:
 
         1.  Let |credentials| be the result of <a abstract-op lt="collect local">collecting
             `Credential`s from the credential store</a>, given |origin|, |options|, and
@@ -842,7 +838,7 @@ spec:css-syntax-3;
 
             Otherwise, [=reject=] |p| with |result|.
 
-    10.  Return |p|.
+    9.  Return |p|.
   </ol>
 
   <h4 id="algorithm-collect-known" algorithm>Collect `Credential`s from the credential store</h4>
