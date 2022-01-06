@@ -377,6 +377,7 @@ spec:css-syntax-3;
     interface Credential {
       readonly attribute USVString id;
       readonly attribute DOMString type;
+      static boolean isConditionalMediationAvailable();
     };
   </pre>
   <div dfn-for="Credential">
@@ -387,6 +388,24 @@ spec:css-syntax-3;
     :   <dfn attribute>type</dfn>
     ::  This attribute's getter returns the value of the object's [=interface object=]'s
         {{[[type]]}} slot, which specifies the [=credential type=] represented by this object.
+
+    :   <dfn method>isConditionalMediationAvailable()</dfn>
+    ::  Returns `true` if and only if the user agent supports the
+        {{CredentialMediationRequirement/conditional}} approach to
+        [[#mediation-requirements|mediation of credential requests]] for the [=credential type=],
+        `false` otherwise.
+
+        {{Credential}}'s default implementation of {{Credential/isConditionalMediationAvailable()}}:
+
+        <ol class="algorithm">
+            1.  Return `false`.
+        </ol>
+
+        The specification for any [=credential type=] supporting
+        {{CredentialMediationRequirement/conditional}} mediation must explicitly override this
+        function to return `true`.
+        Note: If this function is not present, {{CredentialMediationRequirement/conditional}}
+        mediation is not supported for the [=credential type=].
 
     :   <dfn attribute>\[[type]]</dfn>
     ::  The {{Credential}} [=interface object=] has an internal slot named `[[type]]`, which
@@ -708,6 +727,7 @@ spec:css-syntax-3;
     enum CredentialMediationRequirement {
       "silent",
       "optional",
+      "conditional",
       "required"
     };
   </pre>
@@ -731,6 +751,26 @@ spec:css-syntax-3;
         developer has reasonable confidence that a user expects to start a sign-in operation. If
         a user has just clicked "sign-in" for example, then they won't be surprised or confused to
         see a [=credential chooser=] if necessary.
+
+    :   <dfn>conditional</dfn>
+    ::  Discovered credentials are presented to the user in a non-modal dialog along with an
+        indication of the [=origin=] which is requesting credentials. If the user makes a gesture
+        outside of the dialog, the dialog closes without resolving or rejecting the {{Promise}}
+        returned by the {{CredentialsContainer/get()}} method and without causing a user-visible
+        error condition. If the user makes a gesture that selects a credential, that credential is
+        returned to the caller. The [=prevent silent access flag=] is treated as being `true`
+        regardless of its actual value: the {{CredentialMediationRequirement/conditional}} behavior
+        always involves [=user mediation=] of some sort if applicable credentials are discovered.
+
+        If no credentials are discovered, the user agent MAY prompt the user to take action in a way
+        that depends on the type of credential (e.g. to insert a device containing credentials).
+        Either way, the `get()` method MUST NOT resolve immediately with `null` to avoid revealing
+        the lack of applicable credentials to the website.
+
+        Websites can only pass {{CredentialMediationRequirement/conditional}} into the
+        {{CredentialsContainer/get()}} method if all of the [=relevant credential interface objects|credential
+        interfaces it refers to=] have overridden {{Credential/isConditionalMediationAvailable()}} to return
+        `true`.
 
     :   <dfn>required</dfn>
     ::  The user agent will not hand over credentials without [=user mediation=], even if the
@@ -868,64 +908,89 @@ spec:css-syntax-3;
   <ol class="algorithm">
     1.  Let |settings| be the <a>current settings object</a>
 
-    2.  Assert: |settings| is a [=secure context=].
+    1.  Assert: |settings| is a [=secure context=].
 
-    3.  If <code>|options|.{{CredentialRequestOptions/signal}}</code> is [=AbortSignal/aborted=],
+    1.  If <code>|options|.{{CredentialRequestOptions/signal}}</code> is [=AbortSignal/aborted=],
         then return [=a promise rejected with=]
         <code>|options|.{{CredentialRequestOptions/signal}}</code>'s [=AbortSignal/abort reason=].
 
-    4.  Let |p| be [=a new promise=].
+    1.  If <code>|options|.{{CredentialRequestOptions/mediation}}</code> is
+        "{{CredentialMediationRequirement/conditional}}":
 
-    5.  Let |origin| be the [=current settings object=]'s [=environment settings object/origin=].
+        1.  For each |interface| in |options|' [=relevant credential interface objects=]:
 
-    6.  Let |sameOriginWithAncestors| be `true` if |settings| is [=same-origin with its
+            1.  If |interface| does not support {{CredentialMediationRequirement/conditional}}
+                [=user mediation=], return [=a promise rejected with=] a "{{TypeError}}" {{DOMException}}.
+
+    1.  Let |p| be [=a new promise=].
+
+    1.  Let |origin| be the [=current settings object=]'s [=environment settings object/origin=].
+
+    1.  Let |sameOriginWithAncestors| be `true` if |settings| is [=same-origin with its
         ancestors=], and `false` otherwise.
 
-    7.  Run the following steps [=in parallel=]:
+    1.  If |options|[{{CredentialRequestOptions/publicKey}}] [=map/exists=] then
+        if |settings|' [=responsible document=] is **not** [=allowed to use=] the
+        [=publickey-credentials-get-feature|publickey-credentials-get=]
+        [=policy-controlled feature=] return [=a promise rejected with=] a "{{NotAllowedError}}" {{DOMException}}.
+
+        Note: <a const>`password`</a> and <a const>`federated`</a> [=credential types=] are not presently
+        treated as [=policy-controlled features=], although this may change in the future.
+
+    1.  Run the following steps [=in parallel=]:
 
         1.  Let |credentials| be the result of <a abstract-op lt="collect local">collecting
             `Credential`s from the credential store</a>, given |origin|, |options|, and
             |sameOriginWithAncestors|.
 
-        2.  If |credentials| is an [=exception=], [=reject=] |p| with |credentials|.
+        1.  If |credentials| is an [=exception=], [=reject=] |p| with |credentials|.
 
-        3.  If all of the following statements are true, resolve |p| with |credentials|[0] and
+        1.  If all of the following statements are true, resolve |p| with |credentials|[0] and
             skip the remaining steps:
 
             1.  |credentials|' [=set/size=] is 1
 
-            2.  |origin| does not [=origin/requires user mediation|require user mediation=]
+            1.  |origin| does not [=origin/requires user mediation|require user mediation=]
 
-            3.  |options| is <a>matchable <i lang="la">a priori</i></a>.
+            1.  |options| is <a>matchable <i lang="la">a priori</i></a>.
 
-            4.  |options|.{{CredentialRequestOptions/mediation}} is not
+            1.  |options|.{{CredentialRequestOptions/mediation}} is not
                 "{{CredentialMediationRequirement/required}}".
+
+            1.  |options|.{{CredentialRequestOptions/mediation}} is not
+                "{{CredentialMediationRequirement/conditional}}".
 
             ISSUE: This might be the wrong model. It would be nice to support a site that wished
             to accept either username/passwords or webauthn-style credentials without forcing
             a chooser for those users who use the former, and who wish to remain signed in.
 
-        4.  If |options|' {{CredentialRequestOptions/mediation}} is
+        1.  If |options|' {{CredentialRequestOptions/mediation}} is
             "{{CredentialMediationRequirement/silent}}", [=resolve=] |p| with `null`, and skip
             the remaining steps.
 
-        5.  Let |choice| be the result of <a abstract-op lt="ask to choose">asking the user to
+        1.  Let |result| be the result of <a abstract-op lt="ask to choose">asking the user to
             choose a `Credential`</a>, given |options| and |credentials|.
 
-        6.  If |choice| is `null` or a {{Credential}}, [=resolve=] |p| with |choice| and skip the
-            remaining steps.
+        1.  If |result| is an [=interface object=]:
 
-        7.  Assert: |choice| is an [=interface object=].
+            1.  Set |result| to the result of executing |result|'s
+                {{[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)}},
+                given |origin|, |options|, and |sameOriginWithAncestors|.
 
-        8.  Let |result| be the result of executing |choice|'s
-            {{[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)}},
-            given |origin|, |options|, and |sameOriginWithAncestors|.
+        1.  Assert: |result| is `null`, a {{Credential}}, or an [=exception=].
 
-        9.  If |result| is a {{Credential}} or `null`, resolve |p| with |result|.
+        1.  If |result| is a {{Credential}}, [=resolve=] |p| with |result|.
 
-            Otherwise, [=reject=] |p| with |result|.
+        1.  If |result| is an [=exception=], [=reject=] |p| with |result|.
 
-    7.  Return |p|.
+        1.  If |result| is `null` and |options|.{{CredentialRequestOptions/mediation}} is not
+            {{CredentialMediationRequirement/conditional}}, [=resolve=] |p| with |result|.
+
+            Note: if |options|.{{CredentialRequestOptions/mediation}} is
+            {{CredentialMediationRequirement/conditional}} and a `null` credential is discovered,
+            promise |p| is not resolved.
+
+    1.  Return |p|.
   </ol>
 
   <h4 id="algorithm-collect-known" algorithm>Collect `Credential`s from the credential store</h4>
@@ -1018,7 +1083,7 @@ spec:css-syntax-3;
             types in order to support a "sign-up" use case. For the moment, though, we're punting
             on that by restricting the dictionary to a single entry.
 
-    3.  If <code>|options|.{{CredentialRequestOptions/signal}}</code> is [=AbortSignal/aborted=],
+    7.  If <code>|options|.{{CredentialRequestOptions/signal}}</code> is [=AbortSignal/aborted=],
         then return [=a promise rejected with=]
         <code>|options|.{{CredentialRequestOptions/signal}}</code>'s [=AbortSignal/abort reason=].
 
@@ -2173,7 +2238,7 @@ spec:css-syntax-3;
         </pre>
       </div>
 
-  2.  Define appropriate {{Credential/[[Create]](origin, options, sameOriginWithAncestors)}},
+  1.  Define appropriate {{Credential/[[Create]](origin, options, sameOriginWithAncestors)}},
       {{Credential/[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)}},
       {{Credential/[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)}}, and
       {{Credential/[[Store]](credential, sameOriginWithAncestors)}} methods on `ExampleCredential`'s
@@ -2207,21 +2272,21 @@ spec:css-syntax-3;
             1.  ...
       </div>
 
-  3.  Define the value of the `ExampleCredential` [=interface object=]'s {{[[type]]}} slot:
+  1.  Define the value of the `ExampleCredential` [=interface object=]'s {{[[type]]}} slot:
 
       <div class="example">
         The `ExampleCredential` [=interface object=] has an internal slot named `[[type]]` whose
         value is the string "`example`".
       </div>
 
-  4.  Define the value of the `ExampleCredential` [=interface object=]'s {{[[discovery]]}} slot:
+  1.  Define the value of the `ExampleCredential` [=interface object=]'s {{[[discovery]]}} slot:
 
       <div class="example">
         The `ExampleCredential` [=interface object=] has an internal slot named `[[discovery]]` whose
         value is "{{Credential/[[discovery]]/credential store}}".
       </div>
 
-  5.  Extend {{CredentialRequestOptions}} with the options the new credential type needs to respond
+  1.  Extend {{CredentialRequestOptions}} with the options the new credential type needs to respond
       reasonably to {{get()}}:
 
       <div class="example">
@@ -2236,7 +2301,7 @@ spec:css-syntax-3;
         </pre>
       </div>
 
-  6.  Extend {{CredentialCreationOptions}} with the data the new credential type needs to create
+  1.  Extend {{CredentialCreationOptions}} with the data the new credential type needs to create
       `Credential` objects in response to {{create()}}:
 
       <div class="example">
@@ -2251,7 +2316,10 @@ spec:css-syntax-3;
         </pre>
       </div>
 
-  7.  Following the procedure in [[#sctn-registry-requirements]], add an entry for the new
+  1.  If the new credential type supports {{CredentialMediationRequirement/conditional}} [=user
+      mediation=], define `ExampleCredential/isConditionalMediationAvailable()` to return `true`.
+
+  1.  Following the procedure in [[#sctn-registry-requirements]], add an entry for the new
       "example" [=credential type=] and its corresponding {{CredentialCreationOptions}}' and
       {{CredentialRequestOptions}}' [=dictionary member=] [=identifier=]&mdash;in this case it
       is "example"&mdash;to the
