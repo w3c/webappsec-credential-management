@@ -68,9 +68,6 @@ spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
 spec: promises-guide-1; urlPrefix: https://www.w3.org/2001/tag/doc/promises-guide
   type: dfn
     text: promise-calling; url: should-promise-call
-spec: infra; urlPrefix: https://infra.spec.whatwg.org/
-  type: dfn
-    text: exists; url: map-exists
 </pre>
 
 <pre class="link-defaults">
@@ -834,9 +831,9 @@ spec:css-syntax-3;
     1.  Let |sameOriginWithAncestors| be `true` if |settings| is [=same-origin with its
         ancestors=], and `false` otherwise.
 
-    1.  If |options|[{{CredentialRequestOptions/publicKey}}] [=exists=] then
+    1.  If |options|[{{CredentialRequestOptions/publicKey}}] [=map/exists=] then
         if |settings|' [=responsible document=] is **not** [=allowed to use=] the
-        <a data-lt="publickey-credentials-get-feature">publickey-credentials-get</a>
+        [=publickey-credentials-get-feature|publickey-credentials-get=]
         [=policy-controlled feature=] return [=a promise rejected with=] a "{{NotAllowedError}}" {{DOMException}}.
 
         Note: <a const>`password`</a> and <a const>`federated`</a> [=credential types=] are not presently
