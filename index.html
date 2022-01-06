@@ -3,10 +3,12 @@
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
   <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
   <title>Credential Management Level 1</title>
+  <meta content="ED" name="w3c-status">
   <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED" rel="stylesheet">
-  <meta content="Bikeshed version 31a2f03f4, updated Wed Dec 1 15:27:21 2021 -0800" name="generator">
+  <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
+  <meta content="Bikeshed version cace53f8c, updated Tue Dec 7 12:12:54 2021 -0800" name="generator">
   <link href="http://www.w3.org/TR/credential-management-1/" rel="canonical">
-  <meta content="b273b4a9d6b1f43c649936b175f5b01868c48b86" name="document-revision">
+  <meta content="307bd776b73440c59be37460b257623e62c3205d" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -644,9 +646,9 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2021-12-06">6 December 2021</time></p>
-   <details>
-    <summary>Specification Metadata</summary>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2022-01-06">6 January 2022</time></p>
+   <details open>
+    <summary>More details about this document</summary>
     <div data-fill-with="spec-metadata">
      <dl>
       <dt>This version:
@@ -670,7 +672,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     </div>
    </details>
    <div data-fill-with="warning"></div>
-   <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2021 <a href="https://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup> (<a href="https://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>, <a href="https://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>, <a href="https://www.keio.ac.jp/">Keio</a>, <a href="https://ev.buaa.edu.cn/">Beihang</a>). W3C <a href="https://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>, <a href="https://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and <a href="https://www.w3.org/Consortium/Legal/copyright-software">permissive document license</a> rules apply. </p>
+   <p class="copyright" data-fill-with="copyright"><a href="https://www.w3.org/Consortium/Legal/ipr-notice#Copyright">Copyright</a> © 2022 <a href="https://www.w3.org/"><abbr title="World Wide Web Consortium">W3C</abbr></a><sup>®</sup> (<a href="https://www.csail.mit.edu/"><abbr title="Massachusetts Institute of Technology">MIT</abbr></a>, <a href="https://www.ercim.eu/"><abbr title="European Research Consortium for Informatics and Mathematics">ERCIM</abbr></a>, <a href="https://www.keio.ac.jp/">Keio</a>, <a href="https://ev.buaa.edu.cn/">Beihang</a>). W3C <a href="https://www.w3.org/Consortium/Legal/ipr-notice#Legal_Disclaimer">liability</a>, <a href="https://www.w3.org/Consortium/Legal/ipr-notice#W3C_Trademarks">trademark</a> and <a href="https://www.w3.org/Consortium/Legal/2015/copyright-software-and-document" rel="license">permissive document license</a> rules apply. </p>
    <hr title="Separator for header">
   </div>
   <div class="p-summary" data-fill-with="abstract">
@@ -680,7 +682,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   user’s credentials from a user agent, and to help the user agent correctly
   store user credentials for future use.</p>
   </div>
-  <h2 class="no-num no-toc no-ref heading settled" id="status"><span class="content">Status of this document</span></h2>
+  <h2 class="no-num no-toc no-ref heading settled" id="sotd"><span class="content">Status of this document</span></h2>
   <div data-fill-with="status">
    <p> This is a public copy of the editors’ draft.
 	It is provided for discussion only and may change at any moment.
@@ -815,12 +817,6 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
       <li><a href="#browser-extensions"><span class="secno">7.3</span> <span class="content">Browser Extensions</span></a>
      </ol>
     <li><a href="#teh-futur"><span class="secno">8</span> <span class="content">Future Work</span></a>
-    <li>
-     <a href="#conformance"><span class="secno"></span> <span class="content">Conformance</span></a>
-     <ol class="toc">
-      <li><a href="#conventions"><span class="secno"></span> <span class="content">Document conventions</span></a>
-      <li><a href="#conformant-algorithms"><span class="secno"></span> <span class="content">Conformant Algorithms</span></a>
-     </ol>
     <li>
      <a href="#index"><span class="secno"></span> <span class="content">Index</span></a>
      <ol class="toc">
@@ -1544,6 +1540,11 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
       <p>Let <var>sameOriginWithAncestors</var> be <code>true</code> if <var>settings</var> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors④">same-origin with its
   ancestors</a>, and <code>false</code> otherwise.</p>
      <li data-md>
+      <p>If <var>options</var>[<code class="idl"><a data-link-type="idl" href="https://w3c.github.io/webauthn/#dom-credentialrequestoptions-publickey" id="ref-for-dom-credentialrequestoptions-publickey">publicKey</a></code>] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists①">exists</a> then
+  if <var>settings</var>’ <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-document" id="ref-for-responsible-document②">responsible document</a> is <strong>not</strong> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#allowed-to-use" id="ref-for-allowed-to-use">allowed to use</a> the <a data-link-type="dfn" href="https://w3c.github.io/webauthn/#publickey-credentials-get-feature" id="ref-for-publickey-credentials-get-feature">publickey-credentials-get</a> <a data-link-type="dfn" href="https://w3c.github.io/webappsec-permissions-policy/#policy-controlled-feature" id="ref-for-policy-controlled-feature">policy-controlled feature</a> return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with②">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException①">DOMException</a></code>.</p>
+      <p class="note" role="note"><span>Note:</span> <a class="idl-code" data-link-type="const" href="#dom-credential-type-password" id="ref-for-dom-credential-type-password"><code>password</code></a> and <a class="idl-code" data-link-type="const" href="#dom-federatedcredential-federated" id="ref-for-dom-federatedcredential-federated"><code>federated</code></a> <a data-link-type="dfn" href="#credential-credential-type" id="ref-for-credential-credential-type⑤">credential types</a> are not presently
+  treated as <a data-link-type="dfn" href="https://w3c.github.io/webappsec-permissions-policy/#policy-controlled-feature" id="ref-for-policy-controlled-feature①">policy-controlled features</a>, although this may change in the future.</p>
+     <li data-md>
       <p>Run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel③">in parallel</a>:</p>
       <ol>
        <li data-md>
@@ -1667,11 +1668,11 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
      <li data-md>
       <p>Let <var>interfaces</var> be the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set">set</a> of <var>options</var>’ <a data-link-type="dfn" href="#credentialrequestoptions-relevant-credential-interface-objects" id="ref-for-credentialrequestoptions-relevant-credential-interface-objects④">relevant credential interface objects</a>.</p>
      <li data-md>
-      <p>Return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with②">a promise rejected with</a> <code>NotSupportedError</code> if any of the following statements
+      <p>Return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with③">a promise rejected with</a> <code>NotSupportedError</code> if any of the following statements
   are true:</p>
       <ol>
        <li data-md>
-        <p><var>settings</var> does not have a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-document" id="ref-for-responsible-document②">responsible document</a>.</p>
+        <p><var>settings</var> does not have a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-document" id="ref-for-responsible-document③">responsible document</a>.</p>
        <li data-md>
         <p><var>interfaces</var>’ <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size①">size</a> is greater than 1.</p>
         <p class="note" role="note"><span>Note:</span> It may be reasonable at some point in the future to loosen this restriction, and
@@ -1681,7 +1682,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
       </ol>
      <li data-md>
       <p>If <code><var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-signal" id="ref-for-dom-credentialrequestoptions-signal③">signal</a></code></code> is <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#abortsignal-aborted" id="ref-for-abortsignal-aborted①">aborted</a>,
-  then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with③">a promise rejected with</a> <code><var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-signal" id="ref-for-dom-credentialrequestoptions-signal④">signal</a></code></code>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#abortsignal-abort-reason" id="ref-for-abortsignal-abort-reason③">abort reason</a>.</p>
+  then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with④">a promise rejected with</a> <code><var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-signal" id="ref-for-dom-credentialrequestoptions-signal④">signal</a></code></code>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#abortsignal-abort-reason" id="ref-for-abortsignal-abort-reason③">abort reason</a>.</p>
      <li data-md>
       <p>Let <var>p</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise②">a new promise</a>.</p>
      <li data-md>
@@ -1747,7 +1748,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
       // a basic login form.
       return;
     }
-    if (credential.<a class="idl-code" data-link-type="attribute" href="#dom-credential-type" id="ref-for-dom-credential-type①">type</a> == '<a class="idl-code" data-link-type="const" href="#dom-credential-type-password" id="ref-for-dom-credential-type-password">password</a>') {
+    if (credential.<a class="idl-code" data-link-type="attribute" href="#dom-credential-type" id="ref-for-dom-credential-type①">type</a> == '<a class="idl-code" data-link-type="const" href="#dom-credential-type-password" id="ref-for-dom-credential-type-password①">password</a>') {
       var form = new FormData();
       form.append('username_field', credential.id);
       form.append('password_field', credential.password);
@@ -1982,9 +1983,9 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     <p>The algorithm will return a <code>NotAllowedError</code> if <var>sameOriginWithAncestors</var> is not <code>true</code>.</p>
     <ol class="algorithm">
      <li data-md>
-      <p class="assertion">Assert: <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password②">password</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists①">exists</a>.</p>
+      <p class="assertion">Assert: <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password②">password</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②">exists</a>.</p>
      <li data-md>
-      <p>If <var>sameOriginWithAncestors</var> is <code>false</code>, return a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException①">DOMException</a></code>.</p>
+      <p>If <var>sameOriginWithAncestors</var> is <code>false</code>, return a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror①">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException②">DOMException</a></code>.</p>
       <p class="note" role="note"><span>Note:</span> This restriction aims to address the concern raised in <a href="#security-origin-confusion">§ 6.4 Origin Confusion</a>.</p>
      <li data-md>
       <p>Return the empty set if <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password③">password</a></code>"] is not <code>true</code>.</p>
@@ -2005,7 +2006,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   used to create a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential①④">PasswordCredential</a></code>, this algorithm will return a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror③">TypeError</a></code> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception⑧">exception</a>.</p>
     <ol class="algorithm">
      <li data-md>
-      <p class="assertion">Assert: <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-password" id="ref-for-dom-credentialcreationoptions-password">password</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②">exists</a>, and <var>sameOriginWithAncestors</var> is unused.</p>
+      <p class="assertion">Assert: <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-password" id="ref-for-dom-credentialcreationoptions-password">password</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③">exists</a>, and <var>sameOriginWithAncestors</var> is unused.</p>
      <li data-md>
       <p>If <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-password" id="ref-for-dom-credentialcreationoptions-password①">password</a></code>"] is an <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement" id="ref-for-htmlformelement⑦">HTMLFormElement</a></code>, return the
   result of executing <a data-link-type="abstract-op" href="#abstract-opdef-create-a-passwordcredential-from-an-htmlformelement" id="ref-for-abstract-opdef-create-a-passwordcredential-from-an-htmlformelement①">Create a <code>PasswordCredential</code> from an <code>HTMLFormElement</code></a> given <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-password" id="ref-for-dom-credentialcreationoptions-password②">password</a></code>"] and <var>origin</var>.</p>
@@ -2022,7 +2023,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     <p>The algorithm will return a <code>NotAllowedError</code> if <var>sameOriginWithAncestors</var> is not <code>true</code>.</p>
     <ol class="algorithm">
      <li data-md>
-      <p>Return a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror①">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException②">DOMException</a></code> without altering the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store①⑥">credential store</a> if <var>sameOriginWithAncestors</var> is <code>false</code>.</p>
+      <p>Return a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror②">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException③">DOMException</a></code> without altering the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store①⑥">credential store</a> if <var>sameOriginWithAncestors</var> is <code>false</code>.</p>
       <p class="note" role="note"><span>Note:</span> This restriction aims to address the concern raised in <a href="#security-origin-confusion">§ 6.4 Origin Confusion</a>.</p>
      <li data-md>
       <p>If the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store①⑦">credential store</a> contains a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential①⑥">PasswordCredential</a></code> (<var>stored</var>)
@@ -2240,7 +2241,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
       <dt data-md><code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot④">[[type]]</a></code>
       <dd data-md>
        <p>The <code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential②">FederatedCredential</a></code> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-interface-object" id="ref-for-dfn-interface-object①⑤">interface object</a> has an internal slot named <code>[[type]]</code> whose
-  value is "<dfn class="idl-code" data-dfn-for="FederatedCredential" data-dfn-type="const" data-export id="dom-federatedcredential-federated"><code>federated</code><a class="self-link" href="#dom-federatedcredential-federated"></a></dfn>".</p>
+  value is "<dfn class="dfn-paneled idl-code" data-dfn-for="FederatedCredential" data-dfn-type="const" data-export id="dom-federatedcredential-federated"><code>federated</code></dfn>".</p>
       <dt data-md><code class="idl"><a data-link-type="idl" href="#dom-credential-discovery-slot" id="ref-for-dom-credential-discovery-slot②">[[discovery]]</a></code>
       <dd data-md>
        <p>The <code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential③">FederatedCredential</a></code> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-interface-object" id="ref-for-dfn-interface-object①⑥">interface object</a> has an internal slot named <code>[[discovery]]</code> whose value is "<code class="idl"><a data-link-type="idl" href="#dom-credential-discovery-credential-store" id="ref-for-dom-credential-discovery-credential-store②">credential store</a></code>".</p>
@@ -2294,9 +2295,9 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   will be empty.</p>
     <ol class="algorithm">
      <li data-md>
-      <p class="assertion">Assert: <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-federated" id="ref-for-dom-credentialrequestoptions-federated">federated</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③">exists</a>.</p>
+      <p class="assertion">Assert: <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-federated" id="ref-for-dom-credentialrequestoptions-federated">federated</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④">exists</a>.</p>
      <li data-md>
-      <p>If <var>sameOriginWithAncestors</var> is <code>false</code>, return a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror②">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException③">DOMException</a></code>.</p>
+      <p>If <var>sameOriginWithAncestors</var> is <code>false</code>, return a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror③">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException④">DOMException</a></code>.</p>
       <p class="note" role="note"><span>Note:</span> This restriction aims to address the concern raised in <a href="#security-origin-confusion">§ 6.4 Origin Confusion</a>.</p>
      <li data-md>
       <p>Return the empty set if <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-federated" id="ref-for-dom-credentialrequestoptions-federated①">federated</a></code>"] is not <code>true</code>.</p>
@@ -2308,9 +2309,9 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
        <li data-md>
         <p>The credential’s <code class="idl"><a data-link-type="idl" href="#dom-credential-origin-slot" id="ref-for-dom-credential-origin-slot⑥">[[origin]]</a></code> is the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#same-origin" id="ref-for-same-origin③">same origin</a> as <var>origin</var>.</p>
        <li data-md>
-        <p>If <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-federated" id="ref-for-dom-credentialrequestoptions-federated②">federated</a></code>"]["<code class="idl"><a data-link-type="idl" href="#dom-federatedcredentialrequestoptions-providers" id="ref-for-dom-federatedcredentialrequestoptions-providers①">providers</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④">exists</a>, its value <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①">contains</a> the credentials’s <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-provider" id="ref-for-dom-federatedcredential-provider③">provider</a></code>.</p>
+        <p>If <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-federated" id="ref-for-dom-credentialrequestoptions-federated②">federated</a></code>"]["<code class="idl"><a data-link-type="idl" href="#dom-federatedcredentialrequestoptions-providers" id="ref-for-dom-federatedcredentialrequestoptions-providers①">providers</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤">exists</a>, its value <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①">contains</a> the credentials’s <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-provider" id="ref-for-dom-federatedcredential-provider③">provider</a></code>.</p>
        <li data-md>
-        <p>If <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-federated" id="ref-for-dom-credentialrequestoptions-federated③">federated</a></code>"]["<code class="idl"><a data-link-type="idl" href="#dom-federatedcredentialrequestoptions-protocols" id="ref-for-dom-federatedcredentialrequestoptions-protocols">protocols</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤">exists</a>, its value <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain②">contains</a> the credentials’s <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-protocol" id="ref-for-dom-federatedcredential-protocol①">protocol</a></code>.</p>
+        <p>If <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-federated" id="ref-for-dom-credentialrequestoptions-federated③">federated</a></code>"]["<code class="idl"><a data-link-type="idl" href="#dom-federatedcredentialrequestoptions-protocols" id="ref-for-dom-federatedcredentialrequestoptions-protocols">protocols</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥">exists</a>, its value <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain②">contains</a> the credentials’s <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-protocol" id="ref-for-dom-federatedcredential-protocol①">protocol</a></code>.</p>
       </ol>
     </ol>
     <h4 class="heading settled algorithm" data-algorithm="FederatedCredential&apos;s [[Create]](origin, options, sameOriginWithAncestors)" data-level="4.2.2" id="create-federatedcredential"><span class="secno">4.2.2. </span><span class="content"> <code>FederatedCredential</code>'s <code>[[Create]](origin, options, sameOriginWithAncestors)</code> </span><a class="self-link" href="#create-federatedcredential"></a></h4>
@@ -2319,7 +2320,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   The algorithm returns a <code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential⑨">FederatedCredential</a></code> if one can be created, <code>null</code> otherwise, or an <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception①③">exception</a> in exceptional circumstances:</p>
     <ol class="algorithm">
      <li data-md>
-      <p class="assertion">Assert: <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-federated" id="ref-for-dom-credentialcreationoptions-federated">federated</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥">exists</a>, and <var>sameOriginWithAncestors</var> is unused.</p>
+      <p class="assertion">Assert: <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-federated" id="ref-for-dom-credentialcreationoptions-federated">federated</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑦">exists</a>, and <var>sameOriginWithAncestors</var> is unused.</p>
      <li data-md>
       <p>Set <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-federated" id="ref-for-dom-credentialcreationoptions-federated①">federated</a></code>"]'s <code class="idl"><a data-link-type="idl" href="#dom-federatedcredentialinit-origin" id="ref-for-dom-federatedcredentialinit-origin">origin</a></code> member’s value to <var>origin</var>’s value.</p>
      <li data-md>
@@ -2333,7 +2334,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
     <p>The algorithm will return a <code>NotAllowedError</code> if <var>sameOriginWithAncestors</var> is not <code>true</code>.</p>
     <ol class="algorithm">
      <li data-md>
-      <p>Return a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror③">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException④">DOMException</a></code> without altering the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store②②">credential store</a> if <var>sameOriginWithAncestors</var> is <code>false</code>.</p>
+      <p>Return a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror④">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑤">DOMException</a></code> without altering the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store②②">credential store</a> if <var>sameOriginWithAncestors</var> is <code>false</code>.</p>
       <p class="note" role="note"><span>Note:</span> This restriction aims to address the concern raised in <a href="#security-origin-confusion">§ 6.4 Origin Confusion</a>.</p>
      <li data-md>
       <p>If the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store②③">credential store</a> contains a <code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential①①">FederatedCredential</a></code> whose <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id⑥">id</a></code> attribute is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id⑦">id</a></code> and whose <code class="idl"><a data-link-type="idl" href="#dom-credential-origin-slot" id="ref-for-dom-credential-origin-slot⑦">[[origin]]</a></code> slot is the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#same-origin" id="ref-for-same-origin④">same origin</a> as <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-origin-slot" id="ref-for-dom-credential-origin-slot⑧">[[origin]]</a></code>, and
@@ -2732,37 +2733,6 @@ partial dictionary CredentialCreationOptions {
     <p>Baby steps.</p>
    </section>
   </main>
-  <h2 class="no-ref no-num heading settled" id="conformance"><span class="content">Conformance</span><a class="self-link" href="#conformance"></a></h2>
-  <h3 class="no-ref no-num heading settled" id="conventions"><span class="content">Document conventions</span><a class="self-link" href="#conventions"></a></h3>
-  <p>Conformance requirements are expressed with a combination of
-    descriptive assertions and RFC 2119 terminology. The key words “MUST”,
-    “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”,
-    “RECOMMENDED”, “MAY”, and “OPTIONAL” in the normative parts of this
-    document are to be interpreted as described in RFC 2119.
-    However, for readability, these words do not appear in all uppercase
-    letters in this specification. </p>
-  <p>All of the text of this specification is normative except sections
-    explicitly marked as non-normative, examples, and notes. <a data-link-type="biblio" href="#biblio-rfc2119">[RFC2119]</a></p>
-  <p>Examples in this specification are introduced with the words “for example”
-    or are set apart from the normative text with <code>class="example"</code>,
-    like this: </p>
-  <div class="example" id="example-ae2b6bc0">
-   <a class="self-link" href="#example-ae2b6bc0"></a> 
-   <p>This is an example of an informative example.</p>
-  </div>
-  <p>Informative notes begin with the word “Note” and are set apart from the
-    normative text with <code>class="note"</code>, like this: </p>
-  <p class="note" role="note">Note, this is an informative note.</p>
-  <h3 class="no-ref no-num heading settled" id="conformant-algorithms"><span class="content">Conformant Algorithms</span><a class="self-link" href="#conformant-algorithms"></a></h3>
-  <p>Requirements phrased in the imperative as part of algorithms (such as
-    "strip any leading space characters" or "return false and abort these
-    steps") are to be interpreted with the meaning of the key word ("must",
-    "should", "may", etc) used in introducing the algorithm.</p>
-  <p>Conformance requirements phrased as algorithms or specific steps can be
-    implemented in any manner, so long as the end result is equivalent. In
-    particular, the algorithms defined in this specification are intended to
-    be easy to understand and are not intended to be performant. Implementers
-    are encouraged to optimize.</p>
 <script src="https://www.w3.org/scripts/TR/2021/fixup.js"></script>
   <h2 class="no-num no-ref heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
   <h3 class="no-num no-ref heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
@@ -3073,6 +3043,12 @@ partial dictionary CredentialCreationOptions {
     <li><a href="#ref-for-active-document①">2.3. navigator.credentials</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-allowed-to-use">
+   <a href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#allowed-to-use">https://html.spec.whatwg.org/multipage/iframe-embed-object.html#allowed-to-use</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-allowed-to-use">2.5.1. Request a Credential</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-ascii-serialisation-of-an-origin">
    <a href="https://html.spec.whatwg.org/multipage/origin.html#ascii-serialisation-of-an-origin">https://html.spec.whatwg.org/multipage/origin.html#ascii-serialisation-of-an-origin</a><b>Referenced in:</b>
    <ul>
@@ -3246,7 +3222,8 @@ partial dictionary CredentialCreationOptions {
    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-document">https://html.spec.whatwg.org/multipage/webappapis.html#responsible-document</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-responsible-document">2.1. Infrastructure</a> <a href="#ref-for-responsible-document①">(2)</a>
-    <li><a href="#ref-for-responsible-document②">2.5.4. Create a Credential</a>
+    <li><a href="#ref-for-responsible-document②">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-responsible-document③">2.5.4. Create a Credential</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-same-origin">
@@ -3340,13 +3317,14 @@ partial dictionary CredentialCreationOptions {
    <a href="https://infra.spec.whatwg.org/#map-exists">https://infra.spec.whatwg.org/#map-exists</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-map-exists">2.3.1. The CredentialRequestOptions Dictionary</a>
-    <li><a href="#ref-for-map-exists①">3.3.1. 
+    <li><a href="#ref-for-map-exists①">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-map-exists②">3.3.1. 
     PasswordCredential's [[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors) </a>
-    <li><a href="#ref-for-map-exists②">3.3.2. 
+    <li><a href="#ref-for-map-exists③">3.3.2. 
     PasswordCredential's [[Create]](origin, options, sameOriginWithAncestors) </a>
-    <li><a href="#ref-for-map-exists③">4.2.1. 
-    FederatedCredential's [[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors) </a> <a href="#ref-for-map-exists④">(2)</a> <a href="#ref-for-map-exists⑤">(3)</a>
-    <li><a href="#ref-for-map-exists⑥">4.2.2. 
+    <li><a href="#ref-for-map-exists④">4.2.1. 
+    FederatedCredential's [[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors) </a> <a href="#ref-for-map-exists⑤">(2)</a> <a href="#ref-for-map-exists⑥">(3)</a>
+    <li><a href="#ref-for-map-exists⑦">4.2.2. 
     FederatedCredential's [[Create]](origin, options, sameOriginWithAncestors) </a>
    </ul>
   </aside>
@@ -3368,6 +3346,12 @@ partial dictionary CredentialCreationOptions {
    <ul>
     <li><a href="#ref-for-a-priori-authenticated-url">2.2.2. CredentialUserData Mixin</a>
     <li><a href="#ref-for-a-priori-authenticated-url①">6.3. Insecure Sites</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-policy-controlled-feature">
+   <a href="https://w3c.github.io/webappsec-permissions-policy/#policy-controlled-feature">https://w3c.github.io/webappsec-permissions-policy/#policy-controlled-feature</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-policy-controlled-feature">2.5.1. Request a Credential</a> <a href="#ref-for-policy-controlled-feature①">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-should-promise-call">
@@ -3400,17 +3384,29 @@ partial dictionary CredentialCreationOptions {
     <li><a href="#ref-for-dom-publickeycredential-discoverfromexternalsource-slot">7.2. Extension Points</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-dom-credentialrequestoptions-publickey">
+   <a href="https://w3c.github.io/webauthn/#dom-credentialrequestoptions-publickey">https://w3c.github.io/webauthn/#dom-credentialrequestoptions-publickey</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dom-credentialrequestoptions-publickey">2.5.1. Request a Credential</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-publickey-credentials-get-feature">
+   <a href="https://w3c.github.io/webauthn/#publickey-credentials-get-feature">https://w3c.github.io/webauthn/#publickey-credentials-get-feature</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-publickey-credentials-get-feature">2.5.1. Request a Credential</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-idl-DOMException">
    <a href="https://webidl.spec.whatwg.org/#idl-DOMException">https://webidl.spec.whatwg.org/#idl-DOMException</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-idl-DOMException">2.5.1. Request a Credential</a>
-    <li><a href="#ref-for-idl-DOMException①">3.3.1. 
+    <li><a href="#ref-for-idl-DOMException">2.5.1. Request a Credential</a> <a href="#ref-for-idl-DOMException①">(2)</a>
+    <li><a href="#ref-for-idl-DOMException②">3.3.1. 
     PasswordCredential's [[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors) </a>
-    <li><a href="#ref-for-idl-DOMException②">3.3.3. 
+    <li><a href="#ref-for-idl-DOMException③">3.3.3. 
     PasswordCredential's [[Store]](credential, sameOriginWithAncestors) </a>
-    <li><a href="#ref-for-idl-DOMException③">4.2.1. 
+    <li><a href="#ref-for-idl-DOMException④">4.2.1. 
     FederatedCredential's [[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors) </a>
-    <li><a href="#ref-for-idl-DOMException④">4.2.3. 
+    <li><a href="#ref-for-idl-DOMException⑤">4.2.3. 
     FederatedCredential's [[Store]](credential, sameOriginWithAncestors) </a>
    </ul>
   </aside>
@@ -3433,13 +3429,14 @@ partial dictionary CredentialCreationOptions {
   <aside class="dfn-panel" data-for="term-for-notallowederror">
    <a href="https://webidl.spec.whatwg.org/#notallowederror">https://webidl.spec.whatwg.org/#notallowederror</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-notallowederror">3.3.1. 
+    <li><a href="#ref-for-notallowederror">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-notallowederror①">3.3.1. 
     PasswordCredential's [[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors) </a>
-    <li><a href="#ref-for-notallowederror①">3.3.3. 
+    <li><a href="#ref-for-notallowederror②">3.3.3. 
     PasswordCredential's [[Store]](credential, sameOriginWithAncestors) </a>
-    <li><a href="#ref-for-notallowederror②">4.2.1. 
+    <li><a href="#ref-for-notallowederror③">4.2.1. 
     FederatedCredential's [[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors) </a>
-    <li><a href="#ref-for-notallowederror③">4.2.3. 
+    <li><a href="#ref-for-notallowederror④">4.2.3. 
     FederatedCredential's [[Store]](credential, sameOriginWithAncestors) </a>
    </ul>
   </aside>
@@ -3506,8 +3503,8 @@ partial dictionary CredentialCreationOptions {
   <aside class="dfn-panel" data-for="term-for-a-promise-rejected-with">
    <a href="https://webidl.spec.whatwg.org/#a-promise-rejected-with">https://webidl.spec.whatwg.org/#a-promise-rejected-with</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-a-promise-rejected-with">2.5.1. Request a Credential</a> <a href="#ref-for-a-promise-rejected-with①">(2)</a>
-    <li><a href="#ref-for-a-promise-rejected-with②">2.5.4. Create a Credential</a> <a href="#ref-for-a-promise-rejected-with③">(2)</a>
+    <li><a href="#ref-for-a-promise-rejected-with">2.5.1. Request a Credential</a> <a href="#ref-for-a-promise-rejected-with①">(2)</a> <a href="#ref-for-a-promise-rejected-with②">(3)</a>
+    <li><a href="#ref-for-a-promise-rejected-with③">2.5.4. Create a Credential</a> <a href="#ref-for-a-promise-rejected-with④">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-boolean">
@@ -3680,6 +3677,7 @@ partial dictionary CredentialCreationOptions {
      <li><span class="dfn-paneled" id="term-for-navigator">Navigator</span>
      <li><span class="dfn-paneled" id="term-for-worker">Worker</span>
      <li><span class="dfn-paneled" id="term-for-active-document">active document</span>
+     <li><span class="dfn-paneled" id="term-for-allowed-to-use">allowed to use</span>
      <li><span class="dfn-paneled" id="term-for-ascii-serialisation-of-an-origin">ascii serialization of an origin</span>
      <li><span class="dfn-paneled" id="term-for-attr-fe-autocomplete">autocomplete</span>
      <li><span class="dfn-paneled" id="term-for-autofill-detail-tokens">autofill detail tokens</span>
@@ -3726,6 +3724,11 @@ partial dictionary CredentialCreationOptions {
      <li><span class="dfn-paneled" id="term-for-a-priori-authenticated-url">a priori authenticated url</span>
     </ul>
    <li>
+    <a data-link-type="biblio">[permissions-policy-1]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="term-for-policy-controlled-feature">policy-controlled feature</span>
+    </ul>
+   <li>
     <a data-link-type="biblio">[promises-guide]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="term-for-should-promise-call">promise-calling</span>
@@ -3741,6 +3744,8 @@ partial dictionary CredentialCreationOptions {
      <li><span class="dfn-paneled" id="term-for-publickeycredential">PublicKeyCredential</span>
      <li><span class="dfn-paneled" id="term-for-dom-publickeycredential-create-slot">[[Create]](origin, options, sameOriginWithAncestors)</span>
      <li><span class="dfn-paneled" id="term-for-dom-publickeycredential-discoverfromexternalsource-slot">[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)</span>
+     <li><span class="dfn-paneled" id="term-for-dom-credentialrequestoptions-publickey">publicKey</span>
+     <li><span class="dfn-paneled" id="term-for-publickey-credentials-get-feature">publickey-credentials-get-feature</span>
     </ul>
    <li>
     <a data-link-type="biblio">[WEBIDL]</a> defines the following terms:
@@ -3792,12 +3797,14 @@ partial dictionary CredentialCreationOptions {
    <dd>Anne van Kesteren; Domenic Denicola. <a href="https://infra.spec.whatwg.org/"><cite>Infra Standard</cite></a>. Living Standard. URL: <a href="https://infra.spec.whatwg.org/">https://infra.spec.whatwg.org/</a>
    <dt id="biblio-mixed-content">[MIXED-CONTENT]
    <dd>Emily Stark; Mike West; Carlos IbarraLopez. <a href="https://www.w3.org/TR/mixed-content/"><cite>Mixed Content</cite></a>. 4 October 2021. CR. URL: <a href="https://www.w3.org/TR/mixed-content/">https://www.w3.org/TR/mixed-content/</a>
+   <dt id="biblio-permissions-policy-1">[PERMISSIONS-POLICY-1]
+   <dd>Ian Clelland. <a href="https://www.w3.org/TR/permissions-policy-1/"><cite>Permissions Policy</cite></a>. 16 July 2020. WD. URL: <a href="https://www.w3.org/TR/permissions-policy-1/">https://www.w3.org/TR/permissions-policy-1/</a>
    <dt id="biblio-promises-guide">[PROMISES-GUIDE]
    <dd>Domenic Denicola. <a href="https://www.w3.org/2001/tag/doc/promises-guide"><cite>Writing Promise-Using Specifications</cite></a>. 9 November 2018. TAG Finding. URL: <a href="https://www.w3.org/2001/tag/doc/promises-guide">https://www.w3.org/2001/tag/doc/promises-guide</a>
    <dt id="biblio-psl">[PSL]
    <dd><cite><a href="https://publicsuffix.org/">Public Suffix List</a></cite>.    Mozilla Foundation.
-   <dt id="biblio-rfc2119">[RFC2119]
-   <dd>S. Bradner. <a href="https://datatracker.ietf.org/doc/html/rfc2119"><cite>Key words for use in RFCs to Indicate Requirement Levels</cite></a>. March 1997. Best Current Practice. URL: <a href="https://datatracker.ietf.org/doc/html/rfc2119">https://datatracker.ietf.org/doc/html/rfc2119</a>
+   <dt id="biblio-webauthn">[WEBAUTHN]
+   <dd>Dirk Balfanz; et al. <a href="https://www.w3.org/TR/webauthn-1/"><cite>Web Authentication:An API for accessing Public Key Credentials Level 1</cite></a>. 4 March 2019. REC. URL: <a href="https://www.w3.org/TR/webauthn-1/">https://www.w3.org/TR/webauthn-1/</a>
    <dt id="biblio-webidl">[WEBIDL]
    <dd>Edgar Chen; Timothy Gu. <a href="https://webidl.spec.whatwg.org/"><cite>Web IDL Standard</cite></a>. Living Standard. URL: <a href="https://webidl.spec.whatwg.org/">https://webidl.spec.whatwg.org/</a>
    <dt id="biblio-xhr">[XHR]
@@ -3811,8 +3818,6 @@ partial dictionary CredentialCreationOptions {
    <dd>Devdatta Akhawe; et al. <a href="https://www.w3.org/TR/SRI/"><cite>Subresource Integrity</cite></a>. 23 June 2016. REC. URL: <a href="https://www.w3.org/TR/SRI/">https://www.w3.org/TR/SRI/</a>
    <dt id="biblio-web-login">[WEB-LOGIN]
    <dd>Jason Denizac; Robin Berjon; Anne van Kesteren. <a href="https://github.com/jden/web-login"><cite>web-login</cite></a>. URL: <a href="https://github.com/jden/web-login">https://github.com/jden/web-login</a>
-   <dt id="biblio-webauthn">[WEBAUTHN]
-   <dd>Dirk Balfanz; et al. <a href="https://www.w3.org/TR/webauthn-1/"><cite>Web Authentication:An API for accessing Public Key Credentials Level 1</cite></a>. 4 March 2019. REC. URL: <a href="https://www.w3.org/TR/webauthn-1/">https://www.w3.org/TR/webauthn-1/</a>
    <dt id="biblio-xmlhttprequest">[XMLHTTPREQUEST]
    <dd>Anne van Kesteren; et al. <a href="https://www.w3.org/TR/XMLHttpRequest/"><cite>XMLHttpRequest Level 1</cite></a>. 6 October 2016. NOTE. URL: <a href="https://www.w3.org/TR/XMLHttpRequest/">https://www.w3.org/TR/XMLHttpRequest/</a>
   </dl>
@@ -4114,6 +4119,7 @@ partial dictionary CredentialCreationOptions {
    <ul>
     <li><a href="#ref-for-credential-credential-type">2.2. The Credential Interface</a> <a href="#ref-for-credential-credential-type①">(2)</a> <a href="#ref-for-credential-credential-type②">(3)</a> <a href="#ref-for-credential-credential-type③">(4)</a>
     <li><a href="#ref-for-credential-credential-type④">2.2.1.4. [[Create]] internal method</a>
+    <li><a href="#ref-for-credential-credential-type⑤">2.5.1. Request a Credential</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-credential-discovery-slot">
@@ -4532,7 +4538,8 @@ partial dictionary CredentialCreationOptions {
   <aside class="dfn-panel" data-for="dom-credential-type-password">
    <b><a href="#dom-credential-type-password">#dom-credential-type-password</a></b><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-credential-type-password">3.1.1. Password-based Sign-in</a>
+    <li><a href="#ref-for-dom-credential-type-password">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-dom-credential-type-password①">3.1.1. Password-based Sign-in</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-passwordcredential-passwordcredential">
@@ -4710,6 +4717,12 @@ partial dictionary CredentialCreationOptions {
     FederatedCredential's [[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors) </a>
     <li><a href="#ref-for-dom-federatedcredential-protocol②">4.2.3. 
     FederatedCredential's [[Store]](credential, sameOriginWithAncestors) </a> <a href="#ref-for-dom-federatedcredential-protocol③">(2)</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="dom-federatedcredential-federated">
+   <b><a href="#dom-federatedcredential-federated">#dom-federatedcredential-federated</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dom-federatedcredential-federated">2.5.1. Request a Credential</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="dom-federatedcredential-federatedcredential">
