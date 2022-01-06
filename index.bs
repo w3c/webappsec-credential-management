@@ -831,6 +831,14 @@ spec:css-syntax-3;
     1.  Let |sameOriginWithAncestors| be `true` if |settings| is [=same-origin with its
         ancestors=], and `false` otherwise.
 
+    1.  If |options|[{{CredentialRequestOptions/publicKey}}] [=map/exists=] then
+        if |settings|' [=responsible document=] is **not** [=allowed to use=] the
+        [=publickey-credentials-get-feature|publickey-credentials-get=]
+        [=policy-controlled feature=] return [=a promise rejected with=] a "{{NotAllowedError}}" {{DOMException}}.
+
+        Note: <a const>`password`</a> and <a const>`federated`</a> [=credential types=] are not presently
+        treated as [=policy-controlled features=], although this may change in the future.
+
     1.  Run the following steps [=in parallel=]:
 
         1.  Let |credentials| be the result of <a abstract-op lt="collect local">collecting
