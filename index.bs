@@ -308,7 +308,7 @@ spec:css-syntax-3;
   <table class="data">
     <thead>
       <tr>
-        <th>Credential Type<br>
+        <th><dfn for="Credential Type Registry">Credential Type</dfn><br>
         (in alphabetical order)</th>
         <th>Options Member Identifier</th>
         <th>Specification</th>
@@ -677,7 +677,7 @@ spec:css-syntax-3;
 
             1.  Let |credentialType| be |object|'s {{Credential/[[type]]}} slot's value.
 
-            1.  Let |key| be the result of looking up the |credentialType|'s |options|'s
+            1.  Let |key| be the [=Credential Type Registry/Options Member Identifier=] whose [=Credential Type Registry/Credential Type=] is |credentialType|.
                 [=dictionary member|member=] [=identifier=] in the registry of
                 [[#sctn-registry-cred-type-to-options-member-identifier|Credential Type to Options Member Identifier Mappings]].
 
