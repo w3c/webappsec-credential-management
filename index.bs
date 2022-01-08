@@ -206,7 +206,7 @@ spec:css-syntax-3;
   hanging off of {{CredentialsContainer|navigator.credentials.*}} which enable developers to
   obtain them.
 
-  Various [=credential types=] are each represented to JavaScript as an interface which
+  Various [=credential type registry/credential types=] are each represented to JavaScript as an interface which
   [=interface/inherits=], either directly or indirectly, from the {{Credential}} interface. This
   document defines two such interfaces, {{PasswordCredential}} and {{FederatedCredential}}. Other
   specifications, for example [[WEBAUTHN]], define other credential types.
@@ -295,9 +295,9 @@ spec:css-syntax-3;
     7.  Return `true`.
   </ol>
 
-  ### Registry: Credential Type to Options Member Identifier Mappings ### {#sctn-registry-cred-type-to-options-member-identifier}
+  ### Credential Type Registry ### {#sctn-cred-type-registry}
 
-  This registry maps [=credential types=] (i.e., {{Credential/[[type]]}} values) to the
+  This registry maps [=credential type registry/credential types=] (i.e., {{Credential/[[type]]}} values) to various values associated with a given credential type. For example: the
   [=dictionary member=] [=identifier=] used in
   {{CredentialCreationOptions}} and {{CredentialRequestOptions}} (i.e., "options dictionaries")
   by their specifications.
@@ -308,9 +308,9 @@ spec:css-syntax-3;
   <table class="data">
     <thead>
       <tr>
-        <th><dfn for="Credential Type Registry">Credential Type</dfn><br>
+        <th><dfn for="credential type registry">Credential Type</dfn><br>
         (in alphabetical order)</th>
-        <th>Options Member Identifier</th>
+        <th><dfn for="credential type registry">Options Member Identifier</dfn></th>
         <th>Specification</th>
         <th>Requestor Contact</th>
       </tr>
@@ -348,18 +348,18 @@ spec:css-syntax-3;
 
   #### Registration Entry Requirements and Update Process #### {#sctn-registry-requirements}
 
-  * Each [=credential type=] must be unique amongst the set of [=credential types=].
+  * Each [=credential type registry/credential type=] must be unique amongst the set of [=credential type registry/credential types=].
 
   * Each registry entry must state the [=dictionary member=] [=identifier=] used in the
     credential specification's extentions of {{CredentialCreationOptions}} and
     {{CredentialRequestOptions}}.
 
   * Each registry entry must include a link that references a publicly available specification
-    defining the [=credential type=] and the [=dictionary member=] [=identifier=].
+    defining the [=credential type registry/credential type=] and the [=dictionary member=] [=identifier=].
 
   * Each registry entry's specification must include the requestor's contact information.
 
-  An update to this registry is an addition, change or deletion of a [=credential type=]'s registry entry.
+  An update to this registry is an addition, change or deletion of a [=credential type registry/credential type=]'s registry entry.
   Any person can request an update to this registry by pull requests to the
   <a href="https://github.com/w3c/webappsec-credential-management">webappsec-credential-management</a>
   repository.
@@ -387,12 +387,12 @@ spec:css-syntax-3;
 
     :   <dfn attribute>type</dfn>
     ::  This attribute's getter returns the value of the object's [=interface object=]'s
-        {{[[type]]}} slot, which specifies the [=credential type=] represented by this object.
+        {{[[type]]}} slot, which specifies the [=credential/credential type=] represented by this object.
 
     :   <dfn method>isConditionalMediationAvailable()</dfn>
     ::  Returns `true` if and only if the user agent supports the
         {{CredentialMediationRequirement/conditional}} approach to
-        [[#mediation-requirements|mediation of credential requests]] for the [=credential type=],
+        [[#mediation-requirements|mediation of credential requests]] for the [=credential/credential type=],
         `false` otherwise.
 
         {{Credential}}'s default implementation of {{Credential/isConditionalMediationAvailable()}}:
@@ -401,16 +401,16 @@ spec:css-syntax-3;
             1.  Return `false`.
         </ol>
 
-        The specification for any [=credential type=] supporting
+        The specification for any [=credential/credential type=] supporting
         {{CredentialMediationRequirement/conditional}} mediation must explicitly override this
         function to return `true`.
         Note: If this function is not present, {{CredentialMediationRequirement/conditional}}
-        mediation is not supported for the [=credential type=].
+        mediation is not supported for the [=credential/credential type=].
 
     :   <dfn attribute>\[[type]]</dfn>
     ::  The {{Credential}} [=interface object=] has an internal slot named `[[type]]`, which
-        unsurprisingly contains a <dfn lt="credential type">string representing the credential type</dfn>. The slot's value
-        is the empty string unless otherwise specified.
+        unsurprisingly contains a <dfn for="credential" lt="credential type">string representing the credential type</dfn>. The slot's value
+        is the empty string unless otherwise specified. See [[#sctn-cred-type-registry]] for a list of [=credential type registry/credential types=].
 
         Note: The {{[[type]]}} slot's value will be the same for all credentials implementing a
         particular interface, which means that developers can rely on `obj.type` returning a string
@@ -509,7 +509,7 @@ spec:css-syntax-3;
         and returns an [=interface object=]
         inheriting from {{Credential}}. This algorithm MUST be invoked from a [=task=].
 
-    Note: This algorithm's steps are defined on a per-[=credential type=] basis.
+    Note: This algorithm's steps are defined on a per-[=credential/credential type=] basis.
 
     {{Credential}}'s default implementation of {{Credential/[[Create]](origin, options, sameOriginWithAncestors)}}:
 
@@ -677,9 +677,9 @@ spec:css-syntax-3;
 
             1.  Let |credentialType| be |object|'s {{Credential/[[type]]}} slot's value.
 
-            1.  Let |key| be the [=Credential Type Registry/Options Member Identifier=] whose [=Credential Type Registry/Credential Type=] is |credentialType|.
-                [=dictionary member|member=] [=identifier=] in the registry of
-                [[#sctn-registry-cred-type-to-options-member-identifier|Credential Type to Options Member Identifier Mappings]].
+            1.  Let |key| be the [=credential type registry/Options Member Identifier=] whose [=credential type registry/Credential Type=] is |credentialType|.
+                [=dictionary member|member=] [=identifier=] in the
+                [[#sctn-cred-type-registry|Credential Type Registry]].
 
             1.  If |options|[|key|] <a for="map">exists</a>, <a for="set">append</a> |object| to
                 |relevant interface objects|.
@@ -690,8 +690,8 @@ spec:css-syntax-3;
     ISSUE: jyasskin@ suggests replacing the iteration through the interface objects with a registry.
     I'm not sure which is less clear, honestly. I'll leave it like this for the moment, and we can
     argue about whether this is too much of a `COMEFROM` interface. (The addition of the
-    [[#sctn-registry-cred-type-to-options-member-identifier|Credential Type to Options Member Identifier Mappings]]
-    registry does not obviate this issue.)
+    [[#sctn-cred-type-registry|Credential Type Registry]]
+    does not obviate this issue.)
   </div>
 
   <div algorithm="can collect locally">
@@ -934,7 +934,7 @@ spec:css-syntax-3;
         [=publickey-credentials-get-feature|publickey-credentials-get=]
         [=policy-controlled feature=] return [=a promise rejected with=] a "{{NotAllowedError}}" {{DOMException}}.
 
-        Note: <a const>`password`</a> and <a const>`federated`</a> [=credential types=] are not presently
+        Note: <a const>`password`</a> and <a const>`federated`</a> [=credential type registry/credential types=] are not presently
         treated as [=policy-controlled features=], although this may change in the future.
 
     1.  Run the following steps [=in parallel=]:
@@ -1926,7 +1926,7 @@ spec:css-syntax-3;
   if a user configures their browser to grant persistent credential access to a particular origin,
   credentials may be provided without presenting the user with a UI requesting a decision.
 
-  Here we'll spell out a few requirements that hold for all [=credential types=], but note that there's
+  Here we'll spell out a few requirements that hold for all [=credential type registry/credential types=], but note that there's
   a good deal of latitude left up to the user agent (which is in a priviliged position to assist
   the user). Moreover, specific credential types may have distinct requirements that exceed the
   requirements laid out more generally here.
@@ -2320,15 +2320,14 @@ spec:css-syntax-3;
       mediation=], define `ExampleCredential/isConditionalMediationAvailable()` to return `true`.
 
   1.  Following the procedure in [[#sctn-registry-requirements]], add an entry for the new
-      "example" [=credential type=] and its corresponding {{CredentialCreationOptions}}' and
+      "example" [=credential type registry/credential type=] and its corresponding {{CredentialCreationOptions}}' and
       {{CredentialRequestOptions}}' [=dictionary member=] [=identifier=]&mdash;in this case it
       is "example"&mdash;to the
-      [[#sctn-registry-cred-type-to-options-member-identifier|Credential Type to Options Member Identifier Mappings]]
-      registry:
+      [[#sctn-cred-type-registry|Credential Type Registry]]:
 
-      Note: The [=credential type=]'s options dictionaries' [=dictionary member|member=] [=identifier=] must be the
+      Note: The [=credential type registry/credential type=]'s options dictionaries' [=dictionary member|member=] [=identifier=] must be the
       same in both {{CredentialCreationOptions}} and {{CredentialRequestOptions}}, and should be
-      the same as the [=credential type=].
+      the same as the [=credential/credential type=] value in the {{Credential}} [=interface object=]'s {{[[type]]}} slot.
 
   You might also find that new primitives are necessary. For instance, you might want to return
   many {{Credential}} objects rather than just one in some sort of complicated, multi-factor
