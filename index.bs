@@ -68,6 +68,9 @@ spec: FETCH; urlPrefix: https://fetch.spec.whatwg.org/
 spec: promises-guide-1; urlPrefix: https://www.w3.org/2001/tag/doc/promises-guide
   type: dfn
     text: promise-calling; url: should-promise-call
+spec: web-otp; urlPrefix: https://wicg.github.io/web-otp
+  type: interface
+    text: OTPCredential; url: otpcredential
 </pre>
 
 <pre class="link-defaults">
@@ -309,8 +312,9 @@ spec:css-syntax-3;
     <thead>
       <tr>
         <th><dfn for="credential type registry">Credential Type</dfn><br>
-        (in alphabetical order)</th>
+        <small>(in alphabetical order)</small></th>
         <th><dfn for="credential type registry">Options Member Identifier</dfn></th>
+        <th><dfn for="credential type registry">Appropriate Interface Object</dfn></th>
         <th>Specification</th>
         <th>Requestor Contact</th>
       </tr>
@@ -318,24 +322,28 @@ spec:css-syntax-3;
     <tr>
         <td>federated</td>
         <td>federated</td>
+        <td>{{FederatedCredential}}</td>
         <td>This specification: [[#federated]]</td>
         <td><a href="https://www.w3.org/2011/webappsec/">W3C</a></td>
     </tr>
     <tr>
         <td>otp</td>
         <td>otp</td>
+        <td>{{OTPCredential}}</td>
         <td>[[WEB-OTP]]</td>
         <td><a href="https://wicg.io/">WICG</a></td>
     </tr>
     <tr>
         <td>password</td>
         <td>password</td>
+        <td>{{PasswordCredential}}</td>
         <td>This specification: [[#passwords]]</td>
         <td><a href="https://www.w3.org/2011/webappsec/">W3C</a></td>
     </tr>
     <tr>
         <td>public-key</td>
         <td>publicKey</td>
+        <td>{{PublicKeyCredential}}</td>
         <td>[[WEBAUTHN]]</td>
         <td><a href="https://www.w3.org/blog/webauthn/">W3C</a></td>
     </tr>
