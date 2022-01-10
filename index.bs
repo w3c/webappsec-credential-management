@@ -686,8 +686,6 @@ spec:css-syntax-3;
             1.  Let |credentialType| be |object|'s {{Credential/[[type]]}} slot's value.
 
             1.  Let |key| be the [=credential type registry/Options Member Identifier=] whose [=credential type registry/Credential Type=] is |credentialType|.
-                [=dictionary member|member=] [=identifier=] in the
-                [[#sctn-cred-type-registry|Credential Type Registry]].
 
             1.  If |options|[|key|] <a for="map">exists</a>, <a for="set">append</a> |object| to
                 |relevant interface objects|.
