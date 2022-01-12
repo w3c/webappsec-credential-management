@@ -673,31 +673,22 @@ spec:css-syntax-3;
     <ol class="algorithm">
         1.  Let |settings| be the <a>current settings object</a>
 
-        1.  Let |interface objects| be the set of [=interface objects=] on |settings|'
-            [=environment settings object/global object=].
-
         1.  Let |relevant interface objects| be an [=set/empty=] [=set=].
 
-        1.  For each |object| in |interface objects|:
+        1.  [=map/For each=] |optionKey| → <var ignore>optionValue</var> of |options|:
 
-            1.  If |object|'s [=inherited interfaces=] do not <a for="set">contain</a> {{Credential}},
-                <a for="iteration">continue</a>.
+            1.  Let |credentialInterfaceObject| be the [=credential type registry/Appropriate Interface Object=]
+                (on |settings|' [=environment settings object/global object=]) whose [=credential
+                type registry/Options Member Identifier=] is |optionKey|.
 
-            1.  Let |credentialType| be |object|'s {{Credential/[[type]]}} slot's value.
+            1.  Assert: |credentialInterfaceObject|'s {{[[type]]}} slot equals the [=credential type
+                registry/Credential Type=] whose [=credential type registry/Options Member
+                Identifier=] is |optionKey|.
 
-            1.  Let |key| be the [=credential type registry/Options Member Identifier=] whose [=credential type registry/Credential Type=] is |credentialType|.
-
-            1.  If |options|[|key|] <a for="map">exists</a>, <a for="set">append</a> |object| to
-                |relevant interface objects|.
+            1.  Append |credentialInterfaceObject| to |relevant interface objects|.
 
         1.  Return |relevant interface objects|.
     </ol>
-
-    ISSUE: jyasskin@ suggests replacing the iteration through the interface objects with a registry.
-    I'm not sure which is less clear, honestly. I'll leave it like this for the moment, and we can
-    argue about whether this is too much of a `COMEFROM` interface. (The addition of the
-    [[#sctn-cred-type-registry|Credential Type Registry]]
-    does not obviate this issue.)
   </div>
 
   <div algorithm="can collect locally">
