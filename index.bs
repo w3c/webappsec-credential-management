@@ -670,6 +670,8 @@ spec:css-syntax-3;
     The <dfn for="CredentialRequestOptions,CredentialCreationOptions">relevant credential interface objects</dfn> for a given
     {{CredentialCreationOptions}} or {{CredentialRequestOptions}} (|options|) is a set of [=interface objects=], collected as follows:
 
+    Note: This algorithm uses the [[#sctn-cred-type-registry|Credential Type Registry]].
+
     <ol class="algorithm">
         1.  Let |settings| be the <a>current settings object</a>
 
