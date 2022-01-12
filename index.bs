@@ -314,7 +314,7 @@ spec:css-syntax-3;
         <th><dfn for="credential type registry">Credential Type</dfn><br>
         <small>(in alphabetical order)</small></th>
         <th><dfn for="credential type registry">Options Member Identifier</dfn></th>
-        <th><dfn for="credential type registry">Credential Interface Object Identifier</dfn></th>
+        <th><dfn for="credential type registry">Appropriate Interface Object</dfn></th>
         <th>Specification</th>
         <th>Requestor Contact</th>
       </tr>
