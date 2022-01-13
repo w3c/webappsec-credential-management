@@ -300,8 +300,8 @@ spec:css-syntax-3;
 
   ### Credential Type Registry ### {#sctn-cred-type-registry}
 
-  This registry maps [=credential type registry/credential types=] (i.e., {{Credential/[[type]]}} values) to various values associated with a given credential type. For example: the
-  [=dictionary member=] [=identifier=] used in
+  This registry maps [=credential type registry/credential types=] (i.e., {{Credential/[[type]]}} values) to various values associated with a given credential type. For example: the [=credential type registry/Options Member Identifier=]
+  (formally, a [=dictionary member=] [=identifier=]) used in
   {{CredentialCreationOptions}} and {{CredentialRequestOptions}} (i.e., "options dictionaries")
   by their specifications.
 
@@ -358,9 +358,12 @@ spec:css-syntax-3;
 
   * Each [=credential type registry/credential type=] must be unique amongst the set of [=credential type registry/credential types=].
 
-  * Each registry entry must state the [=dictionary member=] [=identifier=] used in the
+  * Each registry entry must state the [=dictionary member=] [=identifier=] (known as the [=credential type registry/Options Member Identifier=] in the registry) used in the
     credential specification's extentions of {{CredentialCreationOptions}} and
     {{CredentialRequestOptions}}.
+
+  * Each registry entry must state the [=credential type registry/Appropriate Interface Object=] [=identifier=] for the
+    [=credential type registry/credential type=].
 
   * Each registry entry must include a link that references a publicly available specification
     defining the [=credential type registry/credential type=] and the [=dictionary member=] [=identifier=].
@@ -2323,7 +2326,7 @@ spec:css-syntax-3;
       "example" [=credential type registry/credential type=] and its corresponding:
       *   {{CredentialCreationOptions}}' and {{CredentialRequestOptions}}'
           [=credential type registry/Options Member Identifier=] (in this case it is "example"), and
-      *   [=credential type registry/Appropriate Interface Object=] identifier (in this case it is
+      *   [=credential type registry/Appropriate Interface Object=] [=identifier=] (in this case it is
           <code>ExampleCredential</code>).
 
       Note: The [=credential type registry/credential type=]'s options dictionaries' [=credential type registry/Options Member Identifier=] must be the
