@@ -2318,13 +2318,15 @@ spec:css-syntax-3;
   1.  If the new credential type supports {{CredentialMediationRequirement/conditional}} [=user
       mediation=], define `ExampleCredential/isConditionalMediationAvailable()` to return `true`.
 
-  1.  Following the procedure in [[#sctn-registry-requirements]], add an entry for the new
-      "example" [=credential type registry/credential type=] and its corresponding {{CredentialCreationOptions}}' and
-      {{CredentialRequestOptions}}' [=dictionary member=] [=identifier=]&mdash;in this case it
-      is "example"&mdash;to the
-      [[#sctn-cred-type-registry|Credential Type Registry]]:
+  1.  Following the procedure in [[#sctn-registry-requirements]], add an entry to the
+      [[#sctn-cred-type-registry|Credential Type Registry]] for the new
+      "example" [=credential type registry/credential type=] and its corresponding:
+      *   {{CredentialCreationOptions}}' and {{CredentialRequestOptions}}'
+          [=credential type registry/Options Member Identifier=] (in this case it is "example"), and
+      *   [=credential type registry/Appropriate Interface Object=] identifier (in this case it is
+          <code>ExampleCredential</code>).
 
-      Note: The [=credential type registry/credential type=]'s options dictionaries' [=dictionary member|member=] [=identifier=] must be the
+      Note: The [=credential type registry/credential type=]'s options dictionaries' [=credential type registry/Options Member Identifier=] must be the
       same in both {{CredentialCreationOptions}} and {{CredentialRequestOptions}}, and should be
       the same as the [=credential/credential type=] value in the {{Credential}} [=interface object=]'s {{[[type]]}} slot.
 
