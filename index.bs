@@ -2049,7 +2049,7 @@ spec:css-syntax-3;
  ██████  ████████  ██████   ███████  ██     ██ ████    ██       ██
 -->
 <section>
-  # Security and Privacy Considerations # {#security-and-privacy}
+  # Security Considerations # {#security-considerations}
 
   The following sections represent guidelines for various security and privacy considerations.
   Individual credential types may enforce stricter or more relaxed versions of these guidelines.
@@ -2164,6 +2164,11 @@ spec:css-syntax-3;
   the [=credential store=] to `true`. Additionally, the user agent SHOULD provide some UI affordance
   for disabling automatic sign-in for a particular origin. This could be tied to the notification
   that credentials have been provided to an origin, for example.
+</section>
+
+
+<section>
+  # Privacy Considerations # {#privacy-considerations}
 
   ## Chooser Leakage ## {#security-chooser-leakage}
 
