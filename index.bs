@@ -2136,15 +2136,6 @@ spec:css-syntax-3;
   will immedietely return an empty set if called from inside a {{Worker}}, or a non-[=top-level
   browsing context=].
 
-  ## Timing Attacks ## {#security-timing}
-
-  If the user has no credentials for an origin, a call to {{CredentialsContainer/get()}} will
-  resolve very quickly indeed. A malicious website could distinguish between a user with no
-  credentials and a user with credentials who chooses not to share them.
-
-  User agents SHOULD also rate-limit credential requests. It's almost certainly abusive for a page
-  to request credentials more than a few times in a short period.
-
   ## Signing-Out ## {#security-signout}
 
   If a user has chosen to automatically sign-in to websites, as discussed in
@@ -2169,6 +2160,15 @@ spec:css-syntax-3;
 
 <section>
   # Privacy Considerations # {#privacy-considerations}
+
+  ## Timing Attacks ## {#security-timing}
+
+  If the user has no credentials for an origin, a call to {{CredentialsContainer/get()}} will
+  resolve very quickly indeed. A malicious website could distinguish between a user with no
+  credentials and a user with credentials who chooses not to share them.
+
+  User agents SHOULD also rate-limit credential requests. It's almost certainly abusive for a page
+  to request credentials more than a few times in a short period.
 
   ## Chooser Leakage ## {#security-chooser-leakage}
 
