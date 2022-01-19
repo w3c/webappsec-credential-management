@@ -2049,7 +2049,7 @@ spec:css-syntax-3;
  ██████  ████████  ██████   ███████  ██     ██ ████    ██       ██
 -->
 <section>
-  # Security and Privacy Considerations # {#security-and-privacy}
+  # Security Considerations # {#security-considerations}
 
   The following sections represent guidelines for various security and privacy considerations.
   Individual credential types may enforce stricter or more relaxed versions of these guidelines.
@@ -2136,15 +2136,6 @@ spec:css-syntax-3;
   will immedietely return an empty set if called from inside a {{Worker}}, or a non-[=top-level
   browsing context=].
 
-  ## Timing Attacks ## {#security-timing}
-
-  If the user has no credentials for an origin, a call to {{CredentialsContainer/get()}} will
-  resolve very quickly indeed. A malicious website could distinguish between a user with no
-  credentials and a user with credentials who chooses not to share them.
-
-  User agents SHOULD also rate-limit credential requests. It's almost certainly abusive for a page
-  to request credentials more than a few times in a short period.
-
   ## Signing-Out ## {#security-signout}
 
   If a user has chosen to automatically sign-in to websites, as discussed in
@@ -2164,6 +2155,20 @@ spec:css-syntax-3;
   the [=credential store=] to `true`. Additionally, the user agent SHOULD provide some UI affordance
   for disabling automatic sign-in for a particular origin. This could be tied to the notification
   that credentials have been provided to an origin, for example.
+</section>
+
+
+<section>
+  # Privacy Considerations # {#privacy-considerations}
+
+  ## Timing Attacks ## {#security-timing}
+
+  If the user has no credentials for an origin, a call to {{CredentialsContainer/get()}} will
+  resolve very quickly indeed. A malicious website could distinguish between a user with no
+  credentials and a user with credentials who chooses not to share them.
+
+  User agents SHOULD also rate-limit credential requests. It's almost certainly abusive for a page
+  to request credentials more than a few times in a short period.
 
   ## Chooser Leakage ## {#security-chooser-leakage}
 
