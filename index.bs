@@ -983,8 +983,8 @@ spec:css-syntax-3;
 
                 1. Let |e| be the thrown [=exception=].
 
-                1. [=Queue a task=] on |global|'s [=DOM manipulation task source=] to run the
-                   following substeps:
+                1. [=Queue a task=] on <var ignore>global</var>'s [=DOM manipulation task source=]
+                   to run the following substeps:
 
                     1. [=Reject=] |p| with |e|.
 
@@ -1056,8 +1056,8 @@ spec:css-syntax-3;
 
             1.  Let |e| be the thrown [=exception=].
 
-            2.  [=Queue a task=] on |global|'s [=DOM manipulation task source=] to run the
-                following substeps:
+            2.  [=Queue a task=] on <var ignore>global</var>'s [=DOM manipulation task source=] to
+                run the following substeps:
 
                 1. [=Reject=] |p| with |e|.
 
