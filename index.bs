@@ -1052,7 +1052,14 @@ spec:css-syntax-3;
             {{Credential/[[Store]](credential, sameOriginWithAncestors)}} internal method on
             |credential| and |sameOriginWithAncestors|.
 
-        2.  If |r| is an [=exception=], [=reject=] |p| with |r|.
+            If that threw an [=exception=]:
+
+            1.  Let |e| be the thrown [=exception=].
+
+            2.  [=Queue a task=] on |global|'s [=DOM manipulation task source=] to run the
+                following substeps:
+
+                1. [=Reject=] |p| with |e|.
 
             Otherwise, [=resolve=] |p| with |r|.
 
@@ -1501,7 +1508,7 @@ spec:css-syntax-3;
   The algorithm will return a `NotAllowedError` if |sameOriginWithAncestors| is not `true`.
 
   <ol class="algorithm">
-    1.  Return a "{{NotAllowedError}}" {{DOMException}} without altering the user agent's
+    1.  Throw a "{{NotAllowedError}}" {{DOMException}} without altering the user agent's
         [=credential store=] if |sameOriginWithAncestors| is `false`.
 
         Note: This restriction aims to address the concern raised in [[#security-origin-confusion]].
@@ -1850,7 +1857,7 @@ spec:css-syntax-3;
   The algorithm will return a `NotAllowedError` if |sameOriginWithAncestors| is not `true`.
 
   <ol class="algorithm">
-    1.  Return a "{{NotAllowedError}}" {{DOMException}} without altering the user agent's
+    1.  Throw a "{{NotAllowedError}}" {{DOMException}} without altering the user agent's
         [=credential store=] if <var ignore>sameOriginWithAncestors</var> is `false`.
 
         Note: This restriction aims to address the concern raised in [[#security-origin-confusion]].
