@@ -1078,7 +1078,7 @@ spec:css-syntax-3;
     6.  Return [=a promise rejected with=] `NotSupportedError` if any of the following statements
         are true:
 
-        1.  |settings| does not have a [=environment settings object/responsible document=].
+        1.  |global| does not have an [=associated Document=].
 
         2.  |interfaces|' [=list/size=] is greater than 1.
 
