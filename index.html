@@ -6,9 +6,9 @@
   <meta content="ED" name="w3c-status">
   <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED" rel="stylesheet">
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
-  <meta content="Bikeshed version 2e3c4c68b, updated Fri Jan 14 14:49:00 2022 -0800" name="generator">
+  <meta content="Bikeshed version fb1e763a4, updated Tue Mar 1 13:13:50 2022 -0800" name="generator">
   <link href="http://www.w3.org/TR/credential-management-1/" rel="canonical">
-  <meta content="466e85325387e602e2a31f692fab03f7dc3310a0" name="document-revision">
+  <meta content="dbabb7b354425da32060db7b9b98f637c27d4ad3" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -646,7 +646,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2022-01-19">19 January 2022</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2022-03-31">31 March 2022</time></p>
    <details open>
     <summary>More details about this document</summary>
     <div data-fill-with="spec-metadata">
@@ -973,10 +973,10 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   ancestors</dfn> if the following algorithm returns <code>true</code>:</p>
     <ol class="algorithm">
      <li data-md>
-      <p>If <var>settings</var> has no <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-document" id="ref-for-responsible-document">responsible document</a>,
+      <p>If <var>settings</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global">relevant global object</a> has no <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#concept-document-window" id="ref-for-concept-document-window">associated Document</a>,
   return <code>false</code>.</p>
      <li data-md>
-      <p>Let <var>document</var> be <var>settings</var>’ <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-document" id="ref-for-responsible-document①">responsible document</a>.</p>
+      <p>Let <var>document</var> be <var>settings</var>’ <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global①">relevant global object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#concept-document-window" id="ref-for-concept-document-window①">associated Document</a>.</p>
      <li data-md>
       <p>If <var>document</var> has no <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/browsers.html#concept-document-bc" id="ref-for-concept-document-bc">browsing context</a>, return <code>false</code>.</p>
      <li data-md>
@@ -1620,9 +1620,8 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
   ancestors</a>, and <code>false</code> otherwise.</p>
      <li data-md>
       <p>If <var>options</var>[<code class="idl"><a data-link-type="idl" href="https://w3c.github.io/webauthn/#dom-credentialrequestoptions-publickey" id="ref-for-dom-credentialrequestoptions-publickey">publicKey</a></code>] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists">exists</a> then
-  if <var>settings</var>’ <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-document" id="ref-for-responsible-document②">responsible document</a> is <strong>not</strong> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#allowed-to-use" id="ref-for-allowed-to-use">allowed to use</a> the <a data-link-type="dfn" href="https://w3c.github.io/webauthn/#publickey-credentials-get-feature" id="ref-for-publickey-credentials-get-feature">publickey-credentials-get</a> <a data-link-type="dfn" href="https://w3c.github.io/webappsec-permissions-policy/#policy-controlled-feature" id="ref-for-policy-controlled-feature">policy-controlled feature</a> return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with②">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException①">DOMException</a></code>.</p>
-      <p class="note" role="note"><span>Note:</span> <a class="idl-code" data-link-type="const" href="#dom-credential-type-password" id="ref-for-dom-credential-type-password"><code>password</code></a> and <a class="idl-code" data-link-type="const" href="#dom-federatedcredential-federated" id="ref-for-dom-federatedcredential-federated"><code>federated</code></a> <a data-link-type="dfn" href="#credential-type-registry-credential-type" id="ref-for-credential-type-registry-credential-type⑨">credential types</a> are not presently
-  treated as <a data-link-type="dfn" href="https://w3c.github.io/webappsec-permissions-policy/#policy-controlled-feature" id="ref-for-policy-controlled-feature①">policy-controlled features</a>, although this may change in the future.</p>
+  if <var>settings</var>’ <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②">relevant global object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#concept-document-window" id="ref-for-concept-document-window②">associated Document</a> is <strong>not</strong> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#allowed-to-use" id="ref-for-allowed-to-use">allowed to use</a> the <a data-link-type="dfn" href="https://w3c.github.io/webauthn/#publickey-credentials-get-feature" id="ref-for-publickey-credentials-get-feature">publickey-credentials-get</a> <a data-link-type="dfn" href="https://w3c.github.io/webappsec-permissions-policy/#policy-controlled-feature" id="ref-for-policy-controlled-feature">policy-controlled feature</a> return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with②">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException①">DOMException</a></code>.</p>
+      <p class="note" role="note"><span>Note:</span> <a class="idl-code" data-link-type="const" href="#dom-credential-type-password" id="ref-for-dom-credential-type-password"><code>password</code></a> and <a class="idl-code" data-link-type="const" href="#dom-federatedcredential-federated" id="ref-for-dom-federatedcredential-federated"><code>federated</code></a> <a data-link-type="dfn" href="#credential-type-registry-credential-type" id="ref-for-credential-type-registry-credential-type⑨">credential types</a> are not presently treated as <a data-link-type="dfn" href="https://w3c.github.io/webappsec-permissions-policy/#policy-controlled-feature" id="ref-for-policy-controlled-feature①">policy-controlled features</a>, although this may change in the future.</p>
      <li data-md>
       <p>Run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel③">in parallel</a>:</p>
       <ol>
@@ -1751,7 +1750,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
   are true:</p>
       <ol>
        <li data-md>
-        <p><var>settings</var> does not have a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-document" id="ref-for-responsible-document③">responsible document</a>.</p>
+        <p><var>global</var> does not have an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#concept-document-window" id="ref-for-concept-document-window③">associated Document</a>.</p>
        <li data-md>
         <p><var>interfaces</var>’ <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-size" id="ref-for-list-size①">size</a> is greater than 1.</p>
         <p class="note" role="note"><span>Note:</span> It may be reasonable at some point in the future to loosen this restriction, and
@@ -3152,6 +3151,14 @@ partial dictionary CredentialCreationOptions {
     <li><a href="#ref-for-ascii-serialisation-of-an-origin">4.1.1. Identifying Providers</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-document-window">
+   <a href="https://html.spec.whatwg.org/multipage/window-object.html#concept-document-window">https://html.spec.whatwg.org/multipage/window-object.html#concept-document-window</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-document-window">2.1.1.1. Same-Origin with its Ancestors</a> <a href="#ref-for-concept-document-window①">(2)</a>
+    <li><a href="#ref-for-concept-document-window②">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-concept-document-window③">2.5.4. Create a Credential</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-attr-fe-autocomplete">
    <a href="https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete">https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete</a><b>Referenced in:</b>
    <ul>
@@ -3310,18 +3317,17 @@ partial dictionary CredentialCreationOptions {
     <li><a href="#ref-for-queue-a-task">2.5.4. Create a Credential</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-concept-relevant-global">
+   <a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global">https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-concept-relevant-global">2.1.1.1. Same-Origin with its Ancestors</a> <a href="#ref-for-concept-relevant-global①">(2)</a>
+    <li><a href="#ref-for-concept-relevant-global②">2.5.1. Request a Credential</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-concept-relevant-realm">
    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-realm">https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-realm</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-concept-relevant-realm">2.3. navigator.credentials</a>
-   </ul>
-  </aside>
-  <aside class="dfn-panel" data-for="term-for-responsible-document">
-   <a href="https://html.spec.whatwg.org/multipage/webappapis.html#responsible-document">https://html.spec.whatwg.org/multipage/webappapis.html#responsible-document</a><b>Referenced in:</b>
-   <ul>
-    <li><a href="#ref-for-responsible-document">2.1.1.1. Same-Origin with its Ancestors</a> <a href="#ref-for-responsible-document①">(2)</a>
-    <li><a href="#ref-for-responsible-document②">2.5.1. Request a Credential</a>
-    <li><a href="#ref-for-responsible-document③">2.5.4. Create a Credential</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-same-origin">
@@ -3797,6 +3803,7 @@ partial dictionary CredentialCreationOptions {
      <li><span class="dfn-paneled" id="term-for-active-document">active document</span>
      <li><span class="dfn-paneled" id="term-for-allowed-to-use">allowed to use</span>
      <li><span class="dfn-paneled" id="term-for-ascii-serialisation-of-an-origin">ascii serialization of an origin</span>
+     <li><span class="dfn-paneled" id="term-for-concept-document-window">associated document</span>
      <li><span class="dfn-paneled" id="term-for-attr-fe-autocomplete">autocomplete</span>
      <li><span class="dfn-paneled" id="term-for-autofill-detail-tokens">autofill detail tokens</span>
      <li><span class="dfn-paneled" id="term-for-concept-document-bc">browsing context</span>
@@ -3815,8 +3822,8 @@ partial dictionary CredentialCreationOptions {
      <li><span class="dfn-paneled" id="term-for-parent-browsing-context">parent browsing context</span>
      <li><span class="dfn-paneled" id="term-for-attr-fe-autocomplete-photo">photo</span>
      <li><span class="dfn-paneled" id="term-for-queue-a-task">queue a task</span>
+     <li><span class="dfn-paneled" id="term-for-concept-relevant-global">relevant global object</span>
      <li><span class="dfn-paneled" id="term-for-concept-relevant-realm">relevant realm</span>
-     <li><span class="dfn-paneled" id="term-for-responsible-document">responsible document</span>
      <li><span class="dfn-paneled" id="term-for-same-origin">same origin</span>
      <li><span class="dfn-paneled" id="term-for-secure-context">secure context</span>
      <li><span class="dfn-paneled" id="term-for-dom-form-submit">submit()</span>
