@@ -8,7 +8,7 @@
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
   <meta content="Bikeshed version fb1e763a4, updated Tue Mar 1 13:13:50 2022 -0800" name="generator">
   <link href="http://www.w3.org/TR/credential-management-1/" rel="canonical">
-  <meta content="dbabb7b354425da32060db7b9b98f637c27d4ad3" name="document-revision">
+  <meta content="1de6ec02bef0b3c40bb47341b1e703d4a9c65fe4" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -646,7 +646,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2022-03-31">31 March 2022</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2022-04-01">1 April 2022</time></p>
    <details open>
     <summary>More details about this document</summary>
     <div data-fill-with="spec-metadata">
@@ -1128,10 +1128,10 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
      <dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="method" data-export id="dom-credential-discoverfromexternalsource-slot"><code>[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)</code></dfn> is called <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel">in parallel</a> with an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin②">origin</a>, a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions③">CredentialRequestOptions</a></code> object,
     and a boolean which is true iff the caller’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object②">environment settings object</a> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors①">same-origin with its ancestors</a>.
     It returns a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential①⑤">Credential</a></code> if one can be
-    returned given the options provided, <code>null</code> if no credential is available, or an error if
-    discovery fails (for example, incorrect options could produce a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror">TypeError</a></code>). If this
-    kind of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential①⑥">Credential</a></code> is only <a data-link-type="dfn" href="#credential-effective" id="ref-for-credential-effective②">effective</a> for a single use or a limited time, this
-    method is responsible for generating new <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential①④">credentials</a> using a <a data-link-type="dfn" href="#credential-source" id="ref-for-credential-source">credential source</a>. 
+    returned given the options provided, <code>null</code> if no credential is available, or throws an
+    error if discovery fails (for example, incorrect options could produce a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror">TypeError</a></code>).
+    If this kind of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential①⑥">Credential</a></code> is only <a data-link-type="dfn" href="#credential-effective" id="ref-for-credential-effective②">effective</a> for a single use or a limited time,
+    this method is responsible for generating new <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential①④">credentials</a> using a <a data-link-type="dfn" href="#credential-source" id="ref-for-credential-source">credential source</a>. 
     <p><code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential①⑦">Credential</a></code>'s default implementation of <code class="idl"><a data-link-type="idl" href="#dom-credential-discoverfromexternalsource-slot" id="ref-for-dom-credential-discoverfromexternalsource-slot">[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)</a></code>:</p>
     <ol class="algorithm">
      <li data-md>
@@ -1155,7 +1155,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
      <li data-md>
       <p>does not create a credential and returns <code>null</code>, or</p>
      <li data-md>
-      <p>returns an error if creation fails due to exceptional situations
+      <p>throws an error if creation fails due to exceptional situations
   (for example, incorrect options could produce a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror①">TypeError</a></code>).</p>
     </ul>
     <p>When creating a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential②②">Credential</a></code>, it will return an algorithm that takes a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-global" id="ref-for-concept-settings-object-global">global object</a> and returns an <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-interface-object" id="ref-for-dfn-interface-object⑥">interface object</a> inheriting from <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential②③">Credential</a></code>. This algorithm MUST be invoked from a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-task" id="ref-for-concept-task">task</a>.</p>
@@ -1662,13 +1662,26 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
          <li data-md>
           <p>Set <var>result</var> to the result of executing <var>result</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-discoverfromexternalsource-slot" id="ref-for-dom-credential-discoverfromexternalsource-slot①">[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)</a></code>,
   given <var>origin</var>, <var>options</var>, and <var>sameOriginWithAncestors</var>.</p>
+          <p>If that threw an <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception①">exception</a>:</p>
+          <ol>
+           <li data-md>
+            <p>Let <var>e</var> be the thrown <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception②">exception</a>.</p>
+           <li data-md>
+            <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task" id="ref-for-queue-a-task">Queue a task</a> on <var>global</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source" id="ref-for-dom-manipulation-task-source">DOM manipulation task source</a> to run the following substeps:</p>
+            <ol>
+             <li data-md>
+              <p><a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject①">Reject</a> <var>p</var> with <var>e</var>.</p>
+            </ol>
+          </ol>
         </ol>
+      </ol>
+     <li data-md>
+      <p>Terminate these substeps.</p>
+      <ol>
        <li data-md>
-        <p class="assertion">Assert: <var>result</var> is <code>null</code>, a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential③④">Credential</a></code>, or an <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception①">exception</a>.</p>
+        <p class="assertion">Assert: <var>result</var> is <code>null</code>, or a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential③④">Credential</a></code>.</p>
        <li data-md>
         <p>If <var>result</var> is a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential③⑤">Credential</a></code>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#resolve" id="ref-for-resolve①">resolve</a> <var>p</var> with <var>result</var>.</p>
-       <li data-md>
-        <p>If <var>result</var> is an <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception②">exception</a>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject①">reject</a> <var>p</var> with <var>result</var>.</p>
        <li data-md>
         <p>If <var>result</var> is <code>null</code> and <var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-mediation" id="ref-for-dom-credentialrequestoptions-mediation①⑥">mediation</a></code> is not <code class="idl"><a data-link-type="idl" href="#dom-credentialmediationrequirement-conditional" id="ref-for-dom-credentialmediationrequirement-conditional⑨">conditional</a></code>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#resolve" id="ref-for-resolve②">resolve</a> <var>p</var> with <var>result</var>.</p>
         <p class="note" role="note"><span>Note:</span> if <var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-mediation" id="ref-for-dom-credentialrequestoptions-mediation①⑦">mediation</a></code> is <code class="idl"><a data-link-type="idl" href="#dom-credentialmediationrequirement-conditional" id="ref-for-dom-credentialmediationrequirement-conditional①⓪">conditional</a></code> and a <code>null</code> credential is discovered,
@@ -1690,9 +1703,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
       <p>For each <var>interface</var> in <var>options</var>’ <a data-link-type="dfn" href="#credentialrequestoptions-relevant-credential-interface-objects" id="ref-for-credentialrequestoptions-relevant-credential-interface-objects④">relevant credential interface objects</a>:</p>
       <ol>
        <li data-md>
-        <p>Let <var>r</var> be the result of executing <var>interface</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-collectfromcredentialstore-slot" id="ref-for-dom-credential-collectfromcredentialstore-slot①">[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)</a></code> internal method on <var>origin</var>, <var>options</var>, and <var>sameOriginWithAncestors</var>.</p>
-       <li data-md>
-        <p>If <var>r</var> is an <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception③">exception</a>, return <var>r</var>.</p>
+        <p>Let <var>r</var> be the result of executing <var>interface</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-collectfromcredentialstore-slot" id="ref-for-dom-credential-collectfromcredentialstore-slot①">[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)</a></code> internal method on <var>origin</var>, <var>options</var>, and <var>sameOriginWithAncestors</var>. If that threw an <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception③">exception</a>, rethrow that exception.</p>
        <li data-md>
         <p class="assertion">Assert: <var>r</var> is a list of <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-interface-object" id="ref-for-dfn-interface-object⑨">interface objects</a>.</p>
        <li data-md>
@@ -1722,8 +1733,18 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
       <ol>
        <li data-md>
         <p>Let <var>r</var> be the result of executing <var>credential</var>’s <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-interface-object" id="ref-for-dfn-interface-object①⓪">interface object</a>'s <code class="idl"><a data-link-type="idl" href="#dom-credential-store-slot" id="ref-for-dom-credential-store-slot①">[[Store]](credential, sameOriginWithAncestors)</a></code> internal method on <var>credential</var> and <var>sameOriginWithAncestors</var>.</p>
-       <li data-md>
-        <p>If <var>r</var> is an <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception④">exception</a>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject②">reject</a> <var>p</var> with <var>r</var>.</p>
+        <p>If that threw an <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception④">exception</a>:</p>
+        <ol>
+         <li data-md>
+          <p>Let <var>e</var> be the thrown <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception⑤">exception</a>.</p>
+         <li data-md>
+          <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task" id="ref-for-queue-a-task①">Queue a task</a> on <var>global</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source" id="ref-for-dom-manipulation-task-source①">DOM manipulation task source</a> to
+  run the following substeps:</p>
+          <ol>
+           <li data-md>
+            <p><a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject②">Reject</a> <var>p</var> with <var>e</var>.</p>
+          </ol>
+        </ol>
         <p>Otherwise, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#resolve" id="ref-for-resolve③">resolve</a> <var>p</var> with <var>r</var>.</p>
       </ol>
      <li data-md>
@@ -1770,17 +1791,33 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
       <ol>
        <li data-md>
         <p>Let <var>r</var> be the result of executing <var>interfaces</var>[0]'s <code class="idl"><a data-link-type="idl" href="#dom-credential-create-slot" id="ref-for-dom-credential-create-slot①">[[Create]](origin, options, sameOriginWithAncestors)</a></code> internal method on <var>origin</var>, <var>options</var>, and <var>sameOriginWithAncestors</var>.</p>
-       <li data-md>
-        <p>If <var>r</var> is an <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception⑤">exception</a>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject③">reject</a> <var>p</var> with <var>r</var>, and terminate these substeps.</p>
-       <li data-md>
-        <p>If <var>r</var> is a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential④①">Credential</a></code> or <code>null</code>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#resolve" id="ref-for-resolve④">resolve</a> <var>p</var> with <var>r</var>, and terminate these substeps.</p>
-       <li data-md>
-        <p class="assertion">Assert: <var>r</var> is a algorithm (as defined in <a href="#algorithm-create-cred">§ 2.2.1.4 [[Create]] internal method</a>).</p>
-       <li data-md>
-        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task" id="ref-for-queue-a-task">Queue a task</a> on <var>global</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source" id="ref-for-dom-manipulation-task-source">DOM manipulation task source</a> to run the following substeps:</p>
+        <p>If that threw an <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception⑥">exception</a>:</p>
         <ol>
          <li data-md>
-          <p><a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#resolve" id="ref-for-resolve⑤">Resolve</a> <var>p</var> with the result of <a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide#should-promise-call" id="ref-for-should-promise-call">promise-calling</a> <var>r</var> given <var>global</var>.</p>
+          <p>Let <var>e</var> be the thrown <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception⑦">exception</a>.</p>
+         <li data-md>
+          <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task" id="ref-for-queue-a-task②">Queue a task</a> on <var>global</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source" id="ref-for-dom-manipulation-task-source②">DOM manipulation task source</a> to run the
+ following substeps:</p>
+          <ol>
+           <li data-md>
+            <p><a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject③">Reject</a> <var>p</var> with <var>e</var>.</p>
+          </ol>
+        </ol>
+      </ol>
+      <ol start="3">
+       <li data-md>
+        <p>Terminate these substeps.</p>
+        <ol start="2">
+         <li data-md>
+          <p>If <var>r</var> is a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential④①">Credential</a></code> or <code>null</code>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#resolve" id="ref-for-resolve④">resolve</a> <var>p</var> with <var>r</var>, and terminate these substeps.</p>
+         <li data-md>
+          <p class="assertion">Assert: <var>r</var> is an algorithm (as defined in <a href="#algorithm-create-cred">§ 2.2.1.4 [[Create]] internal method</a>).</p>
+         <li data-md>
+          <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task" id="ref-for-queue-a-task③">Queue a task</a> on <var>global</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source" id="ref-for-dom-manipulation-task-source③">DOM manipulation task source</a> to run the following substeps:</p>
+          <ol>
+           <li data-md>
+            <p><a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#resolve" id="ref-for-resolve⑤">Resolve</a> <var>p</var> with the result of <a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide#should-promise-call" id="ref-for-should-promise-call">promise-calling</a> <var>r</var> given <var>global</var>.</p>
+          </ol>
         </ol>
       </ol>
      <li data-md>
@@ -2018,7 +2055,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
          <p>Let <var>r</var> be the result of executing <a data-link-type="abstract-op" href="#abstract-opdef-create-a-passwordcredential-from-an-htmlformelement" id="ref-for-abstract-opdef-create-a-passwordcredential-from-an-htmlformelement">Create a <code>PasswordCredential</code> from
   an <code>HTMLFormElement</code></a> given <var>form</var> and <var>origin</var>.</p>
         <li data-md>
-         <p>If <var>r</var> is an <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception⑥">exception</a>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw">throw</a> <var>r</var>.</p>
+         <p>If <var>r</var> is an <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception⑧">exception</a>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw">throw</a> <var>r</var>.</p>
          <p>Otherwise, return <var>r</var>.</p>
        </ol>
       <dt data-md><dfn class="dfn-paneled idl-code" data-dfn-for="PasswordCredential" data-dfn-type="constructor" data-export data-lt="PasswordCredential(data)|constructor(data)" id="dom-passwordcredential-passwordcredential-data"><code>PasswordCredential(data)</code></dfn>
@@ -2028,7 +2065,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
         <li data-md>
          <p>Let <var>r</var> be the result of executing <a data-link-type="abstract-op" href="#abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata" id="ref-for-abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata">Create a <code>PasswordCredential</code> from <code>PasswordCredentialData</code></a> on <var>data</var>.</p>
         <li data-md>
-         <p>If <var>r</var> is an <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception⑦">exception</a>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw①">throw</a> <var>r</var>.</p>
+         <p>If <var>r</var> is an <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception⑨">exception</a>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw①">throw</a> <var>r</var>.</p>
          <p>Otherwise, return <var>r</var>.</p>
        </ol>
      </dl>
@@ -2058,12 +2095,12 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
   The algorithm returns a set of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential④④">Credential</a></code> objects from
   the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store①③">credential store</a>. If no matching <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential④⑤">Credential</a></code> objects are available, the returned set
   will be empty.</p>
-    <p>The algorithm will return a <code>NotAllowedError</code> if <var>sameOriginWithAncestors</var> is not <code>true</code>.</p>
+    <p>The algorithm will throw a <code>NotAllowedError</code> if <var>sameOriginWithAncestors</var> is not <code>true</code>.</p>
     <ol class="algorithm">
      <li data-md>
       <p class="assertion">Assert: <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password②">password</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists①">exists</a>.</p>
      <li data-md>
-      <p>If <var>sameOriginWithAncestors</var> is <code>false</code>, return a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror①">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException②">DOMException</a></code>.</p>
+      <p>If <var>sameOriginWithAncestors</var> is <code>false</code>, throw a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror①">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException②">DOMException</a></code>.</p>
       <p class="note" role="note"><span>Note:</span> This restriction aims to address the concern raised in <a href="#security-origin-confusion">§ 6.4 Origin Confusion</a>.</p>
      <li data-md>
       <p>Return the empty set if <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password③">password</a></code>"] is not <code>true</code>.</p>
@@ -2081,18 +2118,20 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
   context is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors⑨">same-origin with its ancestors</a> (<var>sameOriginWithAncestors</var>).
   The algorithm returns a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential①④">PasswordCredential</a></code> if one can be created, <code>null</code> otherwise. The <code class="idl"><a data-link-type="idl" href="#dictdef-credentialcreationoptions" id="ref-for-dictdef-credentialcreationoptions①⓪">CredentialCreationOptions</a></code> dictionary must have a <code>password</code> member which
   holds either an <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement" id="ref-for-htmlformelement⑥">HTMLFormElement</a></code> or a <code class="idl"><a data-link-type="idl" href="#dictdef-passwordcredentialdata" id="ref-for-dictdef-passwordcredentialdata④">PasswordCredentialData</a></code>. If that member’s value cannot be
-  used to create a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential①⑤">PasswordCredential</a></code>, this algorithm will return a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror③">TypeError</a></code> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception⑧">exception</a>.</p>
+  used to create a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential①⑤">PasswordCredential</a></code>, this algorithm will throw a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror③">TypeError</a></code> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception①⓪">exception</a>.</p>
     <ol class="algorithm">
      <li data-md>
       <p class="assertion">Assert: <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-password" id="ref-for-dom-credentialcreationoptions-password">password</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②">exists</a>, and <var>sameOriginWithAncestors</var> is unused.</p>
      <li data-md>
       <p>If <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-password" id="ref-for-dom-credentialcreationoptions-password①">password</a></code>"] is an <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement" id="ref-for-htmlformelement⑦">HTMLFormElement</a></code>, return the
-  result of executing <a data-link-type="abstract-op" href="#abstract-opdef-create-a-passwordcredential-from-an-htmlformelement" id="ref-for-abstract-opdef-create-a-passwordcredential-from-an-htmlformelement①">Create a <code>PasswordCredential</code> from an <code>HTMLFormElement</code></a> given <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-password" id="ref-for-dom-credentialcreationoptions-password②">password</a></code>"] and <var>origin</var>.</p>
+  result of executing <a data-link-type="abstract-op" href="#abstract-opdef-create-a-passwordcredential-from-an-htmlformelement" id="ref-for-abstract-opdef-create-a-passwordcredential-from-an-htmlformelement①">Create a <code>PasswordCredential</code> from an <code>HTMLFormElement</code></a> given <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-password" id="ref-for-dom-credentialcreationoptions-password②">password</a></code>"] and <var>origin</var>.
+  Rethrow any exceptions.</p>
      <li data-md>
       <p>If <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-password" id="ref-for-dom-credentialcreationoptions-password③">password</a></code>"] is a <code class="idl"><a data-link-type="idl" href="#dictdef-passwordcredentialdata" id="ref-for-dictdef-passwordcredentialdata⑤">PasswordCredentialData</a></code>, return
-  the result of executing <a data-link-type="abstract-op" href="#abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata" id="ref-for-abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata①">Create a <code>PasswordCredential</code> from <code>PasswordCredentialData</code></a> given <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-password" id="ref-for-dom-credentialcreationoptions-password④">password</a></code>"].</p>
+  the result of executing <a data-link-type="abstract-op" href="#abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata" id="ref-for-abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata①">Create a <code>PasswordCredential</code> from <code>PasswordCredentialData</code></a> given <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-password" id="ref-for-dom-credentialcreationoptions-password④">password</a></code>"].
+  Rethrow any exceptions.</p>
      <li data-md>
-      <p>Return a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror④">TypeError</a></code> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception⑨">exception</a>.</p>
+      <p>Throw a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror④">TypeError</a></code> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception①①">exception</a>.</p>
     </ol>
     <h4 class="heading settled algorithm" data-algorithm="PasswordCredential&apos;s [[Store]](credential, sameOriginWithAncestors)" data-level="3.3.3" id="store-passwordcredential"><span class="secno">3.3.3. </span><span class="content"> <code>PasswordCredential</code>'s <code>[[Store]](credential, sameOriginWithAncestors)</code> </span><a class="self-link" href="#store-passwordcredential"></a></h4>
     <p><dfn class="dfn-paneled idl-code" data-dfn-for="PasswordCredential" data-dfn-type="method" data-export id="dom-passwordcredential-store-slot"><code>[[Store]](credential, sameOriginWithAncestors)</code></dfn> is
@@ -2101,7 +2140,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
     <p>The algorithm will return a <code>NotAllowedError</code> if <var>sameOriginWithAncestors</var> is not <code>true</code>.</p>
     <ol class="algorithm">
      <li data-md>
-      <p>Return a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror②">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException③">DOMException</a></code> without altering the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store①⑥">credential store</a> if <var>sameOriginWithAncestors</var> is <code>false</code>.</p>
+      <p>Throw a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror②">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException③">DOMException</a></code> without altering the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store①⑥">credential store</a> if <var>sameOriginWithAncestors</var> is <code>false</code>.</p>
       <p class="note" role="note"><span>Note:</span> This restriction aims to address the concern raised in <a href="#security-origin-confusion">§ 6.4 Origin Confusion</a>.</p>
      <li data-md>
       <p>If the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store①⑦">credential store</a> contains a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential①⑦">PasswordCredential</a></code> (<var>stored</var>)
@@ -2212,9 +2251,8 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
         </ol>
       </ol>
      <li data-md>
-      <p>Let <var>c</var> be the result of executing <a data-link-type="abstract-op" href="#abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata" id="ref-for-abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata②">Create a <code>PasswordCredential</code> from <code>PasswordCredentialData</code></a> on <var>data</var>.</p>
-     <li data-md>
-      <p>If <var>c</var> is an <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception①⓪">exception</a>, return <var>c</var>.</p>
+      <p>Let <var>c</var> be the result of executing <a data-link-type="abstract-op" href="#abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata" id="ref-for-abstract-opdef-create-a-passwordcredential-from-passwordcredentialdata②">Create a <code>PasswordCredential</code> from <code>PasswordCredentialData</code></a> on <var>data</var>. If that threw an <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception①②">exception</a>, rethrow that
+  exception.</p>
      <li data-md>
       <p class="assertion">Assert: <var>c</var> is a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential①⑨">PasswordCredential</a></code>.</p>
      <li data-md>
@@ -2226,7 +2264,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
      <li data-md>
       <p>Let <var>c</var> be a new <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential②⓪">PasswordCredential</a></code> object.</p>
      <li data-md>
-      <p>If any of the following are the empty string, return a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror⑤">TypeError</a></code> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception①①">exception</a>:</p>
+      <p>If any of the following are the empty string, throw a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror⑤">TypeError</a></code> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception①③">exception</a>:</p>
       <ul>
        <li data-md>
         <p><var>data</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credentialdata-id" id="ref-for-dom-credentialdata-id①">id</a></code> member’s value</p>
@@ -2328,10 +2366,10 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
        <p>This constructor accepts a <code class="idl"><a data-link-type="idl" href="#dictdef-federatedcredentialinit" id="ref-for-dictdef-federatedcredentialinit①">FederatedCredentialInit</a></code> (<var>data</var>), and runs the following steps:</p>
        <ol>
         <li data-md>
-         <p>Let <var>r</var> be the result of executing <a data-link-type="abstract-op" href="#abstract-opdef-create-a-federatedcredential-from-federatedcredentialinit" id="ref-for-abstract-opdef-create-a-federatedcredential-from-federatedcredentialinit">Create a <code>FederatedCredential</code> from <code>FederatedCredentialInit</code></a> on <var>data</var>.</p>
+         <p>Let <var>r</var> be the result of executing <a data-link-type="abstract-op" href="#abstract-opdef-create-a-federatedcredential-from-federatedcredentialinit" id="ref-for-abstract-opdef-create-a-federatedcredential-from-federatedcredentialinit">Create a <code>FederatedCredential</code> from <code>FederatedCredentialInit</code></a> on <var>data</var>. If that threw an <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception①④">exception</a>, rethrow that
+  exception.</p>
         <li data-md>
-         <p>If <var>r</var> is an <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception①②">exception</a>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-throw" id="ref-for-dfn-throw②">throw</a> <var>r</var>.</p>
-         <p>Otherwise, return <var>r</var>.</p>
+         <p>Return <var>r</var>.</p>
        </ol>
      </dl>
     </div>
@@ -2375,7 +2413,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
      <li data-md>
       <p class="assertion">Assert: <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-federated" id="ref-for-dom-credentialrequestoptions-federated">federated</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists③">exists</a>.</p>
      <li data-md>
-      <p>If <var>sameOriginWithAncestors</var> is <code>false</code>, return a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror③">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException④">DOMException</a></code>.</p>
+      <p>If <var>sameOriginWithAncestors</var> is <code>false</code>, throw a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror③">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException④">DOMException</a></code>.</p>
       <p class="note" role="note"><span>Note:</span> This restriction aims to address the concern raised in <a href="#security-origin-confusion">§ 6.4 Origin Confusion</a>.</p>
      <li data-md>
       <p>Return the empty set if <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-federated" id="ref-for-dom-credentialrequestoptions-federated①">federated</a></code>"] is not <code>true</code>.</p>
@@ -2395,14 +2433,15 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
     <h4 class="heading settled algorithm" data-algorithm="FederatedCredential&apos;s [[Create]](origin, options, sameOriginWithAncestors)" data-level="4.2.2" id="create-federatedcredential"><span class="secno">4.2.2. </span><span class="content"> <code>FederatedCredential</code>'s <code>[[Create]](origin, options, sameOriginWithAncestors)</code> </span><a class="self-link" href="#create-federatedcredential"></a></h4>
     <p><dfn class="dfn-paneled idl-code" data-dfn-for="FederatedCredential" data-dfn-type="method" data-export id="dom-federatedcredential-create-slot"><code>[[Create]](origin, options, sameOriginWithAncestors)</code></dfn> is called with an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin①⓪">origin</a> (<var>origin</var>), a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialcreationoptions" id="ref-for-dictdef-credentialcreationoptions①②">CredentialCreationOptions</a></code> (<var>options</var>), and a boolean which is <code>true</code> iff the
   calling context is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors①②">same-origin with its ancestors</a> (<var>sameOriginWithAncestors</var>).
-  The algorithm returns a <code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential①⓪">FederatedCredential</a></code> if one can be created, <code>null</code> otherwise, or an <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception①③">exception</a> in exceptional circumstances:</p>
+  The algorithm returns a <code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential①⓪">FederatedCredential</a></code> if one can be created, <code>null</code> otherwise, or throws an <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception①⑤">exception</a> in exceptional circumstances:</p>
     <ol class="algorithm">
      <li data-md>
       <p class="assertion">Assert: <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-federated" id="ref-for-dom-credentialcreationoptions-federated">federated</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥">exists</a>, and <var>sameOriginWithAncestors</var> is unused.</p>
      <li data-md>
       <p>Set <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-federated" id="ref-for-dom-credentialcreationoptions-federated①">federated</a></code>"]'s <code class="idl"><a data-link-type="idl" href="#dom-federatedcredentialinit-origin" id="ref-for-dom-federatedcredentialinit-origin">origin</a></code> member’s value to <var>origin</var>’s value.</p>
      <li data-md>
-      <p>Return the result of executing <a data-link-type="abstract-op" href="#abstract-opdef-create-a-federatedcredential-from-federatedcredentialinit" id="ref-for-abstract-opdef-create-a-federatedcredential-from-federatedcredentialinit①">Create a <code>FederatedCredential</code> from <code>FederatedCredentialInit</code></a> given <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-federated" id="ref-for-dom-credentialcreationoptions-federated②">federated</a></code>"].</p>
+      <p>Return the result of executing <a data-link-type="abstract-op" href="#abstract-opdef-create-a-federatedcredential-from-federatedcredentialinit" id="ref-for-abstract-opdef-create-a-federatedcredential-from-federatedcredentialinit①">Create a <code>FederatedCredential</code> from <code>FederatedCredentialInit</code></a> given <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialcreationoptions-federated" id="ref-for-dom-credentialcreationoptions-federated②">federated</a></code>"].
+  If that threw an <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception①⑥">exception</a>, then rethrow that exception.</p>
     </ol>
     <h4 class="heading settled algorithm" data-algorithm="FederatedCredential&apos;s [[Store]](credential, sameOriginWithAncestors)" data-level="4.2.3" id="store-federatedcredential"><span class="secno">4.2.3. </span><span class="content"> <code>FederatedCredential</code>'s <code>[[Store]](credential, sameOriginWithAncestors)</code> </span><a class="self-link" href="#store-federatedcredential"></a></h4>
     <p><dfn class="dfn-paneled idl-code" data-dfn-for="FederatedCredential" data-dfn-type="method" data-export id="dom-federatedcredential-store-slot"><code>[[Store]](credential, sameOriginWithAncestors)</code></dfn> is
@@ -2412,7 +2451,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
     <p>The algorithm will return a <code>NotAllowedError</code> if <var>sameOriginWithAncestors</var> is not <code>true</code>.</p>
     <ol class="algorithm">
      <li data-md>
-      <p>Return a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror④">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑤">DOMException</a></code> without altering the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store②②">credential store</a> if <var>sameOriginWithAncestors</var> is <code>false</code>.</p>
+      <p>Throw a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror④">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑤">DOMException</a></code> without altering the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store②②">credential store</a> if <var>sameOriginWithAncestors</var> is <code>false</code>.</p>
       <p class="note" role="note"><span>Note:</span> This restriction aims to address the concern raised in <a href="#security-origin-confusion">§ 6.4 Origin Confusion</a>.</p>
      <li data-md>
       <p>If the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store②③">credential store</a> contains a <code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential①②">FederatedCredential</a></code> whose <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id⑥">id</a></code> attribute is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id⑦">id</a></code> and whose <code class="idl"><a data-link-type="idl" href="#dom-credential-origin-slot" id="ref-for-dom-credential-origin-slot⑦">[[origin]]</a></code> slot is the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#same-origin" id="ref-for-same-origin④">same origin</a> as <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-origin-slot" id="ref-for-dom-credential-origin-slot⑧">[[origin]]</a></code>, and
@@ -2449,7 +2488,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
      <li data-md>
       <p>Let <var>c</var> be a new <code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential①④">FederatedCredential</a></code> object.</p>
      <li data-md>
-      <p>If any of the following are the empty string, return a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror⑥">TypeError</a></code> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception①④">exception</a>:</p>
+      <p>If any of the following are the empty string, throw a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror⑥">TypeError</a></code> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception①⑦">exception</a>:</p>
       <ul>
        <li data-md>
         <p><var>init</var>.<code class="idl"><a data-link-type="idl" href="#dom-credentialdata-id" id="ref-for-dom-credentialdata-id③">id</a></code>'s value</p>
@@ -3205,7 +3244,9 @@ partial dictionary CredentialCreationOptions {
   <aside class="dfn-panel" data-for="term-for-dom-manipulation-task-source">
    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source">https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-dom-manipulation-task-source">2.5.4. Create a Credential</a>
+    <li><a href="#ref-for-dom-manipulation-task-source">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-dom-manipulation-task-source①">2.5.3. Store a Credential</a>
+    <li><a href="#ref-for-dom-manipulation-task-source②">2.5.4. Create a Credential</a> <a href="#ref-for-dom-manipulation-task-source③">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-environment-settings-object">
@@ -3314,7 +3355,9 @@ partial dictionary CredentialCreationOptions {
   <aside class="dfn-panel" data-for="term-for-queue-a-task">
    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task">https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-queue-a-task">2.5.4. Create a Credential</a>
+    <li><a href="#ref-for-queue-a-task">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-queue-a-task①">2.5.3. Store a Credential</a>
+    <li><a href="#ref-for-queue-a-task②">2.5.4. Create a Credential</a> <a href="#ref-for-queue-a-task③">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-concept-relevant-global">
@@ -3641,19 +3684,19 @@ partial dictionary CredentialCreationOptions {
    <ul>
     <li><a href="#ref-for-dfn-exception">2.5.1. Request a Credential</a> <a href="#ref-for-dfn-exception①">(2)</a> <a href="#ref-for-dfn-exception②">(3)</a>
     <li><a href="#ref-for-dfn-exception③">2.5.2. Collect Credentials from the credential store</a>
-    <li><a href="#ref-for-dfn-exception④">2.5.3. Store a Credential</a>
-    <li><a href="#ref-for-dfn-exception⑤">2.5.4. Create a Credential</a>
-    <li><a href="#ref-for-dfn-exception⑥">3.2. The PasswordCredential Interface</a> <a href="#ref-for-dfn-exception⑦">(2)</a>
-    <li><a href="#ref-for-dfn-exception⑧">3.3.2. 
-    PasswordCredential's [[Create]](origin, options, sameOriginWithAncestors) </a> <a href="#ref-for-dfn-exception⑨">(2)</a>
-    <li><a href="#ref-for-dfn-exception①⓪">3.3.4. 
+    <li><a href="#ref-for-dfn-exception④">2.5.3. Store a Credential</a> <a href="#ref-for-dfn-exception⑤">(2)</a>
+    <li><a href="#ref-for-dfn-exception⑥">2.5.4. Create a Credential</a> <a href="#ref-for-dfn-exception⑦">(2)</a>
+    <li><a href="#ref-for-dfn-exception⑧">3.2. The PasswordCredential Interface</a> <a href="#ref-for-dfn-exception⑨">(2)</a>
+    <li><a href="#ref-for-dfn-exception①⓪">3.3.2. 
+    PasswordCredential's [[Create]](origin, options, sameOriginWithAncestors) </a> <a href="#ref-for-dfn-exception①①">(2)</a>
+    <li><a href="#ref-for-dfn-exception①②">3.3.4. 
     Create a PasswordCredential from an HTMLFormElement </a>
-    <li><a href="#ref-for-dfn-exception①①">3.3.5. 
+    <li><a href="#ref-for-dfn-exception①③">3.3.5. 
     Create a PasswordCredential from PasswordCredentialData </a>
-    <li><a href="#ref-for-dfn-exception①②">4.1. The FederatedCredential Interface</a>
-    <li><a href="#ref-for-dfn-exception①③">4.2.2. 
-    FederatedCredential's [[Create]](origin, options, sameOriginWithAncestors) </a>
-    <li><a href="#ref-for-dfn-exception①④">4.2.4. 
+    <li><a href="#ref-for-dfn-exception①④">4.1. The FederatedCredential Interface</a>
+    <li><a href="#ref-for-dfn-exception①⑤">4.2.2. 
+    FederatedCredential's [[Create]](origin, options, sameOriginWithAncestors) </a> <a href="#ref-for-dfn-exception①⑥">(2)</a>
+    <li><a href="#ref-for-dfn-exception①⑦">4.2.4. 
     Create a FederatedCredential from FederatedCredentialInit </a>
    </ul>
   </aside>
@@ -3721,7 +3764,6 @@ partial dictionary CredentialCreationOptions {
    <a href="https://webidl.spec.whatwg.org/#dfn-throw">https://webidl.spec.whatwg.org/#dfn-throw</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dfn-throw">3.2. The PasswordCredential Interface</a> <a href="#ref-for-dfn-throw①">(2)</a>
-    <li><a href="#ref-for-dfn-throw②">4.1. The FederatedCredential Interface</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-undefined">
