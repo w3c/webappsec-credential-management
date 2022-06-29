@@ -388,7 +388,7 @@ spec:css-syntax-3;
     interface Credential {
       readonly attribute USVString id;
       readonly attribute DOMString type;
-      static boolean isConditionalMediationAvailable();
+      static Promise&lt;boolean&gt; isConditionalMediationAvailable();
     };
   </pre>
   <div dfn-for="Credential">
@@ -401,7 +401,7 @@ spec:css-syntax-3;
         {{[[type]]}} slot, which specifies the [=credential/credential type=] represented by this object.
 
     :   <dfn method>isConditionalMediationAvailable()</dfn>
-    ::  Returns `true` if and only if the user agent supports the
+    ::  Returns a new {{Promise}} that [=resolves=] with `true` if and only if the user agent supports the
         {{CredentialMediationRequirement/conditional}} approach to
         [[#mediation-requirements|mediation of credential requests]] for the [=credential/credential type=],
         `false` otherwise.
@@ -409,12 +409,13 @@ spec:css-syntax-3;
         {{Credential}}'s default implementation of {{Credential/isConditionalMediationAvailable()}}:
 
         <ol class="algorithm">
-            1.  Return `false`.
+            1.  Return a new {{Promise}} that immediately [=resolves=] with `false`.
         </ol>
 
         The specification for any [=credential/credential type=] supporting
         {{CredentialMediationRequirement/conditional}} mediation must explicitly override this
-        function to return `true`.
+        function to [=resolve=] to `true`.
+
         Note: If this function is not present, {{CredentialMediationRequirement/conditional}}
         mediation is not supported for the [=credential/credential type=].
 
@@ -772,7 +773,7 @@ spec:css-syntax-3;
         Websites can only pass {{CredentialMediationRequirement/conditional}} into the
         {{CredentialsContainer/get()}} method if all of the [=relevant credential interface objects|credential
         interfaces it refers to=] have overridden {{Credential/isConditionalMediationAvailable()}} to return
-        `true`.
+        a new {{Promise}} that [=resolves=] with `true`.
 
     :   <dfn>required</dfn>
     ::  The user agent will not hand over credentials without [=user mediation=], even if the
@@ -2350,7 +2351,8 @@ spec:css-syntax-3;
       </div>
 
   1.  If the new credential type supports {{CredentialMediationRequirement/conditional}} [=user
-      mediation=], define `ExampleCredential/isConditionalMediationAvailable()` to return `true`.
+      mediation=], define `ExampleCredential/isConditionalMediationAvailable()`
+      to return a new {{Promise}} that [=resolves=] with `true`.
 
   1.  Following the procedure in [[#sctn-registry-requirements]], add an entry to the
       [[#sctn-cred-type-registry|Credential Type Registry]] for the new
