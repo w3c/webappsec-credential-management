@@ -8,7 +8,7 @@
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
   <meta content="Bikeshed version 70e626dff, updated Wed Jul 27 11:34:41 2022 -0700" name="generator">
   <link href="http://www.w3.org/TR/credential-management-1/" rel="canonical">
-  <meta content="af51360c2c39e9965291704542303185611f9adf" name="document-revision">
+  <meta content="8350696f70e0e8d4f875248b1505d6b6a6d75bbb" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -1014,6 +1014,12 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
        <td><code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential①">FederatedCredential</a></code>
        <td>This specification: <a href="#federated">§ 4 Federated Credentials</a>
        <td><a href="https://www.w3.org/2011/webappsec/">W3C</a>
+      <tr>
+       <td>identity
+       <td>identity
+       <td><code class="idl"><a data-link-type="idl" href="https://fedidcg.github.io/FedCM#identitycredential" id="ref-for-identitycredential">IdentityCredential</a></code>
+       <td><a data-link-type="biblio" href="#biblio-fedcm">[FEDCM]</a>
+       <td><a href="https://www.w3.org/community/fed-id/">W3C</a>
       <tr>
        <td>otp
        <td>otp
@@ -3067,6 +3073,12 @@ partial dictionary CredentialCreationOptions {
     <li><a href="#ref-for-sec-ordinary-object-internal-methods-and-internal-slots">2.2.1. Credential Internal Methods</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-identitycredential">
+   <a href="https://fedidcg.github.io/FedCM#identitycredential">https://fedidcg.github.io/FedCM#identitycredential</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-identitycredential">2.1.2. Credential Type Registry</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-response">
    <a href="https://fetch.spec.whatwg.org/#response">https://fetch.spec.whatwg.org/#response</a><b>Referenced in:</b>
    <ul>
@@ -3788,6 +3800,11 @@ partial dictionary CredentialCreationOptions {
      <li><span class="dfn-paneled" id="term-for-sec-ordinary-object-internal-methods-and-internal-slots">internal method</span>
     </ul>
    <li>
+    <a data-link-type="biblio">[FEDCM]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="term-for-identitycredential">IdentityCredential</span>
+    </ul>
+   <li>
     <a data-link-type="biblio">[FETCH]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="term-for-response">Response</span>
@@ -3925,6 +3942,8 @@ partial dictionary CredentialCreationOptions {
    <dd>Mike West. <a href="https://w3c.github.io/webappsec-csp/"><cite>Content Security Policy Level 3</cite></a>. URL: <a href="https://w3c.github.io/webappsec-csp/">https://w3c.github.io/webappsec-csp/</a>
    <dt id="biblio-dom">[DOM]
    <dd>Anne van Kesteren. <a href="https://dom.spec.whatwg.org/"><cite>DOM Standard</cite></a>. Living Standard. URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a>
+   <dt id="biblio-fedcm">[FEDCM]
+   <dd>Sam Goto. <a href="https://fedidcg.github.io/FedCM/"><cite>FedCM API</cite></a>. URL: <a href="https://fedidcg.github.io/FedCM/">https://fedidcg.github.io/FedCM/</a>
    <dt id="biblio-fetch">[FETCH]
    <dd>Anne van Kesteren. <a href="https://fetch.spec.whatwg.org/"><cite>Fetch Standard</cite></a>. Living Standard. URL: <a href="https://fetch.spec.whatwg.org/">https://fetch.spec.whatwg.org/</a>
    <dt id="biblio-html">[HTML]
