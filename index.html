@@ -6,9 +6,9 @@
   <meta content="ED" name="w3c-status">
   <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED" rel="stylesheet">
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
-  <meta content="Bikeshed version 37b7e7e68, updated Fri May 27 15:08:11 2022 -0700" name="generator">
+  <meta content="Bikeshed version 70e626dff, updated Wed Jul 27 11:34:41 2022 -0700" name="generator">
   <link href="http://www.w3.org/TR/credential-management-1/" rel="canonical">
-  <meta content="878530d5182188b5ddb03a4f1f83085691ba44b0" name="document-revision">
+  <meta content="af51360c2c39e9965291704542303185611f9adf" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -646,7 +646,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2022-06-29">29 June 2022</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2022-07-29">29 July 2022</time></p>
    <details open>
     <summary>More details about this document</summary>
     <div data-fill-with="spec-metadata">
@@ -1673,12 +1673,10 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
              <li data-md>
               <p><a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject①">Reject</a> <var>p</var> with <var>e</var>.</p>
             </ol>
+           <li data-md>
+            <p>Terminate these substeps.</p>
           </ol>
         </ol>
-      </ol>
-     <li data-md>
-      <p>Terminate these substeps.</p>
-      <ol>
        <li data-md>
         <p class="assertion">Assert: <var>result</var> is <code>null</code>, or a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential③⑤">Credential</a></code>.</p>
        <li data-md>
@@ -1803,22 +1801,18 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
            <li data-md>
             <p><a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#reject" id="ref-for-reject③">Reject</a> <var>p</var> with <var>e</var>.</p>
           </ol>
+         <li data-md>
+          <p>Terminate these substeps.</p>
         </ol>
-      </ol>
-      <ol start="3">
        <li data-md>
-        <p>Terminate these substeps.</p>
-        <ol start="2">
+        <p>If <var>r</var> is a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential④②">Credential</a></code> or <code>null</code>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#resolve" id="ref-for-resolve⑧">resolve</a> <var>p</var> with <var>r</var>, and terminate these substeps.</p>
+       <li data-md>
+        <p class="assertion">Assert: <var>r</var> is an algorithm (as defined in <a href="#algorithm-create-cred">§ 2.2.1.4 [[Create]] internal method</a>).</p>
+       <li data-md>
+        <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task" id="ref-for-queue-a-task③">Queue a task</a> on <var>global</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source" id="ref-for-dom-manipulation-task-source③">DOM manipulation task source</a> to run the following substeps:</p>
+        <ol>
          <li data-md>
-          <p>If <var>r</var> is a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential④②">Credential</a></code> or <code>null</code>, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#resolve" id="ref-for-resolve⑧">resolve</a> <var>p</var> with <var>r</var>, and terminate these substeps.</p>
-         <li data-md>
-          <p class="assertion">Assert: <var>r</var> is an algorithm (as defined in <a href="#algorithm-create-cred">§ 2.2.1.4 [[Create]] internal method</a>).</p>
-         <li data-md>
-          <p><a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task" id="ref-for-queue-a-task③">Queue a task</a> on <var>global</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#dom-manipulation-task-source" id="ref-for-dom-manipulation-task-source③">DOM manipulation task source</a> to run the following substeps:</p>
-          <ol>
-           <li data-md>
-            <p><a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#resolve" id="ref-for-resolve⑨">Resolve</a> <var>p</var> with the result of <a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide#should-promise-call" id="ref-for-should-promise-call">promise-calling</a> <var>r</var> given <var>global</var>.</p>
-          </ol>
+          <p><a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#resolve" id="ref-for-resolve⑨">Resolve</a> <var>p</var> with the result of <a data-link-type="dfn" href="https://www.w3.org/2001/tag/doc/promises-guide#should-promise-call" id="ref-for-should-promise-call">promise-calling</a> <var>r</var> given <var>global</var>.</p>
         </ol>
       </ol>
      <li data-md>
@@ -3855,17 +3849,17 @@ partial dictionary CredentialCreationOptions {
      <li><span class="dfn-paneled" id="term-for-list-size">size</span>
     </ul>
    <li>
-    <a data-link-type="biblio">[mixed-content]</a> defines the following terms:
+    <a data-link-type="biblio">[MIXED-CONTENT]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="term-for-a-priori-authenticated-url">a priori authenticated url</span>
     </ul>
    <li>
-    <a data-link-type="biblio">[permissions-policy-1]</a> defines the following terms:
+    <a data-link-type="biblio">[PERMISSIONS-POLICY-1]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="term-for-policy-controlled-feature">policy-controlled feature</span>
     </ul>
    <li>
-    <a data-link-type="biblio">[promises-guide]</a> defines the following terms:
+    <a data-link-type="biblio">[PROMISES-GUIDE]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="term-for-should-promise-call">promise-calling</span>
     </ul>
@@ -3928,7 +3922,7 @@ partial dictionary CredentialCreationOptions {
   <h3 class="no-num no-ref heading settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
   <dl>
    <dt id="biblio-csp">[CSP]
-   <dd>Mike West. <a href="https://www.w3.org/TR/CSP3/"><cite>Content Security Policy Level 3</cite></a>. 29 June 2021. WD. URL: <a href="https://www.w3.org/TR/CSP3/">https://www.w3.org/TR/CSP3/</a>
+   <dd>Mike West. <a href="https://w3c.github.io/webappsec-csp/"><cite>Content Security Policy Level 3</cite></a>. URL: <a href="https://w3c.github.io/webappsec-csp/">https://w3c.github.io/webappsec-csp/</a>
    <dt id="biblio-dom">[DOM]
    <dd>Anne van Kesteren. <a href="https://dom.spec.whatwg.org/"><cite>DOM Standard</cite></a>. Living Standard. URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a>
    <dt id="biblio-fetch">[FETCH]
@@ -3938,9 +3932,9 @@ partial dictionary CredentialCreationOptions {
    <dt id="biblio-infra">[INFRA]
    <dd>Anne van Kesteren; Domenic Denicola. <a href="https://infra.spec.whatwg.org/"><cite>Infra Standard</cite></a>. Living Standard. URL: <a href="https://infra.spec.whatwg.org/">https://infra.spec.whatwg.org/</a>
    <dt id="biblio-mixed-content">[MIXED-CONTENT]
-   <dd>Emily Stark; Mike West; Carlos IbarraLopez. <a href="https://www.w3.org/TR/mixed-content/"><cite>Mixed Content</cite></a>. 4 October 2021. CR. URL: <a href="https://www.w3.org/TR/mixed-content/">https://www.w3.org/TR/mixed-content/</a>
+   <dd>Emily Stark; Mike West; Carlos IbarraLopez. <a href="https://w3c.github.io/webappsec-mixed-content/"><cite>Mixed Content</cite></a>. URL: <a href="https://w3c.github.io/webappsec-mixed-content/">https://w3c.github.io/webappsec-mixed-content/</a>
    <dt id="biblio-permissions-policy-1">[PERMISSIONS-POLICY-1]
-   <dd>Ian Clelland. <a href="https://www.w3.org/TR/permissions-policy-1/"><cite>Permissions Policy</cite></a>. 16 July 2020. WD. URL: <a href="https://www.w3.org/TR/permissions-policy-1/">https://www.w3.org/TR/permissions-policy-1/</a>
+   <dd>Ian Clelland. <a href="https://w3c.github.io/webappsec-permissions-policy/"><cite>Permissions Policy</cite></a>. URL: <a href="https://w3c.github.io/webappsec-permissions-policy/">https://w3c.github.io/webappsec-permissions-policy/</a>
    <dt id="biblio-promises-guide">[PROMISES-GUIDE]
    <dd>Domenic Denicola. <a href="https://www.w3.org/2001/tag/doc/promises-guide"><cite>Writing Promise-Using Specifications</cite></a>. 9 November 2018. TAG Finding. URL: <a href="https://www.w3.org/2001/tag/doc/promises-guide">https://www.w3.org/2001/tag/doc/promises-guide</a>
    <dt id="biblio-psl">[PSL]
@@ -3948,7 +3942,7 @@ partial dictionary CredentialCreationOptions {
    <dt id="biblio-web-otp">[WEB-OTP]
    <dd>Sam Goto. <a href="https://wicg.github.io/web-otp/"><cite>WebOTP API</cite></a>. URL: <a href="https://wicg.github.io/web-otp/">https://wicg.github.io/web-otp/</a>
    <dt id="biblio-webauthn">[WEBAUTHN]
-   <dd>Dirk Balfanz; et al. <a href="https://www.w3.org/TR/webauthn-1/"><cite>Web Authentication:An API for accessing Public Key Credentials Level 1</cite></a>. 4 March 2019. REC. URL: <a href="https://www.w3.org/TR/webauthn-1/">https://www.w3.org/TR/webauthn-1/</a>
+   <dd>Dirk Balfanz; et al. <a href="https://w3c.github.io/webauthn/"><cite>Web Authentication:An API for accessing Public Key Credentials Level 1</cite></a>. URL: <a href="https://w3c.github.io/webauthn/">https://w3c.github.io/webauthn/</a>
    <dt id="biblio-webidl">[WEBIDL]
    <dd>Edgar Chen; Timothy Gu. <a href="https://webidl.spec.whatwg.org/"><cite>Web IDL Standard</cite></a>. Living Standard. URL: <a href="https://webidl.spec.whatwg.org/">https://webidl.spec.whatwg.org/</a>
    <dt id="biblio-xhr">[XHR]
@@ -3959,11 +3953,11 @@ partial dictionary CredentialCreationOptions {
    <dt id="biblio-browserid">[BROWSERID]
    <dd>Ben Adida; et al. <a href="https://github.com/mozilla/id-specs/blob/prod/browserid/index.md"><cite>BrowserID</cite></a>. 26 February 2013. URL: <a href="https://github.com/mozilla/id-specs/blob/prod/browserid/index.md">https://github.com/mozilla/id-specs/blob/prod/browserid/index.md</a>
    <dt id="biblio-sri">[SRI]
-   <dd>Devdatta Akhawe; et al. <a href="https://www.w3.org/TR/SRI/"><cite>Subresource Integrity</cite></a>. 23 June 2016. REC. URL: <a href="https://www.w3.org/TR/SRI/">https://www.w3.org/TR/SRI/</a>
+   <dd>Devdatta Akhawe; et al. <a href="https://w3c.github.io/webappsec-subresource-integrity/"><cite>Subresource Integrity</cite></a>. URL: <a href="https://w3c.github.io/webappsec-subresource-integrity/">https://w3c.github.io/webappsec-subresource-integrity/</a>
    <dt id="biblio-web-login">[WEB-LOGIN]
    <dd>Jason Denizac; Robin Berjon; Anne van Kesteren. <a href="https://github.com/jden/web-login"><cite>web-login</cite></a>. URL: <a href="https://github.com/jden/web-login">https://github.com/jden/web-login</a>
    <dt id="biblio-xmlhttprequest">[XMLHTTPREQUEST]
-   <dd>Anne van Kesteren; et al. <a href="https://www.w3.org/TR/XMLHttpRequest/"><cite>XMLHttpRequest Level 1</cite></a>. 6 October 2016. NOTE. URL: <a href="https://www.w3.org/TR/XMLHttpRequest/">https://www.w3.org/TR/XMLHttpRequest/</a>
+   <dd>Anne van Kesteren; et al. <a href="https://xhr.spec.whatwg.org/"><cite>XMLHttpRequest Level 1</cite></a>. URL: <a href="https://xhr.spec.whatwg.org/">https://xhr.spec.whatwg.org/</a>
   </dl>
   <h2 class="no-num no-ref heading settled" id="idl-index"><span class="content">IDL Index</span><a class="self-link" href="#idl-index"></a></h2>
 <pre class="idl highlight def">[<a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#Exposed"><c- g>Exposed</c-></a>=<c- n>Window</c->, <a class="idl-code" data-link-type="extended-attribute" href="https://webidl.spec.whatwg.org/#SecureContext"><c- g>SecureContext</c-></a>]
