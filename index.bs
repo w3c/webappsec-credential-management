@@ -991,7 +991,7 @@ spec:css-syntax-3;
 
                     1. [=Reject=] |p| with |e|.
 
-		1. Terminate these substeps.
+                1. Terminate these substeps.
 
         1.  Assert: |result| is `null`, or a {{Credential}}.
 
@@ -1125,7 +1125,7 @@ spec:css-syntax-3;
 
                1. [=Reject=] |p| with |e|.
 
-	    3. Terminate these substeps.
+            3. Terminate these substeps.
 
         2.  If |r| is a {{Credential}} or `null`, [=resolve=] |p| with |r|, and terminate these substeps.
 
