@@ -71,6 +71,9 @@ spec: promises-guide-1; urlPrefix: https://www.w3.org/2001/tag/doc/promises-guid
 spec: web-otp; urlPrefix: https://wicg.github.io/web-otp
   type: interface
     text: OTPCredential; url: otpcredential
+spec: FEDCM; urlPrefix: https://fedidcg.github.io/FedCM
+  type: interface
+    text: IdentityCredential; url: identitycredential
 </pre>
 
 <pre class="link-defaults">
@@ -96,6 +99,11 @@ spec:css-syntax-3;
 </pre>
 <pre class="biblio">
 {
+  "FEDCM": {
+    "authors": [ "Sam Goto" ],
+    "href": "https://fedidcg.github.io/FedCM/",
+    "title": "FedCM API"
+  },
   "WEB-LOGIN": {
     "authors": [ "Jason Denizac", "Robin Berjon", "Anne van Kesteren" ],
     "href": "https://github.com/jden/web-login",
@@ -325,6 +333,13 @@ spec:css-syntax-3;
         <td>{{FederatedCredential}}</td>
         <td>This specification: [[#federated]]</td>
         <td><a href="https://www.w3.org/2011/webappsec/">W3C</a></td>
+    </tr>
+    <tr>
+        <td>identity</td>
+        <td>identity</td>
+        <td>{{IdentityCredential}}</td>
+        <td>[[FEDCM]]</td>
+        <td><a href="https://www.w3.org/community/fed-id/">W3C</a></td>
     </tr>
     <tr>
         <td>otp</td>
