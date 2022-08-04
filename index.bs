@@ -74,6 +74,9 @@ spec: web-otp; urlPrefix: https://wicg.github.io/web-otp
 spec: FEDCM; urlPrefix: https://fedidcg.github.io/FedCM
   type: interface
     text: IdentityCredential; url: identitycredential
+  type: dict-member
+    for: CredentialRequestOptions
+      text: identity; url: dom-credentialrequestoptions-identity
 </pre>
 
 <pre class="link-defaults">
@@ -946,6 +949,12 @@ spec:css-syntax-3;
 
     1.  Let |sameOriginWithAncestors| be `true` if |settings| is [=same-origin with its
         ancestors=], and `false` otherwise.
+
+    1.  If |options|[{{CredentialRequestOptions/identity}}] [=map/exists=] then
+        if |settings|' [=relevant global object=]'s [=associated Document=] is **not**
+        [=allowed to use=] the "fedcm"
+        [=policy-controlled feature=] return [=a promise rejected with=] a "{{NotAllowedError}}"
+        {{DOMException}}.
 
     1.  If |options|[{{CredentialRequestOptions/publicKey}}] [=map/exists=] then
         if |settings|' [=relevant global object=]'s [=associated Document=] is **not**
