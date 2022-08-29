@@ -72,6 +72,8 @@ spec: web-otp; urlPrefix: https://wicg.github.io/web-otp
   type: interface
     text: OTPCredential; url: otpcredential
 spec: FEDCM; urlPrefix: https://fedidcg.github.io/FedCM
+  type: dfn
+    text: identity-credentials-get
   type: interface
     text: IdentityCredential; url: identitycredential
   type: dict-member
@@ -952,7 +954,7 @@ spec:css-syntax-3;
 
     1.  If |options|[{{CredentialRequestOptions/identity}}] [=map/exists=] then
         if |settings|' [=relevant global object=]'s [=associated Document=] is **not**
-        [=allowed to use=] the "fedcm"
+        [=allowed to use=] the [=identity-credentials-get=]
         [=policy-controlled feature=] return [=a promise rejected with=] a "{{NotAllowedError}}"
         {{DOMException}}.
 
