@@ -275,8 +275,8 @@ spec:css-syntax-3;
   This document depends on the Infra Standard for a number of foundational concepts used in its
   algorithms and prose [[!INFRA]].
 
-  Each [=/browsing context=] has an associated <dfn noexport>active credential types</dfn>, a [=set=]
-  which is initially empty.
+  Each [=/environment settings object=] has an associated <dfn noexport>active credential
+  types</dfn>, a [=set=] which is initially empty.
 
   ### Infrastructure Algorithms ### {#sctn-infra-algorithms}
 
@@ -944,18 +944,16 @@ spec:css-syntax-3;
 
     1.  Let |p| be [=a new promise=].
 
-    1. Let |topLevelBrowsingContext| be |settings|' [=top-level browsing context=].
+    1. [=map/For each=] |optionKey| → <var ignore>optionValue</var> of |options|:
+
+        1. If |settings|' [=active credential types=] [=set/contains=] |optionKey|, [=reject=] |p|
+            with null and return |p|.
 
     1. [=map/For each=] |optionKey| → <var ignore>optionValue</var> of |options|:
 
-        1. If |topLevelBrowsingContext|'s [=active credential types=] [=set/contains=] |optionKey|,
-            [=reject=] |p| with null and return |p|.
+        1. [=set/Append=] |optionKey| to |settings|' [=active credential types=].
 
-    1. [=map/For each=] |optionKey| → <var ignore>optionValue</var> of |options|:
-
-        1. [=set/Append=] |optionKey| to |topLevelBrowsingContext|'s [=active credential types=].
-
-    1.  Let |origin| be the [=current settings object=]'s [=environment settings object/origin=].
+    1.  Let |origin| be |settings|' [=environment settings object/origin=].
 
     1.  Let |sameOriginWithAncestors| be `true` if |settings| is [=same-origin with its
         ancestors=], and `false` otherwise.
@@ -1034,7 +1032,7 @@ spec:css-syntax-3;
 
     1. [=map/For each=] |optionKey| → <var ignore>optionValue</var> of |options|:
 
-        1. [=set/Remove=] |optionKey| from |topLevelBrowsingContext|'s [=active credential types=].
+        1. [=set/Remove=] |optionKey| from |settings|' [=active credential types=].
 
     1.  Return |p|.
   </ol>
@@ -1083,12 +1081,10 @@ spec:css-syntax-3;
 
     1.  Let |p| be [=a new promise=].
 
-    1. Let |topLevelBrowsingContext| be |settings|' [=top-level browsing context=].
-
-    1. If |topLevelBrowsingContext|'s [=active credential types=] [=set/contains=] |credential|'s
+    1. If |settings|' [=active credential types=] [=set/contains=] |credential|'s
         {{Credential/[[type]]}}, [=reject=] |p| with null and return |p|.
     
-    1. [=set/Append=] |credential|'s {{Credential/[[type]]}} to |topLevelBrowsingContext|'s
+    1. [=set/Append=] |credential|'s {{Credential/[[type]]}} to |settings|'
         [=active credential types=].
 
     1.  Run the following steps [=in parallel=]:
@@ -1108,7 +1104,7 @@ spec:css-syntax-3;
 
             Otherwise, [=resolve=] |p| with |r|.
 
-    1. [=set/Remove=] |credential|'s {{Credential/[[type]]}} from |topLevelBrowsingContext|'s
+    1. [=set/Remove=] |credential|'s {{Credential/[[type]]}} from |settings|'
         [=active credential types=].
 
     1.  Return |p|.
@@ -1151,14 +1147,12 @@ spec:css-syntax-3;
 
     1.  Let |p| be [=a new promise=].
 
-    1. Let |topLevelBrowsingContext| be |settings|' [=top-level browsing context=].
-
     1. Let |type| be |interfaces|[0]'s {{Credential/[[type]]}}.
 
-    1. If |topLevelBrowsingContext|'s [=active credential types=] [=set/contains=] |type|,
-        [=reject=] |p| with null and return |p|.
+    1. If |settings|' [=active credential types=] [=set/contains=] |type|, [=reject=] |p| with null
+        and return |p|.
     
-    1. [=set/Append=] |type| to |topLevelBrowsingContext|'s [=active credential types=].
+    1. [=set/Append=] |type| to |settings|' [=active credential types=].
 
     1.  Let |origin| be |settings|'s [=environment settings object/origin=].
 
@@ -1187,7 +1181,7 @@ spec:css-syntax-3;
 
             1. [=Resolve=] |p| with the result of [=promise-calling=] |r| given |global|.
 
-    1. [=set/Remove=] |type| from |topLevelBrowsingContext|'s [=active credential types=].
+    1. [=set/Remove=] |type| from |settings|' [=active credential types=].
 
     1.  Return |p|.
   </ol>
