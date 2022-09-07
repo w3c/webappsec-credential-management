@@ -8,7 +8,7 @@
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
   <meta content="Bikeshed version 44af0bf3e, updated Fri Jul 29 17:05:16 2022 -0700" name="generator">
   <link href="http://www.w3.org/TR/credential-management-1/" rel="canonical">
-  <meta content="05f44022a5703998ed2b8c0792c3bfad06916285" name="document-revision">
+  <meta content="41505fe0b610411a985a8bd861190b8d5844de85" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -646,7 +646,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2022-08-30">30 August 2022</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2022-09-07">7 September 2022</time></p>
    <details open>
     <summary>More details about this document</summary>
     <div data-fill-with="spec-metadata">
@@ -1017,7 +1017,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
       <tr>
        <td>identity
        <td>identity
-       <td><code class="idl"><a data-link-type="idl" href="https://fedidcg.github.io/FedCM#identitycredential" id="ref-for-identitycredential">IdentityCredential</a></code>
+       <td><code class="idl"><a data-link-type="idl" href="https://fedidcg.github.io/FedCM/#identitycredential" id="ref-for-identitycredential">IdentityCredential</a></code>
        <td><a data-link-type="biblio" href="#biblio-fedcm">[FEDCM]</a>
        <td><a href="https://www.w3.org/community/fed-id/">W3C</a>
       <tr>
@@ -1626,8 +1626,8 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
       <p>Let <var>sameOriginWithAncestors</var> be <code>true</code> if <var>settings</var> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors④">same-origin with its
   ancestors</a>, and <code>false</code> otherwise.</p>
      <li data-md>
-      <p>If <var>options</var>[<code class="idl"><a data-link-type="idl" href="https://fedidcg.github.io/FedCM#dom-credentialrequestoptions-identity" id="ref-for-dom-credentialrequestoptions-identity">identity</a></code>] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists">exists</a> and
-  if <var>settings</var>’ <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②">relevant global object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#concept-document-window" id="ref-for-concept-document-window②">associated Document</a> is <strong>not</strong> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#allowed-to-use" id="ref-for-allowed-to-use">allowed to use</a> the <a data-link-type="dfn" href="https://fedidcg.github.io/FedCM#identity-credentials-get" id="ref-for-identity-credentials-get">identity-credentials-get</a> <a data-link-type="dfn" href="https://w3c.github.io/webappsec-permissions-policy/#policy-controlled-feature" id="ref-for-policy-controlled-feature">policy-controlled feature</a> return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with②">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException①">DOMException</a></code>.</p>
+      <p>If <var>options</var>[<code class="idl"><a data-link-type="idl" href="https://fedidcg.github.io/FedCM/#dom-credentialrequestoptions-identity" id="ref-for-dom-credentialrequestoptions-identity">identity</a></code>] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists">exists</a> and
+  if <var>settings</var>’ <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②">relevant global object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#concept-document-window" id="ref-for-concept-document-window②">associated Document</a> is <strong>not</strong> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#allowed-to-use" id="ref-for-allowed-to-use">allowed to use</a> the <a data-link-type="dfn" href="https://fedidcg.github.io/FedCM/#identity-credentials-get" id="ref-for-identity-credentials-get">identity-credentials-get</a> <a data-link-type="dfn" href="https://w3c.github.io/webappsec-permissions-policy/#policy-controlled-feature" id="ref-for-policy-controlled-feature">policy-controlled feature</a> return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with②">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException①">DOMException</a></code>.</p>
      <li data-md>
       <p>If <var>options</var>[<code class="idl"><a data-link-type="idl" href="https://w3c.github.io/webauthn/#dom-credentialrequestoptions-publickey" id="ref-for-dom-credentialrequestoptions-publickey">publicKey</a></code>] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists①">exists</a> and
   if <var>settings</var>’ <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global③">relevant global object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#concept-document-window" id="ref-for-concept-document-window③">associated Document</a> is <strong>not</strong> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#allowed-to-use" id="ref-for-allowed-to-use①">allowed to use</a> the <a data-link-type="dfn" href="https://w3c.github.io/webauthn/#publickey-credentials-get-feature" id="ref-for-publickey-credentials-get-feature">publickey-credentials-get</a> <a data-link-type="dfn" href="https://w3c.github.io/webappsec-permissions-policy/#policy-controlled-feature" id="ref-for-policy-controlled-feature①">policy-controlled feature</a> return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with③">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror①">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException②">DOMException</a></code>.</p>
@@ -3077,19 +3077,19 @@ partial dictionary CredentialCreationOptions {
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-identitycredential">
-   <a href="https://fedidcg.github.io/FedCM#identitycredential">https://fedidcg.github.io/FedCM#identitycredential</a><b>Referenced in:</b>
+   <a href="https://fedidcg.github.io/FedCM/#identitycredential">https://fedidcg.github.io/FedCM/#identitycredential</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-identitycredential">2.1.2. Credential Type Registry</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-dom-credentialrequestoptions-identity">
-   <a href="https://fedidcg.github.io/FedCM#dom-credentialrequestoptions-identity">https://fedidcg.github.io/FedCM#dom-credentialrequestoptions-identity</a><b>Referenced in:</b>
+   <a href="https://fedidcg.github.io/FedCM/#dom-credentialrequestoptions-identity">https://fedidcg.github.io/FedCM/#dom-credentialrequestoptions-identity</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dom-credentialrequestoptions-identity">2.5.1. Request a Credential</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-identity-credentials-get">
-   <a href="https://fedidcg.github.io/FedCM#identity-credentials-get">https://fedidcg.github.io/FedCM#identity-credentials-get</a><b>Referenced in:</b>
+   <a href="https://fedidcg.github.io/FedCM/#identity-credentials-get">https://fedidcg.github.io/FedCM/#identity-credentials-get</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-identity-credentials-get">2.5.1. Request a Credential</a>
    </ul>
