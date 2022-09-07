@@ -71,14 +71,6 @@ spec: promises-guide-1; urlPrefix: https://www.w3.org/2001/tag/doc/promises-guid
 spec: web-otp; urlPrefix: https://wicg.github.io/web-otp
   type: interface
     text: OTPCredential; url: otpcredential
-spec: FEDCM; urlPrefix: https://fedidcg.github.io/FedCM
-  type: dfn
-    text: identity-credentials-get
-  type: interface
-    text: IdentityCredential; url: identitycredential
-  type: dict-member
-    for: CredentialRequestOptions
-      text: identity; url: dom-credentialrequestoptions-identity
 </pre>
 
 <pre class="link-defaults">
