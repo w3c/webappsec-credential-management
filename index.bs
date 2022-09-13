@@ -115,13 +115,13 @@ spec:css-syntax-3;
 </pre>
 
 <!--
-████ ██    ██ ████████ ████████   ███████ 
+████ ██    ██ ████████ ████████   ███████
  ██  ███   ██    ██    ██     ██ ██     ██
  ██  ████  ██    ██    ██     ██ ██     ██
  ██  ██ ██ ██    ██    ████████  ██     ██
  ██  ██  ████    ██    ██   ██   ██     ██
  ██  ██   ███    ██    ██    ██  ██     ██
-████ ██    ██    ██    ██     ██  ███████ 
+████ ██    ██    ██    ██     ██  ███████
 -->
 <section>
   # Introduction # {#introduction}
@@ -197,11 +197,11 @@ spec:css-syntax-3;
 
 <!--
  ██████   ███████  ████████  ████████          ███    ████████  ████
-██    ██ ██     ██ ██     ██ ██               ██ ██   ██     ██  ██ 
-██       ██     ██ ██     ██ ██              ██   ██  ██     ██  ██ 
-██       ██     ██ ████████  ██████         ██     ██ ████████   ██ 
-██       ██     ██ ██   ██   ██             █████████ ██         ██ 
-██    ██ ██     ██ ██    ██  ██             ██     ██ ██         ██ 
+██    ██ ██     ██ ██     ██ ██               ██ ██   ██     ██  ██
+██       ██     ██ ██     ██ ██              ██   ██  ██     ██  ██
+██       ██     ██ ████████  ██████         ██     ██ ████████   ██
+██       ██     ██ ██   ██   ██             █████████ ██         ██
+██    ██ ██     ██ ██    ██  ██             ██     ██ ██         ██
  ██████   ███████  ██     ██ ████████       ██     ██ ██        ████
 -->
 <section>
@@ -463,12 +463,12 @@ spec:css-syntax-3;
   for which the {{Credential}} may be [=effective=].
 
   ### `Credential` Internal Methods ### {#credential-internal-methods}
-  
-  The {{Credential}} [=interface object=] features several [=internal methods=] facilitating 
+
+  The {{Credential}} [=interface object=] features several [=internal methods=] facilitating
   retrieval and storage of {{Credential}} objects, with default "no-op" implementations
   as specified in this section, below.
 
-  Unless otherwise specified, each [=interface object=] created for interfaces which [=interface/inherit=] 
+  Unless otherwise specified, each [=interface object=] created for interfaces which [=interface/inherit=]
   from {{Credential}} MUST provide implementations for at least one of these internal methods, overriding
   {{Credential}}'s default implementations, as appropriate for the [=credential=] type. E.g.,
   [[#passwordcredential-interface]], [[#federatedcredential-interface]], and [[WEBAUTHN]].
@@ -631,7 +631,7 @@ spec:css-syntax-3;
     ::  When {{CredentialsContainer/preventSilentAccess()}} is called, the user agent MUST return
         the result of executing <a abstract-op>Prevent Silent Access</a> on the <a>current settings
         object</a>.
-  
+
         Note: The intent here is a signal from the origin that the user has signed out. That
         is, after a click on a "Sign out" button, the site updates the user's session info, and
         calls `navigator.credentials.preventSilentAccess()`. This sets the <a>`prevent silent
@@ -890,7 +890,7 @@ spec:css-syntax-3;
         }
       });
     </pre>
- 
+
   </div>
   ## The `CredentialCreationOptions` Dictionary ## {#credentialcreationoptions-dictionary}
 
@@ -941,14 +941,16 @@ spec:css-syntax-3;
 
     1.  Let |p| be [=a new promise=].
 
-    1. [=map/For each=] |optionKey| → <var ignore>optionValue</var> of |options|:
+    1. For each |interface| in |options|' <a>relevant credential interface objects</a>:
 
-        1. If |settings|' [=active credential types=] [=set/contains=] |optionKey|, [=reject=] |p|
-            with null and return |p|.
+        1. If |settings|' [=active credential types=] [=set/contains=] |interface|'s
+            {{Credential/[[type]]}}, return [=a promise rejected with=] a "{{NotAllowedError}}"
+            {{DOMException}}.
 
-    1. [=map/For each=] |optionKey| → <var ignore>optionValue</var> of |options|:
+    1. For each |interface| in |options|' <a>relevant credential interface objects</a>:
 
-        1. [=set/Append=] |optionKey| to |settings|' [=active credential types=].
+        1. [=set/Append=] |interface|'s {{Credential/[[type]]}} to |settings|'
+            [=active credential types=].
 
     1.  Let |origin| be |settings|' [=environment settings object/origin=].
 
@@ -1033,9 +1035,12 @@ spec:css-syntax-3;
             {{CredentialMediationRequirement/conditional}} and a `null` credential is discovered,
             promise |p| is not resolved.
 
-    1. [=map/For each=] |optionKey| → <var ignore>optionValue</var> of |options|:
+    1. [=React=] to |p|:
 
-        1. [=set/Remove=] |optionKey| from |settings|' [=active credential types=].
+        1. For each |interface| in |options|' <a>relevant credential interface objects</a>:
+
+            1. [=set/Remove=] |interface|'s {{Credential/[[type]]}} from |settings|'
+                [=active credential types=].
 
     1.  Return |p|.
   </ol>
@@ -1085,8 +1090,9 @@ spec:css-syntax-3;
     1.  Let |p| be [=a new promise=].
 
     1. If |settings|' [=active credential types=] [=set/contains=] |credential|'s
-        {{Credential/[[type]]}}, [=reject=] |p| with null and return |p|.
-    
+        {{Credential/[[type]]}}, return [=a promise rejected with=] a "{{NotAllowedError}}"
+        {{DOMException}}.
+
     1. [=set/Append=] |credential|'s {{Credential/[[type]]}} to |settings|'
         [=active credential types=].
 
@@ -1107,8 +1113,10 @@ spec:css-syntax-3;
 
             Otherwise, [=resolve=] |p| with |r|.
 
-    1. [=set/Remove=] |credential|'s {{Credential/[[type]]}} from |settings|'
-        [=active credential types=].
+    1. [=React=] to |p|:
+
+        1. [=set/Remove=] |credential|'s {{Credential/[[type]]}} from |settings|'
+            [=active credential types=].
 
     1.  Return |p|.
   </ol>
@@ -1152,9 +1160,9 @@ spec:css-syntax-3;
 
     1. Let |type| be |interfaces|[0]'s {{Credential/[[type]]}}.
 
-    1. If |settings|' [=active credential types=] [=set/contains=] |type|, [=reject=] |p| with null
-        and return |p|.
-    
+    1. If |settings|' [=active credential types=] [=set/contains=] |type|, return
+        [=a promise rejected with=] a "{{NotAllowedError}}" {{DOMException}}.
+
     1. [=set/Append=] |type| to |settings|' [=active credential types=].
 
     1.  Let |origin| be |settings|'s [=environment settings object/origin=].
@@ -1184,7 +1192,9 @@ spec:css-syntax-3;
 
             1. [=Resolve=] |p| with the result of [=promise-calling=] |r| given |global|.
 
-    1. [=set/Remove=] |type| from |settings|' [=active credential types=].
+    1. [=React=] to |p|:
+
+        1. [=set/Remove=] |type| from |settings|' [=active credential types=].
 
     1.  Return |p|.
   </ol>
@@ -1213,13 +1223,13 @@ spec:css-syntax-3;
 </section>
 
 <!--
-████████     ███     ██████   ██████  ██      ██  ███████  ████████  ████████   ██████ 
+████████     ███     ██████   ██████  ██      ██  ███████  ████████  ████████   ██████
 ██     ██   ██ ██   ██    ██ ██    ██ ██  ██  ██ ██     ██ ██     ██ ██     ██ ██    ██
-██     ██  ██   ██  ██       ██       ██  ██  ██ ██     ██ ██     ██ ██     ██ ██      
-████████  ██     ██  ██████   ██████  ██  ██  ██ ██     ██ ████████  ██     ██  ██████ 
+██     ██  ██   ██  ██       ██       ██  ██  ██ ██     ██ ██     ██ ██     ██ ██
+████████  ██     ██  ██████   ██████  ██  ██  ██ ██     ██ ████████  ██     ██  ██████
 ██        █████████       ██       ██ ██  ██  ██ ██     ██ ██   ██   ██     ██       ██
 ██        ██     ██ ██    ██ ██    ██ ██  ██  ██ ██     ██ ██    ██  ██     ██ ██    ██
-██        ██     ██  ██████   ██████   ███  ███   ███████  ██     ██ ████████   ██████ 
+██        ██     ██  ██████   ██████   ███  ███   ███████  ██     ██ ████████   ██████
 -->
 <section>
   # Password Credentials # {#passwords}
@@ -1232,7 +1242,7 @@ spec:css-syntax-3;
   ## Examples ##  {#password-examples}
 
   ### Password-based Sign-in ### {#examples-password-signin}
-  
+
   <div class="example">
     MegaCorp, Inc. supports passwords, and can use {{get()|navigator.credentials.get()}} to obtain
     username/password pairs from a user's [=credential store=]:
@@ -1462,11 +1472,11 @@ spec:css-syntax-3;
 
             Otherwise, return |r|.
   </div>
- 
+
   {{PasswordCredential}} objects can be created via
   {{CredentialsContainer/create()|navigator.credentials.create()}}
   either explicitly by passing in a {{PasswordCredentialData}} dictionary, or based on the contents
-  of an {{HTMLFormElement}}'s [=submittable elements=]. 
+  of an {{HTMLFormElement}}'s [=submittable elements=].
 
   <pre class="idl">
     dictionary PasswordCredentialData : CredentialData {
@@ -1589,11 +1599,11 @@ spec:css-syntax-3;
                 {{CredentialUserData/iconURL}}.
 
         Otherwise, if the user grants permission to store credentials (as discussed when
-        defining [=user mediation=], then: 
+        defining [=user mediation=], then:
 
         1.  Store a {{PasswordCredential}} in the [=credential store=] with the following
             properties:
-            
+
             :   {{Credential/id}}
             ::  |credential|'s {{Credential/id}}
             :   {{CredentialUserData/name}},
@@ -1615,7 +1625,7 @@ spec:css-syntax-3;
 
   To <dfn abstract-op>Create a `PasswordCredential` from an `HTMLFormElement`</dfn>, given an
   {{HTMLFormElement}} (|form|) and an [=origin=] (|origin|), run these steps.
-  
+
   Note: [[#examples-post-signin]] and [[#examples-change-password]] provide examples of the intended
   usage.
 
@@ -1643,9 +1653,9 @@ spec:css-syntax-3;
 
         4.  If |field|'s <{input/autocomplete}> attribute's value contains one or more [=autofill
             detail tokens=] (|tokens|), then:
-            
+
             1.  For each |token| in |tokens|:
-            
+
                 1.  If |token| is an <a>ASCII case-insensitive</a> match for one
                     of the following strings, run the associated steps:
 
@@ -1683,7 +1693,7 @@ spec:css-syntax-3;
     7.  Let |c| be the result of executing <a abstract-op>Create a `PasswordCredential` from
         `PasswordCredentialData`</a> on |data|. If that threw an [=exception=], rethrow that
         exception.
-     
+
     8.  Assert: |c| is a {{PasswordCredential}}.
 
     9.  Return |c|.
@@ -1698,7 +1708,7 @@ spec:css-syntax-3;
 
   <ol class="algorithm">
     1.  Let |c| be a new {{PasswordCredential}} object.
-    
+
     2.  If any of the following are the empty string, throw a {{TypeError}} [=exception=]:
 
         *   |data|'s {{CredentialData/id}} member's value
@@ -1706,7 +1716,7 @@ spec:css-syntax-3;
         *   |data|'s {{PasswordCredentialData/password}} member's value
 
     3.  Set |c|'s properties as follows:
-    
+
         :   <a attribute for="PasswordCredential">`password`</a>
         ::  |data|'s {{PasswordCredentialData/password}} member's value
         :   {{Credential/id}}
@@ -1737,13 +1747,13 @@ spec:css-syntax-3;
 </section>
 
 <!--
-████████ ████████ ████████  ████████ ████████     ███    ████████ ████  ███████  ██    ██  ██████ 
+████████ ████████ ████████  ████████ ████████     ███    ████████ ████  ███████  ██    ██  ██████
 ██       ██       ██     ██ ██       ██     ██   ██ ██      ██     ██  ██     ██ ███   ██ ██    ██
-██       ██       ██     ██ ██       ██     ██  ██   ██     ██     ██  ██     ██ ████  ██ ██      
-██████   ██████   ██     ██ ██████   ████████  ██     ██    ██     ██  ██     ██ ██ ██ ██  ██████ 
+██       ██       ██     ██ ██       ██     ██  ██   ██     ██     ██  ██     ██ ████  ██ ██
+██████   ██████   ██     ██ ██████   ████████  ██     ██    ██     ██  ██     ██ ██ ██ ██  ██████
 ██       ██       ██     ██ ██       ██   ██   █████████    ██     ██  ██     ██ ██  ████       ██
 ██       ██       ██     ██ ██       ██    ██  ██     ██    ██     ██  ██     ██ ██   ███ ██    ██
-██       ████████ ████████  ████████ ██     ██ ██     ██    ██    ████  ███████  ██    ██  ██████ 
+██       ████████ ████████  ████████ ██     ██ ██     ██    ██    ████  ███████  ██    ██  ██████
 -->
 <section>
   # Federated Credentials # {#federated}
@@ -1929,7 +1939,7 @@ spec:css-syntax-3;
     3.  If the user grants permission to store credentials (as discussed when defining
         [=user mediation=]), then store a {{FederatedCredential}} in the [=credential store=] with
         the following properties:
-        
+
         :   {{Credential/id}}
         ::  |credential|'s {{Credential/id}}
         :   {{CredentialUserData/name}},
@@ -1956,14 +1966,14 @@ spec:css-syntax-3;
 
   <ol class="algorithm">
     1.  Let |c| be a new {{FederatedCredential}} object.
-    
+
     2.  If any of the following are the empty string, throw a {{TypeError}} [=exception=]:
 
         *   |init|.{{CredentialData/id}}'s value
         *   |init|.{{FederatedCredentialInit/provider}}'s value
 
     3.  Set |c|'s properties as follows:
-    
+
         :   {{Credential/id}}
         ::  |init|.{{CredentialData/id}}'s value
         :   {{FederatedCredential/provider}}
@@ -2019,7 +2029,7 @@ spec:css-syntax-3;
 
   1.  Credential information SHOULD NOT be stored or updated without [=user mediation=]. For
       example, the user agent could display a "Save this credential?" dialog box to the user in
-      response to each call to {{store()}}. 
+      response to each call to {{store()}}.
 
       User consent MAY be inferred if a user agent chooses to offer a persistant grant of consent
       in the form of an "Always save passwords" option (though we'd suggest that user agents should
@@ -2100,7 +2110,7 @@ spec:css-syntax-3;
     <div class="note">
       It seems reasonable for the chooser interface to display the list of |locally discovered
       credentials| to the user, perhaps something like this exceptionally non-normative mock:
-  
+
       <img src="./mock-chooser.png" alt="A mockup of what a chooser might look like.">
 
       If the |options| provided is not <a>matchable <i lang="la">a priori</i></a>, then it might
@@ -2312,8 +2322,8 @@ spec:css-syntax-3;
   straightforward:
 
   1.  Define a new interface that inherits from {{Credential}}:
- 
-      <div class="example"> 
+
+      <div class="example">
         <pre>
           [Exposed=Window,
            SecureContext]
@@ -2442,8 +2452,8 @@ spec:css-syntax-3;
 ████████ ████████ ██     ██       ████████ ██     ██ ████████ ██     ██ ████████  ████
    ██    ██       ██     ██       ██       ██     ██    ██    ██     ██ ██     ██ ████
    ██    ██       ██     ██       ██       ██     ██    ██    ██     ██ ██     ██ ████
-   ██    ██████   █████████       ██████   ██     ██    ██    ██     ██ ████████   ██ 
-   ██    ██       ██     ██       ██       ██     ██    ██    ██     ██ ██   ██       
+   ██    ██████   █████████       ██████   ██     ██    ██    ██     ██ ████████   ██
+   ██    ██       ██     ██       ██       ██     ██    ██    ██     ██ ██   ██
    ██    ██       ██     ██       ██       ██     ██    ██    ██     ██ ██    ██  ████
    ██    ████████ ██     ██       ██        ███████     ██     ███████  ██     ██ ████
 -->
