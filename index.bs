@@ -272,6 +272,9 @@ spec:css-syntax-3;
   This document depends on the Infra Standard for a number of foundational concepts used in its
   algorithms and prose [[!INFRA]].
 
+  Each [=/environment settings object=] has an associated <dfn noexport>active credential
+  types</dfn>, a [=set=] which is initially empty.
+
 
   ### Infrastructure Algorithms ### {#sctn-infra-algorithms}
 
@@ -939,7 +942,18 @@ spec:css-syntax-3;
 
     1.  Let |p| be [=a new promise=].
 
-    1.  Let |origin| be the [=current settings object=]'s [=environment settings object/origin=].
+    1. For each |interface| in |options|' <a>relevant credential interface objects</a>:
+
+        1. If |settings|' [=active credential types=] [=set/contains=] |interface|'s
+            {{Credential/[[type]]}}, return [=a promise rejected with=] a "{{NotAllowedError}}"
+            {{DOMException}}.
+
+    1. For each |interface| in |options|' <a>relevant credential interface objects</a>:
+
+        1. [=set/Append=] |interface|'s {{Credential/[[type]]}} to |settings|'
+            [=active credential types=].
+
+    1.  Let |origin| be |settings|' [=environment settings object/origin=].
 
     1.  Let |sameOriginWithAncestors| be `true` if |settings| is [=same-origin with its
         ancestors=], and `false` otherwise.
@@ -1022,6 +1036,13 @@ spec:css-syntax-3;
             {{CredentialMediationRequirement/conditional}} and a `null` credential is discovered,
             promise |p| is not resolved.
 
+    1. [=React=] to |p|:
+
+        1. For each |interface| in |options|' <a>relevant credential interface objects</a>:
+
+            1. [=set/Remove=] |interface|'s {{Credential/[[type]]}} from |settings|'
+                [=active credential types=].
+
     1.  Return |p|.
   </ol>
 
@@ -1062,14 +1083,21 @@ spec:css-syntax-3;
   <ol class="algorithm">
     1.  Let |settings| be the <a>current settings object</a>
 
-    2.  Assert: |settings| is a [=secure context=].
+    1.  Assert: |settings| is a [=secure context=].
 
-    3.  Let |sameOriginWithAncestors| be `true` if the [=current settings object=] is [=same-origin
+    1.  Let |sameOriginWithAncestors| be `true` if the [=current settings object=] is [=same-origin
         with its ancestors=], and `false` otherwise.
 
-    4.  Let |p| be [=a new promise=].
+    1.  Let |p| be [=a new promise=].
 
-    5.  Run the following steps [=in parallel=]:
+    1. If |settings|' [=active credential types=] [=set/contains=] |credential|'s
+        {{Credential/[[type]]}}, return [=a promise rejected with=] a "{{NotAllowedError}}"
+        {{DOMException}}.
+
+    1. [=set/Append=] |credential|'s {{Credential/[[type]]}} to |settings|'
+        [=active credential types=].
+
+    1.  Run the following steps [=in parallel=]:
 
         1.  Let |r| be the result of executing |credential|'s [=interface object=]'s
             {{Credential/[[Store]](credential, sameOriginWithAncestors)}} internal method on
@@ -1086,7 +1114,12 @@ spec:css-syntax-3;
 
             Otherwise, [=resolve=] |p| with |r|.
 
-    6.  Return |p|.
+    1. [=React=] to |p|:
+
+        1. [=set/Remove=] |credential|'s {{Credential/[[type]]}} from |settings|'
+            [=active credential types=].
+
+    1.  Return |p|.
   </ol>
 
   <h4 id="algorithm-create" algorithm>Create a `Credential`</h4>
@@ -1099,16 +1132,16 @@ spec:css-syntax-3;
   <ol class="algorithm">
     1.  Let |settings| be the <a>current settings object</a>.
 
-    2.  Assert: |settings| is a [=secure context=].
+    1.  Assert: |settings| is a [=secure context=].
 
-    3.  Let |global| be |settings|' [=environment settings object/global object=].
+    1.  Let |global| be |settings|' [=environment settings object/global object=].
 
-    4.  Let |sameOriginWithAncestors| be `true` if the [=current settings object=] is [=same-origin
+    1.  Let |sameOriginWithAncestors| be `true` if the [=current settings object=] is [=same-origin
         with its ancestors=], and `false` otherwise.
 
-    5.  Let |interfaces| be the [=set=] of |options|' <a>relevant credential interface objects</a>.
+    1.  Let |interfaces| be the [=set=] of |options|' <a>relevant credential interface objects</a>.
 
-    6.  Return [=a promise rejected with=] `NotSupportedError` if any of the following statements
+    1.  Return [=a promise rejected with=] `NotSupportedError` if any of the following statements
         are true:
 
         1.  |global| does not have an [=associated Document=].
@@ -1120,15 +1153,22 @@ spec:css-syntax-3;
             types in order to support a "sign-up" use case. For the moment, though, we're punting
             on that by restricting the dictionary to a single entry.
 
-    7.  If <code>|options|.{{CredentialRequestOptions/signal}}</code> is [=AbortSignal/aborted=],
+    1.  If <code>|options|.{{CredentialRequestOptions/signal}}</code> is [=AbortSignal/aborted=],
         then return [=a promise rejected with=]
         <code>|options|.{{CredentialRequestOptions/signal}}</code>'s [=AbortSignal/abort reason=].
 
-    8.  Let |p| be [=a new promise=].
+    1.  Let |p| be [=a new promise=].
 
-    9.  Let |origin| be |settings|'s [=environment settings object/origin=].
+    1. Let |type| be |interfaces|[0]'s {{Credential/[[type]]}}.
 
-    10.  Run the following steps [=in parallel=]:
+    1. If |settings|' [=active credential types=] [=set/contains=] |type|, return
+        [=a promise rejected with=] a "{{NotAllowedError}}" {{DOMException}}.
+
+    1. [=set/Append=] |type| to |settings|' [=active credential types=].
+
+    1.  Let |origin| be |settings|'s [=environment settings object/origin=].
+
+    1.  Run the following steps [=in parallel=]:
 
         1.  Let |r| be the result of executing |interfaces|[0]'s
             {{Credential/[[Create]](origin, options, sameOriginWithAncestors)}} internal method on
@@ -1153,7 +1193,11 @@ spec:css-syntax-3;
 
             1. [=Resolve=] |p| with the result of [=promise-calling=] |r| given |global|.
 
-    11.  Return |p|.
+    1. [=React=] to |p|:
+
+        1. [=set/Remove=] |type| from |settings|' [=active credential types=].
+
+    1.  Return |p|.
   </ol>
 
   <h4 id="algorithm-prevent-silent-access" algorithm>Prevent Silent Access</h4>
