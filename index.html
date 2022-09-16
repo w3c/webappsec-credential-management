@@ -8,7 +8,7 @@
   <link href="https://www.w3.org/2008/site/images/favicon.ico" rel="icon">
   <meta content="Bikeshed version 44af0bf3e, updated Fri Jul 29 17:05:16 2022 -0700" name="generator">
   <link href="http://www.w3.org/TR/credential-management-1/" rel="canonical">
-  <meta content="41505fe0b610411a985a8bd861190b8d5844de85" name="document-revision">
+  <meta content="976f91bcd97a93797cc5be8e90b9432b811029d4" name="document-revision">
 <style>/* style-autolinks */
 
 .css.css, .property.property, .descriptor.descriptor {
@@ -646,7 +646,7 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2022-09-07">7 September 2022</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2022-09-16">16 September 2022</time></p>
    <details open>
     <summary>More details about this document</summary>
     <div data-fill-with="spec-metadata">
@@ -967,9 +967,11 @@ c-[il] { color: #000000 } /* Literal.Number.Integer.Long */
   More capabilities may be specified by other documents in support of specific <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential①①">credential</a> types.</p>
     <p>This document depends on the Infra Standard for a number of foundational concepts used in its
   algorithms and prose <a data-link-type="biblio" href="#biblio-infra">[INFRA]</a>.</p>
+    <p>Each <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object">environment settings object</a> has an associated <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="active credential types" data-noexport id="active-credential-types">active credential
+  types</dfn>, a <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set">set</a> which is initially empty.</p>
     <h4 class="heading settled" data-level="2.1.1" id="sctn-infra-algorithms"><span class="secno">2.1.1. </span><span class="content">Infrastructure Algorithms</span><a class="self-link" href="#sctn-infra-algorithms"></a></h4>
     <h5 class="heading settled algorithm" data-algorithm="Same-Origin with its Ancestors" data-level="2.1.1.1" id="algorithm-same-origin-with-ancestors"><span class="secno">2.1.1.1. </span><span class="content">Same-Origin with its Ancestors</span><a class="self-link" href="#algorithm-same-origin-with-ancestors"></a></h5>
-    <p>An <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object">environment settings object</a> (<var>settings</var>) is <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="same-origin with its ancestors" data-noexport id="same-origin-with-its-ancestors">same-origin with its
+    <p>An <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object①">environment settings object</a> (<var>settings</var>) is <dfn class="dfn-paneled" data-dfn-type="dfn" data-lt="same-origin with its ancestors" data-noexport id="same-origin-with-its-ancestors">same-origin with its
   ancestors</dfn> if the following algorithm returns <code>true</code>:</p>
     <ol class="algorithm">
      <li data-md>
@@ -1121,7 +1123,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
     <p>Unless otherwise specified, each <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-interface-object" id="ref-for-dfn-interface-object⑤">interface object</a> created for interfaces which <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-inherit" id="ref-for-dfn-inherit①">inherit</a> from <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential①⓪">Credential</a></code> MUST provide implementations for at least one of these internal methods, overriding <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential①①">Credential</a></code>'s default implementations, as appropriate for the <a data-link-type="dfn" href="#concept-credential" id="ref-for-concept-credential①③">credential</a> type. E.g., <a href="#passwordcredential-interface">§ 3.2 The PasswordCredential Interface</a>, <a href="#federatedcredential-interface">§ 4.1 The FederatedCredential Interface</a>, and <a data-link-type="biblio" href="#biblio-webauthn">[WEBAUTHN]</a>.</p>
     <h5 class="heading settled algorithm" data-algorithm="[[CollectFromCredentialStore]] internal method" data-level="2.2.1.1" id="algorithm-collect-creds"><span class="secno">2.2.1.1. </span><span class="content"><code>[[CollectFromCredentialStore]]</code> internal method</span><a class="self-link" href="#algorithm-collect-creds"></a></h5>
      <dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="method" data-export id="dom-credential-collectfromcredentialstore-slot"><code>[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)</code></dfn> is called with an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin①">origin</a>, a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions②">CredentialRequestOptions</a></code>, and a boolean which
-    is true iff the caller’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object①">environment settings object</a> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors">same-origin with its ancestors</a>.
+    is true iff the caller’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object②">environment settings object</a> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors">same-origin with its ancestors</a>.
     The algorithm returns a set of <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential①②">Credential</a></code> objects from the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store⑥">credential store</a> that
     match the options provided. If no matching <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential①③">Credential</a></code> objects are available, the
     returned set will be empty. 
@@ -1132,7 +1134,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
     </ol>
     <h5 class="heading settled algorithm" data-algorithm="[[DiscoverFromExternalSource]] internal method" data-level="2.2.1.2" id="algorithm-discover-creds"><span class="secno">2.2.1.2. </span><span class="content"><code>[[DiscoverFromExternalSource]]</code> internal method</span><a class="self-link" href="#algorithm-discover-creds"></a></h5>
      <dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="method" data-export id="dom-credential-discoverfromexternalsource-slot"><code>[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)</code></dfn> is called <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel">in parallel</a> with an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin②">origin</a>, a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions③">CredentialRequestOptions</a></code> object,
-    and a boolean which is true iff the caller’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object②">environment settings object</a> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors①">same-origin with its ancestors</a>.
+    and a boolean which is true iff the caller’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object③">environment settings object</a> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors①">same-origin with its ancestors</a>.
     It returns a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential①⑤">Credential</a></code> if one can be
     returned given the options provided, <code>null</code> if no credential is available, or throws an
     error if discovery fails (for example, incorrect options could produce a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#exceptiondef-typeerror" id="ref-for-exceptiondef-typeerror">TypeError</a></code>).
@@ -1144,7 +1146,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
       <p>Return <code>null</code>.</p>
     </ol>
     <h5 class="heading settled algorithm" data-algorithm="[[Store]] internal method" data-level="2.2.1.3" id="algorithm-store-cred"><span class="secno">2.2.1.3. </span><span class="content"><code>[[Store]]</code> internal method</span><a class="self-link" href="#algorithm-store-cred"></a></h5>
-     <dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="method" data-export id="dom-credential-store-slot"><code>[[Store]](credential, sameOriginWithAncestors)</code></dfn> is called <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①">in parallel</a> with a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential①⑧">Credential</a></code>, and a boolean which is true iff the caller’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object③">environment settings object</a> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors②">same-origin with its ancestors</a>.
+     <dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="method" data-export id="dom-credential-store-slot"><code>[[Store]](credential, sameOriginWithAncestors)</code></dfn> is called <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel①">in parallel</a> with a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential①⑧">Credential</a></code>, and a boolean which is true iff the caller’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object④">environment settings object</a> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors②">same-origin with its ancestors</a>.
     The algorithm returns once <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential①⑨">Credential</a></code> is persisted to the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store⑦">credential store</a>. 
     <p><code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential②⓪">Credential</a></code>'s default implementation of <code class="idl"><a data-link-type="idl" href="#dom-credential-store-slot" id="ref-for-dom-credential-store-slot">[[Store]](credential, sameOriginWithAncestors)</a></code>:</p>
     <ol class="algorithm">
@@ -1153,7 +1155,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
     </ol>
     <h5 class="heading settled algorithm" data-algorithm="[[Create]] internal method" data-level="2.2.1.4" id="algorithm-create-cred"><span class="secno">2.2.1.4. </span><span class="content"><code>[[Create]]</code> internal method</span><a class="self-link" href="#algorithm-create-cred"></a></h5>
      <dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="method" data-export id="dom-credential-create-slot"><code>[[Create]](origin, options, sameOriginWithAncestors)</code></dfn> is called <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel②">in parallel</a> with an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin③">origin</a>, a <code class="idl"><a data-link-type="idl" href="#dictdef-credentialcreationoptions" id="ref-for-dictdef-credentialcreationoptions②">CredentialCreationOptions</a></code>,
-    and a boolean which is true iff the caller’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object④">environment settings object</a> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors③">same-origin with its ancestors</a>.
+    and a boolean which is true iff the caller’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object⑤">environment settings object</a> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors③">same-origin with its ancestors</a>.
     The algorithm either: 
     <ul>
      <li data-md>
@@ -1414,7 +1416,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
       <li data-md>
        <p>Let <var>settings</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object①">current settings object</a></p>
       <li data-md>
-       <p>Let <var>relevant interface objects</var> be an <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-empty" id="ref-for-list-empty">empty</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set">set</a>.</p>
+       <p>Let <var>relevant interface objects</var> be an <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-empty" id="ref-for-list-empty">empty</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set①">set</a>.</p>
       <li data-md>
        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-iterate" id="ref-for-map-iterate">For each</a> <var>optionKey</var> → <var>optionValue</var> of <var>options</var>:</p>
        <ol>
@@ -1621,16 +1623,28 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
      <li data-md>
       <p>Let <var>p</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise">a new promise</a>.</p>
      <li data-md>
-      <p>Let <var>origin</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object③">current settings object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin④">origin</a>.</p>
+      <p>For each <var>interface</var> in <var>options</var>’ <a data-link-type="dfn" href="#credentialrequestoptions-relevant-credential-interface-objects" id="ref-for-credentialrequestoptions-relevant-credential-interface-objects④">relevant credential interface objects</a>:</p>
+      <ol>
+       <li data-md>
+        <p>If <var>settings</var>’ <a data-link-type="dfn" href="#active-credential-types" id="ref-for-active-credential-types">active credential types</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain">contains</a> <var>interface</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot④">[[type]]</a></code>, return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with②">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException①">DOMException</a></code>.</p>
+      </ol>
+     <li data-md>
+      <p>For each <var>interface</var> in <var>options</var>’ <a data-link-type="dfn" href="#credentialrequestoptions-relevant-credential-interface-objects" id="ref-for-credentialrequestoptions-relevant-credential-interface-objects⑤">relevant credential interface objects</a>:</p>
+      <ol>
+       <li data-md>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-append" id="ref-for-set-append">Append</a> <var>interface</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot⑤">[[type]]</a></code> to <var>settings</var>’ <a data-link-type="dfn" href="#active-credential-types" id="ref-for-active-credential-types①">active credential types</a>.</p>
+      </ol>
+     <li data-md>
+      <p>Let <var>origin</var> be <var>settings</var>’ <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin④">origin</a>.</p>
      <li data-md>
       <p>Let <var>sameOriginWithAncestors</var> be <code>true</code> if <var>settings</var> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors④">same-origin with its
   ancestors</a>, and <code>false</code> otherwise.</p>
      <li data-md>
       <p>If <var>options</var>[<code class="idl"><a data-link-type="idl" href="https://fedidcg.github.io/FedCM/#dom-credentialrequestoptions-identity" id="ref-for-dom-credentialrequestoptions-identity">identity</a></code>] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists">exists</a> and
-  if <var>settings</var>’ <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②">relevant global object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#concept-document-window" id="ref-for-concept-document-window②">associated Document</a> is <strong>not</strong> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#allowed-to-use" id="ref-for-allowed-to-use">allowed to use</a> the <a data-link-type="dfn" href="https://fedidcg.github.io/FedCM/#identity-credentials-get" id="ref-for-identity-credentials-get">identity-credentials-get</a> <a data-link-type="dfn" href="https://w3c.github.io/webappsec-permissions-policy/#policy-controlled-feature" id="ref-for-policy-controlled-feature">policy-controlled feature</a> return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with②">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException①">DOMException</a></code>.</p>
+  if <var>settings</var>’ <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global②">relevant global object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#concept-document-window" id="ref-for-concept-document-window②">associated Document</a> is <strong>not</strong> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#allowed-to-use" id="ref-for-allowed-to-use">allowed to use</a> the <a data-link-type="dfn" href="https://fedidcg.github.io/FedCM/#identity-credentials-get" id="ref-for-identity-credentials-get">identity-credentials-get</a> <a data-link-type="dfn" href="https://w3c.github.io/webappsec-permissions-policy/#policy-controlled-feature" id="ref-for-policy-controlled-feature">policy-controlled feature</a> return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with③">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror①">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException②">DOMException</a></code>.</p>
      <li data-md>
       <p>If <var>options</var>[<code class="idl"><a data-link-type="idl" href="https://w3c.github.io/webauthn/#dom-credentialrequestoptions-publickey" id="ref-for-dom-credentialrequestoptions-publickey">publicKey</a></code>] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists①">exists</a> and
-  if <var>settings</var>’ <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global③">relevant global object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#concept-document-window" id="ref-for-concept-document-window③">associated Document</a> is <strong>not</strong> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#allowed-to-use" id="ref-for-allowed-to-use①">allowed to use</a> the <a data-link-type="dfn" href="https://w3c.github.io/webauthn/#publickey-credentials-get-feature" id="ref-for-publickey-credentials-get-feature">publickey-credentials-get</a> <a data-link-type="dfn" href="https://w3c.github.io/webappsec-permissions-policy/#policy-controlled-feature" id="ref-for-policy-controlled-feature①">policy-controlled feature</a> return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with③">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror①">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException②">DOMException</a></code>.</p>
+  if <var>settings</var>’ <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-relevant-global" id="ref-for-concept-relevant-global③">relevant global object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/window-object.html#concept-document-window" id="ref-for-concept-document-window③">associated Document</a> is <strong>not</strong> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#allowed-to-use" id="ref-for-allowed-to-use①">allowed to use</a> the <a data-link-type="dfn" href="https://w3c.github.io/webauthn/#publickey-credentials-get-feature" id="ref-for-publickey-credentials-get-feature">publickey-credentials-get</a> <a data-link-type="dfn" href="https://w3c.github.io/webappsec-permissions-policy/#policy-controlled-feature" id="ref-for-policy-controlled-feature①">policy-controlled feature</a> return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with④">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror②">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException③">DOMException</a></code>.</p>
       <p class="note" role="note"><span>Note:</span> <a class="idl-code" data-link-type="const" href="#dom-credential-type-password" id="ref-for-dom-credential-type-password"><code>password</code></a> and <a class="idl-code" data-link-type="const" href="#dom-federatedcredential-federated" id="ref-for-dom-federatedcredential-federated"><code>federated</code></a> <a data-link-type="dfn" href="#credential-type-registry-credential-type" id="ref-for-credential-type-registry-credential-type⑨">credential types</a> are not presently treated as <a data-link-type="dfn" href="https://w3c.github.io/webappsec-permissions-policy/#policy-controlled-feature" id="ref-for-policy-controlled-feature②">policy-controlled features</a>, although this may change in the future.</p>
      <li data-md>
       <p>Run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel③">in parallel</a>:</p>
@@ -1696,6 +1710,16 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
   promise <var>p</var> is not resolved.</p>
       </ol>
      <li data-md>
+      <p><a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-perform-steps-once-promise-is-settled" id="ref-for-dfn-perform-steps-once-promise-is-settled">React</a> to <var>p</var>:</p>
+      <ol>
+       <li data-md>
+        <p>For each <var>interface</var> in <var>options</var>’ <a data-link-type="dfn" href="#credentialrequestoptions-relevant-credential-interface-objects" id="ref-for-credentialrequestoptions-relevant-credential-interface-objects⑥">relevant credential interface objects</a>:</p>
+        <ol>
+         <li data-md>
+          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-remove" id="ref-for-list-remove">Remove</a> <var>interface</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot⑥">[[type]]</a></code> from <var>settings</var>’ <a data-link-type="dfn" href="#active-credential-types" id="ref-for-active-credential-types②">active credential types</a>.</p>
+        </ol>
+      </ol>
+     <li data-md>
       <p>Return <var>p</var>.</p>
     </ol>
     <h4 class="heading settled algorithm" data-algorithm="Collect Credentials from the credential store" data-level="2.5.2" id="algorithm-collect-known"><span class="secno">2.5.2. </span><span class="content">Collect <code>Credential</code>s from the credential store</span><a class="self-link" href="#algorithm-collect-known"></a></h4>
@@ -1708,7 +1732,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
      <li data-md>
       <p>Let <var>possible matches</var> be an empty set.</p>
      <li data-md>
-      <p>For each <var>interface</var> in <var>options</var>’ <a data-link-type="dfn" href="#credentialrequestoptions-relevant-credential-interface-objects" id="ref-for-credentialrequestoptions-relevant-credential-interface-objects④">relevant credential interface objects</a>:</p>
+      <p>For each <var>interface</var> in <var>options</var>’ <a data-link-type="dfn" href="#credentialrequestoptions-relevant-credential-interface-objects" id="ref-for-credentialrequestoptions-relevant-credential-interface-objects⑦">relevant credential interface objects</a>:</p>
       <ol>
        <li data-md>
         <p>Let <var>r</var> be the result of executing <var>interface</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-collectfromcredentialstore-slot" id="ref-for-dom-credential-collectfromcredentialstore-slot①">[[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)</a></code> internal method on <var>origin</var>, <var>options</var>, and <var>sameOriginWithAncestors</var>. If that threw an <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-exception" id="ref-for-dfn-exception③">exception</a>, rethrow that exception.</p>
@@ -1718,7 +1742,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
         <p>For each <var>c</var> in <var>r</var>:</p>
         <ol>
          <li data-md>
-          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-append" id="ref-for-set-append">Append</a> <var>c</var> to <var>possible matches</var>.</p>
+          <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-append" id="ref-for-set-append①">Append</a> <var>c</var> to <var>possible matches</var>.</p>
         </ol>
       </ol>
      <li data-md>
@@ -1728,14 +1752,18 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
     <p>The <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export id="abstract-opdef-store-a-credential">Store a <code>Credential</code></dfn> algorithm accepts a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential③⑨">Credential</a></code> (<var>credential</var>), and returns a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise①⓪">Promise</a></code> which resolves once the object is persisted to the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store⑨">credential store</a>.</p>
     <ol class="algorithm">
      <li data-md>
-      <p>Let <var>settings</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object④">current settings object</a></p>
+      <p>Let <var>settings</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object③">current settings object</a></p>
      <li data-md>
       <p class="assertion">Assert: <var>settings</var> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context②">secure context</a>.</p>
      <li data-md>
-      <p>Let <var>sameOriginWithAncestors</var> be <code>true</code> if the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object⑤">current settings object</a> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors⑥">same-origin
+      <p>Let <var>sameOriginWithAncestors</var> be <code>true</code> if the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object④">current settings object</a> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors⑥">same-origin
   with its ancestors</a>, and <code>false</code> otherwise.</p>
      <li data-md>
       <p>Let <var>p</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise①">a new promise</a>.</p>
+     <li data-md>
+      <p>If <var>settings</var>’ <a data-link-type="dfn" href="#active-credential-types" id="ref-for-active-credential-types③">active credential types</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①">contains</a> <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot⑦">[[type]]</a></code>, return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with⑤">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror③">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException④">DOMException</a></code>.</p>
+     <li data-md>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-append" id="ref-for-set-append②">Append</a> <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot⑧">[[type]]</a></code> to <var>settings</var>’ <a data-link-type="dfn" href="#active-credential-types" id="ref-for-active-credential-types④">active credential types</a>.</p>
      <li data-md>
       <p>Run the following steps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel④">in parallel</a>:</p>
       <ol>
@@ -1756,6 +1784,12 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
         <p>Otherwise, <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#resolve" id="ref-for-resolve⑦">resolve</a> <var>p</var> with <var>r</var>.</p>
       </ol>
      <li data-md>
+      <p><a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-perform-steps-once-promise-is-settled" id="ref-for-dfn-perform-steps-once-promise-is-settled①">React</a> to <var>p</var>:</p>
+      <ol>
+       <li data-md>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-remove" id="ref-for-list-remove①">Remove</a> <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot⑨">[[type]]</a></code> from <var>settings</var>’ <a data-link-type="dfn" href="#active-credential-types" id="ref-for-active-credential-types⑤">active credential types</a>.</p>
+      </ol>
+     <li data-md>
       <p>Return <var>p</var>.</p>
     </ol>
     <h4 class="heading settled algorithm" data-algorithm="Create a Credential" data-level="2.5.4" id="algorithm-create"><span class="secno">2.5.4. </span><span class="content">Create a <code>Credential</code></span><a class="self-link" href="#algorithm-create"></a></h4>
@@ -1764,18 +1798,18 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
   circumstances, the <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise①②">Promise</a></code> may reject with an appropriate exception:</p>
     <ol class="algorithm">
      <li data-md>
-      <p>Let <var>settings</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object⑥">current settings object</a>.</p>
+      <p>Let <var>settings</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object⑤">current settings object</a>.</p>
      <li data-md>
       <p class="assertion">Assert: <var>settings</var> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context③">secure context</a>.</p>
      <li data-md>
       <p>Let <var>global</var> be <var>settings</var>’ <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-global" id="ref-for-concept-settings-object-global②">global object</a>.</p>
      <li data-md>
-      <p>Let <var>sameOriginWithAncestors</var> be <code>true</code> if the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object⑦">current settings object</a> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors⑦">same-origin
+      <p>Let <var>sameOriginWithAncestors</var> be <code>true</code> if the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object⑥">current settings object</a> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors⑦">same-origin
   with its ancestors</a>, and <code>false</code> otherwise.</p>
      <li data-md>
-      <p>Let <var>interfaces</var> be the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set①">set</a> of <var>options</var>’ <a data-link-type="dfn" href="#credentialrequestoptions-relevant-credential-interface-objects" id="ref-for-credentialrequestoptions-relevant-credential-interface-objects⑤">relevant credential interface objects</a>.</p>
+      <p>Let <var>interfaces</var> be the <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set②">set</a> of <var>options</var>’ <a data-link-type="dfn" href="#credentialrequestoptions-relevant-credential-interface-objects" id="ref-for-credentialrequestoptions-relevant-credential-interface-objects⑧">relevant credential interface objects</a>.</p>
      <li data-md>
-      <p>Return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with④">a promise rejected with</a> <code>NotSupportedError</code> if any of the following statements
+      <p>Return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with⑥">a promise rejected with</a> <code>NotSupportedError</code> if any of the following statements
   are true:</p>
       <ol>
        <li data-md>
@@ -1789,9 +1823,15 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
       </ol>
      <li data-md>
       <p>If <code><var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-signal" id="ref-for-dom-credentialrequestoptions-signal③">signal</a></code></code> is <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#abortsignal-aborted" id="ref-for-abortsignal-aborted①">aborted</a>,
-  then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with⑤">a promise rejected with</a> <code><var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-signal" id="ref-for-dom-credentialrequestoptions-signal④">signal</a></code></code>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#abortsignal-abort-reason" id="ref-for-abortsignal-abort-reason③">abort reason</a>.</p>
+  then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with⑦">a promise rejected with</a> <code><var>options</var>.<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-signal" id="ref-for-dom-credentialrequestoptions-signal④">signal</a></code></code>’s <a data-link-type="dfn" href="https://dom.spec.whatwg.org/#abortsignal-abort-reason" id="ref-for-abortsignal-abort-reason③">abort reason</a>.</p>
      <li data-md>
       <p>Let <var>p</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise②">a new promise</a>.</p>
+     <li data-md>
+      <p>Let <var>type</var> be <var>interfaces</var>[0]'s <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot①⓪">[[type]]</a></code>.</p>
+     <li data-md>
+      <p>If <var>settings</var>’ <a data-link-type="dfn" href="#active-credential-types" id="ref-for-active-credential-types⑥">active credential types</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain②">contains</a> <var>type</var>, return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with⑧">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror④">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑤">DOMException</a></code>.</p>
+     <li data-md>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-append" id="ref-for-set-append③">Append</a> <var>type</var> to <var>settings</var>’ <a data-link-type="dfn" href="#active-credential-types" id="ref-for-active-credential-types⑦">active credential types</a>.</p>
      <li data-md>
       <p>Let <var>origin</var> be <var>settings</var>’s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin⑥">origin</a>.</p>
      <li data-md>
@@ -1825,10 +1865,16 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
         </ol>
       </ol>
      <li data-md>
+      <p><a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-perform-steps-once-promise-is-settled" id="ref-for-dfn-perform-steps-once-promise-is-settled②">React</a> to <var>p</var>:</p>
+      <ol>
+       <li data-md>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-remove" id="ref-for-list-remove②">Remove</a> <var>type</var> from <var>settings</var>’ <a data-link-type="dfn" href="#active-credential-types" id="ref-for-active-credential-types⑧">active credential types</a>.</p>
+      </ol>
+     <li data-md>
       <p>Return <var>p</var>.</p>
     </ol>
     <h4 class="heading settled algorithm" data-algorithm="Prevent Silent Access" data-level="2.5.5" id="algorithm-prevent-silent-access"><span class="secno">2.5.5. </span><span class="content">Prevent Silent Access</span><a class="self-link" href="#algorithm-prevent-silent-access"></a></h4>
-    <p>The <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export id="abstract-opdef-prevent-silent-access">Prevent Silent Access</dfn> algorithm accepts an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object⑤">environment settings
+    <p>The <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export id="abstract-opdef-prevent-silent-access">Prevent Silent Access</dfn> algorithm accepts an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object" id="ref-for-environment-settings-object⑥">environment settings
   object</a> (<var>settings</var>), and returns a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise①③">Promise</a></code> which resolves once the <code>prevent silent access</code> flag is persisted to the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store①⓪">credential store</a>.</p>
     <ol class="algorithm">
      <li data-md>
@@ -2042,7 +2088,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
        <p><dfn class="dfn-paneled idl-code" data-dfn-for="PasswordCredential" data-dfn-type="attribute" data-export id="dom-passwordcredential-password"><code>password</code></dfn>, <span> of type <a data-link-type="idl-name" href="https://webidl.spec.whatwg.org/#idl-USVString" id="ref-for-idl-USVString⑧">USVString</a>, readonly</span></p>
       <dd data-md>
        <p>This attribute represents the password of the credential.</p>
-      <dt data-md><code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot④">[[type]]</a></code>
+      <dt data-md><code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot①①">[[type]]</a></code>
       <dd data-md>
        <p>The <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential⑧">PasswordCredential</a></code> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-interface-object" id="ref-for-dfn-interface-object①①">interface object</a> has an internal slot named <code>[[type]]</code> whose
   value is "<dfn class="dfn-paneled idl-code" data-dfn-for="Credential/[[type]]" data-dfn-type="const" data-export id="dom-credential-type-password"><code>password</code></dfn>".</p>
@@ -2054,7 +2100,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
        <p>This constructor accepts an <code class="idl"><a data-link-type="idl" href="https://html.spec.whatwg.org/multipage/forms.html#htmlformelement" id="ref-for-htmlformelement③">HTMLFormElement</a></code> (<var>form</var>), and runs the following steps:</p>
        <ol>
         <li data-md>
-         <p>Let <var>origin</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object⑧">current settings object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin⑧">origin</a>.</p>
+         <p>Let <var>origin</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object⑦">current settings object</a>'s <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin⑧">origin</a>.</p>
         <li data-md>
          <p>Let <var>r</var> be the result of executing <a data-link-type="abstract-op" href="#abstract-opdef-create-a-passwordcredential-from-an-htmlformelement" id="ref-for-abstract-opdef-create-a-passwordcredential-from-an-htmlformelement">Create a <code>PasswordCredential</code> from
   an <code>HTMLFormElement</code></a> given <var>form</var> and <var>origin</var>.</p>
@@ -2104,7 +2150,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
      <li data-md>
       <p class="assertion">Assert: <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password②">password</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists②">exists</a>.</p>
      <li data-md>
-      <p>If <var>sameOriginWithAncestors</var> is <code>false</code>, throw a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror②">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException③">DOMException</a></code>.</p>
+      <p>If <var>sameOriginWithAncestors</var> is <code>false</code>, throw a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror⑤">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑥">DOMException</a></code>.</p>
       <p class="note" role="note"><span>Note:</span> This restriction aims to address the concern raised in <a href="#security-origin-confusion">§ 6.4 Origin Confusion</a>.</p>
      <li data-md>
       <p>Return the empty set if <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-password" id="ref-for-dom-credentialrequestoptions-password③">password</a></code>"] is not <code>true</code>.</p>
@@ -2144,7 +2190,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
     <p>The algorithm will return a <code>NotAllowedError</code> if <var>sameOriginWithAncestors</var> is not <code>true</code>.</p>
     <ol class="algorithm">
      <li data-md>
-      <p>Throw a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror③">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException④">DOMException</a></code> without altering the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store①⑥">credential store</a> if <var>sameOriginWithAncestors</var> is <code>false</code>.</p>
+      <p>Throw a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror⑥">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑦">DOMException</a></code> without altering the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store①⑥">credential store</a> if <var>sameOriginWithAncestors</var> is <code>false</code>.</p>
       <p class="note" role="note"><span>Note:</span> This restriction aims to address the concern raised in <a href="#security-origin-confusion">§ 6.4 Origin Confusion</a>.</p>
      <li data-md>
       <p>If the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store①⑦">credential store</a> contains a <code class="idl"><a data-link-type="idl" href="#passwordcredential" id="ref-for-passwordcredential①⑦">PasswordCredential</a></code> (<var>stored</var>)
@@ -2358,7 +2404,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
       <dd data-md>
        <p>The credential’s federated identity provider’s protocol (e.g. "<code>openidconnect</code>"). If the
   value is <code>null</code>, then the protocol can be inferred from the <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-provider" id="ref-for-dom-federatedcredential-provider①">provider</a></code>.</p>
-      <dt data-md><code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot⑤">[[type]]</a></code>
+      <dt data-md><code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot①②">[[type]]</a></code>
       <dd data-md>
        <p>The <code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential③">FederatedCredential</a></code> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-interface-object" id="ref-for-dfn-interface-object①④">interface object</a> has an internal slot named <code>[[type]]</code> whose
   value is "<dfn class="dfn-paneled idl-code" data-dfn-for="FederatedCredential" data-dfn-type="const" data-export id="dom-federatedcredential-federated"><code>federated</code></dfn>".</p>
@@ -2417,7 +2463,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
      <li data-md>
       <p class="assertion">Assert: <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-federated" id="ref-for-dom-credentialrequestoptions-federated">federated</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists④">exists</a>.</p>
      <li data-md>
-      <p>If <var>sameOriginWithAncestors</var> is <code>false</code>, throw a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror④">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑤">DOMException</a></code>.</p>
+      <p>If <var>sameOriginWithAncestors</var> is <code>false</code>, throw a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror⑦">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑧">DOMException</a></code>.</p>
       <p class="note" role="note"><span>Note:</span> This restriction aims to address the concern raised in <a href="#security-origin-confusion">§ 6.4 Origin Confusion</a>.</p>
      <li data-md>
       <p>Return the empty set if <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-federated" id="ref-for-dom-credentialrequestoptions-federated①">federated</a></code>"] is not <code>true</code>.</p>
@@ -2429,9 +2475,9 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
        <li data-md>
         <p>The credential’s <code class="idl"><a data-link-type="idl" href="#dom-credential-origin-slot" id="ref-for-dom-credential-origin-slot⑥">[[origin]]</a></code> is the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#same-origin" id="ref-for-same-origin③">same origin</a> as <var>origin</var>.</p>
        <li data-md>
-        <p>If <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-federated" id="ref-for-dom-credentialrequestoptions-federated②">federated</a></code>"]["<code class="idl"><a data-link-type="idl" href="#dom-federatedcredentialrequestoptions-providers" id="ref-for-dom-federatedcredentialrequestoptions-providers①">providers</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤">exists</a>, its value <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain">contains</a> the credentials’s <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-provider" id="ref-for-dom-federatedcredential-provider③">provider</a></code>.</p>
+        <p>If <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-federated" id="ref-for-dom-credentialrequestoptions-federated②">federated</a></code>"]["<code class="idl"><a data-link-type="idl" href="#dom-federatedcredentialrequestoptions-providers" id="ref-for-dom-federatedcredentialrequestoptions-providers①">providers</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑤">exists</a>, its value <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain③">contains</a> the credentials’s <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-provider" id="ref-for-dom-federatedcredential-provider③">provider</a></code>.</p>
        <li data-md>
-        <p>If <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-federated" id="ref-for-dom-credentialrequestoptions-federated③">federated</a></code>"]["<code class="idl"><a data-link-type="idl" href="#dom-federatedcredentialrequestoptions-protocols" id="ref-for-dom-federatedcredentialrequestoptions-protocols">protocols</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥">exists</a>, its value <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①">contains</a> the credentials’s <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-protocol" id="ref-for-dom-federatedcredential-protocol①">protocol</a></code>.</p>
+        <p>If <var>options</var>["<code class="idl"><a data-link-type="idl" href="#dom-credentialrequestoptions-federated" id="ref-for-dom-credentialrequestoptions-federated③">federated</a></code>"]["<code class="idl"><a data-link-type="idl" href="#dom-federatedcredentialrequestoptions-protocols" id="ref-for-dom-federatedcredentialrequestoptions-protocols">protocols</a></code>"] <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#map-exists" id="ref-for-map-exists⑥">exists</a>, its value <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain④">contains</a> the credentials’s <code class="idl"><a data-link-type="idl" href="#dom-federatedcredential-protocol" id="ref-for-dom-federatedcredential-protocol①">protocol</a></code>.</p>
       </ol>
     </ol>
     <h4 class="heading settled algorithm" data-algorithm="FederatedCredential&apos;s [[Create]](origin, options, sameOriginWithAncestors)" data-level="4.2.2" id="create-federatedcredential"><span class="secno">4.2.2. </span><span class="content"> <code>FederatedCredential</code>'s <code>[[Create]](origin, options, sameOriginWithAncestors)</code> </span><a class="self-link" href="#create-federatedcredential"></a></h4>
@@ -2455,7 +2501,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
     <p>The algorithm will return a <code>NotAllowedError</code> if <var>sameOriginWithAncestors</var> is not <code>true</code>.</p>
     <ol class="algorithm">
      <li data-md>
-      <p>Throw a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror⑤">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑥">DOMException</a></code> without altering the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store②②">credential store</a> if <var>sameOriginWithAncestors</var> is <code>false</code>.</p>
+      <p>Throw a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror⑧">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑨">DOMException</a></code> without altering the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store②②">credential store</a> if <var>sameOriginWithAncestors</var> is <code>false</code>.</p>
       <p class="note" role="note"><span>Note:</span> This restriction aims to address the concern raised in <a href="#security-origin-confusion">§ 6.4 Origin Confusion</a>.</p>
      <li data-md>
       <p>If the user agent’s <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store②③">credential store</a> contains a <code class="idl"><a data-link-type="idl" href="#federatedcredential" id="ref-for-federatedcredential①②">FederatedCredential</a></code> whose <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id⑥">id</a></code> attribute is <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-id" id="ref-for-dom-credential-id⑦">id</a></code> and whose <code class="idl"><a data-link-type="idl" href="#dom-credential-origin-slot" id="ref-for-dom-credential-origin-slot⑦">[[origin]]</a></code> slot is the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#same-origin" id="ref-for-same-origin④">same origin</a> as <var>credential</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-origin-slot" id="ref-for-dom-credential-origin-slot⑧">[[origin]]</a></code>, and
@@ -2614,12 +2660,12 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
       credentials</var> to the user, perhaps something like this exceptionally non-normative mock: 
       <p><img alt="A mockup of what a chooser might look like." height="400" src="./mock-chooser.png" width="450"></p>
       <p>If the <var>options</var> provided is not <a data-link-type="dfn" href="#credentialrequestoptions-matchable-a-priori" id="ref-for-credentialrequestoptions-matchable-a-priori②">matchable <i lang="la">a priori</i></a>, then it might
-      also make sense for the chooser interface to list the <a data-link-type="dfn" href="#credentialrequestoptions-relevant-credential-interface-objects" id="ref-for-credentialrequestoptions-relevant-credential-interface-objects⑥">relevant credential interface
+      also make sense for the chooser interface to list the <a data-link-type="dfn" href="#credentialrequestoptions-relevant-credential-interface-objects" id="ref-for-credentialrequestoptions-relevant-credential-interface-objects⑨">relevant credential interface
       objects</a> for <var>options</var> that aren’t covered by the list of explicit credentials. If, for
       instance, a site accepts webauthn-style authenticators, then "Security Key" might show up
       in the chooser list with an appropriate icon.</p>
       <p>Also, note that in some cases the user agent may skip the chooser entirely. For example, if
-      the only <a data-link-type="dfn" href="#credentialrequestoptions-relevant-credential-interface-objects" id="ref-for-credentialrequestoptions-relevant-credential-interface-objects⑦">relevant credential interface objects</a> is one that itself requires user
+      the only <a data-link-type="dfn" href="#credentialrequestoptions-relevant-credential-interface-objects" id="ref-for-credentialrequestoptions-relevant-credential-interface-objects①⓪">relevant credential interface objects</a> is one that itself requires user
       interaction, the user agent may return that interface directly, and rely on its internal
       mediation flow for user consent.</p>
      </div>
@@ -2784,7 +2830,7 @@ interface ExampleCredential : Credential {
        </ol>
       </div>
      <li data-md>
-      <p>Define the value of the <code>ExampleCredential</code> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-interface-object" id="ref-for-dfn-interface-object①⑨">interface object</a>'s <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot⑥">[[type]]</a></code> slot:</p>
+      <p>Define the value of the <code>ExampleCredential</code> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-interface-object" id="ref-for-dfn-interface-object①⑨">interface object</a>'s <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot①③">[[type]]</a></code> slot:</p>
       <div class="example" id="example-b9aa85d8"><a class="self-link" href="#example-b9aa85d8"></a> The <code>ExampleCredential</code> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-interface-object" id="ref-for-dfn-interface-object②⓪">interface object</a> has an internal slot named <code>[[type]]</code> whose
     value is the string "<code>example</code>". </div>
      <li data-md>
@@ -2832,7 +2878,7 @@ partial dictionary CredentialCreationOptions {
       </ul>
       <p class="note" role="note"><span>Note:</span> The <a data-link-type="dfn" href="#credential-type-registry-credential-type" id="ref-for-credential-type-registry-credential-type①②">credential type</a>'s options dictionaries' <a data-link-type="dfn" href="#credential-type-registry-options-member-identifier" id="ref-for-credential-type-registry-options-member-identifier⑤">Options Member Identifier</a> must be the
   same in both <code class="idl"><a data-link-type="idl" href="#dictdef-credentialcreationoptions" id="ref-for-dictdef-credentialcreationoptions①⑥">CredentialCreationOptions</a></code> and <code class="idl"><a data-link-type="idl" href="#dictdef-credentialrequestoptions" id="ref-for-dictdef-credentialrequestoptions②①">CredentialRequestOptions</a></code>, and should be
-  the same as the <a data-link-type="dfn" href="#credential-credential-type" id="ref-for-credential-credential-type⑤">credential type</a> value in the <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential⑥④">Credential</a></code> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-interface-object" id="ref-for-dfn-interface-object②③">interface object</a>'s <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot⑦">[[type]]</a></code> slot.</p>
+  the same as the <a data-link-type="dfn" href="#credential-credential-type" id="ref-for-credential-credential-type⑤">credential type</a> value in the <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential⑥④">Credential</a></code> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-interface-object" id="ref-for-dfn-interface-object②③">interface object</a>'s <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot①④">[[type]]</a></code> slot.</p>
     </ol>
     <p>You might also find that new primitives are necessary. For instance, you might want to return
   many <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential⑥⑤">Credential</a></code> objects rather than just one in some sort of complicated, multi-factor
@@ -2873,6 +2919,7 @@ partial dictionary CredentialCreationOptions {
   <h2 class="no-num no-ref heading settled" id="index"><span class="content">Index</span><a class="self-link" href="#index"></a></h2>
   <h3 class="no-num no-ref heading settled" id="index-defined-here"><span class="content">Terms defined by this specification</span><a class="self-link" href="#index-defined-here"></a></h3>
   <ul class="index">
+   <li><a href="#active-credential-types">active credential types</a><span>, in § 2.1</span>
    <li><a href="#credential-type-registry-appropriate-interface-object">Appropriate Interface Object</a><span>, in § 2.1.2</span>
    <li><a href="#abstract-opdef-ask-the-user-to-choose-a-credential">ask the user to choose a Credential</a><span>, in § 5.3</span>
    <li><a href="#abstract-opdef-ask-the-user-to-choose-a-credential">ask to choose</a><span>, in § 5.3</span>
@@ -3219,10 +3266,10 @@ partial dictionary CredentialCreationOptions {
    <ul>
     <li><a href="#ref-for-current-settings-object">2.3. navigator.credentials</a>
     <li><a href="#ref-for-current-settings-object①">2.3.1. The CredentialRequestOptions Dictionary</a>
-    <li><a href="#ref-for-current-settings-object②">2.5.1. Request a Credential</a> <a href="#ref-for-current-settings-object③">(2)</a>
-    <li><a href="#ref-for-current-settings-object④">2.5.3. Store a Credential</a> <a href="#ref-for-current-settings-object⑤">(2)</a>
-    <li><a href="#ref-for-current-settings-object⑥">2.5.4. Create a Credential</a> <a href="#ref-for-current-settings-object⑦">(2)</a>
-    <li><a href="#ref-for-current-settings-object⑧">3.2. The PasswordCredential Interface</a>
+    <li><a href="#ref-for-current-settings-object②">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-current-settings-object③">2.5.3. Store a Credential</a> <a href="#ref-for-current-settings-object④">(2)</a>
+    <li><a href="#ref-for-current-settings-object⑤">2.5.4. Create a Credential</a> <a href="#ref-for-current-settings-object⑥">(2)</a>
+    <li><a href="#ref-for-current-settings-object⑦">3.2. The PasswordCredential Interface</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-attr-fe-autocomplete-current-password">
@@ -3244,12 +3291,13 @@ partial dictionary CredentialCreationOptions {
   <aside class="dfn-panel" data-for="term-for-environment-settings-object">
    <a href="https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object">https://html.spec.whatwg.org/multipage/webappapis.html#environment-settings-object</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-environment-settings-object">2.1.1.1. Same-Origin with its Ancestors</a>
-    <li><a href="#ref-for-environment-settings-object①">2.2.1.1. [[CollectFromCredentialStore]] internal method</a>
-    <li><a href="#ref-for-environment-settings-object②">2.2.1.2. [[DiscoverFromExternalSource]] internal method</a>
-    <li><a href="#ref-for-environment-settings-object③">2.2.1.3. [[Store]] internal method</a>
-    <li><a href="#ref-for-environment-settings-object④">2.2.1.4. [[Create]] internal method</a>
-    <li><a href="#ref-for-environment-settings-object⑤">2.5.5. Prevent Silent Access</a>
+    <li><a href="#ref-for-environment-settings-object">2.1. Infrastructure</a>
+    <li><a href="#ref-for-environment-settings-object①">2.1.1.1. Same-Origin with its Ancestors</a>
+    <li><a href="#ref-for-environment-settings-object②">2.2.1.1. [[CollectFromCredentialStore]] internal method</a>
+    <li><a href="#ref-for-environment-settings-object③">2.2.1.2. [[DiscoverFromExternalSource]] internal method</a>
+    <li><a href="#ref-for-environment-settings-object④">2.2.1.3. [[Store]] internal method</a>
+    <li><a href="#ref-for-environment-settings-object⑤">2.2.1.4. [[Create]] internal method</a>
+    <li><a href="#ref-for-environment-settings-object⑥">2.5.5. Prevent Silent Access</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-the-form-element">
@@ -3427,7 +3475,10 @@ partial dictionary CredentialCreationOptions {
   <aside class="dfn-panel" data-for="term-for-set-append">
    <a href="https://infra.spec.whatwg.org/#set-append">https://infra.spec.whatwg.org/#set-append</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-set-append">2.5.2. Collect Credentials from the credential store</a>
+    <li><a href="#ref-for-set-append">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-set-append①">2.5.2. Collect Credentials from the credential store</a>
+    <li><a href="#ref-for-set-append②">2.5.3. Store a Credential</a>
+    <li><a href="#ref-for-set-append③">2.5.4. Create a Credential</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-ascii-case-insensitive">
@@ -3440,8 +3491,11 @@ partial dictionary CredentialCreationOptions {
   <aside class="dfn-panel" data-for="term-for-list-contain">
    <a href="https://infra.spec.whatwg.org/#list-contain">https://infra.spec.whatwg.org/#list-contain</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-list-contain">4.2.1. 
-    FederatedCredential's [[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors) </a> <a href="#ref-for-list-contain①">(2)</a>
+    <li><a href="#ref-for-list-contain">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-list-contain①">2.5.3. Store a Credential</a>
+    <li><a href="#ref-for-list-contain②">2.5.4. Create a Credential</a>
+    <li><a href="#ref-for-list-contain③">4.2.1. 
+    FederatedCredential's [[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors) </a> <a href="#ref-for-list-contain④">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-list-empty">
@@ -3470,11 +3524,20 @@ partial dictionary CredentialCreationOptions {
     <li><a href="#ref-for-map-iterate">2.3.1. The CredentialRequestOptions Dictionary</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="term-for-list-remove">
+   <a href="https://infra.spec.whatwg.org/#list-remove">https://infra.spec.whatwg.org/#list-remove</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-list-remove">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-list-remove①">2.5.3. Store a Credential</a>
+    <li><a href="#ref-for-list-remove②">2.5.4. Create a Credential</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="term-for-ordered-set">
    <a href="https://infra.spec.whatwg.org/#ordered-set">https://infra.spec.whatwg.org/#ordered-set</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-ordered-set">2.3.1. The CredentialRequestOptions Dictionary</a>
-    <li><a href="#ref-for-ordered-set①">2.5.4. Create a Credential</a>
+    <li><a href="#ref-for-ordered-set">2.1. Infrastructure</a>
+    <li><a href="#ref-for-ordered-set①">2.3.1. The CredentialRequestOptions Dictionary</a>
+    <li><a href="#ref-for-ordered-set②">2.5.4. Create a Credential</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-list-size">
@@ -3549,14 +3612,16 @@ partial dictionary CredentialCreationOptions {
   <aside class="dfn-panel" data-for="term-for-idl-DOMException">
    <a href="https://webidl.spec.whatwg.org/#idl-DOMException">https://webidl.spec.whatwg.org/#idl-DOMException</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-idl-DOMException">2.5.1. Request a Credential</a> <a href="#ref-for-idl-DOMException①">(2)</a> <a href="#ref-for-idl-DOMException②">(3)</a>
-    <li><a href="#ref-for-idl-DOMException③">3.3.1. 
+    <li><a href="#ref-for-idl-DOMException">2.5.1. Request a Credential</a> <a href="#ref-for-idl-DOMException①">(2)</a> <a href="#ref-for-idl-DOMException②">(3)</a> <a href="#ref-for-idl-DOMException③">(4)</a>
+    <li><a href="#ref-for-idl-DOMException④">2.5.3. Store a Credential</a>
+    <li><a href="#ref-for-idl-DOMException⑤">2.5.4. Create a Credential</a>
+    <li><a href="#ref-for-idl-DOMException⑥">3.3.1. 
     PasswordCredential's [[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors) </a>
-    <li><a href="#ref-for-idl-DOMException④">3.3.3. 
+    <li><a href="#ref-for-idl-DOMException⑦">3.3.3. 
     PasswordCredential's [[Store]](credential, sameOriginWithAncestors) </a>
-    <li><a href="#ref-for-idl-DOMException⑤">4.2.1. 
+    <li><a href="#ref-for-idl-DOMException⑧">4.2.1. 
     FederatedCredential's [[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors) </a>
-    <li><a href="#ref-for-idl-DOMException⑥">4.2.3. 
+    <li><a href="#ref-for-idl-DOMException⑨">4.2.3. 
     FederatedCredential's [[Store]](credential, sameOriginWithAncestors) </a>
    </ul>
   </aside>
@@ -3579,14 +3644,16 @@ partial dictionary CredentialCreationOptions {
   <aside class="dfn-panel" data-for="term-for-notallowederror">
    <a href="https://webidl.spec.whatwg.org/#notallowederror">https://webidl.spec.whatwg.org/#notallowederror</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-notallowederror">2.5.1. Request a Credential</a> <a href="#ref-for-notallowederror①">(2)</a>
-    <li><a href="#ref-for-notallowederror②">3.3.1. 
+    <li><a href="#ref-for-notallowederror">2.5.1. Request a Credential</a> <a href="#ref-for-notallowederror①">(2)</a> <a href="#ref-for-notallowederror②">(3)</a>
+    <li><a href="#ref-for-notallowederror③">2.5.3. Store a Credential</a>
+    <li><a href="#ref-for-notallowederror④">2.5.4. Create a Credential</a>
+    <li><a href="#ref-for-notallowederror⑤">3.3.1. 
     PasswordCredential's [[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors) </a>
-    <li><a href="#ref-for-notallowederror③">3.3.3. 
+    <li><a href="#ref-for-notallowederror⑥">3.3.3. 
     PasswordCredential's [[Store]](credential, sameOriginWithAncestors) </a>
-    <li><a href="#ref-for-notallowederror④">4.2.1. 
+    <li><a href="#ref-for-notallowederror⑦">4.2.1. 
     FederatedCredential's [[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors) </a>
-    <li><a href="#ref-for-notallowederror⑤">4.2.3. 
+    <li><a href="#ref-for-notallowederror⑧">4.2.3. 
     FederatedCredential's [[Store]](credential, sameOriginWithAncestors) </a>
    </ul>
   </aside>
@@ -3655,8 +3722,9 @@ partial dictionary CredentialCreationOptions {
   <aside class="dfn-panel" data-for="term-for-a-promise-rejected-with">
    <a href="https://webidl.spec.whatwg.org/#a-promise-rejected-with">https://webidl.spec.whatwg.org/#a-promise-rejected-with</a><b>Referenced in:</b>
    <ul>
-    <li><a href="#ref-for-a-promise-rejected-with">2.5.1. Request a Credential</a> <a href="#ref-for-a-promise-rejected-with①">(2)</a> <a href="#ref-for-a-promise-rejected-with②">(3)</a> <a href="#ref-for-a-promise-rejected-with③">(4)</a>
-    <li><a href="#ref-for-a-promise-rejected-with④">2.5.4. Create a Credential</a> <a href="#ref-for-a-promise-rejected-with⑤">(2)</a>
+    <li><a href="#ref-for-a-promise-rejected-with">2.5.1. Request a Credential</a> <a href="#ref-for-a-promise-rejected-with①">(2)</a> <a href="#ref-for-a-promise-rejected-with②">(3)</a> <a href="#ref-for-a-promise-rejected-with③">(4)</a> <a href="#ref-for-a-promise-rejected-with④">(5)</a>
+    <li><a href="#ref-for-a-promise-rejected-with⑤">2.5.3. Store a Credential</a>
+    <li><a href="#ref-for-a-promise-rejected-with⑥">2.5.4. Create a Credential</a> <a href="#ref-for-a-promise-rejected-with⑦">(2)</a> <a href="#ref-for-a-promise-rejected-with⑧">(3)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-idl-boolean">
@@ -3729,6 +3797,14 @@ partial dictionary CredentialCreationOptions {
    <a href="https://webidl.spec.whatwg.org/#dfn-interface-prototype-object">https://webidl.spec.whatwg.org/#dfn-interface-prototype-object</a><b>Referenced in:</b>
    <ul>
     <li><a href="#ref-for-dfn-interface-prototype-object">2.2. The Credential Interface</a>
+   </ul>
+  </aside>
+  <aside class="dfn-panel" data-for="term-for-dfn-perform-steps-once-promise-is-settled">
+   <a href="https://webidl.spec.whatwg.org/#dfn-perform-steps-once-promise-is-settled">https://webidl.spec.whatwg.org/#dfn-perform-steps-once-promise-is-settled</a><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-dfn-perform-steps-once-promise-is-settled">2.5.1. Request a Credential</a>
+    <li><a href="#ref-for-dfn-perform-steps-once-promise-is-settled①">2.5.3. Store a Credential</a>
+    <li><a href="#ref-for-dfn-perform-steps-once-promise-is-settled②">2.5.4. Create a Credential</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="term-for-reject">
@@ -3879,6 +3955,7 @@ partial dictionary CredentialCreationOptions {
      <li><span class="dfn-paneled" id="term-for-list-empty">empty</span>
      <li><span class="dfn-paneled" id="term-for-map-exists">exist</span>
      <li><span class="dfn-paneled" id="term-for-map-iterate">for each</span>
+     <li><span class="dfn-paneled" id="term-for-list-remove">remove</span>
      <li><span class="dfn-paneled" id="term-for-ordered-set">set</span>
      <li><span class="dfn-paneled" id="term-for-list-size">size</span>
     </ul>
@@ -3937,6 +4014,7 @@ partial dictionary CredentialCreationOptions {
      <li><span class="dfn-paneled" id="term-for-dfn-inherit">inherit</span>
      <li><span class="dfn-paneled" id="term-for-dfn-interface-object">interface object</span>
      <li><span class="dfn-paneled" id="term-for-dfn-interface-prototype-object">interface prototype object</span>
+     <li><span class="dfn-paneled" id="term-for-dfn-perform-steps-once-promise-is-settled">react</span>
      <li><span class="dfn-paneled" id="term-for-reject">reject</span>
      <li><span class="dfn-paneled" id="term-for-resolve">resolve</span>
      <li><span class="dfn-paneled" id="term-for-idl-sequence">sequence</span>
@@ -3956,7 +4034,7 @@ partial dictionary CredentialCreationOptions {
   <h3 class="no-num no-ref heading settled" id="normative"><span class="content">Normative References</span><a class="self-link" href="#normative"></a></h3>
   <dl>
    <dt id="biblio-csp">[CSP]
-   <dd>Mike West. <a href="https://w3c.github.io/webappsec-csp/"><cite>Content Security Policy Level 3</cite></a>. URL: <a href="https://w3c.github.io/webappsec-csp/">https://w3c.github.io/webappsec-csp/</a>
+   <dd>Mike West; Antonio Sartori. <a href="https://w3c.github.io/webappsec-csp/"><cite>Content Security Policy Level 3</cite></a>. URL: <a href="https://w3c.github.io/webappsec-csp/">https://w3c.github.io/webappsec-csp/</a>
    <dt id="biblio-dom">[DOM]
    <dd>Anne van Kesteren. <a href="https://dom.spec.whatwg.org/"><cite>DOM Standard</cite></a>. Living Standard. URL: <a href="https://dom.spec.whatwg.org/">https://dom.spec.whatwg.org/</a>
    <dt id="biblio-fedcm">[FEDCM]
@@ -4190,6 +4268,14 @@ partial dictionary CredentialCreationOptions {
     <li><a href="#ref-for-origin-requires-user-mediation①">2.5.1. Request a Credential</a>
    </ul>
   </aside>
+  <aside class="dfn-panel" data-for="active-credential-types">
+   <b><a href="#active-credential-types">#active-credential-types</a></b><b>Referenced in:</b>
+   <ul>
+    <li><a href="#ref-for-active-credential-types">2.5.1. Request a Credential</a> <a href="#ref-for-active-credential-types①">(2)</a> <a href="#ref-for-active-credential-types②">(3)</a>
+    <li><a href="#ref-for-active-credential-types③">2.5.3. Store a Credential</a> <a href="#ref-for-active-credential-types④">(2)</a> <a href="#ref-for-active-credential-types⑤">(3)</a>
+    <li><a href="#ref-for-active-credential-types⑥">2.5.4. Create a Credential</a> <a href="#ref-for-active-credential-types⑦">(2)</a> <a href="#ref-for-active-credential-types⑧">(3)</a>
+   </ul>
+  </aside>
   <aside class="dfn-panel" data-for="same-origin-with-its-ancestors">
    <b><a href="#same-origin-with-its-ancestors">#same-origin-with-its-ancestors</a></b><b>Referenced in:</b>
    <ul>
@@ -4311,9 +4397,12 @@ partial dictionary CredentialCreationOptions {
     <li><a href="#ref-for-dom-credential-type-slot">2.1.2. Credential Type Registry</a>
     <li><a href="#ref-for-dom-credential-type-slot①">2.2. The Credential Interface</a> <a href="#ref-for-dom-credential-type-slot②">(2)</a>
     <li><a href="#ref-for-dom-credential-type-slot③">2.3.1. The CredentialRequestOptions Dictionary</a>
-    <li><a href="#ref-for-dom-credential-type-slot④">3.2. The PasswordCredential Interface</a>
-    <li><a href="#ref-for-dom-credential-type-slot⑤">4.1. The FederatedCredential Interface</a>
-    <li><a href="#ref-for-dom-credential-type-slot⑥">8.2. Extension Points</a> <a href="#ref-for-dom-credential-type-slot⑦">(2)</a>
+    <li><a href="#ref-for-dom-credential-type-slot④">2.5.1. Request a Credential</a> <a href="#ref-for-dom-credential-type-slot⑤">(2)</a> <a href="#ref-for-dom-credential-type-slot⑥">(3)</a>
+    <li><a href="#ref-for-dom-credential-type-slot⑦">2.5.3. Store a Credential</a> <a href="#ref-for-dom-credential-type-slot⑧">(2)</a> <a href="#ref-for-dom-credential-type-slot⑨">(3)</a>
+    <li><a href="#ref-for-dom-credential-type-slot①⓪">2.5.4. Create a Credential</a>
+    <li><a href="#ref-for-dom-credential-type-slot①①">3.2. The PasswordCredential Interface</a>
+    <li><a href="#ref-for-dom-credential-type-slot①②">4.1. The FederatedCredential Interface</a>
+    <li><a href="#ref-for-dom-credential-type-slot①③">8.2. Extension Points</a> <a href="#ref-for-dom-credential-type-slot①④">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="credential-credential-type">
@@ -4590,10 +4679,10 @@ partial dictionary CredentialCreationOptions {
     <li><a href="#ref-for-credentialrequestoptions-relevant-credential-interface-objects">2.1.2. Credential Type Registry</a>
     <li><a href="#ref-for-credentialrequestoptions-relevant-credential-interface-objects①">2.3.1. The CredentialRequestOptions Dictionary</a>
     <li><a href="#ref-for-credentialrequestoptions-relevant-credential-interface-objects②">2.3.2. Mediation Requirements</a>
-    <li><a href="#ref-for-credentialrequestoptions-relevant-credential-interface-objects③">2.5.1. Request a Credential</a>
-    <li><a href="#ref-for-credentialrequestoptions-relevant-credential-interface-objects④">2.5.2. Collect Credentials from the credential store</a>
-    <li><a href="#ref-for-credentialrequestoptions-relevant-credential-interface-objects⑤">2.5.4. Create a Credential</a>
-    <li><a href="#ref-for-credentialrequestoptions-relevant-credential-interface-objects⑥">5.3. Credential Selection</a> <a href="#ref-for-credentialrequestoptions-relevant-credential-interface-objects⑦">(2)</a>
+    <li><a href="#ref-for-credentialrequestoptions-relevant-credential-interface-objects③">2.5.1. Request a Credential</a> <a href="#ref-for-credentialrequestoptions-relevant-credential-interface-objects④">(2)</a> <a href="#ref-for-credentialrequestoptions-relevant-credential-interface-objects⑤">(3)</a> <a href="#ref-for-credentialrequestoptions-relevant-credential-interface-objects⑥">(4)</a>
+    <li><a href="#ref-for-credentialrequestoptions-relevant-credential-interface-objects⑦">2.5.2. Collect Credentials from the credential store</a>
+    <li><a href="#ref-for-credentialrequestoptions-relevant-credential-interface-objects⑧">2.5.4. Create a Credential</a>
+    <li><a href="#ref-for-credentialrequestoptions-relevant-credential-interface-objects⑨">5.3. Credential Selection</a> <a href="#ref-for-credentialrequestoptions-relevant-credential-interface-objects①⓪">(2)</a>
    </ul>
   </aside>
   <aside class="dfn-panel" data-for="credentialrequestoptions-matchable-a-priori">
