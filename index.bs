@@ -1139,7 +1139,7 @@ spec:css-syntax-3;
     1.  Let |sameOriginWithAncestors| be `true` if the [=current settings object=] is [=same-origin
         with its ancestors=], and `false` otherwise.
 
-    1.  If |options|[{{CredentialCreationOptions/publicKey}}] [=map/exists=] then
+    1.  If |options|[{{CredentialCreationOptions/publicKey}}] [=map/exists=] and
         if |settings|' [=relevant global object=]'s [=associated Document=] is **not**
         [=allowed to use=] the [=publickey-credentials-create-feature|publickey-credentials-create=]
         [=policy-controlled feature=] return [=a promise rejected with=] a "{{NotAllowedError}}"
