@@ -590,7 +590,7 @@ spec:css-syntax-3;
     [Exposed=Window, SecureContext]
     interface CredentialsContainer {
       Promise&lt;Credential?&gt; get(optional CredentialRequestOptions options = {});
-      Promise&lt;Credential&gt; store(Credential credential);
+      Promise&lt;undefined&gt; store(Credential credential);
       Promise&lt;Credential?&gt; create(optional CredentialCreationOptions options = {});
       Promise&lt;undefined&gt; preventSilentAccess();
     };
@@ -1099,7 +1099,7 @@ spec:css-syntax-3;
 
     1.  Run the following steps [=in parallel=]:
 
-        1.  Let |r| be the result of executing |credential|'s [=interface object=]'s
+        1.  Execute |credential|'s [=interface object=]'s
             {{Credential/[[Store]](credential, sameOriginWithAncestors)}} internal method on
             |credential| and |sameOriginWithAncestors|.
 
@@ -1112,7 +1112,7 @@ spec:css-syntax-3;
 
                 1. [=Reject=] |p| with |e|.
 
-            Otherwise, [=resolve=] |p| with |r|.
+            Otherwise, [=resolve=] |p| with `undefined`.
 
     1. [=React=] to |p|:
 
@@ -1626,8 +1626,6 @@ spec:css-syntax-3;
             :   <a attribute for="PasswordCredential">`password`</a>
             ::  |credential|'s <a attribute for="PasswordCredential">`password`</a>
 
-    3.  Return `undefined`.
-
   </ol>
 
   <h4 algorithm id="construct-passwordcredential-form">
@@ -1963,8 +1961,6 @@ spec:css-syntax-3;
         ::  |credential|'s {{FederatedCredential/provider}}
         :   {{FederatedCredential/protocol}}
         ::  |credential|'s {{FederatedCredential/protocol}}
-
-    4.  Return `undefined`.
   </ol>
 
   <h4 algorithm id="construct-federatedcredential-data">
