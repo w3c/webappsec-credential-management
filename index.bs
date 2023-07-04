@@ -1227,7 +1227,7 @@ spec:css-syntax-3;
 
         2.  [=Resolve=] |p| with `undefined`.
 
-    4.  Retun |p|.
+    4.  Return |p|.
   </ol>
 
 
