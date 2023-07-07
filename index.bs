@@ -76,6 +76,7 @@ spec: web-otp; urlPrefix: https://wicg.github.io/web-otp
 <pre class="link-defaults">
 spec:html; type:dfn; for:html-origin-def; text:origin
 spec:html; type:dfn; for:environment settings object; text:global object
+spec:html; type:dfn; for:navigable; text:parent
 spec:fetch; type:dfn; for:/; text:request
 spec:fetch; type:dictionary; for:/; text:RequestInit
 spec:infra; type:dfn; for:/; text:set
@@ -294,13 +295,13 @@ spec:css-syntax-3;
 
     4.  Let |origin| be |settings|' [=environment settings object/origin=].
 
-    5.  Let |current| be |document|'s [=document/browsing context=].
+    5.  Let |navigable| be |document|'s [=node navigable=].
 
-    6.  While |current| has a [=parent browsing context=]:
+    6.  While |navigable| has a [=parent=]:
 
-        1.  Set |current| to |current|'s [=parent browsing context=].
+        1.  Set |navigable| to |navigable|'s [=parent=].
 
-        2.  If |current|'s [=active document=]'s [=origin=] is not [=same origin=] with |origin|,
+        2.  If |navigable|'s [=active document=]'s [=origin=] is not [=same origin=] with |origin|,
             return `false`.
 
     7.  Return `true`.
@@ -1335,8 +1336,8 @@ spec:css-syntax-3;
   to be passed to {{CredentialsContainer/store()}}.
 
   <div class="example">
-    If a user is signed in by submitting the credentials to a sign-in endpoint via {{fetch()}},
-    we can check the response to determine whether the user
+    If a user is signed in by submitting the credentials to a sign-in endpoint via
+    <a lt=fetch(input)><code>fetch()</code></a>, we can check the response to determine whether the user
     was signed in successfully, and notify the user agent accordingly. Given a sign-in form like the
     following:
 
@@ -2187,8 +2188,8 @@ spec:css-syntax-3;
       it less likely that a cross-site scripting attack will succeed in the first place. If sites
       are populating <{form}> elements, also <a>`form-action`</a> directives should be set.
 
-  *   <a>`connect-src`</a> restricts the origins to which {{fetch()}} may submit data (which
-      mitigates the risk that credentials could be exfiltrated to `evil.com`.
+  *   <a>`connect-src`</a> restricts the origins to which <a lt=fetch(input)><code>fetch()</code></a>
+      may submit data (which mitigates the risk that credentials could be exfiltrated to `evil.com`.
 
   *   <a>`child-src`</a> restricts the nested browsing contexts which may be embedded in a page,
       making it more difficult to inject a malicious `postMessage()` target. [[HTML]]
@@ -2312,8 +2313,8 @@ spec:css-syntax-3;
   ISSUE(w3c/webappsec#290): Add some thoughts here about when and how the API
   should be used, especially with regard to {{CredentialRequestOptions/mediation}}.
 
-  ISSUE: Describe encoding restrictions of submitting credentials by {{fetch()}} with
-  a {{FormData}} body.
+  ISSUE: Describe encoding restrictions of submitting credentials by
+  <a lt=fetch(input)><code>fetch()</code></a> with a {{FormData}} body.
 
   When performing feature detection for a given credential type, developers are encouraged to verify
   that the relevant {{Credential}} specialization is present, rather than relying on the presence of
