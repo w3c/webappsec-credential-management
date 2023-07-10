@@ -517,7 +517,7 @@ spec:css-syntax-3;
     {{Credential}}'s default implementation of {{Credential/[[Store]](credential, sameOriginWithAncestors)}}:
 
     <ol class="algorithm">
-      1.  Return `undefined`.
+      1.  Throw a `NotSupportedError`.
     </ol>
 
   <h5 id="algorithm-create-cred" algorithm>`[[Create]]` internal method</h5>
