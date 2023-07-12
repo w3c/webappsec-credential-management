@@ -76,7 +76,6 @@ spec: web-otp; urlPrefix: https://wicg.github.io/web-otp
 <pre class="link-defaults">
 spec:html; type:dfn; for:html-origin-def; text:origin
 spec:html; type:dfn; for:environment settings object; text:global object
-spec:html; type:dfn; for:navigable; text:parent
 spec:fetch; type:dfn; for:/; text:request
 spec:fetch; type:dictionary; for:/; text:RequestInit
 spec:infra; type:dfn; for:/; text:set
@@ -297,9 +296,9 @@ spec:css-syntax-3;
 
     5.  Let |navigable| be |document|'s [=node navigable=].
 
-    6.  While |navigable| has a [=parent=]:
+    6.  While |navigable| has a non-null [=navigable/parent=]:
 
-        1.  Set |navigable| to |navigable|'s [=parent=].
+        1.  Set |navigable| to |navigable|'s [=navigable/parent=].
 
         2.  If |navigable|'s [=active document=]'s [=origin=] is not [=same origin=] with |origin|,
             return `false`.
