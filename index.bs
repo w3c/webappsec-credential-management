@@ -735,7 +735,7 @@ spec:css-syntax-3;
 
   ### Mediation Requirements ### {#mediation-requirements}
 
-  When making a request via {{get(options)}}, developers can set a case-by-case requirement for
+  When making a request via {{get(options)}} or {{create(options)}}, developers can set a case-by-case requirement for
   [=user mediation=] by choosing the appropriate {{CredentialMediationRequirement}} enum value.
 
   Note: The [[#user-mediation]] section gives more detail on the concept in general, and its
@@ -771,7 +771,7 @@ spec:css-syntax-3;
         see a [=credential chooser=] if necessary.
 
     :   <dfn>conditional</dfn>
-    ::  Discovered credentials are presented to the user in a non-modal dialog along with an
+    ::  For {CredentialsContainer/get()}, discovered credentials are presented to the user in a non-modal dialog along with an
         indication of the [=origin=] which is requesting credentials. If the user makes a gesture
         outside of the dialog, the dialog closes without resolving or rejecting the {{Promise}}
         returned by the {{CredentialsContainer/get()}} method and without causing a user-visible
@@ -789,6 +789,11 @@ spec:css-syntax-3;
         {{CredentialsContainer/get()}} method if all of the [=relevant credential interface objects|credential
         interfaces it refers to=] have overridden {{Credential/isConditionalMediationAvailable()}} to return
         a new {{Promise}} that [=resolves=] with `true`.
+
+        For {CredentialsContainer/create()}, if a user has previously consented to credential creation and
+        the user agent knows it recently mediated an authentication, then the `create()` call may resolve without
+        additional prominent modal interaction. If the user agent did not recently mediate an authentication or
+        does not have consent for credential creation, then the call must throw a "{{NotAllowedError}}" {{DOMException}}.
 
     :   <dfn>required</dfn>
     ::  The user agent will not hand over credentials without [=user mediation=], even if the
@@ -905,6 +910,7 @@ spec:css-syntax-3;
 
   <pre class="idl">
     dictionary CredentialCreationOptions {
+      CredentialMediationRequirement mediation = "optional";
       AbortSignal signal;
     };
   </pre>
