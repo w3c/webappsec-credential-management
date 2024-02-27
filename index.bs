@@ -16,6 +16,7 @@ Abstract:
   store user credentials for future use.
 Indent: 2
 Version History: https://github.com/w3c/webappsec-credential-management/commits/main/index.src.html
+Issue Tracking: GitHub https://github.com/w3c/webappsec-credential-management/issues
 Boilerplate: omit conformance, omit feedback-header
 !Participate: <a href="https://github.com/w3c/webappsec-credential-management/issues/new">File an issue</a> (<a href="https://github.com/w3c/webappsec-credential-management/issues">open issues</a>)
 Markup Shorthands: css off, markdown on
