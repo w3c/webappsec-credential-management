@@ -2,8 +2,8 @@
 <pre class="metadata">
 Status: ED
 ED: https://w3c.github.io/webappsec-credential-management/
-TR: http://www.w3.org/TR/credential-management-1/
-Previous Version: http://www.w3.org/TR/2016/WD-credential-management-1-20160425/
+TR: https://www.w3.org/TR/credential-management-1/
+Previous Version: https://www.w3.org/TR/2016/WD-credential-management-1-20160425/
 Shortname: credential-management
 Level: 1
 Former Editor: Jeff Hodges, w3cid 43843, Google Inc., jdhodges@google.com
