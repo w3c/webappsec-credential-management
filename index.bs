@@ -759,7 +759,7 @@ spec:css-syntax-3;
     ::  Certain [=credential type registry/credential types=] may require [=user mediation=] before creating
         a {{Credential}} via {{CredentialsContainer/create()}}, e.g. if doing so nessessitates storing it on
         an external device or requesting information from a third party. These [=credential types=] can be
-        specialized to talior said [=user mediation=] depending on the value of |mediation|, as described below
+        specialized to tailor said [=user mediation=] depending on the value of |mediation|, as described below
         in {{CredentialMediationRequirement}}.
   </div>
 
@@ -1124,7 +1124,7 @@ spec:css-syntax-3;
         see a [=credential chooser=] if necessary.
 
     :   <dfn>conditional</dfn>
-    ::  For {CredentialsContainer/get()}, discovered credentials are presented to the user in a non-modal dialog along with an
+    ::  For {{CredentialsContainer/get()}}, discovered credentials are presented to the user in a non-modal dialog along with an
         indication of the [=origin=] which is requesting credentials. If the user makes a gesture
         outside of the dialog, the dialog closes without resolving or rejecting the {{Promise}}
         returned by the {{CredentialsContainer/get()}} method and without causing a user-visible
@@ -1143,13 +1143,14 @@ spec:css-syntax-3;
         interfaces it refers to=] have overridden {{Credential/isConditionalMediationAvailable()}} to return
         a new {{Promise}} that [=resolves=] with `true`.
 
-        For {CredentialsContainer/create()}, if a user has previously consented to credential creation and
+        For {{CredentialsContainer/create()}}, if a user has previously consented to credential creation and
         the user agent knows it recently mediated an authentication, then the `create()` call may resolve without
         additional prominent modal interaction. If the user agent did not recently mediate an authentication or
         does not have consent for credential creation, then the call must throw a "{{NotAllowedError}}" {{DOMException}}.
 
         Websites can only pass {{CredentialMediationRequirement/conditional}} into the
-        {{CredentialsContainer/create()}} method if |conditionalCreate| is present in the result of
+        {{CredentialsContainer/create()}} method for {{PublicKeyCredential}} requests,
+        and only if |conditionalCreate| is present in the result of
         {{PublicKeyCredential.getClientCapabilities()}} defined in [[WEBAUTHN]].
 
     :   <dfn>required</dfn>
