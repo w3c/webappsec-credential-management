@@ -757,9 +757,9 @@ spec:css-syntax-3;
 
     :   <dfn>mediation</dfn>
     ::  Certain [=credential type registry/credential types=] may require [=user mediation=] before creating
-        a {{Credential}} via {{CredentialsContainer/create()}}, e.g. if doing so nessessitates storing it on
-        an external device or requesting information from a third party. These [=credential types=] can be
-        specialized to tailor said [=user mediation=] depending on the value of |mediation|, as described below
+        a {{Credential}} via {{CredentialsContainer/create()}}, e.g. if doing so necessitates storing it on
+        an external device or requesting information from a third party. These [=credential type registry/credential types=] can be
+        specialized to tailor said [=user mediation=] depending on the value of {{CredentialCreationOptions/mediation}}, as described below
         in {{CredentialMediationRequirement}}.
   </div>
 
@@ -1016,7 +1016,7 @@ spec:css-syntax-3;
         <code>|options|.{{CredentialRequestOptions/signal}}</code>'s [=AbortSignal/abort reason=].
 
     1.  If <code>|options|.{{CredentialRequestOptions/mediation}}</code> is
-    "{{CredentialMediationRequirement/conditional}}":
+        "{{CredentialMediationRequirement/conditional}}":
 
         1.  For each |interface| in |options|' [=relevant credential interface objects=]:
 
@@ -1150,8 +1150,8 @@ spec:css-syntax-3;
 
         Websites can only pass {{CredentialMediationRequirement/conditional}} into the
         {{CredentialsContainer/create()}} method for {{PublicKeyCredential}} requests,
-        and only if |conditionalCreate| is present in the result of
-        {{PublicKeyCredential.getClientCapabilities()}} defined in [[WEBAUTHN]].
+        and only if <var ignore>conditionalCreate</var> is present in the result of
+        {{PublicKeyCredential/getClientCapabilities()}} defined in [[WEBAUTHN]].
 
     :   <dfn>required</dfn>
     ::  The user agent will not hand over credentials without [=user mediation=], even if the
@@ -1163,7 +1163,7 @@ spec:css-syntax-3;
         origin. To set that flag, developers should call {{preventSilentAccess()}}.
   </div>
 
-  #### Examples #### {#mediation-examples}
+  ### Examples ### {#mediation-examples}
 
   <div class="example" id="example-mediation-silent">
     MegaCorp, Inc. wishes to seamlessly sign in users when possible. They can do so by calling
