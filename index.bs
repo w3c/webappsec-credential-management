@@ -404,6 +404,7 @@ spec:css-syntax-3;
       readonly attribute USVString id;
       readonly attribute DOMString type;
       static Promise&lt;boolean&gt; isConditionalMediationAvailable();
+      static Promise&lt;undefined&gt; willRequestConditionalCreation();
     };
   </pre>
   <div dfn-for="Credential">
@@ -433,6 +434,20 @@ spec:css-syntax-3;
 
         Note: If this function is not present, {{CredentialMediationRequirement/conditional}}
         mediation is not supported for the [=credential/credential type=].
+
+    :   <dfn method>willRequestConditionalCreation()</dfn>
+    ::  Returns a new {{Promise}} that [=resolves=] after the user agent registers the relying party's intention
+        to create a credential using the {{CredentialMediationRequirement/conditional}} approach to
+        [[#mediation-requirements|mediation of credential creation]] for the [=credential/credential type=].
+
+        {{Credential}}'s default implementation of {{Credential/willRequestConditionalCreation()}}:
+
+        <ol class="algorithm">
+            1.  Return a new {{Promise}} that immediately [=resolves=].
+        </ol>
+
+        Note: If this function is not present, {{CredentialMediationRequirement/conditional}}
+        mediation for credential creation is not supported for the [=credential/credential type=].
 
     :   <dfn attribute>\[[type]]</dfn>
     ::  The {{Credential}} [=interface object=] has an internal slot named `[[type]]`, which
