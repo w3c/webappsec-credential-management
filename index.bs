@@ -564,8 +564,7 @@ spec:css-syntax-3;
         display in a [=credential chooser=].
     :   <dfn attribute>iconURL</dfn>
     ::  A URL pointing to an image for the credential, intended for display in a
-        [=credential chooser=]. This URL MUST be an <a><i lang="la">a priori</i> authenticated
-        URL</a>.
+        [=credential chooser=]. This URL MUST be an [=potentially trustworthy URL=].
   </div>
 
   ## `navigator.credentials` ## {#framework-credential-management}
@@ -2205,7 +2204,7 @@ spec:css-syntax-3;
 
   User agents MUST NOT expose the APIs defined here to environments which are not [=secure
   contexts=]. User agents might implement autofill mechanisms which store user credentials and fill
-  sign-in forms on non-<a><i lang="la">a priori</i> authenticated URLs</a>, but those sites cannot
+  sign-in forms on [=potentially trustworthy URL|non-potentially trustworthy URLs=], but those sites cannot
   be trusted to interact directly with the credential manager in any meaningful way, and those sites
   MUST NOT have access to credentials saved in [=secure contexts=].
 
