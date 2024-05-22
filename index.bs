@@ -631,13 +631,13 @@ spec:css-syntax-3;
 
     :   <dfn method>preventSilentAccess()</dfn>
     ::  When {{CredentialsContainer/preventSilentAccess()}} is called, the user agent MUST return
-        the result of executing <a abstract-op>Prevent Silent Access</a> on the <a>current settings
-        object</a>.
+        the result of executing <a abstract-op>Prevent Silent Access</a> on the [=current settings
+        object=].
   
         Note: The intent here is a signal from the origin that the user has signed out. That
         is, after a click on a "Sign out" button, the site updates the user's session info, and
-        calls `navigator.credentials.preventSilentAccess()`. This sets the <a>`prevent silent
-        access` flag</a>, meaning that credentials will not be automagically handed back to the
+        calls `navigator.credentials.preventSilentAccess()`. This sets the [=`prevent silent
+        access` flag=], meaning that credentials will not be automagically handed back to the
         page next time the user visits.
 
         Note: This function was previously called `requireUserMediation()` which should be considered
@@ -693,7 +693,7 @@ spec:css-syntax-3;
     Note: This algorithm uses the [[#sctn-cred-type-registry|Credential Type Registry]].
 
     <ol class="algorithm">
-        1.  Let |settings| be the <a>current settings object</a>
+        1.  Let |settings| be the [=current settings object=].
 
         1.  Let |relevant interface objects| be an [=set/empty=] [=set=].
 
@@ -925,7 +925,7 @@ spec:css-syntax-3;
   unambigiously obtained, or with `null` if not.
 
   <ol class="algorithm">
-    1.  Let |settings| be the <a>current settings object</a>
+    1.  Let |settings| be the [=current settings object=].
 
     1.  Assert: |settings| is a [=secure context=].
 
@@ -1082,7 +1082,7 @@ spec:css-syntax-3;
   [=credential store=].
 
   <ol class="algorithm">
-    1.  Let |settings| be the <a>current settings object</a>
+    1.  Let |settings| be the [=current settings object=].
 
     1.  Assert: |settings| is a [=secure context=].
 
@@ -1131,7 +1131,7 @@ spec:css-syntax-3;
   circumstances, the {{Promise}} may reject with an appropriate exception:
 
   <ol class="algorithm">
-    1.  Let |settings| be the <a>current settings object</a>.
+    1.  Let |settings| be the [=current settings object=].
 
     1.  Assert: |settings| is a [=secure context=].
 
@@ -1224,7 +1224,7 @@ spec:css-syntax-3;
 
     3.  Run the following seps [=in parallel=]:
 
-        1.  Set |origin|'s <a>`prevent silent access` flag</a> in the [=credential store=].
+        1.  Set |origin|'s [=`prevent silent access` flag=] in the [=credential store=].
 
         2.  [=Resolve=] |p| with `undefined`.
 
@@ -1666,7 +1666,7 @@ spec:css-syntax-3;
             
             1.  For each |token| in |tokens|:
             
-                1.  If |token| is an <a>ASCII case-insensitive</a> match for one
+                1.  If |token| is an [=ASCII case-insensitive=] match for one
                     of the following strings, run the associated steps:
 
                     :   "<a attr-value>`new-password`</a>"
@@ -2064,10 +2064,10 @@ spec:css-syntax-3;
 
   1.  User agents MUST allow users to require [=user mediation=] for a given origin or for all
       origins. This functionality might be implemented as a global toggle that overrides each
-      origin's <a>`prevent silent access` flag</a> to return `false`, or via more granular
+      origin's [=`prevent silent access` flag=] to return `false`, or via more granular
       settings for specific origins (or specific credentials on specific origins).
 
-  2.  User agents MUST NOT set an [=origin=]'s <a>`prevent silent access` flag</a> to
+  2.  User agents MUST NOT set an [=origin=]'s [=`prevent silent access` flag=] to
       `false` without [=user mediation=]. For example, the [=credential chooser=] described in
       [[#user-mediated-selection]] could have a checkbox which the user could toggle to mark a
       credential as available without mediation for the origin, or the user agent could have an
@@ -2077,7 +2077,7 @@ spec:css-syntax-3;
       form of an icon in the address bar, or some similar location.
 
   4.  If a user clears her browsing data for an origin (cookies, localStorage, and so on), the user
-      agent MUST set the <a>`prevent silent access` flag</a> to `true` for that origin.
+      agent MUST set the [=`prevent silent access` flag=] to `true` for that origin.
 
   ## Credential Selection ## {#user-mediated-selection}
 
@@ -2184,14 +2184,14 @@ spec:css-syntax-3;
   which restricts the endpoints to which data can be sent. In particular, developers should ensure
   that the following directives are set, explicitly or implicitly, in their pages' policies:
 
-  *   <a>`script-src`</a> and <a>`object-src`</a> both restrict script execution on a page, making
+  *   [=`script-src`=] and [=`object-src`=] both restrict script execution on a page, making
       it less likely that a cross-site scripting attack will succeed in the first place. If sites
-      are populating <{form}> elements, also <a>`form-action`</a> directives should be set.
+      are populating <{form}> elements, also [=`form-action`=] directives should be set.
 
-  *   <a>`connect-src`</a> restricts the origins to which <a lt=fetch(input)><code>fetch()</code></a>
+  *   [=`connect-src`=] restricts the origins to which <a lt=fetch(input)><code>fetch()</code></a>
       may submit data (which mitigates the risk that credentials could be exfiltrated to `evil.com`.
 
-  *   <a>`child-src`</a> restricts the nested browsing contexts which may be embedded in a page,
+  *   [=`child-src`=] restricts the nested browsing contexts which may be embedded in a page,
       making it more difficult to inject a malicious `postMessage()` target. [[HTML]]
 
   Developers should, of course, also properly escape input and output, and consider using other
@@ -2212,7 +2212,7 @@ spec:css-syntax-3;
   ## Origin Confusion ## {#security-origin-confusion}
 
   If framed pages have access to the APIs defined here, it might be possible to confuse a user into
-  granting access to credentials for an origin other than the <a>top-level browsing context</a>,
+  granting access to credentials for an origin other than the [=top-level browsing context=],
   which is the only security origin which users can reasonably be expected to understand.
 
   This document exposes the Credential Management APIs to those contexts, as it's likely that some
@@ -2247,7 +2247,7 @@ spec:css-syntax-3;
   the authentication.
 
   The user MUST have some control over this behavior. As noted in [[#user-mediation-requirement]],
-  clearing cookies for an origin will also reset that origin's <a>`prevent silent access` flag</a>
+  clearing cookies for an origin will also reset that origin's [=`prevent silent access` flag=]
   the [=credential store=] to `true`. Additionally, the user agent SHOULD provide some UI affordance
   for disabling automatic sign-in for a particular origin. This could be tied to the notification
   that credentials have been provided to an origin, for example.
