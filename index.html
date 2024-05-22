@@ -7,7 +7,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED" rel="stylesheet">
   <meta content="Bikeshed version 82ce88815, updated Thu Sep 7 16:33:55 2023 -0700" name="generator">
   <link href="https://www.w3.org/TR/credential-management-1/" rel="canonical">
-  <meta content="671ba03d054e8b5312dafb57c5874c21853f5eab" name="document-revision">
+  <meta content="1c9bc4e1b3d6ceb2591a8abbed1fe3abbd061adc" name="document-revision">
 <style>/* Boilerplate: style-autolinks */
 .css.css, .property.property, .descriptor.descriptor {
     color: var(--a-normal-text);
@@ -1434,8 +1434,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
   display in a <a data-link-type="dfn" href="#credential-chooser" id="ref-for-credential-chooser①">credential chooser</a>.</p>
       <dt data-md><dfn class="dfn-paneled idl-code" data-dfn-for="CredentialUserData" data-dfn-type="attribute" data-export id="dom-credentialuserdata-iconurl"><code>iconURL</code></dfn>, <span> of type <a data-link-type="idl-name" href="https://webidl.spec.whatwg.org/#idl-USVString" id="ref-for-idl-USVString⑤">USVString</a>, readonly</span>
       <dd data-md>
-       <p>A URL pointing to an image for the credential, intended for display in a <a data-link-type="dfn" href="#credential-chooser" id="ref-for-credential-chooser②">credential chooser</a>. This URL MUST be an <a data-link-type="dfn" href="https://w3c.github.io/webappsec-mixed-content/#a-priori-authenticated-url" id="ref-for-a-priori-authenticated-url"><i lang="la">a priori</i> authenticated
-  URL</a>.</p>
+       <p>A URL pointing to an image for the credential, intended for display in a <a data-link-type="dfn" href="#credential-chooser" id="ref-for-credential-chooser②">credential chooser</a>. This URL MUST be an <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-url" id="ref-for-potentially-trustworthy-url">potentially trustworthy URL</a>.</p>
      </dl>
     </div>
     <h3 class="heading settled" data-level="2.3" id="framework-credential-management"><span class="secno">2.3. </span><span class="content"><code>navigator.credentials</code></span><a class="self-link" href="#framework-credential-management"></a></h3>
@@ -2847,7 +2846,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
     <h3 class="heading settled" data-level="6.3" id="insecure-sites"><span class="secno">6.3. </span><span class="content">Insecure Sites</span><a class="self-link" href="#insecure-sites"></a></h3>
     <p>User agents MUST NOT expose the APIs defined here to environments which are not <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context④">secure
   contexts</a>. User agents might implement autofill mechanisms which store user credentials and fill
-  sign-in forms on non-<a data-link-type="dfn" href="https://w3c.github.io/webappsec-mixed-content/#a-priori-authenticated-url" id="ref-for-a-priori-authenticated-url①"><i lang="la">a priori</i> authenticated URLs</a>, but those sites cannot
+  sign-in forms on <a data-link-type="dfn" href="https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-url" id="ref-for-potentially-trustworthy-url①">non-potentially trustworthy URLs</a>, but those sites cannot
   be trusted to interact directly with the credential manager in any meaningful way, and those sites
   MUST NOT have access to credentials saved in <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context⑤">secure contexts</a>.</p>
     <h3 class="heading settled" data-level="6.4" id="security-origin-confusion"><span class="secno">6.4. </span><span class="content">Origin Confusion</span><a class="self-link" href="#security-origin-confusion"></a></h3>
@@ -3302,11 +3301,6 @@ partial dictionary CredentialCreationOptions {
      <li><span class="dfn-paneled" id="0204d188">size</span>
     </ul>
    <li>
-    <a data-link-type="biblio">[MIXED-CONTENT]</a> defines the following terms:
-    <ul>
-     <li><span class="dfn-paneled" id="4d8718f0">a priori authenticated url</span>
-    </ul>
-   <li>
     <a data-link-type="biblio">[PERMISSIONS-POLICY-1]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="cc890cc1">policy-controlled feature</span>
@@ -3320,6 +3314,11 @@ partial dictionary CredentialCreationOptions {
     <a data-link-type="biblio">[PSL]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="5dbcc6ec">registerable domain</span>
+    </ul>
+   <li>
+    <a data-link-type="biblio">[SECURE-CONTEXTS]</a> defines the following terms:
+    <ul>
+     <li><span class="dfn-paneled" id="9c5d9c4d">potentially trustworthy url</span>
     </ul>
    <li>
     <a data-link-type="biblio">[WEB-OTP]</a> defines the following terms:
@@ -3389,14 +3388,14 @@ partial dictionary CredentialCreationOptions {
    <dd>Anne van Kesteren; et al. <a href="https://html.spec.whatwg.org/multipage/"><cite>HTML Standard</cite></a>. Living Standard. URL: <a href="https://html.spec.whatwg.org/multipage/">https://html.spec.whatwg.org/multipage/</a>
    <dt id="biblio-infra">[INFRA]
    <dd>Anne van Kesteren; Domenic Denicola. <a href="https://infra.spec.whatwg.org/"><cite>Infra Standard</cite></a>. Living Standard. URL: <a href="https://infra.spec.whatwg.org/">https://infra.spec.whatwg.org/</a>
-   <dt id="biblio-mixed-content">[MIXED-CONTENT]
-   <dd>Emily Stark; Mike West; Carlos IbarraLopez. <a href="https://w3c.github.io/webappsec-mixed-content/"><cite>Mixed Content</cite></a>. URL: <a href="https://w3c.github.io/webappsec-mixed-content/">https://w3c.github.io/webappsec-mixed-content/</a>
    <dt id="biblio-permissions-policy-1">[PERMISSIONS-POLICY-1]
    <dd>Ian Clelland. <a href="https://w3c.github.io/webappsec-permissions-policy/"><cite>Permissions Policy</cite></a>. URL: <a href="https://w3c.github.io/webappsec-permissions-policy/">https://w3c.github.io/webappsec-permissions-policy/</a>
    <dt id="biblio-promises-guide">[PROMISES-GUIDE]
    <dd>Domenic Denicola. <a href="https://www.w3.org/2001/tag/doc/promises-guide"><cite>Writing Promise-Using Specifications</cite></a>. 9 November 2018. TAG Finding. URL: <a href="https://www.w3.org/2001/tag/doc/promises-guide">https://www.w3.org/2001/tag/doc/promises-guide</a>
    <dt id="biblio-psl">[PSL]
    <dd><cite><a href="https://publicsuffix.org/">Public Suffix List</a></cite>.    Mozilla Foundation.
+   <dt id="biblio-secure-contexts">[SECURE-CONTEXTS]
+   <dd>Mike West. <a href="https://w3c.github.io/webappsec-secure-contexts/"><cite>Secure Contexts</cite></a>. URL: <a href="https://w3c.github.io/webappsec-secure-contexts/">https://w3c.github.io/webappsec-secure-contexts/</a>
    <dt id="biblio-web-otp">[WEB-OTP]
    <dd>Sam Goto. <a href="https://wicg.github.io/web-otp/"><cite>WebOTP API</cite></a>. URL: <a href="https://wicg.github.io/web-otp/">https://wicg.github.io/web-otp/</a>
    <dt id="biblio-webauthn-3">[WEBAUTHN-3]
@@ -4190,10 +4189,10 @@ window.dfnpanelData['45209803'] = {"dfnID": "45209803", "url": "https://infra.sp
 window.dfnpanelData['99c988d6'] = {"dfnID": "99c988d6", "url": "https://infra.spec.whatwg.org/#list-remove", "dfnText": "remove", "refSections": [{"refs": [{"id": "ref-for-list-remove"}], "title": "2.5.1. Request a Credential"}, {"refs": [{"id": "ref-for-list-remove\u2460"}], "title": "2.5.3. Store a Credential"}, {"refs": [{"id": "ref-for-list-remove\u2461"}], "title": "2.5.4. Create a Credential"}], "external": true};
 window.dfnpanelData['15e48c39'] = {"dfnID": "15e48c39", "url": "https://infra.spec.whatwg.org/#ordered-set", "dfnText": "set", "refSections": [{"refs": [{"id": "ref-for-ordered-set"}], "title": "2.1. Infrastructure"}, {"refs": [{"id": "ref-for-ordered-set\u2460"}], "title": "2.3.1. The CredentialRequestOptions Dictionary"}, {"refs": [{"id": "ref-for-ordered-set\u2461"}], "title": "2.5.4. Create a Credential"}], "external": true};
 window.dfnpanelData['0204d188'] = {"dfnID": "0204d188", "url": "https://infra.spec.whatwg.org/#list-size", "dfnText": "size", "refSections": [{"refs": [{"id": "ref-for-list-size"}], "title": "2.5.1. Request a Credential"}, {"refs": [{"id": "ref-for-list-size\u2460"}], "title": "2.5.4. Create a Credential"}], "external": true};
-window.dfnpanelData['4d8718f0'] = {"dfnID": "4d8718f0", "url": "https://w3c.github.io/webappsec-mixed-content/#a-priori-authenticated-url", "dfnText": "a priori authenticated url", "refSections": [{"refs": [{"id": "ref-for-a-priori-authenticated-url"}], "title": "2.2.2. CredentialUserData Mixin"}, {"refs": [{"id": "ref-for-a-priori-authenticated-url\u2460"}], "title": "6.3. Insecure Sites"}], "external": true};
 window.dfnpanelData['cc890cc1'] = {"dfnID": "cc890cc1", "url": "https://w3c.github.io/webappsec-permissions-policy/#policy-controlled-feature", "dfnText": "policy-controlled feature", "refSections": [{"refs": [{"id": "ref-for-policy-controlled-feature"}, {"id": "ref-for-policy-controlled-feature\u2460"}, {"id": "ref-for-policy-controlled-feature\u2461"}], "title": "2.5.1. Request a Credential"}, {"refs": [{"id": "ref-for-policy-controlled-feature\u2462"}, {"id": "ref-for-policy-controlled-feature\u2463"}], "title": "2.5.4. Create a Credential"}], "external": true};
 window.dfnpanelData['e8353b84'] = {"dfnID": "e8353b84", "url": "https://www.w3.org/2001/tag/doc/promises-guide#should-promise-call", "dfnText": "promise-calling", "refSections": [{"refs": [{"id": "ref-for-should-promise-call"}], "title": "2.5.4. Create a Credential"}], "external": true};
 window.dfnpanelData['5dbcc6ec'] = {"dfnID": "5dbcc6ec", "url": "https://publicsuffix.org/list/#", "dfnText": "registerable domain", "refSections": [{"refs": [{"id": "ref-for-something"}], "title": "6.1. Cross-domain credential access"}], "external": true};
+window.dfnpanelData['9c5d9c4d'] = {"dfnID": "9c5d9c4d", "url": "https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-url", "dfnText": "potentially trustworthy url", "refSections": [{"refs": [{"id": "ref-for-potentially-trustworthy-url"}], "title": "2.2.2. CredentialUserData Mixin"}, {"refs": [{"id": "ref-for-potentially-trustworthy-url\u2460"}], "title": "6.3. Insecure Sites"}], "external": true};
 window.dfnpanelData['26cd4086'] = {"dfnID": "26cd4086", "url": "https://wicg.github.io/web-otp#otpcredential", "dfnText": "OTPCredential", "refSections": [{"refs": [{"id": "ref-for-otpcredential"}], "title": "2.1.2. Credential Type Registry"}], "external": true};
 window.dfnpanelData['91d31374'] = {"dfnID": "91d31374", "url": "https://w3c.github.io/webauthn/#publickeycredential", "dfnText": "PublicKeyCredential", "refSections": [{"refs": [{"id": "ref-for-publickeycredential"}], "title": "2.1.2. Credential Type Registry"}, {"refs": [{"id": "ref-for-publickeycredential\u2460"}], "title": "8.2. Extension Points"}], "external": true};
 window.dfnpanelData['dd14e576'] = {"dfnID": "dd14e576", "url": "https://w3c.github.io/webauthn/#dom-publickeycredential-create-slot", "dfnText": "[[Create]](origin, options, sameOriginWithAncestors)", "refSections": [{"refs": [{"id": "ref-for-dom-publickeycredential-create-slot"}], "title": "8.2. Extension Points"}], "external": true};
