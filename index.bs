@@ -635,8 +635,8 @@ spec:css-syntax-3;
   
         Note: The intent here is a signal from the origin that the user has signed out. That
         is, after a click on a "Sign out" button, the site updates the user's session info, and
-        calls `navigator.credentials.preventSilentAccess()`. This sets the [=`prevent silent
-        access` flag=], meaning that credentials will not be automagically handed back to the
+        calls `navigator.credentials.preventSilentAccess()`. This sets the [=origin/prevent silent
+        access flag=], meaning that credentials will not be automagically handed back to the
         page next time the user visits.
 
         Note: This function was previously called `requireUserMediation()` which should be considered
@@ -776,7 +776,7 @@ spec:css-syntax-3;
         outside of the dialog, the dialog closes without resolving or rejecting the {{Promise}}
         returned by the {{CredentialsContainer/get()}} method and without causing a user-visible
         error condition. If the user makes a gesture that selects a credential, that credential is
-        returned to the caller. The [=prevent silent access flag=] is treated as being `true`
+        returned to the caller. The [=origin/prevent silent access flag=] is treated as being `true`
         regardless of its actual value: the {{CredentialMediationRequirement/conditional}} behavior
         always involves [=user mediation=] of some sort if applicable credentials are discovered.
 
@@ -792,11 +792,11 @@ spec:css-syntax-3;
 
     :   <dfn>required</dfn>
     ::  The user agent will not hand over credentials without [=user mediation=], even if the
-        [=prevent silent access flag=] is unset for an origin.
+        [=origin/prevent silent access flag=] is unset for an origin.
 
         Note: This requirement is intended to support [reauthentication](#example-mediation-require)
         or [user-switching](#example-mediation-switch) scenarios. Further, the requirement is tied
-        to a specific operation, and does not affect the [=prevent silent access flag=] for the
+        to a specific operation, and does not affect the [=origin/prevent silent access flag=] for the
         origin. To set that flag, developers should call {{preventSilentAccess()}}.
   </div>
 
@@ -1223,7 +1223,7 @@ spec:css-syntax-3;
 
     3.  Run the following seps [=in parallel=]:
 
-        1.  Set |origin|'s [=`prevent silent access` flag=] in the [=credential store=].
+        1.  Set |origin|'s [=origin/prevent silent access flag=] in the [=credential store=].
 
         2.  [=Resolve=] |p| with `undefined`.
 
@@ -2063,10 +2063,10 @@ spec:css-syntax-3;
 
   1.  User agents MUST allow users to require [=user mediation=] for a given origin or for all
       origins. This functionality might be implemented as a global toggle that overrides each
-      origin's [=`prevent silent access` flag=] to return `false`, or via more granular
+      origin's [=origin/prevent silent access flag=] to return `false`, or via more granular
       settings for specific origins (or specific credentials on specific origins).
 
-  2.  User agents MUST NOT set an [=origin=]'s [=`prevent silent access` flag=] to
+  2.  User agents MUST NOT set an [=origin=]'s [=origin/prevent silent access flag=] to
       `false` without [=user mediation=]. For example, the [=credential chooser=] described in
       [[#user-mediated-selection]] could have a checkbox which the user could toggle to mark a
       credential as available without mediation for the origin, or the user agent could have an
@@ -2076,7 +2076,7 @@ spec:css-syntax-3;
       form of an icon in the address bar, or some similar location.
 
   4.  If a user clears her browsing data for an origin (cookies, localStorage, and so on), the user
-      agent MUST set the [=`prevent silent access` flag=] to `true` for that origin.
+      agent MUST set the [=origin/prevent silent access flag=] to `true` for that origin.
 
   ## Credential Selection ## {#user-mediated-selection}
 
@@ -2246,7 +2246,7 @@ spec:css-syntax-3;
   the authentication.
 
   The user MUST have some control over this behavior. As noted in [[#user-mediation-requirement]],
-  clearing cookies for an origin will also reset that origin's [=`prevent silent access` flag=]
+  clearing cookies for an origin will also reset that origin's [=origin/prevent silent access flag=]
   the [=credential store=] to `true`. Additionally, the user agent SHOULD provide some UI affordance
   for disabling automatic sign-in for a particular origin. This could be tied to the notification
   that credentials have been provided to an origin, for example.
