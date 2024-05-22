@@ -291,8 +291,7 @@ spec:css-syntax-3;
 
     2.  Let |document| be |settings|' [=relevant global object=]'s [=associated Document=].
 
-    1.  If |document| is not [=Document/fully active=], then return [=a promise rejected with=]
-        "{{NotAllowedError}}" {{DOMException}}.
+    1.  If |document| has no [=document/browsing context=], return `false`.
 
     4.  Let |origin| be |settings|' [=environment settings object/origin=].
 
