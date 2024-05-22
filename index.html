@@ -7,7 +7,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED" rel="stylesheet">
   <meta content="Bikeshed version 82ce88815, updated Thu Sep 7 16:33:55 2023 -0700" name="generator">
   <link href="https://www.w3.org/TR/credential-management-1/" rel="canonical">
-  <meta content="c9c03287f46f7f03f7ae310ad21b10982e0f5cf8" name="document-revision">
+  <meta content="671ba03d054e8b5312dafb57c5874c21853f5eab" name="document-revision">
 <style>/* Boilerplate: style-autolinks */
 .css.css, .property.property, .descriptor.descriptor {
     color: var(--a-normal-text);
@@ -1531,7 +1531,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
   object</a>.</p>
        <p class="note" role="note"><span class="marker">Note:</span> The intent here is a signal from the origin that the user has signed out. That
   is, after a click on a "Sign out" button, the site updates the user’s session info, and
-  calls <code>navigator.credentials.preventSilentAccess()</code>. This sets the <a data-link-type="dfn" href="#origin-prevent-silent-access-flag" id="ref-for-origin-prevent-silent-access-flag"><code>prevent silent         access</code> flag</a>, meaning that credentials will not be automagically handed back to the
+  calls <code>navigator.credentials.preventSilentAccess()</code>. This sets the [=<code>prevent silent         access</code> flag=], meaning that credentials will not be automagically handed back to the
   page next time the user visits.</p>
        <p class="note" role="note"><span class="marker">Note:</span> This function was previously called <code>requireUserMediation()</code> which should be considered
   deprecated.</p>
@@ -1577,7 +1577,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
      <p class="note" role="note"><span class="marker">Note:</span> This algorithm uses the <a href="#sctn-cred-type-registry">Credential Type Registry</a>.</p>
      <ol class="algorithm">
       <li data-md>
-       <p>Let <var>settings</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object①">current settings object</a></p>
+       <p>Let <var>settings</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object①">current settings object</a>.</p>
       <li data-md>
        <p>Let <var>relevant interface objects</var> be an <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-empty" id="ref-for-list-empty">empty</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#ordered-set" id="ref-for-ordered-set①">set</a>.</p>
       <li data-md>
@@ -1652,7 +1652,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
   indication of the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin④">origin</a> which is requesting credentials. If the user makes a gesture
   outside of the dialog, the dialog closes without resolving or rejecting the <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise⑦">Promise</a></code> returned by the <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get⑧">get()</a></code> method and without causing a user-visible
   error condition. If the user makes a gesture that selects a credential, that credential is
-  returned to the caller. The <a data-link-type="dfn" href="#origin-prevent-silent-access-flag" id="ref-for-origin-prevent-silent-access-flag①">prevent silent access flag</a> is treated as being <code>true</code> regardless of its actual value: the <code class="idl"><a data-link-type="idl" href="#dom-credentialmediationrequirement-conditional" id="ref-for-dom-credentialmediationrequirement-conditional④">conditional</a></code> behavior
+  returned to the caller. The <a data-link-type="dfn" href="#origin-prevent-silent-access-flag" id="ref-for-origin-prevent-silent-access-flag">prevent silent access flag</a> is treated as being <code>true</code> regardless of its actual value: the <code class="idl"><a data-link-type="idl" href="#dom-credentialmediationrequirement-conditional" id="ref-for-dom-credentialmediationrequirement-conditional④">conditional</a></code> behavior
   always involves <a data-link-type="dfn" href="#user-mediated" id="ref-for-user-mediated③">user mediation</a> of some sort if applicable credentials are discovered.</p>
        <p>If no credentials are discovered, the user agent MAY prompt the user to take action in a way
   that depends on the type of credential (e.g. to insert a device containing credentials).
@@ -1663,9 +1663,9 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
   a new <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise⑧">Promise</a></code> that <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#resolve" id="ref-for-resolve③">resolves</a> with <code>true</code>.</p>
       <dt data-md><dfn class="dfn-paneled idl-code" data-dfn-for="CredentialMediationRequirement" data-dfn-type="enum-value" data-export data-lt="&quot;required&quot;|required" id="dom-credentialmediationrequirement-required"><code>required</code></dfn>
       <dd data-md>
-       <p>The user agent will not hand over credentials without <a data-link-type="dfn" href="#user-mediated" id="ref-for-user-mediated④">user mediation</a>, even if the <a data-link-type="dfn" href="#origin-prevent-silent-access-flag" id="ref-for-origin-prevent-silent-access-flag②">prevent silent access flag</a> is unset for an origin.</p>
+       <p>The user agent will not hand over credentials without <a data-link-type="dfn" href="#user-mediated" id="ref-for-user-mediated④">user mediation</a>, even if the <a data-link-type="dfn" href="#origin-prevent-silent-access-flag" id="ref-for-origin-prevent-silent-access-flag①">prevent silent access flag</a> is unset for an origin.</p>
        <p class="note" role="note"><span class="marker">Note:</span> This requirement is intended to support <a href="#example-mediation-require">reauthentication</a> or <a href="#example-mediation-switch">user-switching</a> scenarios. Further, the requirement is tied
-  to a specific operation, and does not affect the <a data-link-type="dfn" href="#origin-prevent-silent-access-flag" id="ref-for-origin-prevent-silent-access-flag③">prevent silent access flag</a> for the
+  to a specific operation, and does not affect the <a data-link-type="dfn" href="#origin-prevent-silent-access-flag" id="ref-for-origin-prevent-silent-access-flag②">prevent silent access flag</a> for the
   origin. To set that flag, developers should call <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-preventsilentaccess" id="ref-for-dom-credentialscontainer-preventsilentaccess②">preventSilentAccess()</a></code>.</p>
      </dl>
     </div>
@@ -1766,7 +1766,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
   unambigiously obtained, or with <code>null</code> if not.</p>
     <ol class="algorithm">
      <li data-md>
-      <p>Let <var>settings</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object②">current settings object</a></p>
+      <p>Let <var>settings</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object②">current settings object</a>.</p>
      <li data-md>
       <p class="assertion">Assert: <var>settings</var> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context①">secure context</a>.</p>
      <li data-md>
@@ -1915,7 +1915,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
     <p>The <dfn class="dfn-paneled" data-dfn-type="abstract-op" data-export id="abstract-opdef-store-a-credential">Store a <code>Credential</code></dfn> algorithm accepts a <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential③⑧">Credential</a></code> (<var>credential</var>), and returns a <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-promise" id="ref-for-idl-promise①⓪">Promise</a></code> which resolves once the object is persisted to the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store⑨">credential store</a>.</p>
     <ol class="algorithm">
      <li data-md>
-      <p>Let <var>settings</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object③">current settings object</a></p>
+      <p>Let <var>settings</var> be the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#current-settings-object" id="ref-for-current-settings-object③">current settings object</a>.</p>
      <li data-md>
       <p class="assertion">Assert: <var>settings</var> is a <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#secure-context" id="ref-for-secure-context②">secure context</a>.</p>
      <li data-md>
@@ -2052,7 +2052,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
       <p>Run the following seps <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/infrastructure.html#in-parallel" id="ref-for-in-parallel⑥">in parallel</a>:</p>
       <ol>
        <li data-md>
-        <p>Set <var>origin</var>’s <a data-link-type="dfn" href="#origin-prevent-silent-access-flag" id="ref-for-origin-prevent-silent-access-flag④"><code>prevent silent access</code> flag</a> in the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store①①">credential store</a>.</p>
+        <p>Set <var>origin</var>’s [=<code>prevent silent access</code> flag=] in the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store①①">credential store</a>.</p>
        <li data-md>
         <p><a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#resolve" id="ref-for-resolve①⓪">Resolve</a> <var>p</var> with <code>undefined</code>.</p>
       </ol>
@@ -2734,7 +2734,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
   be implemented as a settings page, or via interaction with a notification as described above.</p>
     </ol>
     <h3 class="heading settled" data-level="5.2" id="user-mediation-requirement"><span class="secno">5.2. </span><span class="content">Requiring User Mediation</span><a class="self-link" href="#user-mediation-requirement"></a></h3>
-    <p>By default, <a data-link-type="dfn" href="#user-mediated" id="ref-for-user-mediated①③">user mediation</a> is required for all <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin①①">origins</a>, as the relevant <a data-link-type="dfn" href="#origin-prevent-silent-access-flag" id="ref-for-origin-prevent-silent-access-flag⑤">prevent silent
+    <p>By default, <a data-link-type="dfn" href="#user-mediated" id="ref-for-user-mediated①③">user mediation</a> is required for all <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin①①">origins</a>, as the relevant <a data-link-type="dfn" href="#origin-prevent-silent-access-flag" id="ref-for-origin-prevent-silent-access-flag③">prevent silent
   access flag</a> in the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store②⑤">credential store</a> is set to <code>true</code>. Users MAY choose to grant an
   origin persistent access to credentials (perhaps in the form of a "Stay signed into this site."
   option), which would set this flag to <code>false</code>. In this case, the user would always be signed into
@@ -2746,10 +2746,10 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
      <li data-md>
       <p>User agents MUST allow users to require <a data-link-type="dfn" href="#user-mediated" id="ref-for-user-mediated①④">user mediation</a> for a given origin or for all
   origins. This functionality might be implemented as a global toggle that overrides each
-  origin’s <a data-link-type="dfn" href="#origin-prevent-silent-access-flag" id="ref-for-origin-prevent-silent-access-flag⑥"><code>prevent silent access</code> flag</a> to return <code>false</code>, or via more granular
+  origin’s [=<code>prevent silent access</code> flag=] to return <code>false</code>, or via more granular
   settings for specific origins (or specific credentials on specific origins).</p>
      <li data-md>
-      <p>User agents MUST NOT set an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin①②">origin</a>'s <a data-link-type="dfn" href="#origin-prevent-silent-access-flag" id="ref-for-origin-prevent-silent-access-flag⑦"><code>prevent silent access</code> flag</a> to <code>false</code> without <a data-link-type="dfn" href="#user-mediated" id="ref-for-user-mediated①⑤">user mediation</a>. For example, the <a data-link-type="dfn" href="#credential-chooser" id="ref-for-credential-chooser⑨">credential chooser</a> described in <a href="#user-mediated-selection">§ 5.3 Credential Selection</a> could have a checkbox which the user could toggle to mark a
+      <p>User agents MUST NOT set an <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin①②">origin</a>'s [=<code>prevent silent access</code> flag=] to <code>false</code> without <a data-link-type="dfn" href="#user-mediated" id="ref-for-user-mediated①⑤">user mediation</a>. For example, the <a data-link-type="dfn" href="#credential-chooser" id="ref-for-credential-chooser⑨">credential chooser</a> described in <a href="#user-mediated-selection">§ 5.3 Credential Selection</a> could have a checkbox which the user could toggle to mark a
   credential as available without mediation for the origin, or the user agent could have an
   onboarding process for its credential manager which asked a user for a default setting.</p>
      <li data-md>
@@ -2757,7 +2757,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
   form of an icon in the address bar, or some similar location.</p>
      <li data-md>
       <p>If a user clears her browsing data for an origin (cookies, localStorage, and so on), the user
-  agent MUST set the <a data-link-type="dfn" href="#origin-prevent-silent-access-flag" id="ref-for-origin-prevent-silent-access-flag⑧"><code>prevent silent access</code> flag</a> to <code>true</code> for that origin.</p>
+  agent MUST set the [=<code>prevent silent access</code> flag=] to <code>true</code> for that origin.</p>
     </ol>
     <h3 class="heading settled" data-level="5.3" id="user-mediated-selection"><span class="secno">5.3. </span><span class="content">Credential Selection</span><a class="self-link" href="#user-mediated-selection"></a></h3>
     <p>When responding to a call to <code class="idl"><a data-link-type="idl" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get②②">get()</a></code> on an origin which requires <a data-link-type="dfn" href="#user-mediated" id="ref-for-user-mediated①⑥">user mediation</a>, user agents MUST ask the user for permission to share credential information.
@@ -2830,13 +2830,13 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
   that the following directives are set, explicitly or implicitly, in their pages' policies:</p>
     <ul>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#script-src" id="ref-for-script-src"><code>script-src</code></a> and <a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#object-src" id="ref-for-object-src"><code>object-src</code></a> both restrict script execution on a page, making
+      <p>[=<code>script-src</code>=] and [=<code>object-src</code>=] both restrict script execution on a page, making
   it less likely that a cross-site scripting attack will succeed in the first place. If sites
-  are populating <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/forms.html#the-form-element" id="ref-for-the-form-element②">form</a></code> elements, also <a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#form-action" id="ref-for-form-action"><code>form-action</code></a> directives should be set.</p>
+  are populating <code><a data-link-type="element" href="https://html.spec.whatwg.org/multipage/forms.html#the-form-element" id="ref-for-the-form-element②">form</a></code> elements, also [=<code>form-action</code>=] directives should be set.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#connect-src" id="ref-for-connect-src"><code>connect-src</code></a> restricts the origins to which <a data-link-type="functionish" href="https://fetch.spec.whatwg.org/#dom-global-fetch" id="ref-for-dom-global-fetch①"><code>fetch()</code></a> may submit data (which mitigates the risk that credentials could be exfiltrated to <code>evil.com</code>.</p>
+      <p>[=<code>connect-src</code>=] restricts the origins to which <a data-link-type="functionish" href="https://fetch.spec.whatwg.org/#dom-global-fetch" id="ref-for-dom-global-fetch①"><code>fetch()</code></a> may submit data (which mitigates the risk that credentials could be exfiltrated to <code>evil.com</code>.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://w3c.github.io/webappsec-csp/#child-src" id="ref-for-child-src"><code>child-src</code></a> restricts the nested browsing contexts which may be embedded in a page,
+      <p>[=<code>child-src</code>=] restricts the nested browsing contexts which may be embedded in a page,
   making it more difficult to inject a malicious <code>postMessage()</code> target. <a data-link-type="biblio" href="#biblio-html" title="HTML Standard">[HTML]</a></p>
     </ul>
     <p>Developers should, of course, also properly escape input and output, and consider using other
@@ -2873,7 +2873,8 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
   doesn’t clear user credentials when they click "Sign-out", as the user agent becomes complicit in
   the authentication.</p>
     <p>The user MUST have some control over this behavior. As noted in <a href="#user-mediation-requirement">§ 5.2 Requiring User Mediation</a>,
-  clearing cookies for an origin will also reset that origin’s <a data-link-type="dfn" href="#origin-prevent-silent-access-flag" id="ref-for-origin-prevent-silent-access-flag⑨"><code>prevent silent access</code> flag</a> the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store②⑦">credential store</a> to <code>true</code>. Additionally, the user agent SHOULD provide some UI affordance
+  clearing cookies for an origin will also reset that origin’s [=<code>prevent silent access</code> flag=]
+  the <a data-link-type="dfn" href="#concept-credential-store" id="ref-for-concept-credential-store②⑦">credential store</a> to <code>true</code>. Additionally, the user agent SHOULD provide some UI affordance
   for disabling automatic sign-in for a particular origin. This could be tied to the notification
   that credentials have been provided to an origin, for example.</p>
    </section>
@@ -3215,15 +3216,6 @@ partial dictionary CredentialCreationOptions {
   </ul>
   <h3 class="no-num no-ref heading settled" id="index-defined-elsewhere"><span class="content">Terms defined by reference</span><a class="self-link" href="#index-defined-elsewhere"></a></h3>
   <ul class="index">
-   <li>
-    <a data-link-type="biblio">[CSP]</a> defines the following terms:
-    <ul>
-     <li><span class="dfn-paneled" id="e8ef818c">child-src</span>
-     <li><span class="dfn-paneled" id="6e4a4b23">connect-src</span>
-     <li><span class="dfn-paneled" id="0e0909b7">form-action</span>
-     <li><span class="dfn-paneled" id="6835008d">object-src</span>
-     <li><span class="dfn-paneled" id="9e196595">script-src</span>
-    </ul>
    <li>
     <a data-link-type="biblio">[DOM]</a> defines the following terms:
     <ul>
@@ -4137,11 +4129,6 @@ partial dictionary CredentialCreationOptions {
 </script>
 <script>/* Boilerplate: script-dfn-panel-json */
 window.dfnpanelData = {};
-window.dfnpanelData['e8ef818c'] = {"dfnID": "e8ef818c", "url": "https://w3c.github.io/webappsec-csp/#child-src", "dfnText": "child-src", "refSections": [{"refs": [{"id": "ref-for-child-src"}], "title": "6.2. Credential Leakage"}], "external": true};
-window.dfnpanelData['6e4a4b23'] = {"dfnID": "6e4a4b23", "url": "https://w3c.github.io/webappsec-csp/#connect-src", "dfnText": "connect-src", "refSections": [{"refs": [{"id": "ref-for-connect-src"}], "title": "6.2. Credential Leakage"}], "external": true};
-window.dfnpanelData['0e0909b7'] = {"dfnID": "0e0909b7", "url": "https://w3c.github.io/webappsec-csp/#form-action", "dfnText": "form-action", "refSections": [{"refs": [{"id": "ref-for-form-action"}], "title": "6.2. Credential Leakage"}], "external": true};
-window.dfnpanelData['6835008d'] = {"dfnID": "6835008d", "url": "https://w3c.github.io/webappsec-csp/#object-src", "dfnText": "object-src", "refSections": [{"refs": [{"id": "ref-for-object-src"}], "title": "6.2. Credential Leakage"}], "external": true};
-window.dfnpanelData['9e196595'] = {"dfnID": "9e196595", "url": "https://w3c.github.io/webappsec-csp/#script-src", "dfnText": "script-src", "refSections": [{"refs": [{"id": "ref-for-script-src"}], "title": "6.2. Credential Leakage"}], "external": true};
 window.dfnpanelData['cca3cdb2'] = {"dfnID": "cca3cdb2", "url": "https://dom.spec.whatwg.org/#abortsignal", "dfnText": "AbortSignal", "refSections": [{"refs": [{"id": "ref-for-abortsignal"}, {"id": "ref-for-abortsignal\u2460"}], "title": "2.3.1. The CredentialRequestOptions Dictionary"}, {"refs": [{"id": "ref-for-abortsignal\u2461"}, {"id": "ref-for-abortsignal\u2462"}], "title": "2.4. The CredentialCreationOptions Dictionary"}], "external": true};
 window.dfnpanelData['28e64574'] = {"dfnID": "28e64574", "url": "https://dom.spec.whatwg.org/#abortsignal-abort-reason", "dfnText": "abort reason", "refSections": [{"refs": [{"id": "ref-for-abortsignal-abort-reason"}], "title": "2.3.1. The CredentialRequestOptions Dictionary"}, {"refs": [{"id": "ref-for-abortsignal-abort-reason\u2460"}], "title": "2.4. The CredentialCreationOptions Dictionary"}, {"refs": [{"id": "ref-for-abortsignal-abort-reason\u2461"}], "title": "2.5.1. Request a Credential"}, {"refs": [{"id": "ref-for-abortsignal-abort-reason\u2462"}], "title": "2.5.4. Create a Credential"}], "external": true};
 window.dfnpanelData['535dd335'] = {"dfnID": "535dd335", "url": "https://dom.spec.whatwg.org/#abortsignal-aborted", "dfnText": "aborted", "refSections": [{"refs": [{"id": "ref-for-abortsignal-aborted"}], "title": "2.5.1. Request a Credential"}, {"refs": [{"id": "ref-for-abortsignal-aborted\u2460"}], "title": "2.5.4. Create a Credential"}], "external": true};
@@ -4248,7 +4235,7 @@ window.dfnpanelData['credential-effective'] = {"dfnID": "credential-effective", 
 window.dfnpanelData['credential-source'] = {"dfnID": "credential-source", "url": "#credential-source", "dfnText": "credential source", "refSections": [{"refs": [{"id": "ref-for-credential-source"}], "title": "2.2.1.2. [[DiscoverFromExternalSource]] internal method"}, {"refs": [{"id": "ref-for-credential-source\u2460"}], "title": "8.2. Extension Points"}], "external": false};
 window.dfnpanelData['concept-credential-store'] = {"dfnID": "concept-credential-store", "url": "#concept-credential-store", "dfnText": "credential\n  store", "refSections": [{"refs": [{"id": "ref-for-concept-credential-store"}, {"id": "ref-for-concept-credential-store\u2460"}, {"id": "ref-for-concept-credential-store\u2461"}, {"id": "ref-for-concept-credential-store\u2462"}], "title": "2.1. Infrastructure"}, {"refs": [{"id": "ref-for-concept-credential-store\u2463"}, {"id": "ref-for-concept-credential-store\u2464"}], "title": "2.2. The Credential Interface"}, {"refs": [{"id": "ref-for-concept-credential-store\u2465"}], "title": "2.2.1.1. [[CollectFromCredentialStore]] internal method"}, {"refs": [{"id": "ref-for-concept-credential-store\u2466"}], "title": "2.2.1.3. [[Store]] internal method"}, {"refs": [{"id": "ref-for-concept-credential-store\u2467"}], "title": "2.3. navigator.credentials"}, {"refs": [{"id": "ref-for-concept-credential-store\u2468"}], "title": "2.5.3. Store a Credential"}, {"refs": [{"id": "ref-for-concept-credential-store\u2460\u24ea"}, {"id": "ref-for-concept-credential-store\u2460\u2460"}], "title": "2.5.5. Prevent Silent Access"}, {"refs": [{"id": "ref-for-concept-credential-store\u2460\u2461"}], "title": "3.1.1. Password-based Sign-in"}, {"refs": [{"id": "ref-for-concept-credential-store\u2460\u2462"}, {"id": "ref-for-concept-credential-store\u2460\u2463"}], "title": "3.3.1. \n    PasswordCredential\u2019s [[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)\n  "}, {"refs": [{"id": "ref-for-concept-credential-store\u2460\u2464"}, {"id": "ref-for-concept-credential-store\u2460\u2465"}, {"id": "ref-for-concept-credential-store\u2460\u2466"}, {"id": "ref-for-concept-credential-store\u2460\u2467"}], "title": "3.3.3. \n    PasswordCredential\u2019s [[Store]](credential, sameOriginWithAncestors)\n  "}, {"refs": [{"id": "ref-for-concept-credential-store\u2460\u2468"}, {"id": "ref-for-concept-credential-store\u2461\u24ea"}], "title": "4.2.1. \n    FederatedCredential\u2019s [[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)\n  "}, {"refs": [{"id": "ref-for-concept-credential-store\u2461\u2460"}, {"id": "ref-for-concept-credential-store\u2461\u2461"}, {"id": "ref-for-concept-credential-store\u2461\u2462"}, {"id": "ref-for-concept-credential-store\u2461\u2463"}], "title": "4.2.3. \n    FederatedCredential\u2019s [[Store]](credential, sameOriginWithAncestors)\n  "}, {"refs": [{"id": "ref-for-concept-credential-store\u2461\u2464"}], "title": "5.2. Requiring User Mediation"}, {"refs": [{"id": "ref-for-concept-credential-store\u2461\u2465"}], "title": "5.3. Credential Selection"}, {"refs": [{"id": "ref-for-concept-credential-store\u2461\u2466"}], "title": "6.5. Signing-Out"}, {"refs": [{"id": "ref-for-concept-credential-store\u2461\u2467"}, {"id": "ref-for-concept-credential-store\u2461\u2468"}], "title": "8.2. Extension Points"}], "external": false};
 window.dfnpanelData['abstract-opdef-credential-store-retrieve-a-list-of-credentials'] = {"dfnID": "abstract-opdef-credential-store-retrieve-a-list-of-credentials", "url": "#abstract-opdef-credential-store-retrieve-a-list-of-credentials", "dfnText": "Retrieve a list of credentials", "refSections": [{"refs": [{"id": "ref-for-abstract-opdef-credential-store-retrieve-a-list-of-credentials"}], "title": "3.3.1. \n    PasswordCredential\u2019s [[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)\n  "}, {"refs": [{"id": "ref-for-abstract-opdef-credential-store-retrieve-a-list-of-credentials\u2460"}], "title": "4.2.1. \n    FederatedCredential\u2019s [[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)\n  "}], "external": false};
-window.dfnpanelData['origin-prevent-silent-access-flag'] = {"dfnID": "origin-prevent-silent-access-flag", "url": "#origin-prevent-silent-access-flag", "dfnText": "prevent silent   access flag", "refSections": [{"refs": [{"id": "ref-for-origin-prevent-silent-access-flag"}], "title": "2.3. navigator.credentials"}, {"refs": [{"id": "ref-for-origin-prevent-silent-access-flag\u2460"}, {"id": "ref-for-origin-prevent-silent-access-flag\u2461"}, {"id": "ref-for-origin-prevent-silent-access-flag\u2462"}], "title": "2.3.2. Mediation Requirements"}, {"refs": [{"id": "ref-for-origin-prevent-silent-access-flag\u2463"}], "title": "2.5.5. Prevent Silent Access"}, {"refs": [{"id": "ref-for-origin-prevent-silent-access-flag\u2464"}, {"id": "ref-for-origin-prevent-silent-access-flag\u2465"}, {"id": "ref-for-origin-prevent-silent-access-flag\u2466"}, {"id": "ref-for-origin-prevent-silent-access-flag\u2467"}], "title": "5.2. Requiring User Mediation"}, {"refs": [{"id": "ref-for-origin-prevent-silent-access-flag\u2468"}], "title": "6.5. Signing-Out"}], "external": false};
+window.dfnpanelData['origin-prevent-silent-access-flag'] = {"dfnID": "origin-prevent-silent-access-flag", "url": "#origin-prevent-silent-access-flag", "dfnText": "prevent silent   access flag", "refSections": [{"refs": [{"id": "ref-for-origin-prevent-silent-access-flag"}, {"id": "ref-for-origin-prevent-silent-access-flag\u2460"}, {"id": "ref-for-origin-prevent-silent-access-flag\u2461"}], "title": "2.3.2. Mediation Requirements"}, {"refs": [{"id": "ref-for-origin-prevent-silent-access-flag\u2462"}], "title": "5.2. Requiring User Mediation"}], "external": false};
 window.dfnpanelData['origin-requires-user-mediation'] = {"dfnID": "origin-requires-user-mediation", "url": "#origin-requires-user-mediation", "dfnText": "requires user mediation", "refSections": [{"refs": [{"id": "ref-for-origin-requires-user-mediation"}], "title": "2.3.2. Mediation Requirements"}, {"refs": [{"id": "ref-for-origin-requires-user-mediation\u2460"}], "title": "2.5.1. Request a Credential"}], "external": false};
 window.dfnpanelData['active-credential-types'] = {"dfnID": "active-credential-types", "url": "#active-credential-types", "dfnText": "active credential\n  types", "refSections": [{"refs": [{"id": "ref-for-active-credential-types"}, {"id": "ref-for-active-credential-types\u2460"}, {"id": "ref-for-active-credential-types\u2461"}], "title": "2.5.1. Request a Credential"}, {"refs": [{"id": "ref-for-active-credential-types\u2462"}, {"id": "ref-for-active-credential-types\u2463"}, {"id": "ref-for-active-credential-types\u2464"}], "title": "2.5.3. Store a Credential"}, {"refs": [{"id": "ref-for-active-credential-types\u2465"}, {"id": "ref-for-active-credential-types\u2466"}, {"id": "ref-for-active-credential-types\u2467"}], "title": "2.5.4. Create a Credential"}], "external": false};
 window.dfnpanelData['same-origin-with-its-ancestors'] = {"dfnID": "same-origin-with-its-ancestors", "url": "#same-origin-with-its-ancestors", "dfnText": "same-origin with its\n  ancestors", "refSections": [{"refs": [{"id": "ref-for-same-origin-with-its-ancestors"}], "title": "2.2.1.1. [[CollectFromCredentialStore]] internal method"}, {"refs": [{"id": "ref-for-same-origin-with-its-ancestors\u2460"}], "title": "2.2.1.2. [[DiscoverFromExternalSource]] internal method"}, {"refs": [{"id": "ref-for-same-origin-with-its-ancestors\u2461"}], "title": "2.2.1.3. [[Store]] internal method"}, {"refs": [{"id": "ref-for-same-origin-with-its-ancestors\u2462"}], "title": "2.2.1.4. [[Create]] internal method"}, {"refs": [{"id": "ref-for-same-origin-with-its-ancestors\u2463"}], "title": "2.5.1. Request a Credential"}, {"refs": [{"id": "ref-for-same-origin-with-its-ancestors\u2464"}], "title": "2.5.2. Collect Credentials from the credential store"}, {"refs": [{"id": "ref-for-same-origin-with-its-ancestors\u2465"}], "title": "2.5.3. Store a Credential"}, {"refs": [{"id": "ref-for-same-origin-with-its-ancestors\u2466"}], "title": "2.5.4. Create a Credential"}, {"refs": [{"id": "ref-for-same-origin-with-its-ancestors\u2467"}], "title": "3.3.1. \n    PasswordCredential\u2019s [[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)\n  "}, {"refs": [{"id": "ref-for-same-origin-with-its-ancestors\u2468"}], "title": "3.3.2. \n    PasswordCredential\u2019s [[Create]](origin, options, sameOriginWithAncestors)\n  "}, {"refs": [{"id": "ref-for-same-origin-with-its-ancestors\u2460\u24ea"}], "title": "3.3.3. \n    PasswordCredential\u2019s [[Store]](credential, sameOriginWithAncestors)\n  "}, {"refs": [{"id": "ref-for-same-origin-with-its-ancestors\u2460\u2460"}], "title": "4.2.1. \n    FederatedCredential\u2019s [[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)\n  "}, {"refs": [{"id": "ref-for-same-origin-with-its-ancestors\u2460\u2461"}], "title": "4.2.2. \n    FederatedCredential\u2019s [[Create]](origin, options, sameOriginWithAncestors)\n  "}, {"refs": [{"id": "ref-for-same-origin-with-its-ancestors\u2460\u2462"}], "title": "4.2.3. \n    FederatedCredential\u2019s [[Store]](credential, sameOriginWithAncestors)\n  "}, {"refs": [{"id": "ref-for-same-origin-with-its-ancestors\u2460\u2463"}], "title": "8.2. Extension Points"}], "external": false};
