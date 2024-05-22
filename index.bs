@@ -932,6 +932,9 @@ spec:css-syntax-3;
         then return [=a promise rejected with=]
         <code>|options|.{{CredentialRequestOptions/signal}}</code>'s [=AbortSignal/abort reason=].
 
+    1.  If |settings|'s [=relevant global object=]'s [=associated Document=] is not [=Document/fully active=],
+        then return [=a promise rejected with=] "{{NotAllowedError}}" {{DOMException}}.
+
     1.  If <code>|options|.{{CredentialRequestOptions/mediation}}</code> is
         "{{CredentialMediationRequirement/conditional}}":
 
@@ -1085,6 +1088,9 @@ spec:css-syntax-3;
 
     1.  Assert: |settings| is a [=secure context=].
 
+    1.  If |settings|'s [=relevant global object=]'s [=associated Document=] is not [=Document/fully active=],
+        then return [=a promise rejected with=] "{{NotAllowedError}}" {{DOMException}}.
+
     1.  Let |sameOriginWithAncestors| be `true` if the [=current settings object=] is [=same-origin
         with its ancestors=], and `false` otherwise.
 
@@ -1135,6 +1141,9 @@ spec:css-syntax-3;
     1.  Assert: |settings| is a [=secure context=].
 
     1.  Let |global| be |settings|' [=environment settings object/global object=].
+
+    1.  If |settings|'s [=relevant global object=]'s [=associated Document=] is not [=Document/fully active=],
+        then return [=a promise rejected with=] "{{NotAllowedError}}" {{DOMException}}.
 
     1.  Let |sameOriginWithAncestors| be `true` if the [=current settings object=] is [=same-origin
         with its ancestors=], and `false` otherwise.
