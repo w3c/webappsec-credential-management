@@ -928,12 +928,12 @@ spec:css-syntax-3;
 
     1.  Assert: |settings| is a [=secure context=].
 
+    1.  If |settings|'s [=relevant global object=]'s [=associated Document=] is not [=Document/fully active=],
+        then return [=a promise rejected with=] "{{NotAllowedError}}" {{DOMException}}.
+
     1.  If <code>|options|.{{CredentialRequestOptions/signal}}</code> is [=AbortSignal/aborted=],
         then return [=a promise rejected with=]
         <code>|options|.{{CredentialRequestOptions/signal}}</code>'s [=AbortSignal/abort reason=].
-
-    1.  If |settings|'s [=relevant global object=]'s [=associated Document=] is not [=Document/fully active=],
-        then return [=a promise rejected with=] "{{NotAllowedError}}" {{DOMException}}.
 
     1.  If <code>|options|.{{CredentialRequestOptions/mediation}}</code> is
         "{{CredentialMediationRequirement/conditional}}":
