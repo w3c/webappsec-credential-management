@@ -1228,6 +1228,9 @@ spec:css-syntax-3;
   <ol class="algorithm">
     1.  Let |origin| be |settings|' [=environment settings object/origin=].
 
+    1.  If |settings|'s [=relevant global object=]'s [=associated Document=] is not [=Document/fully active=],
+        then return [=a promise rejected with=] "{{NotAllowedError}}" {{DOMException}}.
+
     2.  Let |p| be [=a new promise=]
 
     3.  Run the following seps [=in parallel=]:
