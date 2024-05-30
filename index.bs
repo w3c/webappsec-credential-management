@@ -443,10 +443,10 @@ spec:css-syntax-3;
         {{Credential}}'s default implementation of {{Credential/willRequestConditionalCreation()}}:
 
         <ol class="algorithm">
-            1.  Return a new {{Promise}} that immediately [=resolves=].
+            1.  Return a new {{Promise}} that [=resolves=] with `undefined`.
         </ol>
 
-        Note: If this function is not present, {{CredentialMediationRequirement/conditional}}
+        Note: If this method is not present, {{CredentialMediationRequirement/conditional}}
         mediation for credential creation is not supported for the [=credential/credential type=].
 
     :   <dfn attribute>\[[type]]</dfn>
