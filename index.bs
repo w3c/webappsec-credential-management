@@ -405,6 +405,7 @@ spec:css-syntax-3;
       readonly attribute USVString id;
       readonly attribute DOMString type;
       static Promise&lt;boolean&gt; isConditionalMediationAvailable();
+      static Promise&lt;undefined&gt; willRequestConditionalCreation();
     };
   </pre>
   <div dfn-for="Credential">
@@ -434,6 +435,20 @@ spec:css-syntax-3;
 
         Note: If this function is not present, {{CredentialMediationRequirement/conditional}}
         mediation is not supported for the [=credential/credential type=].
+
+    :   <dfn method>willRequestConditionalCreation()</dfn>
+    ::  Returns a new {{Promise}} that [=resolves=] after the user agent registers the relying party's intention
+        to create a credential using the {{CredentialMediationRequirement/conditional}} approach to
+        [[#mediation-requirements|mediation of credential creation]] for the [=credential/credential type=].
+
+        {{Credential}}'s default implementation of {{Credential/willRequestConditionalCreation()}}:
+
+        <ol class="algorithm">
+            1.  Return a new {{Promise}} that [=resolves=] with `undefined`.
+        </ol>
+
+        Note: If this method is not present, {{CredentialMediationRequirement/conditional}}
+        mediation for credential creation is not supported for the [=credential/credential type=].
 
     :   <dfn attribute>\[[type]]</dfn>
     ::  The {{Credential}} [=interface object=] has an internal slot named `[[type]]`, which
@@ -735,7 +750,7 @@ spec:css-syntax-3;
 
   ### Mediation Requirements ### {#mediation-requirements}
 
-  When making a request via {{get(options)}}, developers can set a case-by-case requirement for
+  When making a request via {{get(options)}} or {{create(options)}}, developers can set a case-by-case requirement for
   [=user mediation=] by choosing the appropriate {{CredentialMediationRequirement}} enum value.
 
   Note: The [[#user-mediation]] section gives more detail on the concept in general, and its
@@ -771,7 +786,7 @@ spec:css-syntax-3;
         see a [=credential chooser=] if necessary.
 
     :   <dfn>conditional</dfn>
-    ::  Discovered credentials are presented to the user in a non-modal dialog along with an
+    ::  For {CredentialsContainer/get()}, discovered credentials are presented to the user in a non-modal dialog along with an
         indication of the [=origin=] which is requesting credentials. If the user makes a gesture
         outside of the dialog, the dialog closes without resolving or rejecting the {{Promise}}
         returned by the {{CredentialsContainer/get()}} method and without causing a user-visible
@@ -789,6 +804,11 @@ spec:css-syntax-3;
         {{CredentialsContainer/get()}} method if all of the [=relevant credential interface objects|credential
         interfaces it refers to=] have overridden {{Credential/isConditionalMediationAvailable()}} to return
         a new {{Promise}} that [=resolves=] with `true`.
+
+        For {CredentialsContainer/create()}, if a user has previously consented to credential creation and
+        the user agent knows it recently mediated an authentication, then the `create()` call may resolve without
+        additional prominent modal interaction. If the user agent did not recently mediate an authentication or
+        does not have consent for credential creation, then the call must throw a "{{NotAllowedError}}" {{DOMException}}.
 
     :   <dfn>required</dfn>
     ::  The user agent will not hand over credentials without [=user mediation=], even if the
@@ -905,6 +925,7 @@ spec:css-syntax-3;
 
   <pre class="idl">
     dictionary CredentialCreationOptions {
+      CredentialMediationRequirement mediation = "optional";
       AbortSignal signal;
     };
   </pre>
