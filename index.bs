@@ -475,7 +475,7 @@ spec:css-syntax-3;
   [[#algorithm-request]], etc. I'm not sure I've gotten the terminology right. [=interface prototype
   object=], maybe?
 
-  Some {{Credential}} objects are <dfn for="Credential">origin bound</dfn>: these contain an
+  Some {{Credential}} objects are <dfn for="Credential" export>origin bound</dfn>: these contain an
   internal slot named <dfn for="Credential" attribute>\[[origin]]</dfn>, which stores the [=origin=]
   for which the {{Credential}} may be [=effective=].
 
