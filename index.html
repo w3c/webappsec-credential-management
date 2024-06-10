@@ -7,7 +7,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED" rel="stylesheet">
   <meta content="Bikeshed version 4afc1fdf9, updated Tue May 28 15:43:17 2024 -0700" name="generator">
   <link href="https://www.w3.org/TR/credential-management-1/" rel="canonical">
-  <meta content="4fa577c057865f6551a0913ac7b07e7ff79b2ac0" name="revision">
+  <meta content="55d42f1d32906c3112a9733508fb9e59c8f188d9" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>/* Boilerplate: style-autolinks */
@@ -940,7 +940,7 @@ var[data-var-color="6"] { background-color: #FFBCF2; box-shadow: 0 0 0 2px #FFBC
   <div class="head">
    <p data-fill-with="logo"><a class="logo" href="https://www.w3.org/"> <img alt="W3C" height="48" src="https://www.w3.org/StyleSheets/TR/2021/logos/W3C" width="72"> </a> </p>
    <h1>Credential Management Level 1</h1>
-   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2024-05-30">30 May 2024</time></p>
+   <p id="w3c-state"><a href="https://www.w3.org/standards/types#ED">Editor’s Draft</a>, <time class="dt-updated" datetime="2024-06-10">10 June 2024</time></p>
    <details open>
     <summary>More details about this document</summary>
     <div data-fill-with="spec-metadata">
@@ -1419,7 +1419,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
     </div>
     <p class="issue" id="issue-47fed4d0"><a class="self-link" href="#issue-47fed4d0"></a> Talk to Tobie/Dominic about the <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-interface-object" id="ref-for-dfn-interface-object③">interface object</a> bits, here and in <a href="#algorithm-request">§ 2.5.1 Request a Credential</a>, etc. I’m not sure I’ve gotten the terminology right. <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-interface-prototype-object" id="ref-for-dfn-interface-prototype-object">interface prototype
   object</a>, maybe?</p>
-    <p>Some <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential⑦">Credential</a></code> objects are <dfn class="dfn-paneled" data-dfn-for="Credential" data-dfn-type="dfn" data-noexport id="credential-origin-bound">origin bound</dfn>: these contain an
+    <p>Some <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential⑦">Credential</a></code> objects are <dfn class="dfn-paneled" data-dfn-for="Credential" data-dfn-type="dfn" data-export id="credential-origin-bound">origin bound</dfn>: these contain an
   internal slot named <dfn class="dfn-paneled idl-code" data-dfn-for="Credential" data-dfn-type="attribute" data-export id="dom-credential-origin-slot"><code>[[origin]]</code></dfn>, which stores the <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/origin.html#concept-origin" id="ref-for-concept-origin③">origin</a> for which the <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential⑧">Credential</a></code> may be <a data-link-type="dfn" href="#credential-effective" id="ref-for-credential-effective①">effective</a>.</p>
     <h4 class="heading settled" data-level="2.2.1" id="credential-internal-methods"><span class="secno">2.2.1. </span><span class="content"><code>Credential</code> Internal Methods</span><a class="self-link" href="#credential-internal-methods"></a></h4>
     <p>The <code class="idl"><a data-link-type="idl" href="#credential" id="ref-for-credential⑨">Credential</a></code> <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#dfn-interface-object" id="ref-for-dfn-interface-object④">interface object</a> features several <a data-link-type="dfn" href="https://tc39.github.io/ecma262/#sec-ordinary-object-internal-methods-and-internal-slots" id="ref-for-sec-ordinary-object-internal-methods-and-internal-slots">internal methods</a> facilitating
