@@ -8,6 +8,7 @@ Shortname: credential-management
 Level: 1
 Former Editor: Jeff Hodges, w3cid 43843, Google Inc., jdhodges@google.com
 Editor: Nina Satragno, w3cid 116344, Google Inc., nsatragno@google.com
+Editor: Marcos Cáceres, w3cid 39125, Apple Inc., marcosc@apple.com
 Former Editor: Mike West 56384, Google Inc., mkwst@google.com
 Group: webappsec
 Abstract:
