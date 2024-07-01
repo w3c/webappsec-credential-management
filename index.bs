@@ -1186,7 +1186,7 @@ spec:css-syntax-3;
     1.  Let |sameOriginWithAncestors| be `true` if the [=current settings object=] is [=same-origin
         with its ancestors=], and `false` otherwise.
 
-    1. Let |permission| be |options| [=credential type registry/Create Permissions Policy=].
+    1. Let |permission| be |options|'s [=credential type registry/Create Permissions Policy=].
 
     1. If |permission| is not null, and |document| is **not** [=allowed to use=]
        the |permission| [=policy-controlled feature=], return [=a promise rejected with=]
