@@ -1189,7 +1189,7 @@ spec:css-syntax-3;
     1. Let |permission| be |options|'s [=credential type registry/Create Permissions Policy=].
 
     1. If |permission| is not null, and |document| is **not** [=allowed to use=] |permission|,
-        return [=a promise rejected with=] a "{{NotAllowedError}}" {{DOMException}}.
+       return [=a promise rejected with=] a "{{NotAllowedError}}" {{DOMException}}.
 
     1.  Let |interfaces| be the [=set=] of |options|' <a>relevant credential interface objects</a>.
 
