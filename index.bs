@@ -397,12 +397,13 @@ spec:css-syntax-3;
   * Each registry entry must state the [=credential type registry/Appropriate Interface Object=] [=identifier=] for the
     [=credential type registry/credential type=].
 
-  * Each registry entry must state the [=credential type registry/Get Permissions Policy=] [=permission=] used when executing <a abstract-op>Request a `Credential`</a>
-    for a [=credential type registry/credential type=], or null if no [=Document/permissions policy=] is specified.
+  * Each registry entry must state the [=credential type registry/Get Permissions Policy=] [=permission=]
+     used when executing <a abstract-op>Request a `Credential`</a> for 
+     a [=credential type registry/credential type=], or null if no [=Document/permissions policy=] is specified.
 
-  * Each registry entry must state the [=credential type registry/Create Permissions Policy=] [=permission=] used when executing <a abstract-op>Create a `Credential`</a>
-    for a [=credential type registry/credential type=], or null if no [=Document/permissions policy=] is specified.
-
+  * Each registry entry must state the [=credential type registry/Create Permissions Policy=] [=permission=]
+     used when executing <a abstract-op>Create a `Credential`</a> for 
+     a [=credential type registry/credential type=], or null if no [=Document/permissions policy=] is specified.
   * Each registry entry must include a link that references a publicly available specification
     defining the [=credential type registry/credential type=] and the [=dictionary member=] [=identifier=].
 
