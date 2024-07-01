@@ -1008,8 +1008,8 @@ spec:css-syntax-3;
 
         1. If |permission| is null, continue.
 
-        1. If |document| is **not** [=allowed to use=] |permission|, return [=a promise rejected with=] 
-            a "{{NotAllowedError}}" {{DOMException}}.
+        1. If |document| is **not** [=allowed to use=] |permission|, return 
+            [=a promise rejected with=] a "{{NotAllowedError}}" {{DOMException}}.
 
     1.  Let |p| be [=a new promise=].
 
