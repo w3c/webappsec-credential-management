@@ -951,7 +951,7 @@ spec:css-syntax-3;
     1.  Assert: |settings| is a [=secure context=].
 
     1.  If |settings|'s [=relevant global object=]'s [=associated Document=] is not [=Document/fully active=],
-        then return [=a promise rejected with=] "{{NotAllowedError}}" {{DOMException}}.
+        then return [=a promise rejected with=] "{{InvalidStateError}}" {{DOMException}}.
 
     1.  If <code>|options|.{{CredentialRequestOptions/signal}}</code> is [=AbortSignal/aborted=],
         then return [=a promise rejected with=]
