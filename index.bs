@@ -1007,7 +1007,9 @@ spec:css-syntax-3;
     1.  Let |sameOriginWithAncestors| be `true` if |settings| is [=same-origin with its
         ancestors=], and `false` otherwise.
 
-    1. For each |permission| in |options|' [=credential type registry/Get Permissions Policy=]:
+    1. For each |interface| in |options|' [=relevant credential interface objects=]:
+
+        1.  Let |permission| be the |interface|'s {{Credential/[[type]]}} [=credential type registry/Get Permissions Policy=].
 
         1. If |permission| is null, continue.
 
