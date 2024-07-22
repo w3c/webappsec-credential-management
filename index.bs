@@ -357,7 +357,7 @@ spec:css-syntax-3;
         <td>otp</td>
         <td>otp</td>
         <td>{{OTPCredential}}</td>
-        <td>otp-credentials</td>
+        <td>[=otp-credentials|otp-credentials-feature=]</td>
         <td>null</td>
         <td>[[WEB-OTP]]</td>
         <td><a href="https://wicg.io/">WICG</a></td>
