@@ -2116,17 +2116,17 @@ spec:css-syntax-3;
 
   When responding to a call to {{CredentialsContainer/get()}} on an origin which requires
   [=user mediation=], user agents MUST ask the user for permission to share credential information.
-  This SHOULD take the form of a <dfn export>credential chooser</dfn> which presents the user with a
+  This SHOULD take the form of a <dfn export data-local-lt="chooser">credential chooser</dfn> which presents the user with a
   list of credentials that are available for use on a site, allowing them to select one which should
-  be provided to the website, or to reject the request entirely.
+  be provided to the website, or to abort the request entirely.
 
-  The chooser interface SHOULD be implemented in such a way as to be distinguishable from UI which a
+  The [=chooser=]'s user interface SHOULD be implemented in such a way as to be distinguishable from UI which a
   website could produce. For example, the chooser might overlap the user agent's UI in some
   unspoofable way.
 
-  The chooser interface MUST include an indication of the origin which is requesting credentials.
+  The [=chooser=]'s user interface MUST include an indication of the origin which is requesting credentials.
 
-  The chooser interface SHOULD include all {{Credential}} objects associated with the origin that
+  The [=chooser=]'s user interface SHOULD include all {{Credential}} objects associated with the origin that
   requested credentials.
 
   User agents MAY internally associate information with each {{Credential}} object beyond the
