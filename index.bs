@@ -951,31 +951,30 @@ spec:css-syntax-3;
     1.  Assert: |settings| is a [=secure context=].
 
     1.  If |settings|'s [=relevant global object=]'s [=associated Document=] is not [=Document/fully active=],
-        then return [=a promise rejected with=] "{{NotAllowedError}}" {{DOMException}}.
+        then return [=a promise rejected with=] a "{{NotAllowedError}}" {{DOMException}}.
 
     1.  If <code>|options|.{{CredentialRequestOptions/signal}}</code> is [=AbortSignal/aborted=],
         then return [=a promise rejected with=]
         <code>|options|.{{CredentialRequestOptions/signal}}</code>'s [=AbortSignal/abort reason=].
 
-    1.  If <code>|options|.{{CredentialRequestOptions/mediation}}</code> is
-        "{{CredentialMediationRequirement/conditional}}":
+    1.  Let |interfaces| be |options|'s [=relevant credential interface objects=].
 
-        1.  For each |interface| in |options|' [=relevant credential interface objects=]:
+    1.  If |interfaces| is [=set/empty=], then return[=a promise rejected with=]
+        a "{{NotSupportedError}}" {{DOMException}}.
 
-            1.  If |interface| does not support {{CredentialMediationRequirement/conditional}}
-                [=user mediation=], return [=a promise rejected with=] a "{{TypeError}}" {{DOMException}}.
+    1.  [=set/For each=] |interface| of |interfaces|:
 
-    1.  Let |p| be [=a new promise=].
+        1.  If |options|.{{CredentialRequestOptions/mediation}} is
+            {{CredentialMediationRequirement/conditional}} and |interface| does
+            not support {{CredentialMediationRequirement/conditional}}
+            [=user mediation=], return [=a promise rejected with=]
+            a "{{TypeError}}" {{DOMException}}.
 
-    1. For each |interface| in |options|' <a>relevant credential interface objects</a>:
+        1.  If |settings|' [=active credential types=] [=set/contains=] |interface|'s
+            {{Credential/[[type]]}}, return [=a promise rejected with=]
+            a "{{NotAllowedError}}" {{DOMException}}.
 
-        1. If |settings|' [=active credential types=] [=set/contains=] |interface|'s
-            {{Credential/[[type]]}}, return [=a promise rejected with=] a "{{NotAllowedError}}"
-            {{DOMException}}.
-
-    1. For each |interface| in |options|' <a>relevant credential interface objects</a>:
-
-        1. [=set/Append=] |interface|'s {{Credential/[[type]]}} to |settings|'
+        1.  [=set/Append=] |interface|'s {{Credential/[[type]]}} to |settings|'
             [=active credential types=].
 
     1.  Let |origin| be |settings|' [=environment settings object/origin=].
@@ -998,6 +997,8 @@ spec:css-syntax-3;
         Note: <a const>`password`</a> and <a const>`federated`</a>
         [=credential type registry/credential types=] are not presently treated as
         [=policy-controlled features=], although this may change in the future.
+
+    1.  Let |p| be [=a new promise=].
 
     1.  Run the following steps [=in parallel=]:
 
@@ -1063,10 +1064,10 @@ spec:css-syntax-3;
 
     1. [=React=] to |p|:
 
-        1. For each |interface| in |options|' <a>relevant credential interface objects</a>:
+        1. For each |interface| in |interfaces|:
 
             1. [=set/Remove=] |interface|'s {{Credential/[[type]]}} from |settings|'
-                [=active credential types=].
+               [=active credential types=].
 
     1.  Return |p|.
   </ol>
