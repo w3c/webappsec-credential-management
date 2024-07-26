@@ -98,20 +98,15 @@ spec:css-syntax-3;
 </pre>
 <pre class="biblio">
 {
-  "FEDCM": {
-    "authors": [ "Sam Goto" ],
-    "href": "https://fedidcg.github.io/FedCM/",
-    "title": "FedCM API"
-  },
   "WEB-LOGIN": {
     "authors": [ "Jason Denizac", "Robin Berjon", "Anne van Kesteren" ],
     "href": "https://github.com/jden/web-login",
     "title": "web-login"
   },
-  "WEB-OTP": {
-    "authors": [ "Sam Goto" ],
-    "href": "https://wicg.github.io/web-otp/",
-    "title": "WebOTP API"
+  "DIGITAL-CREDENTIALS": {
+    "authors": [ "Marcos Cáceres", "Sam Goto" ],
+    "href": "https://wicg.github.io/digital-credentials/",
+    "title": "Digital Credentials"
   }
 }
 </pre>
@@ -325,14 +320,27 @@ spec:css-syntax-3;
         <small>(in alphabetical order)</small></th>
         <th><dfn for="credential type registry">Options Member Identifier</dfn></th>
         <th><dfn for="credential type registry">Appropriate Interface Object</dfn></th>
+        <th><dfn for="credential type registry">Get Permissions Policy</dfn></th>
+        <th><dfn for="credential type registry">Create Permissions Policy</dfn></th>
         <th>Specification</th>
         <th>Requestor Contact</th>
       </tr>
     </thead>
     <tr>
+        <td>digital-credential</td>
+        <td>digital</td>
+        <td>{{DigitalCredential}}</td>
+        <td>digital-credentials-get</td>
+        <td>null</td>
+        <td>[[DIGITAL-CREDENTIALS]]</td>
+        <td><a href="https://wicg.io/">WICG</a></td>
+    </tr>
+    <tr>
         <td>federated</td>
         <td>federated</td>
         <td>{{FederatedCredential}}</td>
+        <td>null</td>
+        <td>null</td>
         <td>This specification: [[#federated]]</td>
         <td><a href="https://www.w3.org/2011/webappsec/">W3C</a></td>
     </tr>
@@ -340,6 +348,8 @@ spec:css-syntax-3;
         <td>identity</td>
         <td>identity</td>
         <td>{{IdentityCredential}}</td>
+        <td>[=identity-credentials-get=]</td>
+        <td>null</td>
         <td>[[FEDCM]]</td>
         <td><a href="https://www.w3.org/community/fed-id/">W3C</a></td>
     </tr>
@@ -347,6 +357,8 @@ spec:css-syntax-3;
         <td>otp</td>
         <td>otp</td>
         <td>{{OTPCredential}}</td>
+        <td>[=otp-credentials-feature|otp-credentials=]</td>
+        <td>null</td>
         <td>[[WEB-OTP]]</td>
         <td><a href="https://wicg.io/">WICG</a></td>
     </tr>
@@ -354,6 +366,8 @@ spec:css-syntax-3;
         <td>password</td>
         <td>password</td>
         <td>{{PasswordCredential}}</td>
+        <td>null</td>
+        <td>null</td>
         <td>This specification: [[#passwords]]</td>
         <td><a href="https://www.w3.org/2011/webappsec/">W3C</a></td>
     </tr>
@@ -361,6 +375,8 @@ spec:css-syntax-3;
         <td>public-key</td>
         <td>publicKey</td>
         <td>{{PublicKeyCredential}}</td>
+        <td>[=publickey-credentials-get-feature|publickey-credentials-get=]</td>
+        <td>[=publickey-credentials-create-feature|publickey-credentials-create=]</td>
         <td>[[WEBAUTHN]]</td>
         <td><a href="https://www.w3.org/blog/webauthn/">W3C</a></td>
     </tr>
@@ -381,6 +397,14 @@ spec:css-syntax-3;
 
   * Each registry entry must state the [=credential type registry/Appropriate Interface Object=] [=identifier=] for the
     [=credential type registry/credential type=].
+
+  * Each registry entry must state the [=credential type registry/Get Permissions Policy=] [=permission=]
+    used when executing <a abstract-op>Request a `Credential`</a> for a
+    [=credential type registry/credential type=], or null if no [=Document/permissions policy=] is specified.
+
+  * Each registry entry must state the [=credential type registry/Create Permissions Policy=] [=permission=]
+    used when executing <a abstract-op>Create a `Credential`</a> for a
+    [=credential type registry/credential type=], or null if no [=Document/permissions policy=] is specified.
 
   * Each registry entry must include a link that references a publicly available specification
     defining the [=credential type registry/credential type=] and the [=dictionary member=] [=identifier=].
@@ -787,7 +811,7 @@ spec:css-syntax-3;
         see a [=credential chooser=] if necessary.
 
     :   <dfn>conditional</dfn>
-    ::  For {CredentialsContainer/get()}, discovered credentials are presented to the user in a non-modal dialog along with an
+    ::  For {{CredentialsContainer/get()}}, discovered credentials are presented to the user in a non-modal dialog along with an
         indication of the [=origin=] which is requesting credentials. If the user makes a gesture
         outside of the dialog, the dialog closes without resolving or rejecting the {{Promise}}
         returned by the {{CredentialsContainer/get()}} method and without causing a user-visible
@@ -806,7 +830,7 @@ spec:css-syntax-3;
         interfaces it refers to=] have overridden {{Credential/isConditionalMediationAvailable()}} to return
         a new {{Promise}} that [=resolves=] with `true`.
 
-        For {CredentialsContainer/create()}, if a user has previously consented to credential creation and
+        For {{CredentialsContainer/create()}}, if a user has previously consented to credential creation and
         the user agent knows it recently mediated an authentication, then the `create()` call may resolve without
         additional prominent modal interaction. If the user agent did not recently mediate an authentication or
         does not have consent for credential creation, then the call must throw a "{{NotAllowedError}}" {{DOMException}}.
@@ -950,8 +974,10 @@ spec:css-syntax-3;
 
     1.  Assert: |settings| is a [=secure context=].
 
-    1.  If |settings|'s [=relevant global object=]'s [=associated Document=] is not [=Document/fully active=],
-        then return [=a promise rejected with=] "{{InvalidStateError}}" {{DOMException}}.
+    1.  Let |document| be |settings|'s [=relevant global object=]'s [=associated Document=].
+
+    1.  If |document| is not [=Document/fully active=], then return [=a promise rejected with=]
+        an "{{InvalidStateError}}" {{DOMException}}.
 
     1.  If <code>|options|.{{CredentialRequestOptions/signal}}</code> is [=AbortSignal/aborted=],
         then return [=a promise rejected with=]
@@ -964,8 +990,6 @@ spec:css-syntax-3;
 
             1.  If |interface| does not support {{CredentialMediationRequirement/conditional}}
                 [=user mediation=], return [=a promise rejected with=] a "{{TypeError}}" {{DOMException}}.
-
-    1.  Let |p| be [=a new promise=].
 
     1. For each |interface| in |options|' <a>relevant credential interface objects</a>:
 
@@ -983,21 +1007,16 @@ spec:css-syntax-3;
     1.  Let |sameOriginWithAncestors| be `true` if |settings| is [=same-origin with its
         ancestors=], and `false` otherwise.
 
-    1.  If |options|[{{CredentialRequestOptions/identity}}] [=map/exists=] and
-        if |settings|' [=relevant global object=]'s [=associated Document=] is **not**
-        [=allowed to use=] the [=identity-credentials-get=]
-        [=policy-controlled feature=] return [=a promise rejected with=] a "{{NotAllowedError}}"
-        {{DOMException}}.
+    1. For each |interface| in |options|' [=relevant credential interface objects=]:
 
-    1.  If |options|[{{CredentialRequestOptions/publicKey}}] [=map/exists=] and
-        if |settings|' [=relevant global object=]'s [=associated Document=] is **not**
-        [=allowed to use=] the [=publickey-credentials-get-feature|publickey-credentials-get=]
-        [=policy-controlled feature=] return [=a promise rejected with=] a "{{NotAllowedError}}"
-        {{DOMException}}.
+        1. Let |permission| be the |interface|'s {{Credential/[[type]]}} [=credential type registry/Get Permissions Policy=].
 
-        Note: <a const>`password`</a> and <a const>`federated`</a>
-        [=credential type registry/credential types=] are not presently treated as
-        [=policy-controlled features=], although this may change in the future.
+        1. If |permission| is null, continue.
+
+        1. If |document| is **not** [=allowed to use=] |permission|, return
+           [=a promise rejected with=] a "{{NotAllowedError}}" {{DOMException}}.
+
+    1.  Let |p| be [=a new promise=].
 
     1.  Run the following steps [=in parallel=]:
 
@@ -1111,7 +1130,7 @@ spec:css-syntax-3;
     1.  Assert: |settings| is a [=secure context=].
 
     1.  If |settings|'s [=relevant global object=]'s [=associated Document=] is not [=Document/fully active=],
-        then return [=a promise rejected with=] "{{NotAllowedError}}" {{DOMException}}.
+        then return [=a promise rejected with=] an "{{InvalidStateError}}" {{DOMException}}.
 
     1.  Let |sameOriginWithAncestors| be `true` if the [=current settings object=] is [=same-origin
         with its ancestors=], and `false` otherwise.
@@ -1164,21 +1183,13 @@ spec:css-syntax-3;
 
     1.  Let |global| be |settings|' [=environment settings object/global object=].
 
-    1.  If |settings|'s [=relevant global object=]'s [=associated Document=] is not [=Document/fully active=],
-        then return [=a promise rejected with=] "{{NotAllowedError}}" {{DOMException}}.
+    1.  Let |document| be the [=relevant global object=]'s [=associated Document=].
+
+    1.  If |document| is not [=Document/fully active=], then return
+        [=a promise rejected with=] "{{InvalidState}}" {{DOMException}}.
 
     1.  Let |sameOriginWithAncestors| be `true` if the [=current settings object=] is [=same-origin
         with its ancestors=], and `false` otherwise.
-
-    1.  If |options|[{{CredentialCreationOptions/publicKey}}] [=map/exists=] and
-        if |settings|' [=relevant global object=]'s [=associated Document=] is **not**
-        [=allowed to use=] the [=publickey-credentials-create-feature|publickey-credentials-create=]
-        [=policy-controlled feature=] return [=a promise rejected with=] a "{{NotAllowedError}}"
-        {{DOMException}}.
-
-        Note: <a const>`password`</a> and <a const>`federated`</a>
-        [=credential type registry/credential types=] are not presently treated as
-        [=policy-controlled features=], although this may change in the future.
 
     1.  Let |interfaces| be the [=set=] of |options|' <a>relevant credential interface objects</a>.
 
@@ -1193,6 +1204,15 @@ spec:css-syntax-3;
             allow the user agent to help the user choose among one of many potential credential
             types in order to support a "sign-up" use case. For the moment, though, we're punting
             on that by restricting the dictionary to a single entry.
+
+    1. For each |interface| in |interfaces|:
+
+        1. Let |permission| be the |interface|'s {{Credential/[[type]]}} [=credential type registry/Create Permissions Policy=].
+
+        1. If |permission| is null, continue.
+
+        1. If |document| is **not** [=allowed to use=] |permission|, return
+           [=a promise rejected with=] a "{{NotAllowedError}}" {{DOMException}}.
 
     1.  If <code>|options|.{{CredentialRequestOptions/signal}}</code> is [=AbortSignal/aborted=],
         then return [=a promise rejected with=]
@@ -1251,7 +1271,7 @@ spec:css-syntax-3;
     1.  Let |origin| be |settings|' [=environment settings object/origin=].
 
     1.  If |settings|'s [=relevant global object=]'s [=associated Document=] is not [=Document/fully active=],
-        then return [=a promise rejected with=] "{{NotAllowedError}}" {{DOMException}}.
+        then return [=a promise rejected with=] an "{{InvalidStateError}}" {{DOMException}}.
 
     2.  Let |p| be [=a new promise=]
 
@@ -2116,17 +2136,17 @@ spec:css-syntax-3;
 
   When responding to a call to {{CredentialsContainer/get()}} on an origin which requires
   [=user mediation=], user agents MUST ask the user for permission to share credential information.
-  This SHOULD take the form of a <dfn export>credential chooser</dfn> which presents the user with a
+  This SHOULD take the form of a <dfn export data-local-lt="chooser">credential chooser</dfn> which presents the user with a
   list of credentials that are available for use on a site, allowing them to select one which should
-  be provided to the website, or to reject the request entirely.
+  be provided to the website, or to abort the request entirely.
 
-  The chooser interface SHOULD be implemented in such a way as to be distinguishable from UI which a
+  The [=chooser's=] user interface SHOULD be implemented in such a way as to be distinguishable from UI which a
   website could produce. For example, the chooser might overlap the user agent's UI in some
   unspoofable way.
 
-  The chooser interface MUST include an indication of the origin which is requesting credentials.
+  The [=chooser's=] user interface MUST include an indication of the origin which is requesting credentials.
 
-  The chooser interface SHOULD include all {{Credential}} objects associated with the origin that
+  The [=chooser's=] user interface SHOULD include all {{Credential}} objects associated with the origin that
   requested credentials.
 
   User agents MAY internally associate information with each {{Credential}} object beyond the
@@ -2134,7 +2154,7 @@ spec:css-syntax-3;
   example, favicons could help disambiguate identity providers, etc. Any additional information
   stored MUST not be exposed directly to the web.
 
-  The chooser's behavior is not defined here: user agents are encouraged to experiment with UI
+  The [=chooser's=] behavior is not defined here: user agents are encouraged to experiment with UI
   treatments that educate users about their authentication options, and guide them through the
   process of choosing a credential to present. That said, the interface to the chooser is as
   follows:
