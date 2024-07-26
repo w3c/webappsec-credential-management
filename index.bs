@@ -1186,7 +1186,7 @@ spec:css-syntax-3;
     1.  Let |document| be the [=relevant global object=]'s [=associated Document=].
 
     1.  If |document| is not [=Document/fully active=], then return
-        [=a promise rejected with=] "{{InvalidState}}" {{DOMException}}.
+        [=a promise rejected with=] an "{{InvalidStateError}}" {{DOMException}}.
 
     1.  Let |sameOriginWithAncestors| be `true` if the [=current settings object=] is [=same-origin
         with its ancestors=], and `false` otherwise.
