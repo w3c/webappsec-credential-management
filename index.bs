@@ -811,7 +811,7 @@ spec:css-syntax-3;
         see a [=credential chooser=] if necessary.
 
     :   <dfn>conditional</dfn>
-    ::  For {CredentialsContainer/get()}, discovered credentials are presented to the user in a non-modal dialog along with an
+    ::  For {{CredentialsContainer/get()}}, discovered credentials are presented to the user in a non-modal dialog along with an
         indication of the [=origin=] which is requesting credentials. If the user makes a gesture
         outside of the dialog, the dialog closes without resolving or rejecting the {{Promise}}
         returned by the {{CredentialsContainer/get()}} method and without causing a user-visible
@@ -830,7 +830,7 @@ spec:css-syntax-3;
         interfaces it refers to=] have overridden {{Credential/isConditionalMediationAvailable()}} to return
         a new {{Promise}} that [=resolves=] with `true`.
 
-        For {CredentialsContainer/create()}, if a user has previously consented to credential creation and
+        For {{CredentialsContainer/create()}}, if a user has previously consented to credential creation and
         the user agent knows it recently mediated an authentication, then the `create()` call may resolve without
         additional prominent modal interaction. If the user agent did not recently mediate an authentication or
         does not have consent for credential creation, then the call must throw a "{{NotAllowedError}}" {{DOMException}}.
@@ -2136,17 +2136,17 @@ spec:css-syntax-3;
 
   When responding to a call to {{CredentialsContainer/get()}} on an origin which requires
   [=user mediation=], user agents MUST ask the user for permission to share credential information.
-  This SHOULD take the form of a <dfn export>credential chooser</dfn> which presents the user with a
+  This SHOULD take the form of a <dfn export data-local-lt="chooser">credential chooser</dfn> which presents the user with a
   list of credentials that are available for use on a site, allowing them to select one which should
-  be provided to the website, or to reject the request entirely.
+  be provided to the website, or to abort the request entirely.
 
-  The chooser interface SHOULD be implemented in such a way as to be distinguishable from UI which a
+  The [=chooser's=] user interface SHOULD be implemented in such a way as to be distinguishable from UI which a
   website could produce. For example, the chooser might overlap the user agent's UI in some
   unspoofable way.
 
-  The chooser interface MUST include an indication of the origin which is requesting credentials.
+  The [=chooser's=] user interface MUST include an indication of the origin which is requesting credentials.
 
-  The chooser interface SHOULD include all {{Credential}} objects associated with the origin that
+  The [=chooser's=] user interface SHOULD include all {{Credential}} objects associated with the origin that
   requested credentials.
 
   User agents MAY internally associate information with each {{Credential}} object beyond the
@@ -2154,7 +2154,7 @@ spec:css-syntax-3;
   example, favicons could help disambiguate identity providers, etc. Any additional information
   stored MUST not be exposed directly to the web.
 
-  The chooser's behavior is not defined here: user agents are encouraged to experiment with UI
+  The [=chooser's=] behavior is not defined here: user agents are encouraged to experiment with UI
   treatments that educate users about their authentication options, and guide them through the
   process of choosing a credential to present. That said, the interface to the chooser is as
   follows:
