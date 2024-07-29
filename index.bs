@@ -997,8 +997,8 @@ spec:css-syntax-3;
             a "{{TypeError}}" {{DOMException}}.
 
         1. If |settings|' [=active credential types=] [=set/contains=] |interface|'s
-            {{Credential/[[type]]}}, return [=a promise rejected with=]
-            a "{{NotAllowedError}}" {{DOMException}}.
+            {{Credential/[[type]]}}, return [=a promise rejected with=] a "{{NotAllowedError}}"
+            {{DOMException}}.
 
         1. [=set/Append=] |interface|'s {{Credential/[[type]]}} to |settings|'
             [=active credential types=].
@@ -1016,8 +1016,6 @@ spec:css-syntax-3;
 
         1. If |document| is **not** [=allowed to use=] |permission|, return
            [=a promise rejected with=] a "{{NotAllowedError}}" {{DOMException}}.
-
-    1.  Let |p| be [=a new promise=].
 
     1.  Let |p| be [=a new promise=].
 
@@ -1088,7 +1086,7 @@ spec:css-syntax-3;
         1. For each |interface| in |interfaces|:
 
             1. [=set/Remove=] |interface|'s {{Credential/[[type]]}} from |settings|'
-               [=active credential types=].
+                [=active credential types=].
 
     1.  Return |p|.
   </ol>
