@@ -996,7 +996,7 @@ spec:css-syntax-3;
             [=user mediation=], return [=a promise rejected with=]
             a "{{TypeError}}" {{DOMException}}.
 
-        1.  If |settings|' [=active credential types=] [=set/contains=] |interface|'s
+        1. If |settings|' [=active credential types=] [=set/contains=] |interface|'s
             {{Credential/[[type]]}}, return [=a promise rejected with=]
             a "{{NotAllowedError}}" {{DOMException}}.
 
