@@ -1000,7 +1000,7 @@ spec:css-syntax-3;
             {{Credential/[[type]]}}, return [=a promise rejected with=]
             a "{{NotAllowedError}}" {{DOMException}}.
 
-        1.  [=set/Append=] |interface|'s {{Credential/[[type]]}} to |settings|'
+        1. [=set/Append=] |interface|'s {{Credential/[[type]]}} to |settings|'
             [=active credential types=].
 
     1.  Let |origin| be |settings|' [=environment settings object/origin=].
