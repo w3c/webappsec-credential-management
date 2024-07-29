@@ -443,7 +443,7 @@ spec:css-syntax-3;
         {{[[type]]}} slot, which specifies the [=credential/credential type=] represented by this object.
 
     :   <dfn method>isConditionalMediationAvailable()</dfn>
-    ::  Returns a new {{Promise}} that [=resolves=] with `true` if and only if the user agent supports the
+    ::  Returns a {{Promise}} that [=resolves=] with `true` if and only if the user agent supports the
         {{CredentialMediationRequirement/conditional}} approach to
         [[#mediation-requirements|mediation of credential requests]] for the [=credential/credential type=],
         `false` otherwise.
@@ -451,7 +451,7 @@ spec:css-syntax-3;
         {{Credential}}'s default implementation of {{Credential/isConditionalMediationAvailable()}}:
 
         <ol class="algorithm">
-            1.  Return a new {{Promise}} that immediately [=resolves=] with `false`.
+            1.  Return [=a promise resolved with=] with `false`.
         </ol>
 
         The specification for any [=credential/credential type=] supporting
@@ -462,14 +462,14 @@ spec:css-syntax-3;
         mediation is not supported for the [=credential/credential type=].
 
     :   <dfn method>willRequestConditionalCreation()</dfn>
-    ::  Returns a new {{Promise}} that [=resolves=] after the user agent registers the relying party's intention
+    ::  Returns a {{Promise}} that [=resolves=] after the user agent registers the relying party's intention
         to create a credential using the {{CredentialMediationRequirement/conditional}} approach to
         [[#mediation-requirements|mediation of credential creation]] for the [=credential/credential type=].
 
         {{Credential}}'s default implementation of {{Credential/willRequestConditionalCreation()}}:
 
         <ol class="algorithm">
-            1.  Return a new {{Promise}} that [=resolves=] with `undefined`.
+            1.  Return [=a promise resolved with=] `undefined`.
         </ol>
 
         Note: If this method is not present, {{CredentialMediationRequirement/conditional}}
@@ -828,7 +828,7 @@ spec:css-syntax-3;
         Websites can only pass {{CredentialMediationRequirement/conditional}} into the
         {{CredentialsContainer/get()}} method if all of the [=relevant credential interface objects|credential
         interfaces it refers to=] have overridden {{Credential/isConditionalMediationAvailable()}} to return
-        a new {{Promise}} that [=resolves=] with `true`.
+        a {{Promise}} that [=resolves=] with `true`.
 
         For {{CredentialsContainer/create()}}, if a user has previously consented to credential creation and
         the user agent knows it recently mediated an authentication, then the `create()` call may resolve without
@@ -1219,8 +1219,6 @@ spec:css-syntax-3;
         then return [=a promise rejected with=]
         <code>|options|.{{CredentialRequestOptions/signal}}</code>'s [=AbortSignal/abort reason=].
 
-    1.  Let |p| be [=a new promise=].
-
     1. Let |type| be |interfaces|[0]'s {{Credential/[[type]]}}.
 
     1. If |settings|' [=active credential types=] [=set/contains=] |type|, return
@@ -1229,6 +1227,8 @@ spec:css-syntax-3;
     1. [=set/Append=] |type| to |settings|' [=active credential types=].
 
     1.  Let |origin| be |settings|'s [=environment settings object/origin=].
+
+    1.  Let |p| be [=a new promise=].
 
     1.  Run the following steps [=in parallel=]:
 
@@ -1274,13 +1274,13 @@ spec:css-syntax-3;
     1.  If |settings|'s [=relevant global object=]'s [=associated Document=] is not [=Document/fully active=],
         then return [=a promise rejected with=] an "{{InvalidStateError}}" {{DOMException}}.
 
-    2.  Let |p| be [=a new promise=]
+    1.  Let |p| be [=a new promise=].
 
-    3.  Run the following seps [=in parallel=]:
+    1.  Run the following seps [=in parallel=]:
 
         1.  Set |origin|'s [=origin/prevent silent access flag=] in the [=credential store=].
 
-        2.  [=Resolve=] |p| with `undefined`.
+        1.  [=Resolve=] |p| with `undefined`.
 
     4.  Return |p|.
   </ol>
@@ -2475,7 +2475,7 @@ spec:css-syntax-3;
 
   1.  If the new credential type supports {{CredentialMediationRequirement/conditional}} [=user
       mediation=], define `ExampleCredential/isConditionalMediationAvailable()`
-      to return a new {{Promise}} that [=resolves=] with `true`.
+      to return [=a promise resolved with=] `true`.
 
   1.  Following the procedure in [[#sctn-registry-requirements]], add an entry to the
       [[#sctn-cred-type-registry|Credential Type Registry]] for the new
