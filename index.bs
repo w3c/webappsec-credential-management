@@ -995,7 +995,7 @@ spec:css-syntax-3;
     1. If |options|.{{CredentialRequestOptions/mediation}} was not passed,
        set |options|.{{CredentialRequestOptions/mediation}} to one of the following values:
         1. If the |interfaces| together define a [=Credential/default get mediation=], that enum value.
-        1. Otherwise, {{CredentialMediationRequirement/conditional}}.
+        1. Otherwise, {{CredentialMediationRequirement/optional}}.
 
     1.  [=set/For each=] |interface| of |interfaces|:
 
@@ -1206,7 +1206,7 @@ spec:css-syntax-3;
     1. If |options|.{{CredentialRequestOptions/mediation}} was not passed,
        set |options|.{{CredentialRequestOptions/mediation}} to one of the following values:
         1. If the |interfaces| together define a [=Credential/default create mediation=], that enum value.
-        1. Otherwise, {{CredentialMediationRequirement/conditional}}.
+        1. Otherwise, {{CredentialMediationRequirement/optional}}.
 
     1.  Return [=a promise rejected with=] `NotSupportedError` if any of the following statements
         are true:
