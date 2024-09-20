@@ -414,10 +414,10 @@ spec:css-syntax-3;
     [=credential type registry/credential type=], or null if no [=Document/permissions policy=] is specified.
 
   * Although {{CredentialsContainer/get()}} requests support querying for multiple types in the same request, 
-  not all combintations are allowed. Each registry entry must state a [=set=] of [=credential type registry/credential types=] 
-  that denotes the [=credential type registry/types allowed in the same get() request=] for that [=credential type registry/credential type=], 
-  or empty if it cannot be mixed with any other type in the same {{CredentialsContainer/get()}} request. 
-  Every [=credential type registry/credential type=] can mixed with itself in the same {{CredentialsContainer/get()}} request.
+    not all combintations are allowed. Each registry entry must state a [=set=] of [=credential type registry/credential types=] 
+    that denotes the [=credential type registry/Types allowed in the same get() request=] for that [=credential type registry/credential type=], 
+    or empty if it cannot be mixed with any other type in the same {{CredentialsContainer/get()}} request. 
+    Every [=credential type registry/credential type=] can mixed with itself in the same {{CredentialsContainer/get()}} request.
 
   * Each registry entry must include a link that references a publicly available specification
     defining the [=credential type registry/credential type=] and the [=dictionary member=] [=identifier=].
@@ -1006,7 +1006,7 @@ spec:css-syntax-3;
         1. Let |type1| be |interface1|'s {{Credential/[[type]]}} and Let |type2| be |interface2|'s {{Credential/[[type]]}} 
 
         1. If |type1|'s list of [=credential type registry/Types allowed in the same get() request=] doesn't contain |type2|, 
-        then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}. 
+            then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}. 
 
     1.  [=set/For each=] |interface| of |interfaces|:
 
