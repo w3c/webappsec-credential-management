@@ -415,8 +415,8 @@ spec:css-syntax-3;
 
   * Although {{CredentialsContainer/get()}} requests support querying for multiple types in the same request, 
     not all combintations are allowed. Each registry entry must state a [=set=] of [=credential type registry/credential types=] 
-    that denotes the [=credential type registry/Types allowed in the same get() request=] for that [=credential type registry/credential type=], 
-    or empty if it cannot be mixed with any other type in the same {{CredentialsContainer/get()}} request. 
+    that denotes the [=credential type registry/types allowed in the same get() request=] for that [=credential type registry/credential type=], 
+    or [=set/empty=] if it cannot be mixed with any other type in the same {{CredentialsContainer/get()}} request. 
     Every [=credential type registry/credential type=] can mixed with itself in the same {{CredentialsContainer/get()}} request.
 
   * Each registry entry must include a link that references a publicly available specification
@@ -1001,12 +1001,18 @@ spec:css-syntax-3;
     1.  If |interfaces| is [=set/empty=], then return[=a promise rejected with=]
         a "{{NotSupportedError}}" {{DOMException}}.
 
-    1.  [=set/For each=] |interface1| of |interfaces| and |interface2| of |interfaces|:
+    1.  [=set/For each=] |interface1| of |interfaces|:
 
-        1. Let |type1| be |interface1|'s {{Credential/[[type]]}} and Let |type2| be |interface2|'s {{Credential/[[type]]}} 
+        1. Let |type1| be |interface1|'s {{Credential/[[type]]}} 
 
-        1. If |type1|'s list of [=credential type registry/Types allowed in the same get() request=] doesn't contain |type2|, 
-            then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}. 
+        1.  [=set/For each=] |interface2| of |interfaces|:
+
+            1. Let |type2| be |interface2|'s {{Credential/[[type]]}} 
+
+            1. If |type1| equals |type2|, then continue
+
+            1. If |type1|'s list of [=credential type registry/types allowed in the same get() request=] doesn't contain |type2|, 
+                then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}. 
 
     1.  [=set/For each=] |interface| of |interfaces|:
 
