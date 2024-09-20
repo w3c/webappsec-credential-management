@@ -415,7 +415,7 @@ spec:css-syntax-3;
 
   * Although {{CredentialsContainer/get()}} requests support querying for multiple types in the same request, 
   not all combintations are allowed. Each registry entry must state a [=set=] of [=credential type registry/credential types=] 
-  that denotes the [=credential type registry/Types allowed in the same get() request=] for that [=credential type registry/credential type=], 
+  that denotes the [=credential type registry/types allowed in the same get() request=] for that [=credential type registry/credential type=], 
   or empty if it cannot be mixed with any other type in the same {{CredentialsContainer/get()}} request. 
   Every [=credential type registry/credential type=] can mixed with itself in the same {{CredentialsContainer/get()}} request.
 
