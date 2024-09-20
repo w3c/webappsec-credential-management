@@ -1011,7 +1011,7 @@ spec:css-syntax-3;
 
             1. If |type1| equals |type2|, then continue.
 
-            1. If |type1|'s list of [=credential type registry/types allowed in the same get() request=] doesn't contain |type2|, 
+            1. If |type1|'s list of [=credential type registry/types allowed in the same get() request=] doesn't [=set/contain] |type2|, 
                 then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}. 
 
     1.  [=set/For each=] |interface| of |interfaces|:
