@@ -322,6 +322,7 @@ spec:css-syntax-3;
         <th><dfn for="credential type registry">Appropriate Interface Object</dfn></th>
         <th><dfn for="credential type registry">Get Permissions Policy</dfn></th>
         <th><dfn for="credential type registry">Create Permissions Policy</dfn></th>
+        <th><dfn for="credential type registry">Types allowed in the same {{CredentialsContainer/get()}} request</dfn></th>
         <th>Specification</th>
         <th>Requestor Contact</th>
       </tr>
@@ -332,6 +333,7 @@ spec:css-syntax-3;
         <td>{{DigitalCredential}}</td>
         <td>digital-credentials-get</td>
         <td>null</td>
+        <td>[=set/empty=]</td>
         <td>[[DIGITAL-CREDENTIALS]]</td>
         <td><a href="https://wicg.io/">WICG</a></td>
     </tr>
@@ -341,6 +343,7 @@ spec:css-syntax-3;
         <td>{{FederatedCredential}}</td>
         <td>null</td>
         <td>null</td>
+        <td>password</td>
         <td>This specification: [[#federated]]</td>
         <td><a href="https://www.w3.org/2011/webappsec/">W3C</a></td>
     </tr>
@@ -350,6 +353,7 @@ spec:css-syntax-3;
         <td>{{IdentityCredential}}</td>
         <td>[=identity-credentials-get=]</td>
         <td>null</td>
+        <td>[=set/empty=]</td>
         <td>[[FEDCM]]</td>
         <td><a href="https://www.w3.org/community/fed-id/">W3C</a></td>
     </tr>
@@ -359,6 +363,7 @@ spec:css-syntax-3;
         <td>{{OTPCredential}}</td>
         <td>[=otp-credentials-feature|otp-credentials=]</td>
         <td>null</td>
+        <td>[=set/empty=]</td>
         <td>[[WEB-OTP]]</td>
         <td><a href="https://wicg.io/">WICG</a></td>
     </tr>
@@ -368,6 +373,7 @@ spec:css-syntax-3;
         <td>{{PasswordCredential}}</td>
         <td>null</td>
         <td>null</td>
+        <td>federated</td>
         <td>This specification: [[#passwords]]</td>
         <td><a href="https://www.w3.org/2011/webappsec/">W3C</a></td>
     </tr>
@@ -377,6 +383,7 @@ spec:css-syntax-3;
         <td>{{PublicKeyCredential}}</td>
         <td>[=publickey-credentials-get-feature|publickey-credentials-get=]</td>
         <td>[=publickey-credentials-create-feature|publickey-credentials-create=]</td>
+        <td>[=set/empty=]</td>
         <td>[[WEBAUTHN]]</td>
         <td><a href="https://www.w3.org/blog/webauthn/">W3C</a></td>
     </tr>
@@ -405,6 +412,12 @@ spec:css-syntax-3;
   * Each registry entry must state the [=credential type registry/Create Permissions Policy=] [=permission=]
     used when executing <a abstract-op>Create a `Credential`</a> for a
     [=credential type registry/credential type=], or null if no [=Document/permissions policy=] is specified.
+
+  * Although {{CredentialsContainer/get()}} requests support querying for multiple types in the same request, 
+  not all combintations are allowed. Each registry  entry must state a list of [=credential type registry/credential types=] 
+  that denotes the [=credential type registry/Types allowed in the same get() request=] for that [=credential type registry/credential type=], 
+  or empty if it cannot be mixed with any other type in the same {{CredentialsContainer/get()}} request. 
+  Every [=credential type registry/credential type=] can mixed with itself in the same {{CredentialsContainer/get()}} request.
 
   * Each registry entry must include a link that references a publicly available specification
     defining the [=credential type registry/credential type=] and the [=dictionary member=] [=identifier=].
@@ -987,6 +1000,13 @@ spec:css-syntax-3;
 
     1.  If |interfaces| is [=set/empty=], then return[=a promise rejected with=]
         a "{{NotSupportedError}}" {{DOMException}}.
+
+    1.  [=set/For each=] |interface1| of |interfaces| and |interface2| of |interfaces|:
+
+        1. Let |type1| be |interface1|'s {{Credential/[[type]]}} and Let |type2| be |interface2|'s {{Credential/[[type]]}} 
+
+        1. If |type1|'s list of [=credential type registry/Types allowed in the same get() request=] doesn't contain |type2|, 
+        then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}. 
 
     1.  [=set/For each=] |interface| of |interfaces|:
 
