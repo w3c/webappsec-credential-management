@@ -1009,7 +1009,7 @@ spec:css-syntax-3;
 
             1. Let |type2| be |interface2|'s {{Credential/[[type]]}}.
 
-            1. If |type1| equals |type2|, then continue
+            1. If |type1| equals |type2|, then continue.
 
             1. If |type1|'s list of [=credential type registry/types allowed in the same get() request=] doesn't contain |type2|, 
                 then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}. 
