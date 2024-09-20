@@ -998,7 +998,7 @@ spec:css-syntax-3;
 
     1.  Let |interfaces| be |options|'s [=relevant credential interface objects=].
 
-    1.  If |interfaces| is [=set/empty=], then return[=a promise rejected with=]
+    1.  If |interfaces| is [=set/empty=], then return [=a promise rejected with=]
         a "{{NotSupportedError}}" {{DOMException}}.
 
     1.  [=set/For each=] |interface1| of |interfaces|:
