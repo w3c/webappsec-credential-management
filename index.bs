@@ -1007,7 +1007,7 @@ spec:css-syntax-3;
 
         1.  [=set/For each=] |interface2| of |interfaces|:
 
-            1. Let |type2| be |interface2|'s {{Credential/[[type]]}} 
+            1. Let |type2| be |interface2|'s {{Credential/[[type]]}}.
 
             1. If |type1| equals |type2|, then continue
 
