@@ -1189,6 +1189,10 @@ spec:css-syntax-3;
     1.  If |document| is not [=Document/fully active=], then return
         [=a promise rejected with=] an "{{InvalidStateError}}" {{DOMException}}.
 
+    1.  If <code>|options|.{{CredentialRequestOptions/signal}}</code> is [=AbortSignal/aborted=],
+        then return [=a promise rejected with=]
+        <code>|options|.{{CredentialRequestOptions/signal}}</code>'s [=AbortSignal/abort reason=].
+
     1.  Let |sameOriginWithAncestors| be `true` if the [=current settings object=] is [=same-origin
         with its ancestors=], and `false` otherwise.
 
@@ -1214,10 +1218,6 @@ spec:css-syntax-3;
 
         1. If |document| is **not** [=allowed to use=] |permission|, return
            [=a promise rejected with=] a "{{NotAllowedError}}" {{DOMException}}.
-
-    1.  If <code>|options|.{{CredentialRequestOptions/signal}}</code> is [=AbortSignal/aborted=],
-        then return [=a promise rejected with=]
-        <code>|options|.{{CredentialRequestOptions/signal}}</code>'s [=AbortSignal/abort reason=].
 
     1. Let |type| be |interfaces|[0]'s {{Credential/[[type]]}}.
 
