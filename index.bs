@@ -569,7 +569,7 @@ spec:css-syntax-3;
     The algorithm either:
 
     * creates a {{Credential}}, or
-    * does not algorithmsedential and returns `null`, or
+    * does not create a credential and returns `null`, or
     * throws an error if creation fails due to exceptional situations
         (for example, incorrect options could produce a {{TypeError}}).
 
