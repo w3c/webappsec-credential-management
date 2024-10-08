@@ -569,7 +569,7 @@ spec:css-syntax-3;
     The algorithm either:
 
     * creates a {{Credential}}, or
-    * does not create a credential and returns `null`, or
+    * does not algorithmsedential and returns `null`, or
     * throws an error if creation fails due to exceptional situations
         (for example, incorrect options could produce a {{TypeError}}).
 
@@ -1189,6 +1189,10 @@ spec:css-syntax-3;
     1.  If |document| is not [=Document/fully active=], then return
         [=a promise rejected with=] an "{{InvalidStateError}}" {{DOMException}}.
 
+    1.  If <code>|options|.{{CredentialRequestOptions/signal}}</code> is [=AbortSignal/aborted=],
+        then return [=a promise rejected with=]
+        <code>|options|.{{CredentialRequestOptions/signal}}</code>'s [=AbortSignal/abort reason=].
+
     1.  Let |sameOriginWithAncestors| be `true` if the [=current settings object=] is [=same-origin
         with its ancestors=], and `false` otherwise.
 
@@ -1214,10 +1218,6 @@ spec:css-syntax-3;
 
         1. If |document| is **not** [=allowed to use=] |permission|, return
            [=a promise rejected with=] a "{{NotAllowedError}}" {{DOMException}}.
-
-    1.  If <code>|options|.{{CredentialRequestOptions/signal}}</code> is [=AbortSignal/aborted=],
-        then return [=a promise rejected with=]
-        <code>|options|.{{CredentialRequestOptions/signal}}</code>'s [=AbortSignal/abort reason=].
 
     1. Let |type| be |interfaces|[0]'s {{Credential/[[type]]}}.
 
