@@ -786,7 +786,8 @@ spec:css-syntax-3;
       "silent",
       "optional",
       "conditional",
-      "required"
+      "required",
+      "immediate"
     };
   </pre>
   <div dfn-for="CredentialMediationRequirement" dfn-type="enum-value">
@@ -843,6 +844,22 @@ spec:css-syntax-3;
         or [user-switching](#example-mediation-switch) scenarios. Further, the requirement is tied
         to a specific operation, and does not affect the [=origin/prevent silent access flag=] for the
         origin. To set that flag, developers should call {{preventSilentAccess()}}.
+
+    :   <dfn>immediate</dfn>
+    ::  The user agent will not hand over credentials without [=user mediation=], and will throw a
+        "{{NotAllowedError}}" {{DOMException}} if no credentials are available.
+
+        The [=origin/prevent silent access flag=] is ignored.
+
+        Websites can only use {{CredentialMediationRequirement/immediate}} if requesting the {{PublicKeyCredential}}
+        credential type, and if {{PublicKeyCredential/getClientCapabilities()}} indicates that the user
+        agent supports Immediate mediation.
+
+        Note: This specification does not provide a static method similar to
+        {{Credential/isConditionalMediationAvailable()}} to detect feature availability for {{CredentialMediationRequirement/immediate}}.
+        In future, if this mediation mode is expanded to include other credential types, a more general
+        approach to feature detection will be needed that can indicate which credential types are
+        supported under any given {{CredentialMediationRequirement}}.
   </div>
 
   #### Examples #### {#mediation-examples}
@@ -996,6 +1013,12 @@ spec:css-syntax-3;
             [=user mediation=], return [=a promise rejected with=]
             a "{{TypeError}}" {{DOMException}}.
 
+        1.  If |options|.{{CredentialRequestOptions/mediation}} is
+            {{CredentialMediationRequirement/immediate}} and |interface| does
+            not support {{CredentialMediationRequirement/immediate}}
+            [=user mediation=], return [=a promise rejected with=]
+            a "{{TypeError}}" {{DOMException}}.
+
         1. If |settings|' [=active credential types=] [=set/contains=] |interface|'s
             {{Credential/[[type]]}}, return [=a promise rejected with=] a "{{NotAllowedError}}"
             {{DOMException}}.
@@ -1041,6 +1064,9 @@ spec:css-syntax-3;
 
             1.  |options|.{{CredentialRequestOptions/mediation}} is not
                 "{{CredentialMediationRequirement/conditional}}".
+
+            1.  |options|.{{CredentialRequestOptions/mediation}} is not
+                "{{CredentialMediationRequirement/immediate}}".
 
             ISSUE: This might be the wrong model. It would be nice to support a site that wished
             to accept either username/passwords or webauthn-style credentials without forcing
