@@ -243,7 +243,7 @@ spec:css-syntax-3;
   A <dfn export>credential manager</dfn> is an application, hardware device, or service
   that [=credential store|stores=], organizes, manages,
   and allows [=credential chooser|choosing=] credentials.
-  Example credential managers include digital wallets, password managers,
+  Example credential managers include [=digital wallets=], password managers,
   and [=passkey=] managers.
 
   User agents MUST internally provide a <dfn export id="concept-credential-store">credential
