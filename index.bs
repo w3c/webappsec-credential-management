@@ -510,6 +510,10 @@ spec:css-syntax-3;
   internal slot named <dfn for="Credential" attribute>\[[origin]]</dfn>, which stores the [=origin=]
   for which the {{Credential}} may be [=effective=].
 
+  Credential interfaces can define a <dfn for="Credential" export>default get mediation</dfn> and
+  <dfn for="Credential" export>default create mediation</dfn> as an {{CredentialMediationRequirement}} enum value.
+  Together, they establish the default [[#mediation-requirements]] for when none are supplied by the developer.
+
   ### `Credential` Internal Methods ### {#credential-internal-methods}
   
   The {{Credential}} [=interface object=] features several [=internal methods=] facilitating 
@@ -706,7 +710,7 @@ spec:css-syntax-3;
 
   <pre class="idl">
     dictionary CredentialRequestOptions {
-      CredentialMediationRequirement mediation = "optional";
+      CredentialMediationRequirement mediation;
       AbortSignal signal;
     };
   </pre>
@@ -994,6 +998,11 @@ spec:css-syntax-3;
     1.  If |interfaces| is [=set/empty=], then return[=a promise rejected with=]
         a "{{NotSupportedError}}" {{DOMException}}.
 
+    1. If |options|.{{CredentialRequestOptions/mediation}} was not passed,
+       set |options|.{{CredentialRequestOptions/mediation}} to one of the following values:
+        1. If the |interfaces| together define a [=Credential/default get mediation=], that enum value.
+        1. Otherwise, {{CredentialMediationRequirement/optional}}.
+
     1.  [=set/For each=] |interface| of |interfaces|:
 
         1.  If |options|.{{CredentialRequestOptions/mediation}} is
@@ -1199,6 +1208,11 @@ spec:css-syntax-3;
         with its ancestors=], and `false` otherwise.
 
     1.  Let |interfaces| be the [=set=] of |options|' <a>relevant credential interface objects</a>.
+
+    1. If |options|.{{CredentialRequestOptions/mediation}} was not passed,
+       set |options|.{{CredentialRequestOptions/mediation}} to one of the following values:
+        1. If the |interfaces| together define a [=Credential/default create mediation=], that enum value.
+        1. Otherwise, {{CredentialMediationRequirement/optional}}.
 
     1.  Return [=a promise rejected with=] `NotSupportedError` if any of the following statements
         are true:
@@ -2482,6 +2496,16 @@ spec:css-syntax-3;
   1.  If the new credential type supports {{CredentialMediationRequirement/conditional}} [=user
       mediation=], define `ExampleCredential/isConditionalMediationAvailable()`
       to return [=a promise resolved with=] `true`.
+
+  1.  Optionally, define a [=Credential/default get mediation=] and, optionally, a [=Credential/default create mediation=].
+
+      <div class="example">
+        <blockquote>
+          The <strong>default get mediation</strong> for the `ExampleCredential` is "{{CredentialMediationRequirement/required}}".
+        </blockquote>
+      </div>
+
+      Additionally, a specification can add its own set of restriction around what mediations are allowed to be passed into the API.
 
   1.  Following the procedure in [[#sctn-registry-requirements]], add an entry to the
       [[#sctn-cred-type-registry|Credential Type Registry]] for the new
