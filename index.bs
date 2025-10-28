@@ -1020,7 +1020,7 @@ spec:css-syntax-3;
 
         1. If |permission| is null, continue.
 
-        1. If |document| is **not** [=allowed to use=] |permission|, return
+        1. If |document| is **not** [=/allowed to use=] |permission|, return
            [=a promise rejected with=] a "{{NotAllowedError}}" {{DOMException}}.
 
     1.  Let |p| be [=a new promise=].
@@ -1218,7 +1218,7 @@ spec:css-syntax-3;
 
         1. If |permission| is null, continue.
 
-        1. If |document| is **not** [=allowed to use=] |permission|, return
+        1. If |document| is **not** [=/allowed to use=] |permission|, return
            [=a promise rejected with=] a "{{NotAllowedError}}" {{DOMException}}.
 
     1.  If <code>|options|.{{CredentialRequestOptions/signal}}</code> is [=AbortSignal/aborted=],
@@ -2244,14 +2244,14 @@ spec:css-syntax-3;
   which restricts the endpoints to which data can be sent. In particular, developers should ensure
   that the following directives are set, explicitly or implicitly, in their pages' policies:
 
-  *   [=`script-src`=] and [=`object-src`=] both restrict script execution on a page, making
+  *   [=script-src=] and [=object-src=] both restrict script execution on a page, making
       it less likely that a cross-site scripting attack will succeed in the first place. If sites
-      are populating <{form}> elements, also [=`form-action`=] directives should be set.
+      are populating <{form}> elements, also [=form-action=] directives should be set.
 
-  *   [=`connect-src`=] restricts the origins to which <a lt=fetch(input)><code>fetch()</code></a>
-      may submit data (which mitigates the risk that credentials could be exfiltrated to `evil.com`.
+  *   [=connect-src=] restricts the origins to which <a lt=fetch(input)><code>fetch()</code></a>
+      may submit data (which mitigates the risk that credentials could be exfiltrated to `evil.com`).
 
-  *   [=`child-src`=] restricts the nested browsing contexts which may be embedded in a page,
+  *   [=child-src=] restricts the nested browsing contexts which may be embedded in a page,
       making it more difficult to inject a malicious `postMessage()` target. [[HTML]]
 
   Developers should, of course, also properly escape input and output, and consider using other
