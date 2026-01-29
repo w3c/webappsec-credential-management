@@ -707,7 +707,7 @@ spec:css-syntax-3;
   <pre class="idl">
     dictionary CredentialRequestOptions {
       CredentialMediationRequirement mediation = "optional";
-      CredentialUiModeRequirement uiMode = "active";
+      DOMString uiMode;
       AbortSignal signal;
     };
   </pre>
@@ -718,7 +718,7 @@ spec:css-syntax-3;
         Processing details are defined in [[#algorithm-request]].
     :   <dfn>uiMode</dfn>
     ::  This property specifies the user interface mode for a given credential request, when
-        the user agent is going to non-silently mediate the request. The meaning of each enum value
+        the user agent performs {{user mediation}}. The meaning of each value
         is described below in {{CredentialUiModeRequirement}}. Processing details are defined in
         [[#algorithm-request]].
     :   <dfn>signal</dfn>
@@ -862,27 +862,22 @@ spec:css-syntax-3;
   When making a request via {{get(options)}}, developers can set a case-by-case requirement for the
   desired type of [=user mediation=] by choosing the appropriate {{CredentialUiModeRequirement}} enum value.
 
-  Note: This allows callers to distinguish between different available forms of [=user mediation=], when it occurs. Whether
-  or not it occurs depends on the value of {{CredentialMediationRequirement}} for the request. Not all values of
+  The UI Mode requirement field has no default value. When unspecified, the
+  `[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)` method must consider 
+  {{CredentialMediationRequirement}} on its own in order to specify user agent behavior.
+
+  Note: This allows callers to distinguish between different available forms of [=user mediation=], when [=user mediation=] occurs.
+  Whether or not it occurs depends on the value of {{CredentialMediationRequirement}} for the request. Not all values of
   {{CredentialUiModeRequirement}} make sense in combination with all values of {{CredentialMediationRequirement}}, and the
   interaction depends on the `[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)` methods for credential
   types that support it.
 
   <pre class="idl">
     enum CredentialUiModeRequirement {
-      "active",
       "immediate"
     };
   </pre>
   <div dfn-for="CredentialUiModeRequirement" dfn-type="enum-value">
-    :   <dfn>active</dfn>
-    ::  If [=user mediation=] occurs for the given operation, then the user agent will show a modal dialog to the user
-        unless the selected {{CredentialMediationRequirement}} specifies otherwise.
-
-        Note: This is the default {{CredentialUiModeRequirement}} value. It is intended to preserve existing user agent 
-        behavior from before this enumeration was defined, which is that all {{CredentialMediationRequirement}} values
-        cause modal dialogs to be displayed except for {{CredentialMediationRequirement/conditional}}.
-
     :   <dfn>immediate</dfn>
     ::  On an invocation to {{CredentialsContainer/get()}}, the user agent will either show a modal credential selection
         dialog to the user, or the operation will immediately complete without providing credentials.
@@ -1102,9 +1097,6 @@ spec:css-syntax-3;
 
             1.  |options|.{{CredentialRequestOptions/mediation}} is not
                 "{{CredentialMediationRequirement/conditional}}".
-
-            1.  |options|.{{CredentialRequestOptions/uiMode}} is not
-                "{{CredentialUiModeRequirement/immediate}}".
 
             ISSUE: This might be the wrong model. It would be nice to support a site that wished
             to accept either username/passwords or webauthn-style credentials without forcing
