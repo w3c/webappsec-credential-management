@@ -692,6 +692,7 @@ spec:css-syntax-3;
   <pre class="idl">
     dictionary CredentialRequestOptions {
       CredentialMediationRequirement mediation = "optional";
+      DOMString uiMode;
       AbortSignal signal;
     };
   </pre>
@@ -700,6 +701,11 @@ spec:css-syntax-3;
     ::  This property specifies the mediation requirements for a given credential request. The
         meaning of each enum value is described below in {{CredentialMediationRequirement}}.
         Processing details are defined in [[#algorithm-request]].
+    :   <dfn>uiMode</dfn>
+    ::  This property specifies the user interface mode for a given credential request, when
+        the user agent performs [=user mediation=]. The meaning of each value
+        is described below in {{CredentialUiMode}}. Processing details are defined in
+        [[#algorithm-request]].
     :   <dfn>signal</dfn>
     ::  This property lets the developer abort an ongoing {{CredentialsContainer/get()}} operation.
         An aborted operation may complete normally (generally if the abort was received after the
@@ -836,11 +842,49 @@ spec:css-syntax-3;
         origin. To set that flag, developers should call {{preventSilentAccess()}}.
   </div>
 
+  ### UI Mode ### {#ui-mode}
+
+  When making a request via {{get(options)}}, developers can indicate a desired [=user mediation=] mode
+  by choosing the appropriate {{CredentialUiMode}} enum value.
+
+  The UI Mode field has no default value. When unspecified, the
+  `[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)` method must consider 
+  {{CredentialMediationRequirement}} on its own in order to specify user agent behavior.
+
+  Note: This allows callers to distinguish between different available forms of [=user mediation=], when [=user mediation=] occurs.
+  Whether or not UI is shown depends on the value of {{CredentialMediationRequirement}} for the request. Not all values of
+  {{CredentialUiMode}} make sense in combination with all values of {{CredentialMediationRequirement}}, and the
+  interaction depends on the `[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)` methods for credential
+  types that support it.
+
+  <pre class="idl">
+    enum CredentialUiMode {
+      "immediate"
+    };
+  </pre>
+  <div dfn-for="CredentialUiMode" dfn-type="enum-value">
+    :   <dfn>immediate</dfn>
+    ::  On an invocation to {{CredentialsContainer/get()}}, the user agent will either show a modal credential selection
+        dialog to the user, or the operation will immediately complete without providing credentials.
+
+        This provides the ability for simplified sign-in UI to be shown to the user, or else the website can take an
+        alternative action, such as showing its own sign-in page or continuing a non-signed-in user journey.
+
+        If no credentials are available to be displayed in a credential selection dialog, [=user mediation=]
+        will be skipped without, for instance, prompting the user to provide a credential.
+
+        Note: This specification does not provide a static method similar to
+        {{Credential/isConditionalMediationAvailable()}} to detect feature availability for {{CredentialUiMode/immediate}}.
+        In the future, if this mediation mode is expanded to include other credential types, a more general
+        approach to feature detection will be needed that can indicate which credential types are
+        supported under a given combination of {{CredentialMediationRequirement}} and {{CredentialUiMode}} values.
+  </div>
+
   #### Examples #### {#mediation-examples}
 
   <div class="example" id="example-mediation-silent">
     MegaCorp, Inc. wishes to seamlessly sign in users when possible. They can do so by calling
-    {{get()}} for all non-signed in users at some convinient point while a landing page is loading,
+    {{get()}} for all non-signed in users at some convenient point while a landing page is loading,
     passing in a {{CredentialRequestOptions/mediation}} member set to
     "{{CredentialMediationRequirement/silent}}". This ensures that users who have opted-into
     dropping the requirements for user mediation (as described in [[#user-mediation-requirement]])
@@ -863,7 +907,7 @@ spec:css-syntax-3;
   <div class="example" id="example-mediation-optional">
     When a user clicks "Sign In", MegaCorp, Inc. wishes to give them the smoothest possible
     experience. If they have [[#user-mediation-requirement|opted-into]] signing in without
-    [=user mediation=], and the user agent can unambigiously choose a credential, great! If
+    [=user mediation=], and the user agent can unambiguously choose a credential, great! If
     not, a [=credential chooser=] will be presented.
 
     <pre>
@@ -958,7 +1002,7 @@ spec:css-syntax-3;
 
   The <dfn abstract-op>Request a `Credential`</dfn> algorithm accepts a {{CredentialRequestOptions}}
   (|options|), and returns a {{Promise}} that resolves with a {{Credential}} if one can be
-  unambigiously obtained, or with `null` if not.
+  unambiguously obtained, or with `null` if not.
 
   <ol class="algorithm">
     1.  Let |settings| be the [=current settings object=].
@@ -984,6 +1028,12 @@ spec:css-syntax-3;
         1.  If |options|.{{CredentialRequestOptions/mediation}} is
             {{CredentialMediationRequirement/conditional}} and |interface| does
             not support {{CredentialMediationRequirement/conditional}}
+            [=user mediation=], return [=a promise rejected with=]
+            a "{{TypeError}}" {{DOMException}}.
+
+        1.  If |options|.{{CredentialRequestOptions/uiMode}} is
+            {{CredentialUiMode/immediate}} and |interface| does
+            not support {{CredentialUiMode/immediate}}
             [=user mediation=], return [=a promise rejected with=]
             a "{{TypeError}}" {{DOMException}}.
 
