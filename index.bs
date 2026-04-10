@@ -1055,13 +1055,13 @@ spec:css-syntax-3;
             {{CredentialMediationRequirement/conditional}} and |interface| does
             not support {{CredentialMediationRequirement/conditional}}
             [=user mediation=], return [=a promise rejected with=]
-            a "{{TypeError}}" {{DOMException}}.
+            a {{TypeError}}.
 
         1.  If |options|.{{CredentialRequestOptions/uiMode}} is
             {{CredentialUiMode/immediate}} and |interface| does
             not support {{CredentialUiMode/immediate}}
             [=user mediation=], return [=a promise rejected with=]
-            a "{{TypeError}}" {{DOMException}}.
+            a {{TypeError}}.
 
         1. If |settings|' [=active credential types=] [=set/contains=] |interface|'s
             {{Credential/[[type]]}}, return [=a promise rejected with=] a "{{NotAllowedError}}"
