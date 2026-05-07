@@ -498,6 +498,17 @@ spec:css-syntax-3;
         while the latter means that the user agent can discover credentials outside of those
         explicitly represented in the [=credential store=] via interaction with some external device
         or service.
+
+    :   <dfn for="Credential" attribute>\[[implicitMediation]]</dfn>
+    ::  The {{Credential}} [=interface object=] has an internal slot named `[[implicitMediation]]`,
+        which specifies the {{CredentialMediationRequirement}} that is always enforced for this
+        [=credential/credential type=], regardless of what the developer passes. Its value is null
+        unless otherwise specified by a subtype.
+
+        When {{Credential/[[implicitMediation]]}} is not null, the credential type behaves as if
+        the developer had passed that {{CredentialMediationRequirement}} value, and the user agent
+        MUST NOT reject based on the actual value of
+        {{CredentialRequestOptions/mediation}} for that [=credential/credential type=].
   </div>
 
   ISSUE: Talk to Tobie/Dominic about the [=interface object=] bits, here and in
@@ -1050,6 +1061,8 @@ spec:css-syntax-3;
                 then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}. 
 
     1.  [=set/For each=] |interface| of |interfaces|:
+
+        1.  If |interface|'s {{Credential/[[implicitMediation]]}} is not null, [=iteration/continue=].
 
         1.  If |options|.{{CredentialRequestOptions/mediation}} is
             {{CredentialMediationRequirement/conditional}} and |interface| does
