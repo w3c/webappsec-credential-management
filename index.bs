@@ -341,7 +341,7 @@ spec:css-syntax-3;
         <td>digital-credentials-create</td>
         <td>[=set/empty=]</td>
         <td>[[DIGITAL-CREDENTIALS]]</td>
-        <td><a href="https://wicg.io/">WICG</a></td>
+        <td><a href="https://www.w3.org/community/fed-id/">W3C</a></td>
     </tr>
     <tr>
         <td>federated</td>
