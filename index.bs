@@ -338,7 +338,7 @@ spec:css-syntax-3;
         <td>digital</td>
         <td>{{DigitalCredential}}</td>
         <td>digital-credentials-get</td>
-        <td>null</td>
+        <td>digital-credentials-create</td>
         <td>[=set/empty=]</td>
         <td>[[DIGITAL-CREDENTIALS]]</td>
         <td><a href="https://wicg.io/">WICG</a></td>
