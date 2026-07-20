@@ -508,6 +508,17 @@ spec:css-syntax-3;
   internal slot named <dfn for="Credential" attribute>\[[origin]]</dfn>, which stores the [=origin=]
   for which the {{Credential}} may be [=effective=].
 
+  <div class=note id="note-origin-bound-opaque">
+    When a credential type is [=Credential/origin bound=], each credential is tied to a single
+    [=origin=]. This binding can be cryptographic or a hard association. For example, a
+    {{PasswordCredential}} is only for the [=origin=] that stored it. Binding requires a real
+    [=origin=], such as <code>https://example.com</code>. An [=opaque origin=] is null. A null origin
+    is not a real origin, leaving nothing to bind to. Therefore, a request for an origin-bound
+    credential from an [=opaque origin=], such as a sandboxed {{HTMLIFrameElement}} or a
+    <code>data:</code> document, cannot be satisfied, and [[#algorithm-request]] rejects the request
+    with a {{SecurityError}}.
+  </div>
+
   ### `Credential` Internal Methods ### {#credential-internal-methods}
   
   The {{Credential}} [=interface object=] features several [=internal methods=] facilitating 
@@ -1075,6 +1086,12 @@ spec:css-syntax-3;
     1.  Let |sameOriginWithAncestors| be `true` if |settings| is [=same-origin with its
         ancestors=], and `false` otherwise.
 
+    1.  [=set/For each=] |interface| of |interfaces|:
+
+        1.  If instances of |interface| are [=Credential/origin bound=] and |origin| is
+            an [=opaque origin=], then return [=a promise rejected with=] a
+            "{{SecurityError}}" {{DOMException}}.
+
     1. For each |interface| in |options|' [=relevant credential interface objects=]:
 
         1. Let |permission| be the |interface|'s {{Credential/[[type]]}} [=credential type registry/Get Permissions Policy=].
@@ -1200,6 +1217,10 @@ spec:css-syntax-3;
     1.  If |settings|'s [=relevant global object=]'s [=associated Document=] is not [=Document/fully active=],
         then return [=a promise rejected with=] an "{{InvalidStateError}}" {{DOMException}}.
 
+    1.  If |credential| is [=Credential/origin bound=] and |settings|' [=environment settings
+        object/origin=] is an [=opaque origin=], return [=a promise rejected with=] a
+        "{{SecurityError}}" {{DOMException}}.
+
     1.  Let |sameOriginWithAncestors| be `true` if the [=current settings object=] is [=same-origin
         with its ancestors=], and `false` otherwise.
 
@@ -1294,6 +1315,10 @@ spec:css-syntax-3;
     1. [=set/Append=] |type| to |settings|' [=active credential types=].
 
     1.  Let |origin| be |settings|'s [=environment settings object/origin=].
+
+    1.  If instances of |interfaces|[0] are [=Credential/origin bound=] and |origin| is
+        an [=opaque origin=], return [=a promise rejected with=] a "{{SecurityError}}"
+        {{DOMException}}.
 
     1.  Let |p| be [=a new promise=].
 
