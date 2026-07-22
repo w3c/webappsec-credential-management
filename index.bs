@@ -498,15 +498,20 @@ spec:css-syntax-3;
         while the latter means that the user agent can discover credentials outside of those
         explicitly represented in the [=credential store=] via interaction with some external device
         or service.
+
+    :   <dfn for="Credential" attribute>\[[origin]]</dfn>
+    ::  The {{Credential}} [=interface object=] has an internal slot named `[[origin]]`,
+        which stores the [=origin=] for which the {{Credential}} may be [=effective=], or
+        null if the credential is not [=Credential/origin bound=]. Its value is null unless
+        otherwise specified by a subtype.
+
+        A {{Credential}} is <dfn for="Credential" export>origin bound</dfn> if its
+        {{Credential/[[origin]]}} slot is not null.
   </div>
 
   ISSUE: Talk to Tobie/Dominic about the [=interface object=] bits, here and in
   [[#algorithm-request]], etc. I'm not sure I've gotten the terminology right. [=interface prototype
   object=], maybe?
-
-  Some {{Credential}} objects are <dfn for="Credential" export>origin bound</dfn>: these contain an
-  internal slot named <dfn for="Credential" attribute>\[[origin]]</dfn>, which stores the [=origin=]
-  for which the {{Credential}} may be [=effective=].
 
   ### `Credential` Internal Methods ### {#credential-internal-methods}
   
@@ -1626,7 +1631,8 @@ spec:css-syntax-3;
     };
   </pre>
 
-  {{PasswordCredential}} objects are [=Credential/origin bound=].
+  {{PasswordCredential}} objects are [=Credential/origin bound=]: their {{Credential/[[origin]]}}
+  slot is set to the caller's [=origin=] at creation time.
 
   {{PasswordCredential}}'s [=interface object=] inherits {{Credential}}'s implementation of
   {{Credential/[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)}}, and defines
@@ -1955,7 +1961,8 @@ spec:css-syntax-3;
     };
   </pre>
 
-  {{FederatedCredential}} objects are [=Credential/origin bound=].
+  {{FederatedCredential}} objects are [=Credential/origin bound=]: their {{Credential/[[origin]]}}
+  slot is set to the caller's [=origin=] at creation time.
 
   {{FederatedCredential}}'s [=interface object=] inherits {{Credential}}'s implementation of
   {{Credential/[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)}},
