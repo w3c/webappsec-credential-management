@@ -284,7 +284,7 @@ spec:css-syntax-3;
   <!-- NOTE: '<h4>' maps to the same heading level as three hashs '###', thus using '<h5>' for the next section -->
   <h5 id="algorithm-same-origin-with-ancestors" algorithm>Same-Origin with its Ancestors</h5>
 
-  An [=environment settings object=] (|settings|) is <dfn noexport>same-origin with its
+  An [=environment settings object=] (|settings|) is <dfn>same-origin with its
   ancestors</dfn> if the following algorithm returns `true`:
 
   <ol class="algorithm">
