@@ -1266,7 +1266,9 @@ spec:css-syntax-3;
 
         1.  |global| does not have an [=associated Document=].
 
-        2.  |interfaces|' [=list/size=] is greater than 1.
+        2.  |interfaces|' [=list/size=] is 0.
+
+        3.  |interfaces|' [=list/size=] is greater than 1.
 
             Note: It may be reasonable at some point in the future to loosen this restriction, and
             allow the user agent to help the user choose among one of many potential credential
