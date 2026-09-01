@@ -511,12 +511,13 @@ spec:css-syntax-3;
   <div class=note id="note-origin-bound-opaque">
     When a credential type is [=Credential/origin bound=], each credential is tied to a single
     [=origin=]. This binding can be cryptographic or a hard association. For example, a
-    {{PasswordCredential}} is only for the [=origin=] that stored it. Binding requires a real
-    [=origin=], such as <code>https://example.com</code>. An [=opaque origin=] is null. A null origin
-    is not a real origin, leaving nothing to bind to. Therefore, a request for an origin-bound
-    credential from an [=opaque origin=], such as a sandboxed {{HTMLIFrameElement}} or a
-    <code>data:</code> document, cannot be satisfied, and [[#algorithm-request]] rejects the request
-    with a {{SecurityError}}.
+    {{PasswordCredential}} is only for the [=origin=] that stored it. Binding requires a [=tuple
+    origin=], such as <code>https://example.com</code>. An [=opaque origin=] is an internal value
+    whose only meaningful operation is testing for equality, so there is nothing for a credential to
+    be bound to. A document has an [=opaque origin=] when it is sandboxed without
+    `allow-same-origin`, or when it is a <code>data:</code> document. Therefore a request for an
+    origin-bound credential from such a document cannot be satisfied, and [[#algorithm-request]],
+    [[#algorithm-create]], and [[#algorithm-store]] reject it with a {{SecurityError}}.
   </div>
 
   ### `Credential` Internal Methods ### {#credential-internal-methods}
@@ -1060,6 +1061,14 @@ spec:css-syntax-3;
             1. If |type1|'s [=credential type registry/types allowed in the same get() request=] doesn't [=set/contain=] |type2|, 
                 then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}. 
 
+    1.  Let |origin| be |settings|' [=environment settings object/origin=].
+
+    1.  [=set/For each=] |interface| of |interfaces|:
+
+        1.  If instances of |interface| are [=Credential/origin bound=] and |origin| is
+            an [=opaque origin=], then return [=a promise rejected with=] a
+            "{{SecurityError}}" {{DOMException}}.
+
     1.  [=set/For each=] |interface| of |interfaces|:
 
         1.  If |options|.{{CredentialRequestOptions/mediation}} is
@@ -1081,16 +1090,8 @@ spec:css-syntax-3;
         1. [=set/Append=] |interface|'s {{Credential/[[type]]}} to |settings|'
             [=active credential types=].
 
-    1.  Let |origin| be |settings|' [=environment settings object/origin=].
-
     1.  Let |sameOriginWithAncestors| be `true` if |settings| is [=same-origin with its
         ancestors=], and `false` otherwise.
-
-    1.  [=set/For each=] |interface| of |interfaces|:
-
-        1.  If instances of |interface| are [=Credential/origin bound=] and |origin| is
-            an [=opaque origin=], then return [=a promise rejected with=] a
-            "{{SecurityError}}" {{DOMException}}.
 
     1. For each |interface| in |options|' [=relevant credential interface objects=]:
 
@@ -1307,18 +1308,18 @@ spec:css-syntax-3;
         then return [=a promise rejected with=]
         <code>|options|.{{CredentialRequestOptions/signal}}</code>'s [=AbortSignal/abort reason=].
 
+    1.  Let |origin| be |settings|'s [=environment settings object/origin=].
+
+    1.  If instances of |interfaces|[0] are [=Credential/origin bound=] and |origin| is
+        an [=opaque origin=], return [=a promise rejected with=] a "{{SecurityError}}"
+        {{DOMException}}.
+
     1. Let |type| be |interfaces|[0]'s {{Credential/[[type]]}}.
 
     1. If |settings|' [=active credential types=] [=set/contains=] |type|, return
         [=a promise rejected with=] a "{{NotAllowedError}}" {{DOMException}}.
 
     1. [=set/Append=] |type| to |settings|' [=active credential types=].
-
-    1.  Let |origin| be |settings|'s [=environment settings object/origin=].
-
-    1.  If instances of |interfaces|[0] are [=Credential/origin bound=] and |origin| is
-        an [=opaque origin=], return [=a promise rejected with=] a "{{SecurityError}}"
-        {{DOMException}}.
 
     1.  Let |p| be [=a new promise=].
 
