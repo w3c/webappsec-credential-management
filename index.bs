@@ -509,15 +509,13 @@ spec:css-syntax-3;
   for which the {{Credential}} may be [=effective=].
 
   <div class=note id="note-origin-bound-opaque">
-    When a credential type is [=Credential/origin bound=], each credential is tied to a single
-    [=origin=]. This binding can be cryptographic or a hard association. For example, a
-    {{PasswordCredential}} is only for the [=origin=] that stored it. Binding requires a [=tuple
-    origin=], such as <code>https://example.com</code>. An [=opaque origin=] is an internal value
-    whose only meaningful operation is testing for equality, so there is nothing for a credential to
-    be bound to. A document has an [=opaque origin=] when it is sandboxed without
-    `allow-same-origin`, or when it is a <code>data:</code> document. Therefore a request for an
-    origin-bound credential from such a document cannot be satisfied, and [[#algorithm-request]],
-    [[#algorithm-create]], and [[#algorithm-store]] reject it with a {{SecurityError}}.
+    Some credential types are [=Credential/origin bound=]: a credential belongs to one [=origin=],
+    and only that [=origin=] can use it. A {{PasswordCredential}}, for example, is only for the site
+    that stored it.
+
+    A document has an [=opaque origin=] if it is sandboxed without `allow-same-origin`, or if it came
+    from a <code>data:</code> URL. An [=opaque origin=] serializes to `null`, and nothing can be
+    recreated from that, so there is no [=origin=] to bind a credential to.
   </div>
 
   ### `Credential` Internal Methods ### {#credential-internal-methods}
