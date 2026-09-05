@@ -552,10 +552,10 @@ spec:css-syntax-3;
     is called [=in parallel=] with an [=environment settings object/origin=], a {{CredentialRequestOptions}} object,
     and a boolean which is true if and only if the caller's [=environment settings object=] is
     [=same-origin with its ancestors=].
-    It returns a {{Credential}} if one can be
+    It returns a {{Credential}} or a [=sequence=] of {{Credential}}s if one or more can be
     returned given the options provided, `null` if no credential is available, or throws an
     error if discovery fails (for example, incorrect options could produce a {{TypeError}}).
-    If this kind of {{Credential}} is only [=effective=] for a single use or a limited time,
+    If this kind of {{Credential}} or [=sequence=] of {{Credential}}s is only [=effective=] for a single use or a limited time,
     this method is responsible for generating new [=credentials=] using a [=credential source=].
 
     {{Credential}}'s default implementation of
@@ -645,7 +645,7 @@ spec:css-syntax-3;
   <pre class="idl">
     [Exposed=Window, SecureContext]
     interface CredentialsContainer {
-      Promise&lt;Credential?&gt; get(optional CredentialRequestOptions options = {});
+      Promise&lt;(Credential or sequence&lt;Credential&gt;)?&gt; get(optional CredentialRequestOptions options = {});
       Promise&lt;undefined&gt; store(Credential credential);
       Promise&lt;Credential?&gt; create(optional CredentialCreationOptions options = {});
       Promise&lt;undefined&gt; preventSilentAccess();
@@ -1026,7 +1026,7 @@ spec:css-syntax-3;
   <h4 id="algorithm-request" algorithm>Request a `Credential`</h4>
 
   The <dfn abstract-op>Request a `Credential`</dfn> algorithm accepts a {{CredentialRequestOptions}}
-  (|options|), and returns a {{Promise}} that resolves with a {{Credential}} if one can be
+  (|options|), and returns a {{Promise}} that resolves with a {{Credential}} or a [=sequence=] of {{Credential}}s if they can be
   unambiguously obtained, or with `null` if not.
 
   <ol class="algorithm">
@@ -1155,9 +1155,9 @@ spec:css-syntax-3;
 
                 1. Terminate these substeps.
 
-        1.  Assert: |result| is `null`, or a {{Credential}}.
+        1.  Assert: |result| is `null`, a {{Credential}}, or a [=sequence=] of {{Credential}}s.
 
-        1.  If |result| is a {{Credential}}, [=resolve=] |p| with |result|.
+        1.  If |result| is a {{Credential}} or a [=sequence=] of {{Credential}}s, [=resolve=] |p| with |result|.
 
         1.  If |result| is `null` and |options|.{{CredentialRequestOptions/mediation}} is not
             {{CredentialMediationRequirement/conditional}}, [=resolve=] |p| with |result|.
