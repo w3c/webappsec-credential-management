@@ -884,10 +884,24 @@ spec:css-syntax-3;
 
   <pre class="idl">
     enum CredentialUiMode {
-      "immediate"
+      "active",
+      "immediate",
+      "passive"
     };
   </pre>
   <div dfn-for="CredentialUiMode" dfn-type="enum-value">
+    :   <dfn>active</dfn>
+    ::  On an invocation to {{CredentialsContainer/get()}}, the user agent will show a credential selection
+        dialog to the user. The dialog SHOULD be suitable for signing in from pages that are not primarily designed
+        to help the user sign in.
+
+        When paired with {{CredentialMediationRequirement/conditional}}, it signals the user agent that it should display
+        an alternative user interface to autofill. This contrasts with {{CredentialUiMode/passive}} in that the UI should
+        be more direct and obvious, possibly requiring user interaction before continuing.
+
+        It can have other meanings depending on the
+        `[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)` specification.
+
     :   <dfn>immediate</dfn>
     ::  On an invocation to {{CredentialsContainer/get()}}, the user agent will either show a modal credential selection
         dialog to the user, or the operation will immediately complete without providing credentials.
@@ -903,6 +917,18 @@ spec:css-syntax-3;
         In the future, if this mediation mode is expanded to include other credential types, a more general
         approach to feature detection will be needed that can indicate which credential types are
         supported under a given combination of {{CredentialMediationRequirement}} and {{CredentialUiMode}} values.
+
+    :   <dfn>passive</dfn>
+    ::  On an invocation to {{CredentialsContainer/get()}}, the user agent will show a credential selection
+        dialog to the user. The dialog SHOULD be suitable for signing in from pages that are not primarily designed
+        to help the user sign in.
+
+        When paired with {{CredentialMediationRequirement/conditional}}, it signals the user agent that it should display
+        a minimally-disruptive alternative user interface to autofill. This contrasts with {{CredentialUiMode/active}} in
+        that the UI should be easier for the user to ignore and continue on their current task.
+
+        It can have other meanings depending on the
+        `[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)` specification.
   </div>
 
   #### Examples #### {#mediation-examples}
@@ -1082,6 +1108,18 @@ spec:css-syntax-3;
             not support {{CredentialUiMode/immediate}}
             [=user mediation=], return [=a promise rejected with=]
             a {{TypeError}}.
+
+        1.  If |options|.{{CredentialRequestOptions/uiMode}} is
+            {{CredentialUiMode/passive}} and |interface| does
+            not support {{CredentialUiMode/passive}}
+            [=user mediation=], return [=a promise rejected with=]
+            a "{{TypeError}}" {{DOMException}}.
+
+        1.  If |options|.{{CredentialRequestOptions/uiMode}} is
+            {{CredentialUiMode/active}} and |interface| does
+            not support {{CredentialUiMode/active}}
+            [=user mediation=], return [=a promise rejected with=]
+            a "{{TypeError}}" {{DOMException}}.
 
         1. If |settings|' [=active credential types=] [=set/contains=] |interface|'s
             {{Credential/[[type]]}}, return [=a promise rejected with=] a "{{NotAllowedError}}"
