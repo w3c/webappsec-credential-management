@@ -1110,7 +1110,7 @@ spec:css-syntax-3;
             `Credential`s from the credential store</a>, given |origin|, |options|, and
             |sameOriginWithAncestors|.
 
-        1.  If |credentials| is an [=exception=], [=reject=] |p| with |credentials|.
+        1.  If that threw an [=exception=], [=reject=] |p| with the thrown exception and             skip the remaining steps.
 
         1.  If all of the following statements are true, resolve |p| with |credentials|[0] and
             skip the remaining steps:
