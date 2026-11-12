@@ -499,16 +499,16 @@ spec:css-syntax-3;
         explicitly represented in the [=credential store=] via interaction with some external device
         or service.
 
-    :   <dfn for="Credential" attribute>\[[implicitMediation]]</dfn>
+    :   <dfn attribute>\[[implicitMediation]]</dfn>
     ::  The {{Credential}} [=interface object=] has an internal slot named `[[implicitMediation]]`,
         which specifies the {{CredentialMediationRequirement}} that is always enforced for this
-        [=credential/credential type=], regardless of what the developer passes. Its value is null
+        [=credential/credential type=], regardless of what the developer passes. Its value is `null`
         unless otherwise specified by a subtype.
 
-        When {{Credential/[[implicitMediation]]}} is not null, the credential type behaves as if
-        the developer had passed that {{CredentialMediationRequirement}} value, and the user agent
-        MUST NOT reject based on the actual value of
-        {{CredentialRequestOptions/mediation}} for that [=credential/credential type=].
+        Note: When {{Credential/[[implicitMediation]]}} is not `null`, both
+        <a abstract-op>Request a `Credential`</a> and <a abstract-op>Create a `Credential`</a>
+        override the operation's mediation requirement with {{Credential/[[implicitMediation]]}},
+        and <a abstract-op>Request a `Credential`</a> ignores {{CredentialRequestOptions/uiMode}}.
   </div>
 
   ISSUE: Talk to Tobie/Dominic about the [=interface object=] bits, here and in
@@ -1072,6 +1072,10 @@ spec:css-syntax-3;
             1. If |type1|'s [=credential type registry/types allowed in the same get() request=] doesn't [=set/contain=] |type2|, 
                 then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}. 
 
+            1. If |interface1|'s {{Credential/[[implicitMediation]]}} is not |interface2|'s
+                {{Credential/[[implicitMediation]]}}, then return [=a promise rejected with=] a
+                "{{NotSupportedError}}" {{DOMException}}.
+
     1.  Let |origin| be |settings|' [=environment settings object/origin=].
 
     1.  [=set/For each=] |interface| of |interfaces|:
@@ -1080,9 +1084,14 @@ spec:css-syntax-3;
             an [=opaque origin=], then return [=a promise rejected with=] a
             "{{SecurityError}}" {{DOMException}}.
 
-    1.  [=set/For each=] |interface| of |interfaces|:
+    1.  If |interfaces|[0]'s {{Credential/[[implicitMediation]]}} is not `null`:
 
-        1.  If |interface|'s {{Credential/[[implicitMediation]]}} is not null, [=iteration/continue=].
+        1.  Set |options|["{{CredentialRequestOptions/mediation}}"] to |interfaces|[0]'s
+            {{Credential/[[implicitMediation]]}}.
+
+        1.  [=map/Remove=] |options|["{{CredentialRequestOptions/uiMode}}"].
+
+    1.  [=set/For each=] |interface| of |interfaces|:
 
         1.  If |options|.{{CredentialRequestOptions/mediation}} is
             {{CredentialMediationRequirement/conditional}} and |interface| does
@@ -1328,6 +1337,12 @@ spec:css-syntax-3;
         1.  If instances of |interface| are [=Credential/origin bound=] and |origin| is
             an [=opaque origin=], return [=a promise rejected with=] a "{{SecurityError}}"
             {{DOMException}}.
+
+    1.  If |interfaces| is not [=set/empty=] and |interfaces|[0]'s
+        {{Credential/[[implicitMediation]]}} is not `null`:
+
+        1.  Set |options|["{{CredentialCreationOptions/mediation}}"] to |interfaces|[0]'s
+            {{Credential/[[implicitMediation]]}}.
 
     1. Let |type| be |interfaces|[0]'s {{Credential/[[type]]}}.
 
@@ -2584,6 +2599,10 @@ spec:css-syntax-3;
   1.  If the new credential type supports {{CredentialMediationRequirement/conditional}} [=user
       mediation=], define `ExampleCredential/isConditionalMediationAvailable()`
       to return [=a promise resolved with=] `true`.
+
+  1.  If the new credential type always enforces a fixed {{CredentialMediationRequirement}},
+      define the value of the `ExampleCredential` [=interface object=]'s
+      {{Credential/[[implicitMediation]]}} slot accordingly.
 
   1.  Following the procedure in [[#sctn-registry-requirements]], add an entry to the
       [[#sctn-cred-type-registry|Credential Type Registry]] for the new
