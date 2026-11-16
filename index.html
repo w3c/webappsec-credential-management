@@ -5,9 +5,9 @@
   <title>Credential Management Level 1</title>
   <meta content="ED" name="w3c-status">
   <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED" rel="stylesheet">
-  <meta content="Bikeshed version ac92c2f0d, updated Fri Aug 21 16:01:29 2026 -0700" name="generator">
+  <meta content="Bikeshed version e0b165ae4, updated Mon Nov 2 15:16:49 2026 -0800" name="generator">
   <link href="https://www.w3.org/TR/credential-management-1/" rel="canonical">
-  <meta content="0a74859abde0e0717f34d79835de94a12431291a" name="revision">
+  <meta content="ead9f78b706c9b220151b171f4ceb2ddd3076c50" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>/* Boilerplate: style-autolinks */
@@ -360,14 +360,17 @@ figure.table figcaption:not(.no-marker)::before {
     height: auto;
     max-height: 500px;
     overflow: auto;
+    margin: 0;
     padding: 0.5em 0.75em;
     font: small Helvetica Neue, sans-serif, Droid Sans Fallback;
     background: var(--dfnpanel-bg);
     color: var(--dfnpanel-text);
     border: outset 0.2em;
     white-space: normal; /* in case it's moved into a pre */
+    inset: auto;
+    position-area: bottom span-right;
+    position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
 }
-.dfn-panel:not(.on) { display: none; }
 .dfn-panel * { margin: 0; padding: 0; text-indent: 0; }
 .dfn-panel > b { display: block; }
 .dfn-panel a { color: var(--dfnpanel-text); }
@@ -387,6 +390,9 @@ figure.table figcaption:not(.no-marker)::before {
 .dfn-panel.activated {
     display: inline-block;
     position: fixed;
+    position-area: none;
+    top: auto;
+    right: auto;
     left: 8px;
     bottom: 2em;
     margin: 0 auto;
@@ -443,7 +449,8 @@ figure.table figcaption:not(.no-marker)::before {
     opacity: 1;
 }
 
-.dfn-paneled[role="button"] { cursor: help; }
+.dfn-paneled { cursor: help; }
+.dfn-paneled > .dfn-panelbutton { all: unset; }
 
 .highlighted {
     animation: target-fade 3s;
@@ -559,11 +566,10 @@ a[href].issue-return {
 	vertical-align: top;
 }
 .mdn-anno > .feature {
-	margin-top: 20px;
+	margin-top: 6px;
 }
 .mdn-anno > .feature:not(:first-of-type) {
 	border-top: 1px solid #999;
-	margin-top: 6px;
 	padding-top: 2px;
 }
 .mdn-anno > .feature > .less-than-two-engines-text {
@@ -997,7 +1003,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
 </p>
    <h1>Credential Management Level 1</h1>
    <p id="w3c-state"><a href="https://www.w3.org/standards/types/#ED">Editor’s Draft</a>,
-    <time class="dt-updated" datetime="2026-09-03">3 September 2026</time></p>
+    <time class="dt-updated" datetime="2026-11-16">16 November 2026</time></p>
    <details open>
     <summary>More details about this document</summary>
     <div data-fill-with="spec-metadata">
@@ -2145,7 +2151,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
          <li data-md>
           <p>Let <var>type2</var> be <var>interface2</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot⑤">[[type]]</a></code>.</p>
          <li data-md>
-          <p>If <var>type1</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-equal" id="ref-for-set-equal">equals</a> <var>type2</var>, then continue.</p>
+          <p>If <var>type1</var> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#string-is" id="ref-for-string-is">is</a> <var>type2</var>, then continue.</p>
          <li data-md>
           <p>If <var>type1</var>’s <a data-link-type="dfn" href="#credential-type-registry-types-allowed-in-the-same-get-request" id="ref-for-credential-type-registry-types-allowed-in-the-same-get-request①">types allowed in the same get() request</a> doesn’t <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain">contain</a> <var>type2</var>,
   then return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with③">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notsupportederror" id="ref-for-notsupportederror①">NotSupportedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException④">DOMException</a></code>.</p>
@@ -3917,10 +3923,10 @@ partial dictionary CredentialCreationOptions {
      <li><span class="dfn-paneled" id="7f9469b5">ASCII case-insensitive</span>
      <li><span class="dfn-paneled" id="ae8def21">contain</span>
      <li><span class="dfn-paneled" id="03afaf9c">empty</span>
-     <li><span class="dfn-paneled" id="9e466493">equal</span>
      <li><span class="dfn-paneled" id="1243a891">exist</span>
      <li><span class="dfn-paneled" id="16d07e10">for each <small>(for list)</small></span>
      <li><span class="dfn-paneled" id="45209803">for each <small>(for map)</small></span>
+     <li><span class="dfn-paneled" id="7a87d819">is</span>
      <li><span class="dfn-paneled" id="99c988d6">remove</span>
      <li><span class="dfn-paneled" id="15e48c39">set</span>
      <li><span class="dfn-paneled" id="0204d188">size</span>
@@ -3952,7 +3958,7 @@ partial dictionary CredentialCreationOptions {
      <li><span class="dfn-paneled" id="4842aa56">otp-credentials-feature</span>
     </ul>
    <li>
-    <a data-link-type="biblio">[WEBAUTHN-3]</a> defines the following terms:
+    <a data-link-type="biblio">[WEBAUTHN-4]</a> defines the following terms:
     <ul>
      <li><span class="dfn-paneled" id="91d31374">PublicKeyCredential</span>
      <li><span class="dfn-paneled" id="dd14e576">[[Create]](origin, options, sameOriginWithAncestors)</span>
@@ -4029,8 +4035,8 @@ partial dictionary CredentialCreationOptions {
    <dd>Mike West. <a href="https://w3c.github.io/webappsec-secure-contexts/"><cite>Secure Contexts</cite></a>. URL: <a href="https://w3c.github.io/webappsec-secure-contexts/">https://w3c.github.io/webappsec-secure-contexts/</a>
    <dt id="biblio-web-otp">[WEB-OTP]
    <dd><a href="https://wicg.github.io/web-otp/"><cite>WebOTP API</cite></a>. Draft Community Group Report. URL: <a href="https://wicg.github.io/web-otp/">https://wicg.github.io/web-otp/</a>
-   <dt id="biblio-webauthn-3">[WEBAUTHN-3]
-   <dd>Akshay Kumar; et al. <a href="https://w3c.github.io/webauthn/"><cite>Web Authentication: An API for accessing Public Key Credentials - Level 3</cite></a>. URL: <a href="https://w3c.github.io/webauthn/">https://w3c.github.io/webauthn/</a>
+   <dt id="biblio-webauthn-4">[WEBAUTHN-4]
+   <dd>Akshay Kumar; et al. <a href="https://w3c.github.io/webauthn/"><cite>Web Authentication: An API for accessing Public Key Credentials - Level 4</cite></a>. URL: <a href="https://w3c.github.io/webauthn/">https://w3c.github.io/webauthn/</a>
    <dt id="biblio-webidl">[WEBIDL]
    <dd>Edgar Chen; Timothy Gu. <a href="https://webidl.spec.whatwg.org/"><cite>Web IDL Standard</cite></a>. Living Standard. URL: <a href="https://webidl.spec.whatwg.org/">https://webidl.spec.whatwg.org/</a>
    <dt id="biblio-xhr">[XHR]
@@ -4170,293 +4176,59 @@ partial dictionary CredentialCreationOptions {
    <div class="issue"> Describe encoding restrictions of submitting credentials by
   <a data-link-type="functionish" href="https://fetch.spec.whatwg.org/#dom-global-fetch"><code>fetch()</code></a> with a <code class="idl"><a data-link-type="idl" href="https://xhr.spec.whatwg.org/#interface-formdata">FormData</a></code> body. <a class="issue-return" href="#issue-19b3ffaf" title="Jump to section">↵</a></div>
   </div>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-credential-id">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-credential-id" data-mdn="v1|API/Credential/id|9|60,13,51,@!,79,=18,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Credential/id" title="The id property of the Credential interface returns a string containing the credential&apos;s identifier. This might be any one of a GUID, username, or email address.">Credential/id</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>60+</span></span><span class="safari yes"><span>Safari</span><span>13+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge yes"><span>Edge (Legacy)</span><span>18</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-credential-type">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-credential-type" data-mdn="v1|API/Credential/type|9|60,13,51,@!,79,=18,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Credential/type" title="The type property of the Credential interface returns a string containing the credential&apos;s type. Valid values are password, federated and public-key.">Credential/type</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>60+</span></span><span class="safari yes"><span>Safari</span><span>13+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge yes"><span>Edge (Legacy)</span><span>18</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="the-credential-interface">
+  <details class="mdn-anno unpositioned" data-anno-for="the-credential-interface" data-mdn="v1|API/Credential|9|60,13,51,@!,79,=18,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Credential" title="The Credential interface of the Credential Management API provides information about an entity (usually a user) normally as a prerequisite to a trust decision.">Credential</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>60+</span></span><span class="safari yes"><span>Safari</span><span>13+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge yes"><span>Edge (Legacy)</span><span>18</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-credentialscontainer-create">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-credentialscontainer-create" data-mdn="v1|API/CredentialsContainer/create|9|60,13,60,@!,79,=18,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/create" title="The create() method of the CredentialsContainer interface returns a Promise that resolves with a new credential instance based on the provided options, the information from which can then be stored and later used to authenticate users via navigator.credentials.get().">CredentialsContainer/create</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>60+</span></span><span class="safari yes"><span>Safari</span><span>13+</span></span><span class="chrome yes"><span>Chrome</span><span>60+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge yes"><span>Edge (Legacy)</span><span>18</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-credentialscontainer-get">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-credentialscontainer-get" data-mdn="v1|API/CredentialsContainer/get|9|60,13,51,@!,79,=18,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/get" title="The get() method of the CredentialsContainer interface returns a Promise that fulfills with a single credential instance that matches the provided parameters, which the browser can then use to authenticate with a relying party. This is used by several different credential-related APIs with significantly different purposes:">CredentialsContainer/get</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>60+</span></span><span class="safari yes"><span>Safari</span><span>13+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge yes"><span>Edge (Legacy)</span><span>18</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-credentialscontainer-preventsilentaccess">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-credentialscontainer-preventsilentaccess" data-mdn="v1|API/CredentialsContainer/preventSilentAccess|9|60,13,60,@!,79,=18,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/preventSilentAccess" title="The preventSilentAccess() method of the CredentialsContainer interface sets a flag that specifies whether automatic log in is allowed for future visits to the current origin, then returns an empty Promise. For example, you might call this, after a user signs out of a website to ensure that they aren&apos;t automatically signed in on the next site visit. Mediation varies by origin, and is an added check point of browser stored credentials, informing a user of an account login status. This method is typically called after a user signs out of a website, ensuring this user&apos;s login information is not automatically passed on the next site visit.">CredentialsContainer/preventSilentAccess</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>60+</span></span><span class="safari yes"><span>Safari</span><span>13+</span></span><span class="chrome yes"><span>Chrome</span><span>60+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge yes"><span>Edge (Legacy)</span><span>18</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-credentialscontainer-store">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-credentialscontainer-store" data-mdn="v1|API/CredentialsContainer/store|9|60,13,51,@!,79,@?,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer/store" title="The store() method of the CredentialsContainer stores a set of credentials for the user inside a Credential instance, returning this in a Promise.">CredentialsContainer/store</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>60+</span></span><span class="safari yes"><span>Safari</span><span>13+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="credentialscontainer">
+  <details class="mdn-anno unpositioned" data-anno-for="credentialscontainer" data-mdn="v1|API/CredentialsContainer|9|60,13,51,@!,79,=18,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/CredentialsContainer" title="The CredentialsContainer interface of the Credential Management API exposes methods to request credentials and notify the user agent when events such as successful sign in or sign out happen. This interface is accessible from Navigator.credentials.">CredentialsContainer</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>60+</span></span><span class="safari yes"><span>Safari</span><span>13+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge yes"><span>Edge (Legacy)</span><span>18</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-federatedcredential-federatedcredential">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-federatedcredential-federatedcredential" data-mdn="v1|API/FederatedCredential/FederatedCredential|1|-,-,51,@!,79,@?,-,@-,@-,@!,@!,@!,@!,">
    <summary><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/FederatedCredential/FederatedCredential" title="The FederatedCredential() constructor creates a new FederatedCredential object. In supporting browsers, an instance of this class may be passed the credential received from the init object for global fetch().">FederatedCredential/FederatedCredential</a></p>
-    <p class="less-than-two-engines-text">In only one current engine.</p>
-    <div class="support">
-     <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="no safari"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-federatedcredential-protocol">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-federatedcredential-protocol" data-mdn="v1|API/FederatedCredential/protocol|1|-,-,51,@!,79,@?,-,@-,@-,@!,@!,@!,@!,">
    <summary><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/FederatedCredential/protocol" title="The protocol property of the FederatedCredential interface returns a read-only string containing a credential&apos;s federated identity protocol. If this property is null, the protocol may be inferred from the FederatedCredential.provider property.">FederatedCredential/protocol</a></p>
-    <p class="less-than-two-engines-text">In only one current engine.</p>
-    <div class="support">
-     <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="no safari"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-federatedcredential-provider">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-federatedcredential-provider" data-mdn="v1|API/FederatedCredential/provider|1|-,-,51,@!,79,@?,-,@-,@-,@!,@!,@!,@!,">
    <summary><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/FederatedCredential/provider" title="The provider property of the FederatedCredential interface returns a string containing a credential&apos;s federated identity provider.">FederatedCredential/provider</a></p>
-    <p class="less-than-two-engines-text">In only one current engine.</p>
-    <div class="support">
-     <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="no safari"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="federated">
+  <details class="mdn-anno unpositioned" data-anno-for="federated" data-mdn="v1|API/FederatedCredential|1|-,-,51,@!,79,@?,-,@-,@-,@!,@!,@!,@!,">
    <summary><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/FederatedCredential" title="The FederatedCredential interface of the Credential Management API provides information about credentials from a federated identity provider. A federated identity provider is an entity that a website trusts to correctly authenticate a user, and that provides an API for that purpose. OpenID Connect is an example of a federated identity provider framework.">FederatedCredential</a></p>
-    <p class="less-than-two-engines-text">In only one current engine.</p>
-    <div class="support">
-     <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="no safari"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="framework-credential-management">
+  <details class="mdn-anno unpositioned" data-anno-for="framework-credential-management" data-mdn="v1|API/Navigator/credentials|9|60,13,51,@!,79,=18,-,@!,@!,@!,@!,@!,@!,">
    <summary><b class="all-engines-flag" title="This feature is in all current engines.">✔</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/credentials" title="The credentials property of the Navigator interface returns the CredentialsContainer interface, which exposes methods to request credentials. The CredentialsContainer interface also notifies the user agent when an interesting event occurs, such as a successful sign-in or sign-out. This interface can be used for feature detection.">Navigator/credentials</a></p>
-    <p class="all-engines-text">In all current engines.</p>
-    <div class="support">
-     <span class="firefox yes"><span>Firefox</span><span>60+</span></span><span class="safari yes"><span>Safari</span><span>13+</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge yes"><span>Edge (Legacy)</span><span>18</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-passwordcredential-passwordcredential">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-passwordcredential-passwordcredential" data-mdn="v1|API/PasswordCredential/PasswordCredential|1|-,-,51,@!,79,@?,-,@-,@-,@!,@!,@!,@!,">
    <summary><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/PasswordCredential/PasswordCredential" title="The PasswordCredential() constructor creates a new PasswordCredential object. In supporting browsers, an instance of this class may be passed the credential from the init object for global fetch().">PasswordCredential/PasswordCredential</a></p>
-    <p class="less-than-two-engines-text">In only one current engine.</p>
-    <div class="support">
-     <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="no safari"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-credentialuserdata-iconurl">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-credentialuserdata-iconurl" data-mdn="v1|API/PasswordCredential/iconURL|1|-,-,51,@!,79,@?,-,@-,@-,@!,@!,@!,@!,">
    <summary><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/PasswordCredential/iconURL" title="The iconURL read-only property of the PasswordCredential interface returns a string containing a URL pointing to an image for an icon. This image is intended for display in a credential chooser. The URL must be accessible without authentication.">PasswordCredential/iconURL</a></p>
-    <p class="less-than-two-engines-text">In only one current engine.</p>
-    <div class="support">
-     <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="no safari"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-credentialuserdata-name">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-credentialuserdata-name" data-mdn="v1|API/PasswordCredential/name|1|-,-,51,@!,79,@?,-,@-,@-,@!,@!,@!,@!,">
    <summary><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/PasswordCredential/name" title="The name read-only property of the PasswordCredential interface returns a string containing a human-readable public name for display in a credential chooser.">PasswordCredential/name</a></p>
-    <p class="less-than-two-engines-text">In only one current engine.</p>
-    <div class="support">
-     <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="no safari"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="dom-passwordcredential-password">
+  <details class="mdn-anno unpositioned" data-anno-for="dom-passwordcredential-password" data-mdn="v1|API/PasswordCredential/password|1|-,-,60,@!,79,@?,-,@-,@-,@!,@!,@!,@!,">
    <summary><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/PasswordCredential/password" title="The password read-only property of the PasswordCredential interface returns a string containing the password of the credential.">PasswordCredential/password</a></p>
-    <p class="less-than-two-engines-text">In only one current engine.</p>
-    <div class="support">
-     <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="no safari"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>60+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
-  <details class="mdn-anno unpositioned" data-anno-for="passwordcredential-interface">
+  <details class="mdn-anno unpositioned" data-anno-for="passwordcredential-interface" data-mdn="v1|API/PasswordCredential|1|-,-,51,@!,79,@?,-,@-,@-,@!,@!,@!,@!,">
    <summary><b class="less-than-two-engines-flag" title="This feature is in less than two current engines.">⚠</b><span>MDN</span></summary>
-   <div class="feature">
-    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/PasswordCredential" title="The interface of the Credential Management API provides information about a username/password pair. In supporting browsers an instance of this class may be passed in the credential member of the init object for global fetch().">PasswordCredential</a></p>
-    <p class="less-than-two-engines-text">In only one current engine.</p>
-    <div class="support">
-     <span class="firefox no"><span>Firefox</span><span>None</span></span><span class="no safari"><span>Safari</span><span>None</span></span><span class="chrome yes"><span>Chrome</span><span>51+</span></span>
-     <hr>
-     <span class="no opera"><span>Opera</span><span>?</span></span><span class="edge_blink yes"><span>Edge</span><span>79+</span></span>
-     <hr>
-     <span class="edge no"><span>Edge (Legacy)</span><span>?</span></span><span class="ie no"><span>IE</span><span>None</span></span>
-     <hr>
-     <span class="firefox_android no"><span>Firefox for Android</span><span>?</span></span><span class="no safari_ios"><span>iOS Safari</span><span>?</span></span><span class="chrome_android no"><span>Chrome for Android</span><span>?</span></span><span class="no webview_android"><span>Android WebView</span><span>?</span></span><span class="no samsunginternet_android"><span>Samsung Internet</span><span>?</span></span><span class="no opera_android"><span>Opera Mobile</span><span>?</span></span>
-    </div>
-   </div>
   </details>
 <script>/* Boilerplate: script-dom-helper */
 "use strict";
@@ -4714,6 +4486,7 @@ let dfnPanelData = {
 "7393da89": {"dfnID":"7393da89","dfnText":"same origin","external":true,"refSections":[{"refs":[{"id":"ref-for-same-origin"}],"title":"2.1.1.1. Same-Origin with its Ancestors"},{"refs":[{"id":"ref-for-same-origin\u2460"}],"title":"3.3.1. \n    PasswordCredential\u2019s [[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)\n  "},{"refs":[{"id":"ref-for-same-origin\u2461"}],"title":"3.3.3. \n    PasswordCredential\u2019s [[Store]](credential, sameOriginWithAncestors)\n  "},{"refs":[{"id":"ref-for-same-origin\u2462"}],"title":"4.2.1. \n    FederatedCredential\u2019s [[CollectFromCredentialStore]](origin, options, sameOriginWithAncestors)\n  "},{"refs":[{"id":"ref-for-same-origin\u2463"}],"title":"4.2.3. \n    FederatedCredential\u2019s [[Store]](credential, sameOriginWithAncestors)\n  "}],"url":"https://html.spec.whatwg.org/multipage/browsers.html#same-origin"},
 "750a2f08": {"dfnID":"750a2f08","dfnText":"react","external":true,"refSections":[{"refs":[{"id":"ref-for-dfn-perform-steps-once-promise-is-settled"}],"title":"2.5.1. Request a Credential"},{"refs":[{"id":"ref-for-dfn-perform-steps-once-promise-is-settled\u2460"}],"title":"2.5.3. Store a Credential"},{"refs":[{"id":"ref-for-dfn-perform-steps-once-promise-is-settled\u2461"}],"title":"2.5.4. Create a Credential"}],"url":"https://webidl.spec.whatwg.org/#dfn-perform-steps-once-promise-is-settled"},
 "797018a7": {"dfnID":"797018a7","dfnText":"InvalidStateError","external":true,"refSections":[{"refs":[{"id":"ref-for-invalidstateerror"}],"title":"2.5.1. Request a Credential"},{"refs":[{"id":"ref-for-invalidstateerror\u2460"}],"title":"2.5.3. Store a Credential"},{"refs":[{"id":"ref-for-invalidstateerror\u2461"}],"title":"2.5.4. Create a Credential"},{"refs":[{"id":"ref-for-invalidstateerror\u2462"}],"title":"2.5.5. Prevent Silent Access"}],"url":"https://webidl.spec.whatwg.org/#invalidstateerror"},
+"7a87d819": {"dfnID":"7a87d819","dfnText":"is","external":true,"refSections":[{"refs":[{"id":"ref-for-string-is"}],"title":"2.5.1. Request a Credential"}],"url":"https://infra.spec.whatwg.org/#string-is"},
 "7f9469b5": {"dfnID":"7f9469b5","dfnText":"ASCII case-insensitive","external":true,"refSections":[{"refs":[{"id":"ref-for-ascii-case-insensitive"}],"title":"3.3.4. \n    Create a PasswordCredential from an HTMLFormElement\n  "}],"url":"https://infra.spec.whatwg.org/#ascii-case-insensitive"},
 "82ca3efc": {"dfnID":"82ca3efc","dfnText":"TypeError","external":true,"refSections":[{"refs":[{"id":"ref-for-exceptiondef-typeerror"}],"title":"2.2.1.2. [[DiscoverFromExternalSource]] internal method"},{"refs":[{"id":"ref-for-exceptiondef-typeerror\u2460"}],"title":"2.2.1.4. [[Create]] internal method"},{"refs":[{"id":"ref-for-exceptiondef-typeerror\u2461"},{"id":"ref-for-exceptiondef-typeerror\u2462"}],"title":"2.5.1. Request a Credential"},{"refs":[{"id":"ref-for-exceptiondef-typeerror\u2463"},{"id":"ref-for-exceptiondef-typeerror\u2464"}],"title":"3.3.2. \n    PasswordCredential\u2019s [[Create]](origin, options, sameOriginWithAncestors)\n  "},{"refs":[{"id":"ref-for-exceptiondef-typeerror\u2465"}],"title":"3.3.5. \n    Create a PasswordCredential from PasswordCredentialData\n  "},{"refs":[{"id":"ref-for-exceptiondef-typeerror\u2466"}],"title":"4.2.4. \n    Create a FederatedCredential from FederatedCredentialInit\n  "}],"url":"https://webidl.spec.whatwg.org/#exceptiondef-typeerror"},
 "857d5516": {"dfnID":"857d5516","dfnText":"client","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-request-client"}],"title":"7.2. Chooser Leakage"}],"url":"https://fetch.spec.whatwg.org/#concept-request-client"},
@@ -4732,7 +4505,6 @@ let dfnPanelData = {
 "9c5d9c4d": {"dfnID":"9c5d9c4d","dfnText":"potentially trustworthy URL","external":true,"refSections":[{"refs":[{"id":"ref-for-potentially-trustworthy-url"}],"title":"2.2.2. CredentialUserData Mixin"},{"refs":[{"id":"ref-for-potentially-trustworthy-url\u2460"}],"title":"6.3. Insecure Sites"}],"url":"https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-url"},
 "9cce47fd": {"dfnID":"9cce47fd","dfnText":"sequence","external":true,"refSections":[{"refs":[{"id":"ref-for-idl-sequence"},{"id":"ref-for-idl-sequence\u2460"}],"title":"4.1. The FederatedCredential Interface"}],"url":"https://webidl.spec.whatwg.org/#idl-sequence"},
 "9e196595": {"dfnID":"9e196595","dfnText":"script-src","external":true,"refSections":[{"refs":[{"id":"ref-for-script-src"}],"title":"6.2. Credential Leakage"}],"url":"https://w3c.github.io/webappsec-csp/#script-src"},
-"9e466493": {"dfnID":"9e466493","dfnText":"equal","external":true,"refSections":[{"refs":[{"id":"ref-for-set-equal"}],"title":"2.5.1. Request a Credential"}],"url":"https://infra.spec.whatwg.org/#set-equal"},
 "a3b18719": {"dfnID":"a3b18719","dfnText":"append","external":true,"refSections":[{"refs":[{"id":"ref-for-set-append"}],"title":"2.5.1. Request a Credential"},{"refs":[{"id":"ref-for-set-append\u2460"}],"title":"2.5.2. Collect Credentials from the credential store"},{"refs":[{"id":"ref-for-set-append\u2461"}],"title":"2.5.3. Store a Credential"},{"refs":[{"id":"ref-for-set-append\u2462"}],"title":"2.5.4. Create a Credential"}],"url":"https://infra.spec.whatwg.org/#set-append"},
 "a41102eb": {"dfnID":"a41102eb","dfnText":"permissions policy","external":true,"refSections":[{"refs":[{"id":"ref-for-concept-document-permissions-policy"},{"id":"ref-for-concept-document-permissions-policy\u2460"}],"title":"2.1.2.1. Registration Entry Requirements and Update Process"}],"url":"https://html.spec.whatwg.org/multipage/dom.html#concept-document-permissions-policy"},
 "a5c91173": {"dfnID":"a5c91173","dfnText":"SameObject","external":true,"refSections":[{"refs":[{"id":"ref-for-SameObject"}],"title":"2.3. navigator.credentials"}],"url":"https://webidl.spec.whatwg.org/#SameObject"},
@@ -4889,16 +4661,6 @@ let dfnPanelData = {
 
 document.addEventListener("DOMContentLoaded", ()=>{
     genAllDfnPanels();
-
-    document.body.addEventListener("click", (e) => {
-        // If not handled already, just hide all dfn panels.
-        hideAllDfnPanels();
-    });
-});
-
-window.addEventListener("resize", () => {
-    // Pin any visible dfn panel
-    queryAll(".dfn-panel.on, .dfn-panel.activated").forEach(el=>positionDfnPanel(el));
 });
 
 function genAllDfnPanels() {
@@ -4910,16 +4672,17 @@ function genAllDfnPanels() {
             continue;
         }
         dfn.panelData = panelData;
-        insertDfnPopupAction(dfn);
+        genDfnPanel(dfn, panelData);
     }
 }
 
 function genDfnPanel(dfn, { dfnID, url, dfnText, refSections, external }) {
-    const dfnPanel = mk.aside({
-        class: "dfn-panel on",
+    const dfnPanel = mk.dialog({
+        class: "dfn-panel",
         id: `infopanel-for-${dfnID}`,
+        popover: "hint",
         "data-for": dfnID,
-        "aria-labelled-by":`infopaneltitle-for-${dfnID}`,
+        "aria-labelledby": `infopaneltitle-for-${dfnID}`,
         },
         mk.span({id:`infopaneltitle-for-${dfnID}`, style:"display:none"},
             `Info about the '${dfnText}' ${external?"external":""} reference.`),
@@ -4951,106 +4714,34 @@ function genDfnPanel(dfn, { dfnID, url, dfnText, refSections, external }) {
         event.stopPropagation();
         refocusOnTarget(event);
     });
-    dfnPanel.addEventListener('keydown', (event) => {
-        if(event.keyCode == 27) { // Escape key
-            hideDfnPanel({dfnPanel});
-            event.stopPropagation();
-            event.preventDefault();
+
+    dfnPanel.addEventListener('toggle', event=>{
+        if(event.newState == "closed") {
+            unpinDfnPanel(dfnPanel);
         }
     });
 
     dfnPanel.dfn = dfn;
     dfn.dfnPanel = dfnPanel;
+    dfn.after(dfnPanel);
+    const button = mk.button(
+        {
+            class:"dfn-panelbutton",
+            "popovertarget":dfnPanel.id
+        },
+        ...dfn.childNodes
+    );
+    dfn.append(button);
     return dfnPanel;
-}
-
-
-
-function hideAllDfnPanels() {
-    // Delete the currently-active dfn panel.
-    queryAll(".dfn-panel").forEach(dfnPanel=>hideDfnPanel({dfnPanel}));
-}
-
-function showDfnPanel(dfn) {
-    hideAllDfnPanels(); // Only display one at a time.
-
-    dfn.setAttribute("aria-expanded", "true");
-
-    const dfnPanel = genDfnPanel(dfn, dfn.panelData);
-
-    // Give the dfn a unique tabindex, and then
-    // give all the tabbable panel bits successive indexes.
-    let tabIndex = 100;
-    dfn.tabIndex = tabIndex++;
-    const tabbable = dfnPanel.querySelectorAll(":is(a, button)");
-    for (const el of tabbable) {
-        el.tabIndex = tabIndex++;
-    }
-
-    append(document.body, dfnPanel);
-    positionDfnPanel(dfnPanel);
-}
-
-function positionDfnPanel(dfnPanel) {
-    const dfn = dfnPanel.dfn;
-    const dfnPos = getBounds(dfn);
-    dfnPanel.style.top = dfnPos.bottom + "px";
-    dfnPanel.style.left = dfnPos.left + "px";
-
-    const panelPos = dfnPanel.getBoundingClientRect();
-    const panelMargin = 8;
-    const maxRight = document.body.parentNode.clientWidth - panelMargin;
-    if (panelPos.right > maxRight) {
-        const overflowAmount = panelPos.right - maxRight;
-        const newLeft = Math.max(panelMargin, dfnPos.left - overflowAmount);
-        dfnPanel.style.left = newLeft + "px";
-    }
 }
 
 function pinDfnPanel(dfnPanel) {
     // Switch it to "activated" state, which pins it.
     dfnPanel.classList.add("activated");
-    dfnPanel.style.position = "fixed";
-    dfnPanel.style.left = null;
-    dfnPanel.style.top = null;
 }
 
-function hideDfnPanel({dfn, dfnPanel}) {
-    if(!dfnPanel) dfnPanel = dfn.dfnPanel;
-    if(!dfn) dfn = dfnPanel.dfn;
-    dfn.dfnPanel = undefined;
-    dfnPanel.dfn = undefined;
-    dfn.setAttribute("aria-expanded", "false");
-    dfn.tabIndex = undefined;
-    dfnPanel.remove()
-}
-
-function toggleDfnPanel(dfn) {
-    if(dfn.dfnPanel) {
-        hideDfnPanel(dfn);
-    } else {
-        showDfnPanel(dfn);
-    }
-}
-
-function insertDfnPopupAction(dfn) {
-    dfn.setAttribute('role', 'button');
-    dfn.setAttribute('aria-expanded', 'false')
-    dfn.tabIndex = 0;
-    dfn.classList.add('has-dfn-panel');
-    dfn.addEventListener('click', (event) => {
-        toggleDfnPanel(dfn);
-        event.stopPropagation();
-    });
-    dfn.addEventListener('keypress', (event) => {
-        const kc = event.keyCode;
-        // 32->Space, 13->Enter
-        if(kc == 32 || kc == 13) {
-            toggleDfnPanel(dfn);
-            event.stopPropagation();
-            event.preventDefault();
-        }
-    });
+function unpinDfnPanel(dfnPanel) {
+    dfnPanel.classList.remove("activated");
 }
 
 function refocusOnTarget(event) {
@@ -5060,21 +4751,6 @@ function refocusOnTarget(event) {
         // This is needed after browser scrolls to the destination.
         target.focus();
     });
-}
-
-// TODO: shared util
-// Returns the root-level absolute position {left and top} of element.
-function getBounds(el, relativeTo=document.body) {
-    const relativeRect = relativeTo.getBoundingClientRect();
-    const elRect = el.getBoundingClientRect();
-    const top = elRect.top - relativeRect.top;
-    const left = elRect.left - relativeRect.left;
-    return {
-        top,
-        left,
-        bottom: top + elRect.height,
-        right: left + elRect.width,
-    }
 }
 
 function scrollToTargetAndHighlight(event) {
@@ -5267,6 +4943,213 @@ function genLinkingSyntaxes(dfn) {
         )
     ];
 }
+}
+</script>
+<script>/* Boilerplate: script-mdn-anno */
+"use strict";
+{
+'use strict';
+// File copied from https://github.com/whatwg/whatwg.org/blob/main/resources.whatwg.org/standard-mdn-annos.js
+
+// Builds MDN annotation panels on demand from the compact `data-mdn` attribute written by
+// the spec generator (wattsi's EncodeMDNAnnotations; Bikeshed's mdnspeclinks.py builds its
+// panels eagerly for now). Only the wire format is shared: the browser labels, the
+// engine-support strings and the render grouping all live here.
+//
+// Archived commit snapshots load this file forever, so every format version this script
+// has ever understood has to keep working. Evolve the format by adding a branch in
+// `hydrate`, never by redefining a version that has already shipped.
+
+const MDN_URL = 'https://developer.mozilla.org/en-US/docs/Web/';
+const CANIUSE_URL = 'https://caniuse.com/#feat=';
+
+// Render groups, in the order they appear in a panel, separated by <hr>.
+const CURRENT_ENGINES = 0;
+const BORROWED_ENGINES = 1;
+const RETIRED_ENGINES = 2;
+const MOBILE = 3;
+const NON_BROWSER = 4;
+const GROUP_COUNT = 5;
+
+// Cell slots, in the order they appear in `data-mdn`. APPEND-ONLY: a new browser goes at
+// the end and is never inserted, so that old data still lines up and old copies of this
+// script can keep ignoring the cells they don't know about. `group` is what decides where
+// a row is rendered, so appending to this list doesn't constrain where the row shows up.
+const SLOTS = [
+  { id: 'firefox', label: 'Firefox', group: CURRENT_ENGINES },
+  { id: 'safari', label: 'Safari', group: CURRENT_ENGINES },
+  { id: 'chrome', label: 'Chrome', group: CURRENT_ENGINES },
+  { id: 'opera', label: 'Opera', group: BORROWED_ENGINES, mirrors: 'Chrome' },
+  { id: 'edge_blink', label: 'Edge', group: BORROWED_ENGINES },
+  { id: 'edge', label: 'Edge (Legacy)', group: RETIRED_ENGINES },
+  { id: 'ie', label: 'IE', group: RETIRED_ENGINES },
+  { id: 'firefox_android', label: 'Firefox for Android', group: MOBILE, mirrors: 'Firefox' },
+  { id: 'safari_ios', label: 'iOS Safari', group: MOBILE, mirrors: 'Safari' },
+  { id: 'chrome_android', label: 'Chrome for Android', group: MOBILE, mirrors: 'Chrome' },
+  { id: 'webview_android', label: 'Android WebView', group: MOBILE, mirrors: 'Chrome' },
+  { id: 'samsunginternet_android', label: 'Samsung Internet', group: MOBILE, mirrors: 'Chrome' },
+  { id: 'opera_android', label: 'Opera Mobile', group: MOBILE, mirrors: 'Chrome' },
+  { id: 'nodejs', label: 'Node.js', group: NON_BROWSER },
+];
+
+// One mnemonic character per engine-support note.
+const LEVELS = {
+  '0': { class: 'less-than-two-engines-text', text: 'In no current engines.' },
+  '1': { class: 'less-than-two-engines-text', text: 'In only one current engine.' },
+  '9': { class: 'all-engines-text', text: 'In all current engines.' },
+  's': { class: 'less-than-two-engines-text', text: 'Support in one engine under other name.' },
+  'S': { class: 'less-than-two-engines-text', text: 'Support in some engines under other name.' },
+  'v': { class: 'less-than-two-engines-text', text: 'Prefixed support in one engine.' },
+  'V': { class: 'less-than-two-engines-text', text: 'Prefixed support in some engines.' },
+  'p': { class: 'less-than-two-engines-text', text: 'Partial support in one engine.' },
+  'P': { class: 'less-than-two-engines-text', text: 'Partial support in some engines.' },
+};
+
+// Leading character of a cell, qualifying how the version after it should be read. `flag`
+// is whether to mark the version with 🔰 as well as explaining it in a tooltip.
+const CAVEATS = {
+  '*': { flag: true, title: () => 'Partial implementation.' },
+  '^': { flag: true, title: () => 'Requires setting a user preference or runtime flag.' },
+  '$': { flag: true, title: () => 'Requires a prefix or alternative name.' },
+  // Mirrored support is far too common to flag every occurrence; the tooltip is enough.
+  '@': { flag: false, title: (slot) => `Support is mirrored from ${slot.mirrors ?? 'the upstream browser'}.` },
+};
+
+const FLAG = '\u{1F530}'; // 🔰, marks a version that comes with a caveat
+const EN_DASH = '–';
+
+function element(name, attributes, ...children) {
+  const node = document.createElement(name);
+  for (const [attribute, value] of Object.entries(attributes)) {
+    if (value !== undefined) {
+      node.setAttribute(attribute, value);
+    }
+  }
+  node.append(...children);
+  return node;
+}
+
+function splitOnce(string, separator) {
+  const at = string.indexOf(separator);
+  return at === -1 ? [string, undefined] : [string.slice(0, at), string.slice(at + 1)];
+}
+
+// A version body says both whether the browser supports the feature and since when.
+function readVersion(body) {
+  if (body === '?') {
+    return { state: 'unknown', version: '?' };
+  }
+  if (body === '-') {
+    return { state: 'no', version: 'None' };
+  }
+  if (body === '!') {
+    return { state: 'yes', version: 'Yes' };
+  }
+  if (body.startsWith('=')) {
+    // A version that will never be superseded, so no trailing "+".
+    return { state: 'yes', version: body.slice(1) };
+  }
+  const [added, removed] = body.split('-');
+  if (removed !== undefined) {
+    return { state: 'no', version: added + EN_DASH + removed };
+  }
+  return { state: 'yes', version: added + '+' };
+}
+
+function readCell(cell, slot) {
+  const caveat = CAVEATS[cell[0]];
+  const { state, version } = readVersion(caveat ? cell.slice(1) : cell);
+  return {
+    state,
+    version: caveat?.flag ? `${FLAG} ${version}` : version,
+    title: caveat?.title(slot),
+  };
+}
+
+// A browser row is the browser's name in one cell and its version in the next. The logo
+// comes from CSS, keyed off the browser id in the row's class.
+function browserRow(slot, cell) {
+  const { state, version, title } = readCell(cell, slot);
+  return element('span', { class: `${slot.id} ${state}` },
+    element('span', {}, slot.label),
+    element('span', { title }, version));
+}
+
+// The caniuse row has a single cell instead, since its logo needs no label beside it.
+function caniuseRow(field) {
+  const [feature, title] = splitOnce(field, ',');
+  const link = element('a', { href: CANIUSE_URL + feature, title }, 'caniuse.com table');
+  return element('span', { class: 'caniuse' }, element('span', {}, link));
+}
+
+function supportTable(cells, caniuse) {
+  const groups = Array.from({ length: GROUP_COUNT }, () => []);
+  SLOTS.forEach((slot, slotIndex) => {
+    // An empty cell means this browser gets no row at all. Cells beyond SLOTS are
+    // browsers added after this copy of the script was written; ignore them.
+    if (cells[slotIndex]) {
+      groups[slot.group].push(browserRow(slot, cells[slotIndex]));
+    }
+  });
+  if (caniuse !== undefined) {
+    groups.push([caniuseRow(caniuse)]);
+  }
+
+  const table = element('div', { class: 'support' });
+  for (const rows of groups.filter((rows) => rows.length > 0)) {
+    if (table.hasChildNodes()) {
+      table.append(element('hr', {}));
+    }
+    table.append(...rows);
+  }
+  return table;
+}
+
+function featurePanel(record) {
+  const [slug, level, cells, caniuse] = record.split('|');
+
+  const article = element('a', { href: MDN_URL + slug }, slug.slice(slug.indexOf('/') + 1));
+  const panel = element('div', { class: 'feature' }, element('p', {}, article));
+
+  if (level in LEVELS) {
+    panel.append(element('p', { class: LEVELS[level].class }, LEVELS[level].text));
+  }
+  if (cells) {
+    panel.append(supportTable(cells.split(','), caniuse));
+  }
+  return panel;
+}
+
+function hydrate(anno) {
+  const [version, features] = splitOnce(anno.dataset.mdn, '|');
+  delete anno.dataset.mdn; // Only ever hydrate a panel once.
+
+  if (version !== 'v1') {
+    console.warn(`Unsupported MDN annotation data version "${version}".`, anno);
+    return;
+  }
+  anno.append(...features.split('~').map(featurePanel));
+}
+
+function hydrateIfNeeded(node) {
+  if (node instanceof Element && node.matches('.mdn-anno[data-mdn]')) {
+    hydrate(node);
+  }
+}
+
+// A click on the summary arrives before the browser opens the <details>, so hydrating
+// from it means the panel never flashes empty. That covers pointers and the keyboard,
+// since activating a summary dispatches a click either way.
+document.addEventListener('click', (event) => {
+  if (event.target instanceof Element) {
+    hydrateIfNeeded(event.target.closest('summary')?.parentElement);
+  }
+}, true);
+
+// And `toggle` is the catch-all for a panel opened some other way, such as find-in-page
+// or a fragment navigation into it. It fires a task after the state has already changed,
+// and it doesn't bubble, so it has to be a capture listener.
+document.addEventListener('toggle', (event) => hydrateIfNeeded(event.target), true);
 }
 </script>
 <script>/* Boilerplate: script-position-annos */
@@ -5492,7 +5375,7 @@ let refsData = {
 "https://infra.spec.whatwg.org/#map-iterate": {"displayText":"for each","export":true,"for_":["map"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"for each","type":"dfn","url":"https://infra.spec.whatwg.org/#map-iterate"},
 "https://infra.spec.whatwg.org/#ordered-set": {"displayText":"set","export":true,"for_":[],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"set","type":"dfn","url":"https://infra.spec.whatwg.org/#ordered-set"},
 "https://infra.spec.whatwg.org/#set-append": {"displayText":"append","export":true,"for_":["set"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"append","type":"dfn","url":"https://infra.spec.whatwg.org/#set-append"},
-"https://infra.spec.whatwg.org/#set-equal": {"displayText":"equal","export":true,"for_":["set"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"equal","type":"dfn","url":"https://infra.spec.whatwg.org/#set-equal"},
+"https://infra.spec.whatwg.org/#string-is": {"displayText":"is","export":true,"for_":["string"],"level":"1","normative":true,"shortname":"infra","spec":"infra","status":"current","text":"is","type":"dfn","url":"https://infra.spec.whatwg.org/#string-is"},
 "https://publicsuffix.org/list/#": {"displayText":"registerable domain","export":true,"for_":[],"level":"","normative":true,"shortname":"psl","spec":"psl","status":"anchor-block","text":"registerable domain","type":"dfn","url":"https://publicsuffix.org/list/#"},
 "https://tc39.github.io/ecma262/#sec-ordinary-object-internal-methods-and-internal-slots": {"displayText":"internal method","export":true,"for_":[],"level":"","normative":true,"shortname":"ecma262","spec":"ecma262","status":"anchor-block","text":"internal method","type":"dfn","url":"https://tc39.github.io/ecma262/#sec-ordinary-object-internal-methods-and-internal-slots"},
 "https://w3c-fedid.github.io/FedCM/#identity-credentials-get": {"displayText":"identity-credentials-get","export":true,"for_":[],"level":"1","normative":true,"shortname":"fedcm","spec":"fedcm-1","status":"current","text":"identity-credentials-get","type":"dfn","url":"https://w3c-fedid.github.io/FedCM/#identity-credentials-get"},
@@ -5505,12 +5388,12 @@ let refsData = {
 "https://w3c.github.io/webappsec-csp/#object-src": {"displayText":"object-src","export":true,"for_":[],"level":"3","normative":true,"shortname":"csp","spec":"csp3","status":"current","text":"object-src","type":"dfn","url":"https://w3c.github.io/webappsec-csp/#object-src"},
 "https://w3c.github.io/webappsec-csp/#script-src": {"displayText":"script-src","export":true,"for_":[],"level":"3","normative":true,"shortname":"csp","spec":"csp3","status":"current","text":"script-src","type":"dfn","url":"https://w3c.github.io/webappsec-csp/#script-src"},
 "https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-url": {"displayText":"potentially trustworthy URL","export":true,"for_":[],"level":"1","normative":true,"shortname":"secure-contexts","spec":"secure-contexts","status":"current","text":"potentially trustworthy url","type":"dfn","url":"https://w3c.github.io/webappsec-secure-contexts/#potentially-trustworthy-url"},
-"https://w3c.github.io/webauthn/#dom-publickeycredential-create-slot": {"displayText":"[[Create]](origin, options, sameOriginWithAncestors)","export":true,"for_":["PublicKeyCredential"],"level":"3","normative":true,"shortname":"webauthn","spec":"webauthn-3","status":"current","text":"[[Create]](origin, options, sameOriginWithAncestors)","type":"method","url":"https://w3c.github.io/webauthn/#dom-publickeycredential-create-slot"},
-"https://w3c.github.io/webauthn/#dom-publickeycredential-discoverfromexternalsource-slot": {"displayText":"[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)","export":true,"for_":["PublicKeyCredential"],"level":"3","normative":true,"shortname":"webauthn","spec":"webauthn-3","status":"current","text":"[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)","type":"method","url":"https://w3c.github.io/webauthn/#dom-publickeycredential-discoverfromexternalsource-slot"},
-"https://w3c.github.io/webauthn/#passkey": {"displayText":"passkey","export":true,"for_":[],"level":"3","normative":true,"shortname":"webauthn","spec":"webauthn-3","status":"current","text":"passkey","type":"dfn","url":"https://w3c.github.io/webauthn/#passkey"},
-"https://w3c.github.io/webauthn/#publickey-credentials-create-feature": {"displayText":"publickey-credentials-create-feature","export":true,"for_":[],"level":"3","normative":true,"shortname":"webauthn","spec":"webauthn-3","status":"current","text":"publickey-credentials-create-feature","type":"dfn","url":"https://w3c.github.io/webauthn/#publickey-credentials-create-feature"},
-"https://w3c.github.io/webauthn/#publickey-credentials-get-feature": {"displayText":"publickey-credentials-get-feature","export":true,"for_":[],"level":"3","normative":true,"shortname":"webauthn","spec":"webauthn-3","status":"current","text":"publickey-credentials-get-feature","type":"dfn","url":"https://w3c.github.io/webauthn/#publickey-credentials-get-feature"},
-"https://w3c.github.io/webauthn/#publickeycredential": {"displayText":"PublicKeyCredential","export":true,"for_":[],"level":"3","normative":true,"shortname":"webauthn","spec":"webauthn-3","status":"current","text":"PublicKeyCredential","type":"interface","url":"https://w3c.github.io/webauthn/#publickeycredential"},
+"https://w3c.github.io/webauthn/#dom-publickeycredential-create-slot": {"displayText":"[[Create]](origin, options, sameOriginWithAncestors)","export":true,"for_":["PublicKeyCredential"],"level":"4","normative":true,"shortname":"webauthn","spec":"webauthn-4","status":"current","text":"[[Create]](origin, options, sameOriginWithAncestors)","type":"method","url":"https://w3c.github.io/webauthn/#dom-publickeycredential-create-slot"},
+"https://w3c.github.io/webauthn/#dom-publickeycredential-discoverfromexternalsource-slot": {"displayText":"[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)","export":true,"for_":["PublicKeyCredential"],"level":"4","normative":true,"shortname":"webauthn","spec":"webauthn-4","status":"current","text":"[[DiscoverFromExternalSource]](origin, options, sameOriginWithAncestors)","type":"method","url":"https://w3c.github.io/webauthn/#dom-publickeycredential-discoverfromexternalsource-slot"},
+"https://w3c.github.io/webauthn/#passkey": {"displayText":"passkey","export":true,"for_":[],"level":"4","normative":true,"shortname":"webauthn","spec":"webauthn-4","status":"current","text":"passkey","type":"dfn","url":"https://w3c.github.io/webauthn/#passkey"},
+"https://w3c.github.io/webauthn/#publickey-credentials-create-feature": {"displayText":"publickey-credentials-create-feature","export":true,"for_":[],"level":"4","normative":true,"shortname":"webauthn","spec":"webauthn-4","status":"current","text":"publickey-credentials-create-feature","type":"dfn","url":"https://w3c.github.io/webauthn/#publickey-credentials-create-feature"},
+"https://w3c.github.io/webauthn/#publickey-credentials-get-feature": {"displayText":"publickey-credentials-get-feature","export":true,"for_":[],"level":"4","normative":true,"shortname":"webauthn","spec":"webauthn-4","status":"current","text":"publickey-credentials-get-feature","type":"dfn","url":"https://w3c.github.io/webauthn/#publickey-credentials-get-feature"},
+"https://w3c.github.io/webauthn/#publickeycredential": {"displayText":"PublicKeyCredential","export":true,"for_":[],"level":"4","normative":true,"shortname":"webauthn","spec":"webauthn-4","status":"current","text":"PublicKeyCredential","type":"interface","url":"https://w3c.github.io/webauthn/#publickeycredential"},
 "https://webidl.spec.whatwg.org/#Exposed": {"displayText":"Exposed","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"Exposed","type":"extended-attribute","url":"https://webidl.spec.whatwg.org/#Exposed"},
 "https://webidl.spec.whatwg.org/#SameObject": {"displayText":"SameObject","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"SameObject","type":"extended-attribute","url":"https://webidl.spec.whatwg.org/#SameObject"},
 "https://webidl.spec.whatwg.org/#SecureContext": {"displayText":"SecureContext","export":true,"for_":[],"level":"1","normative":true,"shortname":"webidl","spec":"webidl","status":"current","text":"SecureContext","type":"extended-attribute","url":"https://webidl.spec.whatwg.org/#SecureContext"},
