@@ -963,16 +963,15 @@ spec:css-syntax-3;
     a fingerprint, etc. before a credential is handed to the website.
 
     <pre>
-      document.querySelector('#important-form').addEventListener('submit', async () =&gt; {
+      document.querySelector('#important-form').addEventListener('submit', async event =&gt; {
+        event.preventDefault();
         const credentials = await navigator.<a for="Navigator" attribute>credentials</a>.<a for="CredentialsContainer" method lt="get()">get</a>({
           ...,
           <a for="CredentialRequestOptions" dict-member>mediation</a>: '<a for="CredentialMediationRequirement" enum-value>required</a>'
         });
         if (credentials) {
-          // Verify that |credentials| enables access, and cancel the submission
-          // if it doesn't.
-        } else {
-          e.preventDefault();
+          // Verify that |credentials| enables access before continuing the
+          // submission. Otherwise, leave the form unsubmitted.
         }
       });
     </pre>
