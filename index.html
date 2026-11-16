@@ -7,7 +7,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED" rel="stylesheet">
   <meta content="Bikeshed version e0b165ae4, updated Mon Nov 2 15:16:49 2026 -0800" name="generator">
   <link href="https://www.w3.org/TR/credential-management-1/" rel="canonical">
-  <meta content="3d292a9892f8f68873697fbabb203de68268e9d7" name="revision">
+  <meta content="d322c4f24951eca292d5e4b72214ab2b49cd4391" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>/* Boilerplate: style-autolinks */
@@ -2061,16 +2061,15 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
      <p class="note" role="note"><span class="marker">Note:</span> Depending on the security model of the browser or the credential type, this may require
     the user to authenticate themselves in some way, perhaps by entering a master password, scanning
     a fingerprint, etc. before a credential is handed to the website.</p>
-<pre>document.querySelector('#important-form').addEventListener('submit', async () => {
+<pre>document.querySelector('#important-form').addEventListener('submit', async event => {
+  event.preventDefault();
   const credentials = await navigator.<a class="idl-code" data-link-type="attribute" href="#dom-navigator-credentials" id="ref-for-dom-navigator-credentials④">credentials</a>.<a class="idl-code" data-link-type="method" href="#dom-credentialscontainer-get" id="ref-for-dom-credentialscontainer-get②①">get</a>({
     ...,
     <a class="idl-code" data-link-type="dict-member" href="#dom-credentialrequestoptions-mediation" id="ref-for-dom-credentialrequestoptions-mediation⑨">mediation</a>: '<a class="idl-code" data-link-type="enum-value" href="#dom-credentialmediationrequirement-required" id="ref-for-dom-credentialmediationrequirement-required②">required</a>'
   });
   if (credentials) {
-    // Verify that |credentials| enables access, and cancel the submission
-    // if it doesn't.
-  } else {
-    e.preventDefault();
+    // Verify that |credentials| enables access before continuing the
+    // submission. Otherwise, leave the form unsubmitted.
   }
 });
 </pre>
