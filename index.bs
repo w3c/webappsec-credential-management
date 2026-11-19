@@ -1108,9 +1108,6 @@ spec:css-syntax-3;
             {{Credential/[[type]]}}, return [=a promise rejected with=] a "{{NotAllowedError}}"
             {{DOMException}}.
 
-        1. [=set/Append=] |interface|'s {{Credential/[[type]]}} to |settings|'
-            [=active credential types=].
-
     1.  Let |sameOriginWithAncestors| be `true` if |settings| is [=same-origin with its
         ancestors=], and `false` otherwise.
 
@@ -1122,6 +1119,11 @@ spec:css-syntax-3;
 
         1. If |document| is **not** [=/allowed to use=] |permission|, return
            [=a promise rejected with=] a "{{NotAllowedError}}" {{DOMException}}.
+
+    1.  [=set/For each=] |interface| of |interfaces|:
+
+        1. [=set/Append=] |interface|'s {{Credential/[[type]]}} to |settings|'
+            [=active credential types=].
 
     1.  Let |p| be [=a new promise=].
 
