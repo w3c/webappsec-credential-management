@@ -498,6 +498,17 @@ spec:css-syntax-3;
         while the latter means that the user agent can discover credentials outside of those
         explicitly represented in the [=credential store=] via interaction with some external device
         or service.
+
+    :   <dfn attribute>\[[implicitMediation]]</dfn>
+    ::  The {{Credential}} [=interface object=] has an internal slot named `[[implicitMediation]]`,
+        which specifies the {{CredentialMediationRequirement}} that is always enforced for this
+        [=credential/credential type=], regardless of what the developer passes. Its value is `null`
+        unless otherwise specified by a subtype.
+
+        Note: When {{Credential/[[implicitMediation]]}} is not `null`, both
+        <a abstract-op>Request a `Credential`</a> and <a abstract-op>Create a `Credential`</a>
+        override the operation's mediation requirement with {{Credential/[[implicitMediation]]}},
+        and <a abstract-op>Request a `Credential`</a> ignores {{CredentialRequestOptions/uiMode}}.
   </div>
 
   ISSUE: Talk to Tobie/Dominic about the [=interface object=] bits, here and in
@@ -1060,6 +1071,10 @@ spec:css-syntax-3;
             1. If |type1|'s [=credential type registry/types allowed in the same get() request=] doesn't [=set/contain=] |type2|, 
                 then return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}}. 
 
+            1. If |interface1|'s {{Credential/[[implicitMediation]]}} is not |interface2|'s
+                {{Credential/[[implicitMediation]]}}, then return [=a promise rejected with=] a
+                "{{NotSupportedError}}" {{DOMException}}.
+
     1.  Let |origin| be |settings|' [=environment settings object/origin=].
 
     1.  [=set/For each=] |interface| of |interfaces|:
@@ -1067,6 +1082,13 @@ spec:css-syntax-3;
         1.  If instances of |interface| are [=Credential/origin bound=] and |origin| is
             an [=opaque origin=], then return [=a promise rejected with=] a
             "{{SecurityError}}" {{DOMException}}.
+
+    1.  If |interfaces|[0]'s {{Credential/[[implicitMediation]]}} is not `null`:
+
+        1.  Set |options|["{{CredentialRequestOptions/mediation}}"] to |interfaces|[0]'s
+            {{Credential/[[implicitMediation]]}}.
+
+        1.  [=map/Remove=] |options|["{{CredentialRequestOptions/uiMode}}"].
 
     1.  [=set/For each=] |interface| of |interfaces|:
 
@@ -1277,17 +1299,23 @@ spec:css-syntax-3;
     1.  If |document| is not [=Document/fully active=], then return
         [=a promise rejected with=] an "{{InvalidStateError}}" {{DOMException}}.
 
+    1.  If <code>|options|.{{CredentialCreationOptions/signal}}</code> is [=AbortSignal/aborted=],
+        then return [=a promise rejected with=]
+        <code>|options|.{{CredentialCreationOptions/signal}}</code>'s [=AbortSignal/abort reason=].
+
     1.  Let |sameOriginWithAncestors| be `true` if the [=current settings object=] is [=same-origin
         with its ancestors=], and `false` otherwise.
 
     1.  Let |interfaces| be the [=set=] of |options|' <a>relevant credential interface objects</a>.
 
-    1.  Return [=a promise rejected with=] `NotSupportedError` if any of the following statements
-        are true:
+    1.  Return [=a promise rejected with=] a "{{NotSupportedError}}" {{DOMException}} if any of the
+        following statements are true:
 
         1.  |global| does not have an [=associated Document=].
 
-        2.  |interfaces|' [=list/size=] is greater than 1.
+        1.  |interfaces| is [=set/empty=].
+
+        1.  |interfaces|' [=list/size=] is greater than 1.
 
             Note: It may be reasonable at some point in the future to loosen this restriction, and
             allow the user agent to help the user choose among one of many potential credential
@@ -1303,10 +1331,6 @@ spec:css-syntax-3;
         1. If |document| is **not** [=/allowed to use=] |permission|, return
            [=a promise rejected with=] a "{{NotAllowedError}}" {{DOMException}}.
 
-    1.  If <code>|options|.{{CredentialCreationOptions/signal}}</code> is [=AbortSignal/aborted=],
-        then return [=a promise rejected with=]
-        <code>|options|.{{CredentialCreationOptions/signal}}</code>'s [=AbortSignal/abort reason=].
-
     1.  Let |origin| be |settings|' [=environment settings object/origin=].
 
     1.  [=set/For each=] |interface| of |interfaces|:
@@ -1314,6 +1338,11 @@ spec:css-syntax-3;
         1.  If instances of |interface| are [=Credential/origin bound=] and |origin| is
             an [=opaque origin=], return [=a promise rejected with=] a "{{SecurityError}}"
             {{DOMException}}.
+
+    1.  If |interfaces|[0]'s {{Credential/[[implicitMediation]]}} is not `null`:
+
+        1.  Set |options|["{{CredentialCreationOptions/mediation}}"] to |interfaces|[0]'s
+            {{Credential/[[implicitMediation]]}}.
 
     1. Let |type| be |interfaces|[0]'s {{Credential/[[type]]}}.
 
@@ -2570,6 +2599,10 @@ spec:css-syntax-3;
   1.  If the new credential type supports {{CredentialMediationRequirement/conditional}} [=user
       mediation=], define `ExampleCredential/isConditionalMediationAvailable()`
       to return [=a promise resolved with=] `true`.
+
+  1.  If the new credential type always enforces a fixed {{CredentialMediationRequirement}},
+      define the value of the `ExampleCredential` [=interface object=]'s
+      {{Credential/[[implicitMediation]]}} slot accordingly.
 
   1.  Following the procedure in [[#sctn-registry-requirements]], add an entry to the
       [[#sctn-cred-type-registry|Credential Type Registry]] for the new
