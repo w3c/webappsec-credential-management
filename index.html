@@ -7,7 +7,7 @@
   <link href="https://www.w3.org/StyleSheets/TR/2021/W3C-ED" rel="stylesheet">
   <meta content="Bikeshed version e0b165ae4, updated Mon Nov 2 15:16:49 2026 -0800" name="generator">
   <link href="https://www.w3.org/TR/credential-management-1/" rel="canonical">
-  <meta content="12567a6a3c6b979a3f943a802afeaa6a6a565424" name="revision">
+  <meta content="2ee1eef8ec16c488988dfd2734909646dc7e161e" name="revision">
   <meta content="dark light" name="color-scheme">
   <link href="https://www.w3.org/StyleSheets/TR/2021/dark.css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css">
 <style>/* Boilerplate: style-autolinks */
@@ -1003,7 +1003,7 @@ var[data-var-color="6"] { --var-vg: #FFBCF2; }
 </p>
    <h1>Credential Management Level 1</h1>
    <p id="w3c-state"><a href="https://www.w3.org/standards/types/#ED">Editor’s Draft</a>,
-    <time class="dt-updated" datetime="2026-11-19">19 November 2026</time></p>
+    <time class="dt-updated" datetime="2026-11-22">22 November 2026</time></p>
    <details open>
     <summary>More details about this document</summary>
     <div data-fill-with="spec-metadata">
@@ -2208,9 +2208,6 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
         <p>If <var>settings</var>’ <a data-link-type="dfn" href="#active-credential-types" id="ref-for-active-credential-types">active credential types</a> <a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-contain" id="ref-for-list-contain①">contains</a> <var>interface</var>’s
   <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot⑥">[[type]]</a></code>, return <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with⑧">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror①">NotAllowedError</a></code>"
   <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑦">DOMException</a></code>.</p>
-       <li data-md>
-        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-append" id="ref-for-set-append">Append</a> <var>interface</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot⑦">[[type]]</a></code> to <var>settings</var>’
-  <a data-link-type="dfn" href="#active-credential-types" id="ref-for-active-credential-types①">active credential types</a>.</p>
       </ol>
      <li data-md>
       <p>Let <var>sameOriginWithAncestors</var> be <code>true</code> if <var>settings</var> is <a data-link-type="dfn" href="#same-origin-with-its-ancestors" id="ref-for-same-origin-with-its-ancestors④">same-origin with its ancestors</a>, and <code>false</code> otherwise.</p>
@@ -2218,12 +2215,19 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
       <p>For each <var>interface</var> in <var>options</var>’ <a data-link-type="dfn" href="#credentialrequestoptions-relevant-credential-interface-objects" id="ref-for-credentialrequestoptions-relevant-credential-interface-objects④">relevant credential interface objects</a>:</p>
       <ol>
        <li data-md>
-        <p>Let <var>permission</var> be the <var>interface</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot⑧">[[type]]</a></code> <a data-link-type="dfn" href="#credential-type-registry-get-permissions-policy" id="ref-for-credential-type-registry-get-permissions-policy①">Get Permissions Policy</a>.</p>
+        <p>Let <var>permission</var> be the <var>interface</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot⑦">[[type]]</a></code> <a data-link-type="dfn" href="#credential-type-registry-get-permissions-policy" id="ref-for-credential-type-registry-get-permissions-policy①">Get Permissions Policy</a>.</p>
        <li data-md>
         <p>If <var>permission</var> is null, continue.</p>
        <li data-md>
         <p>If <var>document</var> is <strong>not</strong> <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/iframe-embed-object.html#allowed-to-use" id="ref-for-allowed-to-use">allowed to use</a> <var>permission</var>, return
  <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-promise-rejected-with" id="ref-for-a-promise-rejected-with⑨">a promise rejected with</a> a "<code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#notallowederror" id="ref-for-notallowederror②">NotAllowedError</a></code>" <code class="idl"><a data-link-type="idl" href="https://webidl.spec.whatwg.org/#idl-DOMException" id="ref-for-idl-DOMException⑧">DOMException</a></code>.</p>
+      </ol>
+     <li data-md>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate④">For each</a> <var>interface</var> of <var>interfaces</var>:</p>
+      <ol>
+       <li data-md>
+        <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#set-append" id="ref-for-set-append">Append</a> <var>interface</var>’s <code class="idl"><a data-link-type="idl" href="#dom-credential-type-slot" id="ref-for-dom-credential-type-slot⑧">[[type]]</a></code> to <var>settings</var>’
+  <a data-link-type="dfn" href="#active-credential-types" id="ref-for-active-credential-types①">active credential types</a>.</p>
       </ol>
      <li data-md>
       <p>Let <var>p</var> be <a data-link-type="dfn" href="https://webidl.spec.whatwg.org/#a-new-promise" id="ref-for-a-new-promise">a new promise</a>.</p>
@@ -2450,7 +2454,7 @@ defining the <a data-link-type="dfn" href="#credential-type-registry-credential-
      <li data-md>
       <p>Let <var>origin</var> be <var>settings</var>’ <a data-link-type="dfn" href="https://html.spec.whatwg.org/multipage/webappapis.html#concept-settings-object-origin" id="ref-for-concept-settings-object-origin⑦">origin</a>.</p>
      <li data-md>
-      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate④">For each</a> <var>interface</var> of <var>interfaces</var>:</p>
+      <p><a data-link-type="dfn" href="https://infra.spec.whatwg.org/#list-iterate" id="ref-for-list-iterate⑤">For each</a> <var>interface</var> of <var>interfaces</var>:</p>
       <ol>
        <li data-md>
         <p>If instances of <var>interface</var> are <a data-link-type="dfn" href="#credential-origin-bound" id="ref-for-credential-origin-bound③">origin bound</a> and <var>origin</var> is
@@ -4480,7 +4484,7 @@ let dfnPanelData = {
 "13dd6cae": {"dfnID":"13dd6cae","dfnText":"node navigable","external":true,"refSections":[{"refs":[{"id":"ref-for-node-navigable"}],"title":"2.1.1.1. Same-Origin with its Ancestors"}],"url":"https://html.spec.whatwg.org/multipage/document-sequences.html#node-navigable"},
 "1465b9a4": {"dfnID":"1465b9a4","dfnText":"has(name)","external":true,"refSections":[{"refs":[{"id":"ref-for-dom-formdata-has"}],"title":"3.3.4. \n    Create a PasswordCredential from an HTMLFormElement\n  "}],"url":"https://xhr.spec.whatwg.org/#dom-formdata-has"},
 "15e48c39": {"dfnID":"15e48c39","dfnText":"set","external":true,"refSections":[{"refs":[{"id":"ref-for-ordered-set"}],"title":"2.1. Infrastructure"},{"refs":[{"id":"ref-for-ordered-set\u2460"}],"title":"2.1.2.1. Registration Entry Requirements and Update Process"},{"refs":[{"id":"ref-for-ordered-set\u2461"}],"title":"2.3.1. The CredentialRequestOptions Dictionary"},{"refs":[{"id":"ref-for-ordered-set\u2462"}],"title":"2.5.4. Create a Credential"}],"url":"https://infra.spec.whatwg.org/#ordered-set"},
-"16d07e10": {"dfnID":"16d07e10","dfnText":"for each (for list)","external":true,"refSections":[{"refs":[{"id":"ref-for-list-iterate"},{"id":"ref-for-list-iterate\u2460"},{"id":"ref-for-list-iterate\u2461"},{"id":"ref-for-list-iterate\u2462"}],"title":"2.5.1. Request a Credential"},{"refs":[{"id":"ref-for-list-iterate\u2463"}],"title":"2.5.4. Create a Credential"}],"url":"https://infra.spec.whatwg.org/#list-iterate"},
+"16d07e10": {"dfnID":"16d07e10","dfnText":"for each (for list)","external":true,"refSections":[{"refs":[{"id":"ref-for-list-iterate"},{"id":"ref-for-list-iterate\u2460"},{"id":"ref-for-list-iterate\u2461"},{"id":"ref-for-list-iterate\u2462"},{"id":"ref-for-list-iterate\u2463"}],"title":"2.5.1. Request a Credential"},{"refs":[{"id":"ref-for-list-iterate\u2464"}],"title":"2.5.4. Create a Credential"}],"url":"https://infra.spec.whatwg.org/#list-iterate"},
 "18c65a7a": {"dfnID":"18c65a7a","dfnText":"HTMLFormElement","external":true,"refSections":[{"refs":[{"id":"ref-for-htmlformelement"}],"title":"3.1.2. Post-sign-in Confirmation"},{"refs":[{"id":"ref-for-htmlformelement\u2460"}],"title":"3.1.3. Change Password"},{"refs":[{"id":"ref-for-htmlformelement\u2461"},{"id":"ref-for-htmlformelement\u2462"},{"id":"ref-for-htmlformelement\u2463"},{"id":"ref-for-htmlformelement\u2464"}],"title":"3.2. The PasswordCredential Interface"},{"refs":[{"id":"ref-for-htmlformelement\u2465"},{"id":"ref-for-htmlformelement\u2466"}],"title":"3.3.2. \n    PasswordCredential\u2019s [[Create]](origin, options, sameOriginWithAncestors)\n  "},{"refs":[{"id":"ref-for-htmlformelement\u2467"}],"title":"3.3.4. \n    Create a PasswordCredential from an HTMLFormElement\n  "}],"url":"https://html.spec.whatwg.org/multipage/forms.html#htmlformelement"},
 "19866964": {"dfnID":"19866964","dfnText":"nickname","external":true,"refSections":[{"refs":[{"id":"ref-for-attr-fe-autocomplete-nickname"}],"title":"3.3.4. \n    Create a PasswordCredential from an HTMLFormElement\n  "}],"url":"https://html.spec.whatwg.org/multipage/forms.html#attr-fe-autocomplete-nickname"},
 "1a99fe79": {"dfnID":"1a99fe79","dfnText":"publickey-credentials-create-feature","external":true,"refSections":[{"refs":[{"id":"ref-for-publickey-credentials-create-feature"}],"title":"2.1.2. Credential Type Registry"}],"url":"https://w3c.github.io/webauthn/#publickey-credentials-create-feature"},
